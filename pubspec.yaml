@@ -72,6 +72,9 @@ flutter:
     - assets/images/ic_transform_global_hz.png
     - assets/images/ic_transform_native_hz.png
     - assets/images/logo_fluro.png
+    - assets/images/login_intro.png
+    - assets/images/ic_google.png
+    - assets/images/ic_apple.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

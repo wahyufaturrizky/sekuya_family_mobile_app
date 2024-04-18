@@ -7,15 +7,16 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:sekuya_family_mobile_app/screens/login/login_component.dart';
+
 import '../helpers/color_helpers.dart';
 import '../components/demo/demo_simple_component.dart';
-import '../components/home/home_component.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 var rootHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  return HomeComponent();
+  return const LoginComponent();
 });
 
 var demoRouteHandler = Handler(

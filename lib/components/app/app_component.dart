@@ -14,6 +14,8 @@ import '../../config/application.dart';
 import '../../config/routes.dart';
 
 class AppComponent extends StatefulWidget {
+  const AppComponent({super.key});
+
   @override
   State createState() {
     return AppComponentState();
