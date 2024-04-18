@@ -7,17 +7,19 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 
-class LoginComponent extends StatefulWidget {
-  const LoginComponent({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State createState() => LoginComponentState();
+  State createState() => LoginScreenState();
 }
 
-class LoginComponentState extends State<LoginComponent> {
+class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +42,7 @@ class LoginComponentState extends State<LoginComponent> {
                       const Column(
                         children: [
                           ScreenTitle(title: 'Sign In Your Account'),
-                          const SizedBox(
+                          SizedBox(
                             height: 15,
                           ),
                           Text(
@@ -59,7 +61,11 @@ class LoginComponentState extends State<LoginComponent> {
                             tag: 'login_btn',
                             child: CustomButton(
                                 buttonText: 'Continue with Gmail',
-                                onPressed: () {},
+                                onPressed: () {
+                                  Application.router.navigateTo(
+                                      context, "/privatescreens",
+                                      transition: TransitionType.native);
+                                },
                                 buttonIcon: "ic_google.png",
                                 isOutlined: true,
                                 sizeButtonIcon: 20,
@@ -74,7 +80,11 @@ class LoginComponentState extends State<LoginComponent> {
                             child: CustomButton(
                                 buttonText: 'Continue with Apple ID',
                                 isOutlined: true,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Application.router.navigateTo(
+                                      context, "/privatescreens",
+                                      transition: TransitionType.native);
+                                },
                                 buttonIcon: "ic_apple.png",
                                 sizeButtonIcon: 20,
                                 width: 500,

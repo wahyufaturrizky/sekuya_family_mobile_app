@@ -8,6 +8,7 @@
  */
 
 import 'package:sekuya_family_mobile_app/screens/login/login_component.dart';
+import 'package:sekuya_family_mobile_app/screens/private/private_component.dart';
 
 import '../helpers/color_helpers.dart';
 import '../components/demo/demo_simple_component.dart';
@@ -16,7 +17,12 @@ import 'package:flutter/material.dart';
 
 var rootHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  return const LoginComponent();
+  return const LoginScreen();
+});
+
+var privateHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+  return const PrivateScreenApp();
 });
 
 var demoRouteHandler = Handler(
