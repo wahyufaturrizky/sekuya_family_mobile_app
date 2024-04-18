@@ -119,7 +119,7 @@ class HomeComponentState extends State<HomeComponent> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 25, bottom: 35, left: 25),
               child: Image(
                 image: AssetImage("assets/images/logo_fluro.png"),
