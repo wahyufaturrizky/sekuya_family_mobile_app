@@ -9,6 +9,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/screens/private/components/home.dart';
 
 class PrivateScreenApp extends StatelessWidget {
   const PrivateScreenApp({super.key});
@@ -33,10 +34,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
+    HomeComponent(),
     Text(
       'Index 1: Business',
       style: optionStyle,
