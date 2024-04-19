@@ -9,7 +9,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/screens/private/components/community.dart';
 import 'package:sekuya_family_mobile_app/screens/private/components/home.dart';
+import 'package:sekuya_family_mobile_app/screens/private/components/mission.dart';
+import 'package:sekuya_family_mobile_app/screens/private/components/profile.dart';
 
 class PrivateScreenApp extends StatelessWidget {
   const PrivateScreenApp({super.key});
@@ -35,18 +38,9 @@ class _PrivateScreenState extends State<PrivateScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeComponent(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Settings',
-      style: optionStyle,
-    ),
+    MissionComponent(),
+    CommunityComponent(),
+    ProfileComponent(),
   ];
 
   void _onItemTapped(int index) {
@@ -94,6 +88,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: yellowPrimaryColor,
+        unselectedItemColor: greySecondaryColor,
         onTap: _onItemTapped,
       ),
     );
