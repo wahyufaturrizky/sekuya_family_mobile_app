@@ -60,7 +60,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
         ),
         backgroundColor: Colors.black,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(

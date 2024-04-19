@@ -68,7 +68,7 @@ class CustomButton extends StatelessWidget {
                           fontSize: labelSize,
                           color: isOutlined
                               ? yellowPrimaryColor
-                              : textPrimaryColor,
+                              : blackSolidPrimaryColor,
                         ),
                       )
                     ]
@@ -80,7 +80,7 @@ class CustomButton extends StatelessWidget {
                           fontSize: labelSize,
                           color: isOutlined
                               ? yellowPrimaryColor
-                              : textPrimaryColor,
+                              : blackSolidPrimaryColor,
                         ),
                       )
                     ],
