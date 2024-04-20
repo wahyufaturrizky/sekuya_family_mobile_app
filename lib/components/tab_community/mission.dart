@@ -9,7 +9,6 @@
 
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class TabContentCommunityComponent extends StatelessWidget {

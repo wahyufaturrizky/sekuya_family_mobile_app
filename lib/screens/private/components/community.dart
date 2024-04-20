@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sekuya_family_mobile_app/components/tab_community/leaderboard.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/mission.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
@@ -306,12 +307,14 @@ class CommunityComponent extends StatelessWidget {
                               // The items in this example are fixed to 48 pixels
                               // high. This matches the Material Design spec for
                               // ListTile widgets.
-                              itemExtent: 200.0,
+                              itemExtent: name == "Mission" ? 200.0 : 80,
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
                                   // This builder is called for each child.
                                   // In this example, we just number each list item.
-                                  return const TabContentCommunityComponent();
+                                  return name == "Mission"
+                                      ? const TabContentCommunityComponent()
+                                      : const TabContentCommunityLeaderBoardComponent();
                                 },
                                 // The childCount of the SliverChildBuilderDelegate
                                 // specifies how many children this inner list
