@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   fluro: ^2.0.5
   carousel_slider: ^4.2.1
+  avatar_stack: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,9 @@ flutter:
     - assets/images/ic_google.png
     - assets/images/ic_apple.png
     - assets/images/banner_home.png
+    - assets/images/ic_community.png
+    - assets/images/ic_chart.png
+    - assets/images/ic_discord.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

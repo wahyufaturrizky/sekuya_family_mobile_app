@@ -19,8 +19,16 @@ class PrivateScreenApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: PrivateScreen(),
+    return MaterialApp(
+      home: const PrivateScreen(),
+      theme: ThemeData(
+          tabBarTheme: TabBarTheme(
+              labelColor: yellowPrimaryColor,
+              indicatorColor: Colors.transparent,
+              unselectedLabelColor: greySecondaryColor,
+              dividerColor: greySecondaryColor,
+              overlayColor:
+                  MaterialStateProperty.all<Color>(yellowPrimaryColor))),
     );
   }
 }
@@ -34,12 +42,10 @@ class PrivateScreen extends StatefulWidget {
 
 class _PrivateScreenState extends State<PrivateScreen> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeComponent(),
     MissionComponent(),
-    CommunityComponent(),
+    CommunityComponentApp(),
     ProfileComponent(),
   ];
 
@@ -55,14 +61,12 @@ class _PrivateScreenState extends State<PrivateScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text(
-          'BottomNavigationBar Sample',
+          'Title bar',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

@@ -19,7 +19,8 @@ class HomeComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         CarouselSlider(
@@ -250,7 +251,7 @@ class HomeComponent extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 20),
-          height: 160,
+          height: 150,
           child: ListView(
             // This next line does the trick.
             scrollDirection: Axis.horizontal,
@@ -273,9 +274,8 @@ class HomeComponent extends StatelessWidget {
                       },
                       child: SizedBox(
                         width: 200,
-                        height: 160,
+                        height: 150,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Image.asset(
                               'assets/images/banner_home.png',
@@ -284,92 +284,84 @@ class HomeComponent extends StatelessWidget {
                               decoration: const BoxDecoration(boxShadow: [
                                 BoxShadow(
                                     color: blackSolidPrimaryColor,
-                                    spreadRadius: 30,
+                                    spreadRadius: 15,
                                     blurRadius: 15)
                               ]),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 12, bottom: 12, right: 12),
-                                child: Column(
-                                  children: [
-                                    const Text(
-                                      'NFT Communities',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 10,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: Image.asset(
-                                                  'assets/images/ic_apple.png'),
-                                            ),
-                                            const Text(
-                                              '10',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 12,
-                                        ),
-                                        Row(
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 10,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: Image.asset(
-                                                  'assets/images/ic_apple.png'),
-                                            ),
-                                            const Text(
-                                              '10',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 12,
-                                        ),
-                                        Row(
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 10,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: Image.asset(
-                                                  'assets/images/ic_apple.png'),
-                                            ),
-                                            const Text(
-                                              '10',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    'NFT Communities',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 10,
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.asset(
+                                                'assets/images/ic_apple.png'),
+                                          ),
+                                          const Text(
+                                            '10',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 10,
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.asset(
+                                                'assets/images/ic_apple.png'),
+                                          ),
+                                          const Text(
+                                            '10',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 10,
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.asset(
+                                                'assets/images/ic_apple.png'),
+                                          ),
+                                          const Text(
+                                            '10',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -383,6 +375,6 @@ class HomeComponent extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ));
   }
 }
