@@ -245,7 +245,7 @@ class CommunityComponent extends StatelessWidget {
                   ),
                   // This is the title in the app bar.
                   floating: true,
-                  expandedHeight: 150.0,
+                  expandedHeight: 400.0,
                   toolbarHeight: 400,
                   backgroundColor: Colors.black,
                   // The "forceElevated" property causes the SliverAppBar to show

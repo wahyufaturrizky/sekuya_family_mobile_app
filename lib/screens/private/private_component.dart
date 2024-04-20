@@ -44,7 +44,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     HomeComponent(),
-    MissionComponent(),
+    MissionComponentApp(),
     CommunityComponentApp(),
     ProfileComponent(),
   ];
