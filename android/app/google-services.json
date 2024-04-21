@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "433294916757",
+    "project_id": "sekuya-9c1b7",
+    "storage_bucket": "sekuya-9c1b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433294916757:android:d1b51c9fd4a8832eb96f9c",
+        "android_client_info": {
+          "package_name": "com.example.sekuya_family_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0dAPTnmmqZtmkrMTxguSLuQMl3Aj8m9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
