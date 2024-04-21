@@ -49,10 +49,10 @@ class PrivateScreen extends StatefulWidget {
 class _PrivateScreenState extends State<PrivateScreen> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    HomeComponent(),
+    HomeComponentApp(),
     MissionComponentApp(),
     CommunityComponentApp(),
-    ProfileComponent(),
+    ProfileComponentApp(),
   ];
 
   void _onItemTapped(int index) {
@@ -65,13 +65,15 @@ class _PrivateScreenState extends State<PrivateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text(
-          'Title bar',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-      ),
+      appBar: _selectedIndex == 0
+          ? AppBar(
+              title: const Text(
+                'Title bar',
+                style: TextStyle(color: Colors.black),
+              ),
+              backgroundColor: Colors.black,
+            )
+          : null,
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -10,7 +10,7 @@ class MissionComponentApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MissionComponent();
+    return const MissionComponent();
   }
 }
 
@@ -92,7 +92,7 @@ class _MissionComponentState extends State<MissionComponent> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                          padding: EdgeInsets.only(left: 8, right: 8),
+                          padding: const EdgeInsets.only(left: 8, right: 8),
                           width: 165,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40.0),
@@ -132,7 +132,7 @@ class _MissionComponentState extends State<MissionComponent> {
                             }).toList(),
                           )),
                       Container(
-                          padding: EdgeInsets.only(left: 8, right: 8),
+                          padding: const EdgeInsets.only(left: 8, right: 8),
                           width: 165,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40.0),
@@ -177,8 +177,8 @@ class _MissionComponentState extends State<MissionComponent> {
               ),
               // This is the title in the app bar.
               floating: true,
-              expandedHeight: 220.0,
-              toolbarHeight: 220,
+              expandedHeight: 190.0,
+              toolbarHeight: 190,
               backgroundColor: Colors.black,
               // The "forceElevated" property causes the SliverAppBar to show
               // a shadow. The "innerBoxIsScrolled" parameter is true when the
@@ -230,7 +230,7 @@ class _MissionComponentState extends State<MissionComponent> {
                       // The items in this example are fixed to 48 pixels
                       // high. This matches the Material Design spec for
                       // ListTile widgets.
-                      itemExtent: 200.0,
+                      itemExtent: 180.0,
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           // This builder is called for each child.

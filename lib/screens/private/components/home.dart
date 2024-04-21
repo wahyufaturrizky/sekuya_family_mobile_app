@@ -11,9 +11,23 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
-class HomeComponent extends StatelessWidget {
+class HomeComponentApp extends StatelessWidget {
+  const HomeComponentApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const HomeComponent();
+  }
+}
+
+class HomeComponent extends StatefulWidget {
   const HomeComponent({super.key});
 
+  @override
+  State<HomeComponent> createState() => _HomeComponentState();
+}
+
+class _HomeComponentState extends State<HomeComponent> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
 

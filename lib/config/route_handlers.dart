@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 
 var rootHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  return const LoginScreen();
+  return const LoginScreenApp();
 });
 
 var privateHandler = Handler(

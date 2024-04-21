@@ -11,25 +11,25 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
-class TabContentCommunityComponentApp extends StatelessWidget {
-  const TabContentCommunityComponentApp({super.key});
+class TabContentProfileMyCommunityComponentApp extends StatelessWidget {
+  const TabContentProfileMyCommunityComponentApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentCommunityComponent();
+    return const TabContentProfileMyCommunityComponent();
   }
 }
 
-class TabContentCommunityComponent extends StatefulWidget {
-  const TabContentCommunityComponent({super.key});
+class TabContentProfileMyCommunityComponent extends StatefulWidget {
+  const TabContentProfileMyCommunityComponent({super.key});
 
   @override
-  State<TabContentCommunityComponent> createState() =>
-      _TabContentCommunityComponentState();
+  State<TabContentProfileMyCommunityComponent> createState() =>
+      _TabContentProfileMyCommunityComponentState();
 }
 
-class _TabContentCommunityComponentState
-    extends State<TabContentCommunityComponent> {
+class _TabContentProfileMyCommunityComponentState
+    extends State<TabContentProfileMyCommunityComponent> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -45,7 +45,7 @@ class _TabContentCommunityComponentState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
+              padding: const EdgeInsets.only(left: 12, top: 12, right: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

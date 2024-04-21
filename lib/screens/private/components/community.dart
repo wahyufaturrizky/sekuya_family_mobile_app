@@ -12,12 +12,18 @@ class CommunityComponentApp extends StatelessWidget {
   }
 }
 
-class CommunityComponent extends StatelessWidget {
+class CommunityComponent extends StatefulWidget {
   const CommunityComponent({super.key});
 
   @override
+  State<CommunityComponent> createState() => _CommunityComponentState();
+}
+
+class _CommunityComponentState extends State<CommunityComponent> {
+  final List<String> tabs = <String>['Mission', 'Leaderboard', 'Members'];
+
+  @override
   Widget build(BuildContext context) {
-    final List<String> tabs = <String>['Mission', 'Leaderboard', 'Members'];
     return DefaultTabController(
       length: tabs.length, // This is the number of tabs.
       child: Scaffold(
@@ -245,8 +251,8 @@ class CommunityComponent extends StatelessWidget {
                   ),
                   // This is the title in the app bar.
                   floating: true,
-                  expandedHeight: 400.0,
-                  toolbarHeight: 400,
+                  expandedHeight: 360.0,
+                  toolbarHeight: 360,
                   backgroundColor: Colors.black,
                   // The "forceElevated" property causes the SliverAppBar to show
                   // a shadow. The "innerBoxIsScrolled" parameter is true when the
@@ -307,14 +313,14 @@ class CommunityComponent extends StatelessWidget {
                               // The items in this example are fixed to 48 pixels
                               // high. This matches the Material Design spec for
                               // ListTile widgets.
-                              itemExtent: name == "Mission" ? 200.0 : 80,
+                              itemExtent: name == "Mission" ? 170.0 : 80,
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
                                   // This builder is called for each child.
                                   // In this example, we just number each list item.
                                   return name == "Mission"
-                                      ? const TabContentCommunityComponent()
-                                      : const TabContentCommunityLeaderBoardComponent();
+                                      ? const TabContentCommunityComponentApp()
+                                      : const TabContentCommunityLeaderBoardComponentApp();
                                 },
                                 // The childCount of the SliverChildBuilderDelegate
                                 // specifies how many children this inner list

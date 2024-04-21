@@ -81,6 +81,7 @@ flutter:
     - assets/images/ic_community.png
     - assets/images/ic_chart.png
     - assets/images/ic_discord.png
+    - assets/images/bg_profile.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

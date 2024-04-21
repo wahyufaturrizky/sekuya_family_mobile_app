@@ -10,25 +10,25 @@
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
-class TabContentCommunityLeaderBoardComponentApp extends StatelessWidget {
-  const TabContentCommunityLeaderBoardComponentApp({super.key});
+class TabContentProfileMyMissionComponentApp extends StatelessWidget {
+  const TabContentProfileMyMissionComponentApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentCommunityLeaderBoardComponent();
+    return const TabContentProfileMyMissionComponent();
   }
 }
 
-class TabContentCommunityLeaderBoardComponent extends StatefulWidget {
-  const TabContentCommunityLeaderBoardComponent({super.key});
+class TabContentProfileMyMissionComponent extends StatefulWidget {
+  const TabContentProfileMyMissionComponent({super.key});
 
   @override
-  State<TabContentCommunityLeaderBoardComponent> createState() =>
-      _TabContentCommunityLeaderBoardComponentState();
+  State<TabContentProfileMyMissionComponent> createState() =>
+      _TabContentProfileMyMissionComponentState();
 }
 
-class _TabContentCommunityLeaderBoardComponentState
-    extends State<TabContentCommunityLeaderBoardComponent> {
+class _TabContentProfileMyMissionComponentState
+    extends State<TabContentProfileMyMissionComponent> {
   @override
   Widget build(BuildContext context) {
     return Card(
