@@ -22,6 +22,12 @@ class PrivateScreenApp extends StatelessWidget {
     return MaterialApp(
       home: const PrivateScreen(),
       theme: ThemeData(
+          canvasColor: Colors.black,
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor: yellowPrimaryColor.withOpacity(0.2),
+            cursorColor: yellowPrimaryColor,
+            selectionHandleColor: yellowPrimaryColor,
+          ),
           tabBarTheme: TabBarTheme(
               labelColor: yellowPrimaryColor,
               indicatorColor: Colors.transparent,
