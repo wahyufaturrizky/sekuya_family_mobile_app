@@ -55,14 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     print('--- initState ---');
 
-    print('userCredential = $userCredential["value"]');
+    print('userCredential = $userCredential');
     super.initState();
 
     _googleSignIn.onCurrentUserChanged
         .listen((GoogleSignInAccount? account) async {
       bool isAuthorized = account != null;
-
-      print('DEBUG = $isAuthorized');
 
       setState(() {
         _currentUser = account;
@@ -71,28 +69,77 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void handleLoginGoogle() async {
-    // Application.router.navigateTo(context, "/privatescreens",
-    //     transition: TransitionType.native);
+  void handleLoginMock() async {
+    Application.router.navigateTo(context, "/privatescreens",
+        transition: TransitionType.native);
   }
 
-  Future<dynamic> signInWithGoogle() async {
+  Future<dynamic> signInWithApple() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      final appleProvider = AppleAuthProvider();
+      await FirebaseAuth.instance.signInWithProvider(appleProvider);
     } on Exception catch (e) {
       // TODO
       print('exception->$e');
     }
+  }
+
+  Future<dynamic> signInWithGoogle() async {
+    // Application.router.navigateTo(context, "/privatescreens",
+    //     transition: TransitionType.native);
+
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await GoogleSignIn().signIn();
+
+      print("@googleSignInAccount = $googleSignInAccount");
+
+      List<String> signInMethods = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(googleSignInAccount!.email);
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+
+        final UserCredential authResult =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+      }
+
+      if (signInMethods.contains("google.com")) {
+        print("Email is already associated with a Google Sign-In account.");
+        return "0";
+      } else {
+        print("Email is not associated with any account.");
+        return "1";
+      }
+    } catch (error) {
+      print("Error during Google sign-in: $error");
+    }
+
+    // try {
+    //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    //   print('@googleUser = $googleUser');
+
+    //   final GoogleSignInAuthentication? googleAuth =
+    //       await googleUser?.authentication;
+
+    //   print('@googleAuth = $googleAuth["accessToken"]');
+
+    //   final credential = GoogleAuthProvider.credential(
+    //     accessToken: googleAuth?.accessToken,
+    //     idToken: googleAuth?.idToken,
+    //   );
+
+    //   print('@credential = $credential');
+
+    //   return await FirebaseAuth.instance.signInWithCredential(credential);
+    // } on Exception catch (e) {
+    //   // TODO
+    //   print('exception->$e');
+    // }
   }
 
   @override
@@ -154,9 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 buttonText: 'Continue with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
-                                  Application.router.navigateTo(
-                                      context, "/privatescreens",
-                                      transition: TransitionType.native);
+                                  signInWithApple();
                                 },
                                 buttonIcon: "ic_apple.png",
                                 sizeButtonIcon: 20,
