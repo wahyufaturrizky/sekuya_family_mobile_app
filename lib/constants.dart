@@ -8,6 +8,7 @@ const Color greySecondaryColor = Color.fromRGBO(135, 135, 135, 1);
 const Color bluePrimaryColor = Color.fromRGBO(0, 100, 255, 1);
 const Color blackSolidPrimaryColor = Color.fromRGBO(26, 26, 28, 1);
 const Color yellowPrimaryColor = Color.fromRGBO(252, 193, 63, 1);
+const String baseUrl = 'https://api.sekuyalabs.xellar.co/api/v1';
 const InputDecoration kTextInputDecoration = InputDecoration(
   border: InputBorder.none,
   hintText: '',

@@ -13,6 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:dio/dio.dart';
+import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+final dio = Dio();
 
 /// The scopes required by this application.
 // #docregion Initialize
@@ -69,11 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void handleLoginMock() async {
-    Application.router.navigateTo(context, "/privatescreens",
-        transition: TransitionType.native);
-  }
-
   Future<dynamic> signInWithApple() async {
     try {
       final appleProvider = AppleAuthProvider();
@@ -84,62 +84,82 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<dynamic> signInWithGoogle() async {
-    // Application.router.navigateTo(context, "/privatescreens",
-    //     transition: TransitionType.native);
+  Future<void> signInWithGoogle() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<dynamic> signInWithGoogle2() async {
+    print("--- signInWithGoogle ---");
 
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await GoogleSignIn().signIn();
+      _googleSignIn.signIn().then((result) {
+        print('@result = $result');
 
-      print("@googleSignInAccount = $googleSignInAccount");
+        // FirebaseAuth.instance
+        //     .fetchSignInMethodsForEmail(result!.email)
+        //     .then((valSignInMethods) {
+        //   if (valSignInMethods.contains("google.com")) {
+        //     print("Email is already associated with a Google Sign-In account.");
+        //     return "0";
+        //   } else {
+        //     print("Email is not associated with any account.");
+        //     return "1";
+        //   }
+        // });
 
-      List<String> signInMethods = await FirebaseAuth.instance
-          .fetchSignInMethodsForEmail(googleSignInAccount!.email);
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
-        );
+        // result?.authentication.then((googleKey) async {
+        //   print(googleKey.accessToken);
+        //   print(googleKey.idToken);
+        //   print(_googleSignIn.currentUser?.displayName);
 
-        final UserCredential authResult =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-      }
+        //   final AuthCredential credential = GoogleAuthProvider.credential(
+        //     accessToken: googleKey.accessToken,
+        //     idToken: googleKey.idToken,
+        //   );
 
-      if (signInMethods.contains("google.com")) {
-        print("Email is already associated with a Google Sign-In account.");
-        return "0";
-      } else {
-        print("Email is not associated with any account.");
-        return "1";
-      }
+        //   FirebaseAuth.instance
+        //       .signInWithCredential(credential)
+        //       .then((valCredential) {
+        //     print('@valCredential = $valCredential');
+
+        //     dio.post('$baseUrl/account/google', data: {
+        //       'id_token': googleKey.idToken,
+        //       'access_token': googleKey.accessToken,
+        //       'provider': credential.providerId,
+        //     }).then((valResFromXellar) {
+        //       print('@valResFromXellar = $valResFromXellar');
+
+        //       SharedPreferences.getInstance().then((prefs) {
+        //         prefs
+        //             .setInt('access_token', valResFromXellar.data.accessToken)
+        //             .then((value) => {
+        //                   Application.router.navigateTo(
+        //                       context, "/privatescreens",
+        //                       transition: TransitionType.native)
+        //                 })
+        //             .catchError((onError) => print(onError));
+        //       }).catchError((onError) {
+        //         print('onError $onError');
+        //       });
+        //     }).catchError((onError) {
+        //       print('onError xellar = $onError');
+        //     });
+        //   }).catchError((err) {
+        //     print('inner error');
+        //   });
+        // }).catchError((err) {
+        //   print('inner error');
+        // });
+      }).catchError((err) {
+        print('error occured');
+      });
     } catch (error) {
       print("Error during Google sign-in: $error");
     }
-
-    // try {
-    //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    //   print('@googleUser = $googleUser');
-
-    //   final GoogleSignInAuthentication? googleAuth =
-    //       await googleUser?.authentication;
-
-    //   print('@googleAuth = $googleAuth["accessToken"]');
-
-    //   final credential = GoogleAuthProvider.credential(
-    //     accessToken: googleAuth?.accessToken,
-    //     idToken: googleAuth?.idToken,
-    //   );
-
-    //   print('@credential = $credential');
-
-    //   return await FirebaseAuth.instance.signInWithCredential(credential);
-    // } on Exception catch (e) {
-    //   // TODO
-    //   print('exception->$e');
-    // }
   }
 
   @override
@@ -193,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 paddingButton: 0),
                           ),
                           const SizedBox(
-                            height: 15,
+                            height: 24,
                           ),
                           Hero(
                             tag: 'signup_btn',

@@ -52,14 +52,6 @@
 					<string>Editor</string>
 					<key>CFBundleURLSchemes</key>
 					<array>
-							<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-					</array>
-			</dict>
-			<dict>
-					<key>CFBundleTypeRole</key>
-					<string>Editor</string>
-					<key>CFBundleURLSchemes</key>
-					<array>
 							<string>com.googleusercontent.apps.433294916757-kov26lh9dh5hqdvm1uvpi49sh33q72ub</string>
 					</array>
 			</dict>

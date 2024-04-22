@@ -17,16 +17,18 @@ class CustomButton extends StatelessWidget {
     this.isOutlined = false,
     required this.onPressed,
     this.width = 280,
+    this.height = 60,
     this.buttonIcon = "",
     this.sizeButtonIcon = 20,
     this.labelSize = 12,
-    this.paddingButton = 13,
+    this.paddingButton = 0,
   });
 
   final String buttonText;
   final bool isOutlined;
   final Function onPressed;
   final double width;
+  final double height;
   final double paddingButton;
   final double sizeButtonIcon;
   final double labelSize;
@@ -43,6 +45,7 @@ class CustomButton extends StatelessWidget {
         elevation: 4,
         child: Container(
           width: width,
+          height: height,
           padding: EdgeInsets.all(paddingButton),
           decoration: BoxDecoration(
             color: isOutlined ? greyColor : yellowPrimaryColor,
