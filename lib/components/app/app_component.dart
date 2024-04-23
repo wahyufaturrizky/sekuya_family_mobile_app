@@ -39,7 +39,6 @@ class AppComponentState extends State<AppComponent> {
       ),
       onGenerateRoute: Application.router.generator,
     );
-//    print("initial route = ${app.initialRoute}");
     return app;
   }
 }

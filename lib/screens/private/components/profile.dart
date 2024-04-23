@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileComponentApp extends StatelessWidget {
   const ProfileComponentApp({super.key});
@@ -26,6 +31,27 @@ class _ProfileComponentState extends State<ProfileComponent> {
     'My Voucher'
   ];
 
+  final List<String> menu = <String>[
+    'Edit Profile',
+    'Logout',
+  ];
+
+  Future handleLogout() async {
+    FirebaseAuth.instance.signOut().then((value) {
+      SharedPreferences.getInstance().then((prefs) {
+        prefs
+            .remove('access_token')
+            .then((value) => {
+                  Application.router.navigateTo(context, "/",
+                      transition: TransitionType.native)
+                })
+            .catchError((onError) => print(onError));
+      }).catchError((onError) {
+        print('onError $onError');
+      });
+    }).catchError((onError) => {print(onError)});
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -37,13 +63,6 @@ class _ProfileComponentState extends State<ProfileComponent> {
             // These are the slivers that show up in the "outer" scroll view.
             return <Widget>[
               SliverOverlapAbsorber(
-                // This widget takes the overlapping behavior of the SliverAppBar,
-                // and redirects it to the SliverOverlapInjector below. If it is
-                // missing, then it is possible for the nested "inner" scroll view
-                // below to end up under the SliverAppBar even when the inner
-                // scroll view thinks it has not been scrolled.
-                // This is not necessary if the "headerSliverBuilder" only builds
-                // widgets that do not overlap the next sliver.
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
@@ -60,24 +79,74 @@ class _ProfileComponentState extends State<ProfileComponent> {
                             height: 170,
                             alignment: Alignment.topCenter,
                           ),
-                          const Column(
+                          Column(
                             children: [
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    'https://i.pravatar.cc/150?img=1'),
-                                radius: 40,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Icon(
+                                    Icons.more_vert,
+                                    color: Colors.transparent,
+                                  ),
+                                  const CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        'https://i.pravatar.cc/150?img=1'),
+                                    radius: 40,
+                                  ),
+                                  PopupMenuButton<String>(
+                                      color: Colors.black,
+                                      onSelected: (String item) {
+                                        if (item == 'Logout') {
+                                          handleLogout();
+                                        }
+                                      },
+                                      itemBuilder: (BuildContext context) {
+                                        return menu
+                                            .map((item) =>
+                                                PopupMenuItem<String>(
+                                                  value: item,
+                                                  child: ListTile(
+                                                    leading: Icon(
+                                                      item == "Logout"
+                                                          ? Icons.login_outlined
+                                                          : Icons.edit,
+                                                      color: item == "Logout"
+                                                          ? redSolidPrimaryColor
+                                                          : Colors.white,
+                                                    ),
+                                                    title: Text(
+                                                      item == "Logout"
+                                                          ? 'Logout'
+                                                          : 'Edit Profile',
+                                                      style: TextStyle(
+                                                          color: item ==
+                                                                  "Logout"
+                                                              ? redSolidPrimaryColor
+                                                              : Colors.white),
+                                                    ),
+                                                  ),
+                                                ))
+                                            .toList();
+                                      },
+                                      child: const Icon(
+                                        Icons.more_vert,
+                                        color: Colors.white,
+                                      ))
+                                ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 12,
                               ),
-                              Text(
+                              const Text(
                                 'Wahyu Fatur Rizki',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold),
                               ),
-                              Text(
+                              const Text(
                                 'wahyufaturrizkyy@gmail.com',
                                 style: TextStyle(
                                     color: greySecondaryColor,
@@ -85,7 +154,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                     fontWeight: FontWeight.w500),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -101,13 +170,57 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                   radius: 20,
                                 ))
                             .toList(),
-                      )
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                          height: 56,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/bg_progress_xp.png'),
+                                  fit: BoxFit.fill)),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Level 4',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    '255 xp',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              LinearProgressIndicator(
+                                value: 0.6,
+                                color: yellowPrimaryColor,
+                                backgroundColor: greyThirdColor,
+                              )
+                            ],
+                          )),
                     ],
                   ),
                   // This is the title in the app bar.
                   floating: true,
-                  expandedHeight: 250.0,
-                  toolbarHeight: 250,
+                  expandedHeight: 300.0,
+                  toolbarHeight: 300,
                   backgroundColor: Colors.black,
                   // The "forceElevated" property causes the SliverAppBar to show
                   // a shadow. The "innerBoxIsScrolled" parameter is true when the

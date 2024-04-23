@@ -7,13 +7,13 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:dio/dio.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,9 +27,6 @@ const List<String> scopes = <String>[
 ];
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
-  // Optional clientId
-  clientId:
-      '433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com',
   scopes: scopes,
 );
 // #enddocregion Initialize
@@ -51,27 +48,21 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  GoogleSignInAccount? _currentUser;
-  bool _isAuthorized = false; // has granted permissions?
-  String _contactText = '';
-  ValueNotifier userCredential = ValueNotifier('');
-
   @override
   void initState() {
-    print('--- initState ---');
-
-    print('userCredential = $userCredential');
     super.initState();
+    _loadAccessToken();
+  }
 
-    _googleSignIn.onCurrentUserChanged
-        .listen((GoogleSignInAccount? account) async {
-      bool isAuthorized = account != null;
+  Future<void> _loadAccessToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
 
-      setState(() {
-        _currentUser = account;
-        _isAuthorized = isAuthorized;
-      });
-    });
+      final accessToken = prefs.getString('access_token') ?? '';
+      print(accessToken);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<dynamic> signInWithApple() async {
@@ -84,76 +75,63 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> signInWithGoogle() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<dynamic> signInWithGoogle2() async {
-    print("--- signInWithGoogle ---");
-
+  Future<dynamic> signInWithGoogle() async {
     try {
       _googleSignIn.signIn().then((result) {
-        print('@result = $result');
+        FirebaseAuth.instance
+            .fetchSignInMethodsForEmail(result!.email)
+            .then((valSignInMethods) {
+          if (valSignInMethods.contains("google.com")) {
+            print("Email is already associated with a Google Sign-In account.");
+            return "0";
+          } else {
+            print("Email is not associated with any account.");
+            return "1";
+          }
+        });
 
-        // FirebaseAuth.instance
-        //     .fetchSignInMethodsForEmail(result!.email)
-        //     .then((valSignInMethods) {
-        //   if (valSignInMethods.contains("google.com")) {
-        //     print("Email is already associated with a Google Sign-In account.");
-        //     return "0";
-        //   } else {
-        //     print("Email is not associated with any account.");
-        //     return "1";
-        //   }
-        // });
+        result?.authentication.then((googleKey) {
+          final AuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleKey.accessToken,
+            idToken: googleKey.idToken,
+          );
 
-        // result?.authentication.then((googleKey) async {
-        //   print(googleKey.accessToken);
-        //   print(googleKey.idToken);
-        //   print(_googleSignIn.currentUser?.displayName);
-
-        //   final AuthCredential credential = GoogleAuthProvider.credential(
-        //     accessToken: googleKey.accessToken,
-        //     idToken: googleKey.idToken,
-        //   );
-
-        //   FirebaseAuth.instance
-        //       .signInWithCredential(credential)
-        //       .then((valCredential) {
-        //     print('@valCredential = $valCredential');
-
-        //     dio.post('$baseUrl/account/google', data: {
-        //       'id_token': googleKey.idToken,
-        //       'access_token': googleKey.accessToken,
-        //       'provider': credential.providerId,
-        //     }).then((valResFromXellar) {
-        //       print('@valResFromXellar = $valResFromXellar');
-
-        //       SharedPreferences.getInstance().then((prefs) {
-        //         prefs
-        //             .setInt('access_token', valResFromXellar.data.accessToken)
-        //             .then((value) => {
-        //                   Application.router.navigateTo(
-        //                       context, "/privatescreens",
-        //                       transition: TransitionType.native)
-        //                 })
-        //             .catchError((onError) => print(onError));
-        //       }).catchError((onError) {
-        //         print('onError $onError');
-        //       });
-        //     }).catchError((onError) {
-        //       print('onError xellar = $onError');
-        //     });
-        //   }).catchError((err) {
-        //     print('inner error');
-        //   });
-        // }).catchError((err) {
-        //   print('inner error');
-        // });
+          FirebaseAuth.instance
+              .signInWithCredential(credential)
+              .then((valCredential) {
+            dio.post('$baseUrl/account/google',
+                options: Options(
+                    validateStatus: (_) => true,
+                    contentType: Headers.jsonContentType,
+                    responseType: ResponseType.json),
+                data: {
+                  'id_token': googleKey.idToken,
+                  'access_token': googleKey.accessToken,
+                  'provider': credential.providerId,
+                }).then((valResFromXellar) {
+              print(valResFromXellar);
+              SharedPreferences.getInstance().then((prefs) {
+                prefs
+                    .setString('access_token',
+                        valResFromXellar.data['data']['accessToken'])
+                    .then((value) => {
+                          Application.router.navigateTo(
+                              context, "/privatescreens",
+                              transition: TransitionType.native)
+                        })
+                    .catchError((onError) => print(onError));
+              }).catchError((onError) {
+                print('onError $onError');
+              });
+            }).catchError((onError) {
+              print('onError xellar = $onError');
+            });
+          }).catchError((err) {
+            print('inner error');
+          });
+        }).catchError((err) {
+          print('inner error');
+        });
       }).catchError((err) {
         print('error occured');
       });
