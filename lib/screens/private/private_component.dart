@@ -13,14 +13,17 @@ import 'package:sekuya_family_mobile_app/screens/private/components/community.da
 import 'package:sekuya_family_mobile_app/screens/private/components/home.dart';
 import 'package:sekuya_family_mobile_app/screens/private/components/mission.dart';
 import 'package:sekuya_family_mobile_app/screens/private/components/profile.dart';
+import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 
 class PrivateScreenApp extends StatelessWidget {
-  const PrivateScreenApp({super.key});
+  const PrivateScreenApp({super.key, this.args});
+
+  final MyArgumentsDataClass? args;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const PrivateScreen(),
+      home: PrivateScreen(args: args),
       theme: ThemeData(
           canvasColor: Colors.black,
           textSelectionTheme: TextSelectionThemeData(
@@ -40,7 +43,12 @@ class PrivateScreenApp extends StatelessWidget {
 }
 
 class PrivateScreen extends StatefulWidget {
-  const PrivateScreen({super.key});
+  const PrivateScreen({
+    super.key,
+    this.args,
+  });
+
+  final MyArgumentsDataClass? args;
 
   @override
   State<PrivateScreen> createState() => _PrivateScreenState();
@@ -54,6 +62,22 @@ class _PrivateScreenState extends State<PrivateScreen> {
     CommunityComponentApp(),
     ProfileComponentApp(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    handleRouteCondition();
+  }
+
+  void handleRouteCondition() {
+    var goToProfile = widget.args?.goToProfile ?? false;
+
+    if (goToProfile) {
+      setState(() {
+        _selectedIndex = 3;
+      });
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {

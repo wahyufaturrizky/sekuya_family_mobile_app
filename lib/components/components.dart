@@ -19,13 +19,17 @@ class CustomButton extends StatelessWidget {
     this.width = 280,
     this.height = 60,
     this.buttonIcon = "",
+    this.isOutlinedBackgroundColor = greyColor,
     this.sizeButtonIcon = 20,
-    this.labelSize = 12,
+    this.labelSize = 18,
     this.paddingButton = 0,
+    this.isLoading = false,
   });
 
   final String buttonText;
+  final Color isOutlinedBackgroundColor;
   final bool isOutlined;
+  final bool isLoading;
   final Function onPressed;
   final double width;
   final double height;
@@ -48,7 +52,7 @@ class CustomButton extends StatelessWidget {
           height: height,
           padding: EdgeInsets.all(paddingButton),
           decoration: BoxDecoration(
-            color: isOutlined ? greyColor : yellowPrimaryColor,
+            color: isOutlined ? isOutlinedBackgroundColor : yellowPrimaryColor,
             border: isOutlined
                 ? null
                 : Border.all(color: yellowPrimaryColor, width: 2.5),
@@ -57,36 +61,28 @@ class CustomButton extends StatelessWidget {
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: buttonIcon != ""
-                  ? [
-                      CircleAvatar(
-                        radius: sizeButtonIcon,
-                        backgroundColor: Colors.transparent,
-                        child: Image.asset('assets/images/$buttonIcon'),
-                      ),
-                      Text(
-                        buttonText,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: labelSize,
-                          color: isOutlined
-                              ? yellowPrimaryColor
-                              : blackSolidPrimaryColor,
-                        ),
-                      )
-                    ]
-                  : [
-                      Text(
-                        buttonText,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: labelSize,
-                          color: isOutlined
-                              ? yellowPrimaryColor
-                              : blackSolidPrimaryColor,
-                        ),
-                      )
-                    ],
+              children: [
+                if (isLoading)
+                  const CircularProgressIndicator(
+                    color: yellowPrimaryColor,
+                  ),
+                if (buttonIcon != "")
+                  CircleAvatar(
+                    radius: sizeButtonIcon,
+                    backgroundColor: Colors.transparent,
+                    child: Image.asset('assets/images/$buttonIcon'),
+                  ),
+                Text(
+                  buttonText,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: labelSize,
+                    color: isOutlined
+                        ? yellowPrimaryColor
+                        : blackSolidPrimaryColor,
+                  ),
+                )
+              ],
             ),
           ),
         ),

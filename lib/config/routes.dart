@@ -14,7 +14,8 @@ import './route_handlers.dart';
 class Routes {
   static String root = "/";
   static String demoSimple = "/demo";
-  static String privateScreens = "/privatescreens";
+  static String privateScreens = "/privateScreens";
+  static String profileDetailScreens = "/profileDetailScreens";
   static String demoSimpleFixedTrans = "/demo/fixedtrans";
   static String demoFunc = "/demo/func";
   static String deepLink = "/message";
@@ -28,6 +29,7 @@ class Routes {
     router.define(root, handler: rootHandler);
     router.define(demoSimple, handler: demoRouteHandler);
     router.define(privateScreens, handler: privateHandler);
+    router.define(profileDetailScreens, handler: profileDetailHandler);
     router.define(demoSimpleFixedTrans,
         handler: demoRouteHandler, transitionType: TransitionType.inFromLeft);
     router.define(demoFunc, handler: demoFunctionHandler);

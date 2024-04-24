@@ -40,7 +40,7 @@ class _HomeComponentState extends State<HomeComponent> {
         CarouselSlider(
           options: CarouselOptions(
             height: 180.0,
-            autoPlay: true,
+            // autoPlay: true,
             autoPlayInterval: const Duration(seconds: 2),
             viewportFraction: 1.0,
           ),

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -100,6 +99,12 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                       onSelected: (String item) {
                                         if (item == 'Logout') {
                                           handleLogout();
+                                        } else {
+                                          Application.router.navigateTo(
+                                            context,
+                                            "/profileDetailScreens",
+                                            transition: TransitionType.native,
+                                          );
                                         }
                                       },
                                       itemBuilder: (BuildContext context) {

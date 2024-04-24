@@ -88,6 +88,9 @@ flutter:
     - assets/images/ic_discord.png
     - assets/images/bg_profile.png
     - assets/images/bg_progress_xp.png
+    - assets/images/ic_discord.png
+    - assets/images/ic_telegram.png
+    - assets/images/ic_twitter.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

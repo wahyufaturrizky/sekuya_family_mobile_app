@@ -9,6 +9,7 @@
 
 import 'package:sekuya_family_mobile_app/screens/login/login_component.dart';
 import 'package:sekuya_family_mobile_app/screens/private/private_component.dart';
+import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 
 import '../helpers/color_helpers.dart';
 import '../components/demo/demo_simple_component.dart';
@@ -20,9 +21,17 @@ var rootHandler = Handler(
   return const LoginScreenApp();
 });
 
-var privateHandler = Handler(
+var privateHandler =
+    Handler(handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
+  final MyArgumentsDataClass? args =
+      context!.settings!.arguments as MyArgumentsDataClass?;
+
+  return PrivateScreenApp(args: args);
+});
+
+var profileDetailHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  return const PrivateScreenApp();
+  return const ProfileDetailApp();
 });
 
 var demoRouteHandler = Handler(

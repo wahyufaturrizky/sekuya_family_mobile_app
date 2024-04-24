@@ -48,6 +48,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -59,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final prefs = await SharedPreferences.getInstance();
 
       final accessToken = prefs.getString('access_token') ?? '';
-      print(accessToken);
+      // print(accessToken);
     } catch (e) {
       print(e);
     }
@@ -77,6 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<dynamic> signInWithGoogle() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
+
       _googleSignIn.signIn().then((result) {
         FirebaseAuth.instance
             .fetchSignInMethodsForEmail(result!.email)
@@ -99,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
           FirebaseAuth.instance
               .signInWithCredential(credential)
               .then((valCredential) {
-            dio.post('$baseUrl/account/google',
+            dio.post('$baseUrl/auth/login',
                 options: Options(
                     validateStatus: (_) => true,
                     contentType: Headers.jsonContentType,
@@ -109,34 +115,66 @@ class _LoginScreenState extends State<LoginScreen> {
                   'access_token': googleKey.accessToken,
                   'provider': credential.providerId,
                 }).then((valResFromXellar) {
-              print(valResFromXellar);
+              // print(valResFromXellar);
               SharedPreferences.getInstance().then((prefs) {
                 prefs
                     .setString('access_token',
                         valResFromXellar.data['data']['accessToken'])
-                    .then((value) => {
-                          Application.router.navigateTo(
-                              context, "/privatescreens",
-                              transition: TransitionType.native)
-                        })
-                    .catchError((onError) => print(onError));
+                    .then((value) {
+                  Application.router.navigateTo(context, "/privateScreens",
+                      transition: TransitionType.native);
+
+                  setState(() {
+                    isLoading = false;
+                  });
+                }).catchError((onError) {
+                  print(onError);
+
+                  setState(() {
+                    isLoading = false;
+                  });
+                });
               }).catchError((onError) {
                 print('onError $onError');
+
+                setState(() {
+                  isLoading = false;
+                });
               });
             }).catchError((onError) {
               print('onError xellar = $onError');
+
+              setState(() {
+                isLoading = false;
+              });
             });
           }).catchError((err) {
             print('inner error');
+
+            setState(() {
+              isLoading = false;
+            });
           });
         }).catchError((err) {
           print('inner error');
+
+          setState(() {
+            isLoading = false;
+          });
         });
       }).catchError((err) {
         print('error occured');
+
+        setState(() {
+          isLoading = false;
+        });
       });
     } catch (error) {
       print("Error during Google sign-in: $error");
+
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -180,9 +218,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           Hero(
                             tag: 'login_btn',
                             child: CustomButton(
+                                isLoading: isLoading,
                                 buttonText: 'Continue with Gmail',
                                 onPressed: () {
-                                  signInWithGoogle();
+                                  if (!isLoading) {
+                                    signInWithGoogle();
+                                  }
                                 },
                                 buttonIcon: "ic_google.png",
                                 isOutlined: true,
@@ -196,10 +237,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           Hero(
                             tag: 'signup_btn',
                             child: CustomButton(
+                                isLoading: isLoading,
                                 buttonText: 'Continue with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
-                                  signInWithApple();
+                                  if (!isLoading) {
+                                    signInWithApple();
+                                  }
                                 },
                                 buttonIcon: "ic_apple.png",
                                 sizeButtonIcon: 20,
