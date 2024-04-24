@@ -62,7 +62,8 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return SafeArea(
+        child: DefaultTabController(
       length: tabs.length, // This is the number of tabs.
       child: NestedScrollView(
         floatHeaderSlivers: true,
@@ -84,39 +85,56 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                           fit: BoxFit.cover,
                           width: double.infinity,
                         ),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset(
-                              'assets/images/ic_community.png',
+                            IconButton(
+                              color: Colors.white,
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () {
+                                handleBack();
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
                             ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            Row(
                               children: [
-                                const Text(
-                                  'NFT Communities',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                Image.asset(
+                                  'assets/images/ic_community.png',
                                 ),
-                                Row(
+                                const SizedBox(width: 12),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.asset(
-                                      'assets/images/ic_chart.png',
-                                    ),
-                                    const SizedBox(width: 12),
                                     const Text(
-                                      'LEVEL 4',
+                                      'NFT Communities',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/ic_chart.png',
+                                        ),
+                                        const SizedBox(width: 12),
+                                        const Text(
+                                          'LEVEL 4',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ],
-                            ),
+                            )
                           ],
                         )
                       ],
@@ -293,44 +311,39 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
         },
         body: TabBarView(
           children: tabs.map((String name) {
-            return SafeArea(
-              top: false,
-              bottom: false,
-              child: Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    color: Colors.black,
-                    child: CustomScrollView(
-                      key: PageStorageKey<String>(name),
-                      slivers: <Widget>[
-                        SliverOverlapInjector(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                  context),
-                        ),
-                        SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          sliver: SliverFixedExtentList(
-                            itemExtent: name == "Mission" ? 170.0 : 80,
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return name == "Mission"
-                                    ? const TabContentCommunityComponentApp()
-                                    : const TabContentCommunityLeaderBoardComponentApp();
-                              },
-                              childCount: 10,
-                            ),
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                  color: Colors.black,
+                  child: CustomScrollView(
+                    key: PageStorageKey<String>(name),
+                    slivers: <Widget>[
+                      SliverOverlapInjector(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.all(8.0),
+                        sliver: SliverFixedExtentList(
+                          itemExtent: name == "Mission" ? 170.0 : 80,
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return name == "Mission"
+                                  ? const TabContentCommunityComponentApp()
+                                  : const TabContentCommunityLeaderBoardComponentApp();
+                            },
+                            childCount: 10,
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           }).toList(),
         ),
       ),
-    );
+    ));
   }
 }

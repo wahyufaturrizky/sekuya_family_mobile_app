@@ -13,6 +13,7 @@ import 'package:sekuya_family_mobile_app/screens/private/components/community.da
 import 'package:sekuya_family_mobile_app/screens/private/components/home.dart';
 import 'package:sekuya_family_mobile_app/screens/private/components/mission.dart';
 import 'package:sekuya_family_mobile_app/screens/private/components/profile.dart';
+import 'package:sekuya_family_mobile_app/screens/private/components/voucher.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 
 class PrivateScreenApp extends StatelessWidget {
@@ -60,6 +61,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
     HomeComponentApp(),
     MissionComponentApp(),
     CommunityComponentApp(),
+    VoucherComponentApp(),
     ProfileComponentApp(),
   ];
 
@@ -71,8 +73,13 @@ class _PrivateScreenState extends State<PrivateScreen> {
 
   void handleRouteCondition() {
     var goToProfile = widget.args?.goToProfile ?? false;
+    var goToCommunity = widget.args?.goToCommunity ?? false;
 
     if (goToProfile) {
+      setState(() {
+        _selectedIndex = 4;
+      });
+    } else if (goToCommunity) {
       setState(() {
         _selectedIndex = 3;
       });
@@ -106,6 +113,11 @@ class _PrivateScreenState extends State<PrivateScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
             label: 'Community',
+            backgroundColor: Colors.black,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.airplane_ticket),
+            label: 'Voucher',
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
