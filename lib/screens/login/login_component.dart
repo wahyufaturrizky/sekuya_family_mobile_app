@@ -61,7 +61,14 @@ class _LoginScreenState extends State<LoginScreen> {
       final prefs = await SharedPreferences.getInstance();
 
       final accessToken = prefs.getString('access_token') ?? '';
-      // print(accessToken);
+
+      if (accessToken != '') {
+        Application.router.navigateTo(
+          context,
+          "/privateScreens",
+          transition: TransitionType.inFromLeft,
+        );
+      }
     } catch (e) {
       print(e);
     }

@@ -87,17 +87,9 @@ class _PrivateScreenState extends State<PrivateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       backgroundColor: Colors.black,
-      appBar: _selectedIndex == 0
-          ? AppBar(
-              title: const Text(
-                'Title bar',
-                style: TextStyle(color: Colors.black),
-              ),
-              backgroundColor: Colors.black,
-            )
-          : null,
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -127,6 +119,6 @@ class _PrivateScreenState extends State<PrivateScreen> {
         unselectedItemColor: greySecondaryColor,
         onTap: _onItemTapped,
       ),
-    );
+    ));
   }
 }

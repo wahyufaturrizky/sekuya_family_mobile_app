@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/mission.dart';
@@ -168,19 +177,10 @@ class _MissionComponentState extends State<MissionComponent> {
                   )
                 ],
               ),
-              // This is the title in the app bar.
               floating: true,
               expandedHeight: 190.0,
               toolbarHeight: 190,
               backgroundColor: Colors.black,
-              // The "forceElevated" property causes the SliverAppBar to show
-              // a shadow. The "innerBoxIsScrolled" parameter is true when the
-              // inner scroll view is scrolled beyond its "zero" point, i.e.
-              // when it appears to be scrolled below the SliverAppBar.
-              // Without this, there are cases where the shadow would appear
-              // or not appear inappropriately, because the SliverAppBar is
-              // not actually aware of the precise position of the inner
-              // scroll views.
               forceElevated: innerBoxIsScrolled,
             ),
           ),
@@ -190,51 +190,24 @@ class _MissionComponentState extends State<MissionComponent> {
         top: false,
         bottom: false,
         child: Builder(
-          // This Builder is needed to provide a BuildContext that is
-          // "inside" the NestedScrollView, so that
-          // sliverOverlapAbsorberHandleFor() can find the
-          // NestedScrollView.
           builder: (BuildContext context) {
             return Container(
               color: Colors.black,
               child: CustomScrollView(
-                // The "controller" and "primary" members should be left
-                // unset, so that the NestedScrollView can control this
-                // inner scroll view.
-                // If the "controller" property is set, then this scroll
-                // view will not be associated with the NestedScrollView.
-                // The PageStorageKey should be unique to this ScrollView;
-                // it allows the list to remember its scroll position when
-                // the tab view is not on the screen.
                 slivers: <Widget>[
                   SliverOverlapInjector(
-                    // This is the flip side of the SliverOverlapAbsorber
-                    // above.
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                         context),
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.all(8.0),
-                    // In this example, the inner scroll view has
-                    // fixed-height list items, hence the use of
-                    // SliverFixedExtentList. However, one could use any
-                    // sliver widget here, e.g. SliverList or SliverGrid.
                     sliver: SliverFixedExtentList(
-                      // The items in this example are fixed to 48 pixels
-                      // high. This matches the Material Design spec for
-                      // ListTile widgets.
                       itemExtent: 180.0,
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          // This builder is called for each child.
-                          // In this example, we just number each list item.
                           return const TabContentCommunityComponent();
                         },
-                        // The childCount of the SliverChildBuilderDelegate
-                        // specifies how many children this inner list
-                        // has. In this example, each tab has a list of
-                        // exactly 30 items, but this is arbitrary.
-                        childCount: 30,
+                        childCount: 10,
                       ),
                     ),
                   ),

@@ -41,12 +41,29 @@ class ProfileDetail extends StatefulWidget {
 
 class _ProfileDetailState extends State<ProfileDetail> {
   late String username;
+  bool isLoading = false;
+
   void handleBack() {
     final arguments = MyArgumentsDataClass(true);
 
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,
         routeSettings: RouteSettings(arguments: arguments));
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<dynamic> handleUpdateProfile() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      handleBack();
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -175,7 +192,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                             height: 16,
                           ),
                           Hero(
-                            tag: 'signup_btn',
+                            tag: item["title"] ?? "",
                             child: CustomButton(
                                 isOutlinedBackgroundColor: greyDarkColor,
                                 buttonText: item["title"] ?? "",
@@ -197,8 +214,13 @@ class _ProfileDetailState extends State<ProfileDetail> {
       bottomSheet: Container(
           color: Colors.black,
           child: CustomButton(
+              isLoading: isLoading,
               buttonText: 'Save',
-              onPressed: () {},
+              onPressed: () {
+                if (!isLoading) {
+                  handleUpdateProfile();
+                }
+              },
               sizeButtonIcon: 20,
               width: 500,
               paddingButton: 0)),
