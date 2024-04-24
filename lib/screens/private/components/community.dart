@@ -8,8 +8,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:sekuya_family_mobile_app/components/tab_community/leaderboard.dart';
-import 'package:sekuya_family_mobile_app/components/tab_community/mission.dart';
+import 'package:sekuya_family_mobile_app/components/components.dart';
+import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class CommunityComponentApp extends StatelessWidget {
@@ -29,13 +29,39 @@ class CommunityComponent extends StatefulWidget {
 }
 
 class _CommunityComponentState extends State<CommunityComponent> {
+  late String search;
   final List<String> tabs = <String>['Mission', 'Leaderboard', 'Members'];
+
+  final List<Map<String, String>> gridMenu = <Map<String, String>>[
+    {
+      "title": "Trending",
+      "icon": "ic_trending.png",
+    },
+    {
+      "title": "High Level",
+      "icon": "ic_high_level.png",
+    },
+    {
+      "title": "Newest",
+      "icon": "ic_newest.png",
+    },
+    {
+      "title": "Most Member",
+      "icon": "ic_most_member.png",
+    },
+    {
+      "title": "Top Mission",
+      "icon": "ic_top_mission.png",
+    },
+    {
+      "title": "???",
+      "icon": "ic_trending.png",
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: tabs.length, // This is the number of tabs.
-      child: NestedScrollView(
+    return NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           // These are the slivers that show up in the "outer" scroll view.
@@ -46,261 +72,140 @@ class _CommunityComponentState extends State<CommunityComponent> {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Stack(
-                      alignment: Alignment.bottomLeft,
-                      children: [
-                        Image.asset(
-                          'assets/images/banner_home.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
-                        Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/ic_community.png',
-                            ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'NFT Communities',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/ic_chart.png',
-                                    ),
-                                    const SizedBox(width: 12),
-                                    const Text(
-                                      'LEVEL 4',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
+                    const Center(
+                      child: Text(
+                        'Communities',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '2',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Mission',
-                                style: TextStyle(
-                                    color: greySecondaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
-                          ),
-                        )),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                            child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '2',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Members',
-                                style: TextStyle(
-                                    color: greySecondaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
-                          ),
-                        )),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                            child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '2',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Created',
-                                style: TextStyle(
-                                    color: greySecondaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
-                          ),
-                        )),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const Text(
-                      'dictum cursus mauris varius tristique aliquet. Morbi cursus urna in nibh diam dolor lacus sit. Tristique rhoncus amet a congue laoreet amet sodales. Laoreet integer nullam pharetra maecenas sit. Purus adipiscing turpis vestibulum interdum egestas. Ornare tincidunt nunc orci',
-                      style: TextStyle(
-                          color: Colors.white,
+                    const Center(
+                      child: Text(
+                        'Lorem ipsum dolor sit amet, consectetur adipis',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: greySecondaryColor,
                           fontSize: 12,
-                          fontWeight: FontWeight.w400),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 16,
                     ),
-                    const Text(
-                      'Social Media',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500),
+                    CustomTextField(
+                      textField: TextField(
+                          onChanged: (value) {
+                            search = value;
+                          },
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                          decoration: kTextInputDecoration.copyWith(
+                            hintText: 'Search',
+                            prefixIcon: const Icon(Icons.search),
+                            prefixIconColor: greySecondaryColor,
+                            hintStyle:
+                                const TextStyle(color: greySecondaryColor),
+                          )),
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                        children: [
-                      {"title": "abc", "like": "1.8K"},
-                      {"title": "abc", "like": "1.8K"},
-                      {"title": "abc", "like": "1.8K"},
-                      {"title": "abc", "like": "1.8K"},
-                    ].map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/images/ic_discord.png',
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  i["like"]!,
-                                  style: const TextStyle(
-                                      color: yellowPrimaryColor,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }).toList()),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
+                        height: 260,
+                        child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    mainAxisSpacing: 16,
+                                    crossAxisSpacing: 16),
+                            itemCount: 6,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Card(
+                                  color: Colors.black,
+                                  child: InkWell(
+                                      splashColor:
+                                          yellowPrimaryColor.withAlpha(30),
+                                      onTap: () {
+                                        debugPrint('Card tapped.');
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: greySecondaryColor,
+                                                  width: 1),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(16))),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                  child: CircleAvatar(
+                                                radius: 12,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                child: Image.asset(
+                                                    'assets/images/${gridMenu[index]["icon"]}'),
+                                              )),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Center(
+                                                  child: Text(
+                                                gridMenu[index]["title"]!,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )),
+                                            ],
+                                          ))));
+                            })),
                   ],
                 ),
                 floating: true,
-                expandedHeight: 360.0,
-                toolbarHeight: 360,
+                expandedHeight: 400.0,
+                toolbarHeight: 400,
                 backgroundColor: Colors.black,
                 forceElevated: innerBoxIsScrolled,
-                bottom: TabBar(
-                  tabs: tabs.map((String name) => Tab(text: name)).toList(),
-                ),
               ),
             ),
           ];
         },
-        body: TabBarView(
-          children: tabs.map((String name) {
-            return SafeArea(
-              top: false,
-              bottom: false,
-              child: Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    color: Colors.black,
-                    child: CustomScrollView(
-                      key: PageStorageKey<String>(name),
-                      slivers: <Widget>[
-                        SliverOverlapInjector(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                  context),
-                        ),
-                        SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          sliver: SliverFixedExtentList(
-                            itemExtent: name == "Mission" ? 170.0 : 80,
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return name == "Mission"
-                                    ? const TabContentCommunityComponentApp()
-                                    : const TabContentCommunityLeaderBoardComponentApp();
-                              },
-                              childCount: 10,
-                            ),
-                          ),
-                        ),
-                      ],
+        body: Builder(
+          builder: (BuildContext context) {
+            return Container(
+              color: Colors.black,
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8.0),
+                    sliver: SliverFixedExtentList(
+                      itemExtent: 170.0,
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return TabContentCommunityFeaturedComponentApp(
+                              item: index);
+                        },
+                        childCount: 10,
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
             );
-          }).toList(),
-        ),
-      ),
-    );
+          },
+        ));
   }
 }

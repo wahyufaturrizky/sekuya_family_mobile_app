@@ -243,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tag: 'login_btn',
                             child: CustomButton(
                                 isLoading: isLoading,
-                                buttonText: 'Continue with Gmail asd',
+                                buttonText: 'Continue with Gmail',
                                 onPressed: () {
                                   if (!isLoading) {
                                     signInWithGoogle();

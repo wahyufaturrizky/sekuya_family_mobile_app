@@ -186,36 +186,32 @@ class _MissionComponentState extends State<MissionComponent> {
           ),
         ];
       },
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Builder(
-          builder: (BuildContext context) {
-            return Container(
-              color: Colors.black,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(8.0),
-                    sliver: SliverFixedExtentList(
-                      itemExtent: 180.0,
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return const TabContentCommunityComponent();
-                        },
-                        childCount: 10,
-                      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.black,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverOverlapInjector(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(8.0),
+                  sliver: SliverFixedExtentList(
+                    itemExtent: 180.0,
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return const TabContentCommunityComponent();
+                      },
+                      childCount: 10,
                     ),
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

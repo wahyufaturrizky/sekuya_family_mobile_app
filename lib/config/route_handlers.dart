@@ -7,7 +7,9 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
 import 'package:sekuya_family_mobile_app/screens/login/login_component.dart';
+import 'package:sekuya_family_mobile_app/screens/private/detail_community.dart';
 import 'package:sekuya_family_mobile_app/screens/private/private_component.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 
@@ -32,6 +34,14 @@ var privateHandler =
 var profileDetailHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
   return const ProfileDetailApp();
+});
+
+var communityDetailHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+  final MyArgumentsDataDetailCommunityClass? args =
+      context!.settings!.arguments as MyArgumentsDataDetailCommunityClass?;
+
+  return CommunityComponentDetailApp(args: args);
 });
 
 var demoRouteHandler = Handler(
