@@ -187,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
           });
         });
       }).catchError((err) {
-        print('error occured');
+        print('error occured = $err');
 
         setState(() {
           isLoading = false;
@@ -243,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tag: 'login_btn',
                             child: CustomButton(
                                 isLoading: isLoading,
-                                buttonText: 'Continue with Gmail',
+                                buttonText: 'Continue with Gmail asd',
                                 onPressed: () {
                                   if (!isLoading) {
                                     signInWithGoogle();

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "433294916757-pvh6155bm6cji8g0s310difa6c9k1a2f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sekuya_family_mobile_app",
+            "certificate_hash": "970aaa1a2f5a00ef590c387ab63e63b77319119f"
+          }
+        },
+        {
           "client_id": "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "433294916757-kov26lh9dh5hqdvm1uvpi49sh33q72ub.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sekuyaFamilyMobileApp"
+              }
             }
           ]
         }

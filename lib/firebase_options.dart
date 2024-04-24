@@ -63,8 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '433294916757',
     projectId: 'sekuya-9c1b7',
     storageBucket: 'sekuya-9c1b7.appspot.com',
-    iosClientId:
-        '433294916757-kov26lh9dh5hqdvm1uvpi49sh33q72ub.apps.googleusercontent.com',
+    androidClientId: '433294916757-pvh6155bm6cji8g0s310difa6c9k1a2f.apps.googleusercontent.com',
+    iosClientId: '433294916757-kov26lh9dh5hqdvm1uvpi49sh33q72ub.apps.googleusercontent.com',
     iosBundleId: 'com.example.sekuyaFamilyMobileApp',
   );
+
 }

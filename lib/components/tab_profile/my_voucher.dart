@@ -45,7 +45,7 @@ class _TabContentProfileMyVoucherComponentState
           decoration: const BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage('assets/images/banner_home.png'),
+              image: AssetImage('assets/images/bg_voucher.png'),
             ),
           ),
           child: Column(
