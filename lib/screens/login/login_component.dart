@@ -8,6 +8,7 @@
  */
 
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -36,12 +37,17 @@ class LoginScreenApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LoginScreen();
+    return LoginScreen();
   }
 }
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  LoginScreen({
+    super.key,
+  });
+
+  final FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -54,6 +60,17 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _loadAccessToken();
+    _sendAnalyticsEvent();
+  }
+
+  Future<void> _sendAnalyticsEvent() async {
+    try {
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'login_page',
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _loadAccessToken() async {
