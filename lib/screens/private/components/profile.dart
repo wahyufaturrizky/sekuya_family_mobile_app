@@ -7,6 +7,9 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +19,8 @@ import 'package:sekuya_family_mobile_app/components/tab_profile/my_voucher.dart'
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final dio = Dio();
 
 class ProfileComponentApp extends StatelessWidget {
   const ProfileComponentApp({super.key});
@@ -40,10 +45,42 @@ class _ProfileComponentState extends State<ProfileComponent> {
     'My Voucher'
   ];
 
+  var resProfile;
+
   final List<String> menu = <String>[
     'Edit Profile',
     'Logout',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    handleGetDataProfile();
+  }
+
+  Future<dynamic> handleGetDataProfile() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final accessToken = prefs.getString('access_token') ?? '';
+
+      if (accessToken != '') {
+        final response = await dio.get('$baseUrl/profile/info',
+            options: Options(headers: {
+              'Authorization': 'Bearer $accessToken',
+            }));
+
+        var decodeJsonRes = jsonDecode(response.toString());
+        print(decodeJsonRes);
+
+        setState(() {
+          resProfile = decodeJsonRes;
+        });
+      }
+    } catch (e) {
+      print('Error get dashboard =  $e');
+    }
+  }
 
   Future handleLogout() async {
     FirebaseAuth.instance.signOut().then((value) {
@@ -149,20 +186,26 @@ class _ProfileComponentState extends State<ProfileComponent> {
                             const SizedBox(
                               height: 12,
                             ),
-                            const Text(
-                              'Wahyu Fatur Rizki',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const Text(
-                              'wahyufaturrizkyy@gmail.com',
-                              style: TextStyle(
-                                  color: greySecondaryColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
+                            if (resProfile != null)
+                              Text(
+                                resProfile["data"]?["username"] == ""
+                                    ? "-"
+                                    : resProfile["data"]?["username"],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            if (resProfile != null)
+                              Text(
+                                resProfile["data"]?["email"] == ""
+                                    ? "-"
+                                    : resProfile["data"]?["email"],
+                                style: const TextStyle(
+                                    color: greySecondaryColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
                           ],
                         ),
                       ],

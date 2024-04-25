@@ -7,11 +7,17 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+final dio = Dio();
 
 class ProfileDetailApp extends StatelessWidget {
   const ProfileDetailApp({super.key});
@@ -42,6 +48,37 @@ class ProfileDetail extends StatefulWidget {
 class _ProfileDetailState extends State<ProfileDetail> {
   late String username;
   bool isLoading = false;
+  var resProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    handleGetDataProfile();
+  }
+
+  Future<dynamic> handleGetDataProfile() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final accessToken = prefs.getString('access_token') ?? '';
+
+      if (accessToken != '') {
+        final response = await dio.get('$baseUrl/profile/info',
+            options: Options(headers: {
+              'Authorization': 'Bearer $accessToken',
+            }));
+
+        var decodeJsonRes = jsonDecode(response.toString());
+        print(decodeJsonRes);
+
+        setState(() {
+          resProfile = decodeJsonRes;
+        });
+      }
+    } catch (e) {
+      print('Error get dashboard =  $e');
+    }
+  }
 
   void handleBack() {
     final arguments = MyArgumentsDataClass(true, false, false, false);
@@ -102,29 +139,12 @@ class _ProfileDetailState extends State<ProfileDetail> {
                   height: 170,
                   alignment: Alignment.topCenter,
                 ),
-                const Column(
+                Column(
                   children: [
                     CircleAvatar(
                       backgroundImage:
                           NetworkImage('https://i.pravatar.cc/150?img=1'),
                       radius: 40,
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      'Wahyu Fatur Rizki',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'wahyufaturrizkyy@gmail.com',
-                      style: TextStyle(
-                          color: greySecondaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
