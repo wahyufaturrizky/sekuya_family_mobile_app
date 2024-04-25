@@ -9,7 +9,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
-import 'package:sekuya_family_mobile_app/components/tab_community/mission.dart';
+import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
@@ -94,8 +94,8 @@ class _MissionComponentState extends State<MissionComponent> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          width: 165,
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          width: 170,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40.0),
                             border: Border.all(
@@ -134,8 +134,8 @@ class _MissionComponentState extends State<MissionComponent> {
                             }).toList(),
                           )),
                       Container(
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          width: 165,
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          width: 170,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40.0),
                             border: Border.all(
@@ -202,7 +202,7 @@ class _MissionComponentState extends State<MissionComponent> {
                     itemExtent: 180.0,
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        return const TabContentCommunityComponent();
+                        return TabContentMissionComponentApp(item: index);
                       },
                       childCount: 10,
                     ),

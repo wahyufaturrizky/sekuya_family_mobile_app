@@ -75,6 +75,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
     var goToProfile = widget.args?.goToProfile ?? false;
     var goToCommunity = widget.args?.goToCommunity ?? false;
     var goToVoucher = widget.args?.goToVoucher ?? false;
+    var goToMission = widget.args?.goToMission ?? false;
 
     if (goToProfile) {
       setState(() {
@@ -88,6 +89,8 @@ class _PrivateScreenState extends State<PrivateScreen> {
       setState(() {
         _selectedIndex = 3;
       });
+    } else if (goToMission) {
+      _selectedIndex = 1;
     }
   }
 

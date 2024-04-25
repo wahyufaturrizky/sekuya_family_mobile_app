@@ -44,7 +44,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
   bool isLoading = false;
 
   void handleBack() {
-    final arguments = MyArgumentsDataClass(true, false, false);
+    final arguments = MyArgumentsDataClass(true, false, false, false);
 
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,
@@ -232,6 +232,8 @@ class MyArgumentsDataClass {
   final bool goToProfile;
   final bool goToCommunity;
   final bool goToVoucher;
+  final bool goToMission;
 
-  MyArgumentsDataClass(this.goToProfile, this.goToCommunity, this.goToVoucher);
+  MyArgumentsDataClass(
+      this.goToProfile, this.goToCommunity, this.goToVoucher, this.goToMission);
 }

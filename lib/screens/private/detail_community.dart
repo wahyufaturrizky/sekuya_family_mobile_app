@@ -42,7 +42,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
   final List<String> tabs = <String>['Mission', 'Leaderboard', 'Members'];
 
   void handleBack() {
-    final arguments = MyArgumentsDataClass(false, true, false);
+    final arguments = MyArgumentsDataClass(false, true, false, false);
 
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,

@@ -68,7 +68,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
   ];
 
   void handleBack() {
-    final arguments = MyArgumentsDataClass(false, false, true);
+    final arguments = MyArgumentsDataClass(false, false, true, false);
 
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,
