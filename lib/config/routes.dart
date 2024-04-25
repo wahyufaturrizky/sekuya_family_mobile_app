@@ -17,6 +17,7 @@ class Routes {
   static String privateScreens = "/privateScreens";
   static String profileDetailScreens = "/profileDetailScreens";
   static String communityDetailAppScreens = "/communityDetailScreens";
+  static String detailVoucherScreen = "/detailVoucherScreen";
   static String demoSimpleFixedTrans = "/demo/fixedtrans";
   static String demoFunc = "/demo/func";
   static String deepLink = "/message";
@@ -31,6 +32,7 @@ class Routes {
     router.define(demoSimple, handler: demoRouteHandler);
     router.define(privateScreens, handler: privateHandler);
     router.define(profileDetailScreens, handler: profileDetailHandler);
+    router.define(detailVoucherScreen, handler: voucherDetailHandler);
     router.define(communityDetailAppScreens, handler: communityDetailHandler);
     router.define(demoSimpleFixedTrans,
         handler: demoRouteHandler, transitionType: TransitionType.inFromLeft);

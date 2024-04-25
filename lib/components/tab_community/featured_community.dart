@@ -35,8 +35,8 @@ class TabContentCommunityFeaturedComponent extends StatefulWidget {
 
 class _TabContentCommunityFeaturedComponentState
     extends State<TabContentCommunityFeaturedComponent> {
-  void goToDetailCommunity([TabContentCommunityFeaturedComponent? widget]) {
-    final arguments = MyArgumentsDataDetailCommunityClass(widget!.item);
+  void goToDetailCommunity() {
+    final arguments = MyArgumentsDataDetailCommunityClass(widget.item);
 
     Application.router.navigateTo(context, "/communityDetailScreens",
         transition: TransitionType.native,
@@ -52,7 +52,7 @@ class _TabContentCommunityFeaturedComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          goToDetailCommunity(widget);
+          goToDetailCommunity();
         },
         child: Padding(
           padding: const EdgeInsets.all(12),

@@ -8,10 +8,12 @@
  */
 
 import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
+import 'package:sekuya_family_mobile_app/components/tab_voucher/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/screens/login/login_component.dart';
 import 'package:sekuya_family_mobile_app/screens/private/detail_community.dart';
 import 'package:sekuya_family_mobile_app/screens/private/private_component.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
+import 'package:sekuya_family_mobile_app/screens/private/voucher_detail.dart';
 
 import '../helpers/color_helpers.dart';
 import '../components/demo/demo_simple_component.dart';
@@ -42,6 +44,14 @@ var communityDetailHandler = Handler(
       context!.settings!.arguments as MyArgumentsDataDetailCommunityClass?;
 
   return CommunityComponentDetailApp(args: args);
+});
+
+var voucherDetailHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+  final MyArgumentsDataDetailVoucherClass? args =
+      context!.settings!.arguments as MyArgumentsDataDetailVoucherClass?;
+
+  return VoucherDetailApp(args: args);
 });
 
 var demoRouteHandler = Handler(

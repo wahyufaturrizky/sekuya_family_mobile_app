@@ -74,12 +74,17 @@ class _PrivateScreenState extends State<PrivateScreen> {
   void handleRouteCondition() {
     var goToProfile = widget.args?.goToProfile ?? false;
     var goToCommunity = widget.args?.goToCommunity ?? false;
+    var goToVoucher = widget.args?.goToVoucher ?? false;
 
     if (goToProfile) {
       setState(() {
         _selectedIndex = 4;
       });
     } else if (goToCommunity) {
+      setState(() {
+        _selectedIndex = 2;
+      });
+    } else if (goToVoucher) {
       setState(() {
         _selectedIndex = 3;
       });
@@ -101,27 +106,27 @@ class _PrivateScreenState extends State<PrivateScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.ballot_outlined),
             label: 'Mission',
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.diversity_2_outlined),
             label: 'Community',
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.airplane_ticket),
+            icon: Icon(Icons.confirmation_number_outlined),
             label: 'Voucher',
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.account_circle_outlined),
             label: 'Profile',
             backgroundColor: Colors.black,
           ),

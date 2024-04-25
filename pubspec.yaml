@@ -102,6 +102,9 @@ flutter:
     - assets/images/ic_newest.png
     - assets/images/ic_top_mission.png
     - assets/images/ic_trending.png
+    - assets/images/bg_voucher_redeem.png
+    - assets/images/bg_jco.png
+    - assets/images/ic_jco.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
