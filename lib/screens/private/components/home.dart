@@ -7,9 +7,15 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+final dio = Dio();
 
 class HomeComponentApp extends StatelessWidget {
   const HomeComponentApp({super.key});
@@ -28,8 +34,36 @@ class HomeComponent extends StatefulWidget {
 }
 
 class _HomeComponentState extends State<HomeComponent> {
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
+  var resDashboard;
+
+  @override
+  void initState() {
+    super.initState();
+    handleGetDataDashboard();
+  }
+
+  Future<dynamic> handleGetDataDashboard() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final accessToken = prefs.getString('access_token') ?? '';
+
+      if (accessToken != '') {
+        final response = await dio.get('$baseUrl/dashboard',
+            options: Options(headers: {
+              'Authorization': 'Bearer $accessToken',
+            }));
+
+        var decodeJsonRes = jsonDecode(response.toString());
+
+        setState(() {
+          resDashboard = decodeJsonRes;
+        });
+      }
+    } catch (e) {
+      print('Error get dashboard =  $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +85,13 @@ class _HomeComponentState extends State<HomeComponent> {
             return Builder(
               builder: (BuildContext context) {
                 return Container(
-                  child: Image.asset(
-                    'assets/images/banner_home.png',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+                  child: resDashboard != null
+                      ? Image.network(
+                          resDashboard?["data"]?["coverImage"] ?? "",
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        )
+                      : null,
                 );
               },
             );
@@ -90,154 +126,171 @@ class _HomeComponentState extends State<HomeComponent> {
           child: ListView(
             // This next line does the trick.
             scrollDirection: Axis.horizontal,
-            children: [
-              1,
-              2,
-              3,
-              4,
-            ].map((i) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Card(
-                    color: blackPrimaryColor,
-                    clipBehavior: Clip.hardEdge,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: InkWell(
-                      splashColor: yellowPrimaryColor.withAlpha(30),
-                      onTap: () {
-                        debugPrint('Card tapped.');
-                      },
-                      child: SizedBox(
-                        width: 180,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
+            children: resDashboard != null
+                ? (resDashboard?["data"]?["featuredMissions"] as List<dynamic>)
+                    .map((item) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Card(
+                          color: blackPrimaryColor,
+                          clipBehavior: Clip.hardEdge,
+                          margin: const EdgeInsets.only(right: 12),
+                          child: InkWell(
+                            splashColor: yellowPrimaryColor.withAlpha(30),
+                            onTap: () {
+                              debugPrint('Card tapped.');
+                            },
+                            child: SizedBox(
+                              width: 200,
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'Mission ipsumece dolor sit amet',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: Colors.transparent,
-                                        child: Image.asset(
-                                            'assets/images/ic_apple.png'),
-                                      ),
-                                      const Text(
-                                        'NFT Communities',
-                                        style: TextStyle(
-                                            color: greySecondaryColor,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              color: blackSolidPrimaryColor,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Column(
-                                          children: [
-                                            Text(
-                                              '10',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            Text(
-                                              'Task',
-                                              style: TextStyle(
-                                                  color: greySecondaryColor,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w500),
-                                            )
-                                          ],
+                                        Text(
+                                          item["name"],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
                                         ),
-                                        const Column(
-                                          children: [
-                                            Text(
-                                              '10',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            Text(
-                                              'Task',
-                                              style: TextStyle(
-                                                  color: greySecondaryColor,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w500),
-                                            )
-                                          ],
+                                        const SizedBox(
+                                          height: 8,
                                         ),
-                                        Column(
+                                        Row(
                                           children: [
-                                            Row(
-                                              children: [
-                                                CircleAvatar(
-                                                  radius: 10,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  child: Image.asset(
-                                                      'assets/images/ic_apple.png'),
-                                                ),
-                                                const Text(
-                                                  '10',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                              ],
+                                            CircleAvatar(
+                                              radius: 12,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child:
+                                                  Image.network(item["image"]),
                                             ),
-                                            const Text(
-                                              'Task',
-                                              style: TextStyle(
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(
+                                              item["description"]
+                                                      .substring(0, 15) +
+                                                  '...',
+                                              style: const TextStyle(
                                                   color: greySecondaryColor,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w500),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600),
                                             )
                                           ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Container(
+                                    color: blackSolidPrimaryColor,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    item["total_mission"]
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  const Text(
+                                                    'Task',
+                                                    style: TextStyle(
+                                                        color:
+                                                            greySecondaryColor,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  )
+                                                ],
+                                              ),
+                                              const Column(
+                                                children: [
+                                                  Text(
+                                                    '10',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  Text(
+                                                    'Task',
+                                                    style: TextStyle(
+                                                        color:
+                                                            greySecondaryColor,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      CircleAvatar(
+                                                        radius: 10,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        child: Image.asset(
+                                                            'assets/images/ic_apple.png'),
+                                                      ),
+                                                      const Text(
+                                                        '10',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 10,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const Text(
+                                                    'Task',
+                                                    style: TextStyle(
+                                                        color:
+                                                            greySecondaryColor,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
+                          ),
+                        );
+                      },
+                    );
+                  }).toList()
+                : [],
           ),
         ),
         const SizedBox(
@@ -269,123 +322,129 @@ class _HomeComponentState extends State<HomeComponent> {
           child: ListView(
             // This next line does the trick.
             scrollDirection: Axis.horizontal,
-            children: [
-              1,
-              2,
-              3,
-              4,
-            ].map((i) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Card(
-                    color: blackPrimaryColor,
-                    clipBehavior: Clip.hardEdge,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: InkWell(
-                      splashColor: yellowPrimaryColor.withAlpha(30),
-                      onTap: () {
-                        debugPrint('Card tapped.');
-                      },
-                      child: SizedBox(
-                        width: 200,
-                        height: 150,
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              'assets/images/banner_home.png',
-                            ),
-                            Container(
-                              decoration: const BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                    color: blackSolidPrimaryColor,
-                                    spreadRadius: 15,
-                                    blurRadius: 15)
-                              ]),
+            children: resDashboard != null
+                ? (resDashboard?["data"]?["featuredCommunities"]
+                        as List<dynamic>)
+                    .map((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Card(
+                          color: blackPrimaryColor,
+                          clipBehavior: Clip.hardEdge,
+                          margin: const EdgeInsets.only(right: 12),
+                          child: InkWell(
+                            splashColor: yellowPrimaryColor.withAlpha(30),
+                            onTap: () {
+                              debugPrint('Card tapped.');
+                            },
+                            child: SizedBox(
+                              width: 200,
+                              height: 150,
                               child: Column(
                                 children: [
-                                  const Text(
-                                    'NFT Communities',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
+                                  Image.asset(
+                                    'assets/images/banner_home.png',
                                   ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.asset(
-                                                'assets/images/ic_apple.png'),
-                                          ),
-                                          const Text(
-                                            '10',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 12,
-                                      ),
-                                      Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.asset(
-                                                'assets/images/ic_apple.png'),
-                                          ),
-                                          const Text(
-                                            '10',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 12,
-                                      ),
-                                      Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 10,
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.asset(
-                                                'assets/images/ic_apple.png'),
-                                          ),
-                                          const Text(
-                                            '10',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                  Container(
+                                    decoration: const BoxDecoration(boxShadow: [
+                                      BoxShadow(
+                                          color: blackSolidPrimaryColor,
+                                          spreadRadius: 15,
+                                          blurRadius: 15)
+                                    ]),
+                                    child: Column(
+                                      children: [
+                                        const Text(
+                                          'NFT Communities',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 10,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: Image.asset(
+                                                      'assets/images/ic_apple.png'),
+                                                ),
+                                                const Text(
+                                                  '10',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 12,
+                                            ),
+                                            Row(
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 10,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: Image.asset(
+                                                      'assets/images/ic_apple.png'),
+                                                ),
+                                                const Text(
+                                                  '10',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 12,
+                                            ),
+                                            Row(
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 10,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: Image.asset(
+                                                      'assets/images/ic_apple.png'),
+                                                ),
+                                                const Text(
+                                                  '10',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
+                          ),
+                        );
+                      },
+                    );
+                  }).toList()
+                : [],
           ),
         ),
       ],

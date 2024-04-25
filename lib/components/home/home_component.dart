@@ -40,13 +40,13 @@ class HomeComponentState extends State<HomeComponent> {
         // copied widget
         AnimatedOpacity(
           opacity: (_deepLinkOpacity - 1.0).abs(),
-          duration: Duration(milliseconds: 400),
-          child: Center(
+          duration: const Duration(milliseconds: 400),
+          child: const Center(
             child: Text(
               "Copied to clipboard!",
               style: TextStyle(
                 fontSize: 14.0,
-                color: const Color(0xFFFFFFFF),
+                color: Color(0xFFFFFFFF),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -55,12 +55,12 @@ class HomeComponentState extends State<HomeComponent> {
         // button widget
         AnimatedOpacity(
           opacity: _deepLinkOpacity,
-          duration: Duration(milliseconds: 250),
+          duration: const Duration(milliseconds: 250),
           child: Center(
             child: TextButton(
               onPressed: () {
                 if (_deepLinkOpacity == 1.0) {
-                  Timer(Duration(milliseconds: 2000), () {
+                  Timer(const Duration(milliseconds: 2000), () {
                     setState(() {
                       _deepLinkOpacity = 1.0;
                     });
@@ -72,14 +72,14 @@ class HomeComponentState extends State<HomeComponent> {
                   Clipboard.setData(clipboardData);
                 }
               },
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Click here to copy a deep link url to the clipboard",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12.0,
-                    color: const Color(0xCCFFFFFF),
+                    color: Color(0xCCFFFFFF),
                   ),
                 ),
               ),
@@ -147,7 +147,7 @@ class HomeComponentState extends State<HomeComponent> {
   Widget menuButton(
       BuildContext context, String assetSrc, String title, String key) {
     return Padding(
-      padding: EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         height: 42.0,
         child: TextButton(
@@ -169,8 +169,8 @@ class HomeComponentState extends State<HomeComponent> {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: const Color(0xAA001133),
+                style: const TextStyle(
+                  color: Color(0xAA001133),
                 ),
               )
             ],
