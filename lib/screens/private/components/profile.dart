@@ -18,7 +18,6 @@ import 'package:sekuya_family_mobile_app/components/tab_profile/my_voucher.dart'
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
-import 'package:sekuya_family_mobile_app/service/voucher/voucher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileComponentApp extends StatelessWidget {
@@ -47,6 +46,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   var resProfile;
   var resMyVoucher;
+  var resMyMission;
 
   final List<String> menu = <String>[
     'Edit Profile',
@@ -58,6 +58,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
     super.initState();
     getDataProfile();
     getDataMyVoucher();
+    getDataMyMissions();
   }
 
   Future<dynamic> getDataMyVoucher() async {
@@ -91,6 +92,27 @@ class _ProfileComponentState extends State<ProfileComponent> {
       if (res != null) {
         setState(() {
           resProfile = res;
+          isLoading = false;
+        });
+      }
+    } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error getDataVoucher = $e');
+    }
+  }
+
+  Future<dynamic> getDataMyMissions() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      var res = await handleGetDataMyMissios();
+
+      if (res != null) {
+        setState(() {
+          resMyMission = res;
           isLoading = false;
         });
       }
@@ -337,7 +359,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
                                 return name == "My Mission"
-                                    ? const TabContentProfileMyMissionComponentApp()
+                                    ? TabContentProfileMyMissionComponentApp(
+                                        resMyMission: resMyMission,
+                                        index: index)
                                     : name == "My Communities"
                                         ? const TabContentProfileMyCommunityComponentApp()
                                         : TabContentProfileMyVoucherComponentApp(
@@ -345,7 +369,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                             index: index);
                               },
                               childCount: name == "My Mission"
-                                  ? 5
+                                  ? resMyMission?["data"]?["data"]?.length
                                   : name == "My Communities"
                                       ? 5
                                       : resMyVoucher?["data"]?["data"]?.length,

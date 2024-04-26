@@ -20,3 +20,11 @@ Future<dynamic> handleUpdateDataProfile(data) {
     data: data,
   );
 }
+
+Future<dynamic> handleGetDataMyVoucher() {
+  return clientDio(serviceUrlParam: "/profile/my-vouchers", methodParam: "GET");
+}
+
+Future<dynamic> handleGetDataMyMissios() {
+  return clientDio(serviceUrlParam: "/profile/my-missions", methodParam: "GET");
+}

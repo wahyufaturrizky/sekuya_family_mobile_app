@@ -12,16 +12,25 @@ import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class TabContentProfileMyMissionComponentApp extends StatelessWidget {
-  const TabContentProfileMyMissionComponentApp({super.key});
+  const TabContentProfileMyMissionComponentApp(
+      {super.key, this.resMyMission, this.index});
+
+  final dynamic resMyMission;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentProfileMyMissionComponent();
+    return TabContentProfileMyMissionComponent(
+        resMyMission: resMyMission, index: index);
   }
 }
 
 class TabContentProfileMyMissionComponent extends StatefulWidget {
-  const TabContentProfileMyMissionComponent({super.key});
+  const TabContentProfileMyMissionComponent(
+      {super.key, this.resMyMission, this.index});
+
+  final dynamic resMyMission;
+  final int? index;
 
   @override
   State<TabContentProfileMyMissionComponent> createState() =>
@@ -52,16 +61,20 @@ class _TabContentProfileMyMissionComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Mission ipsumece dolor sit amet',
-                        style: TextStyle(
+                      Text(
+                        widget.resMyMission?["data"]?["data"]?[widget.index]
+                                ?["name"] ??
+                            "",
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600),
                       ),
                       Chip(
-                          label: const Text(
-                            'On Going',
+                          label: Text(
+                            widget.resMyMission?["data"]?["data"]?[widget.index]
+                                    ?["status"] ??
+                                "",
                           ),
                           color: MaterialStateProperty.all<Color>(
                               bluePrimaryColor.withOpacity(0.2)),
@@ -76,14 +89,18 @@ class _TabContentProfileMyMissionComponentState
                       CircleAvatar(
                         radius: 12,
                         backgroundColor: Colors.transparent,
-                        child: Image.asset('assets/images/ic_apple.png'),
+                        child: Image.network(widget.resMyMission?["data"]
+                                ?["data"]?[widget.index]?["reward"]?["image"] ??
+                            ""),
                       ),
                       const SizedBox(
                         width: 8,
                       ),
-                      const Text(
-                        'NFT Communities',
-                        style: TextStyle(
+                      Text(
+                        widget.resMyMission?["data"]?["data"]?[widget.index]
+                                ?["community_name"] ??
+                            "",
+                        style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600),
@@ -102,17 +119,29 @@ class _TabContentProfileMyMissionComponentState
                     children: [
                       {
                         "title": "Task",
-                        "amount": "10",
+                        "amount": widget.resMyMission?["data"]?["data"]
+                                    ?[widget.index]?["total_task"]
+                                .toString() ??
+                            "",
                         "icon": "false",
                       },
                       {
                         "title": "Xp",
-                        "amount": "120",
+                        "amount": widget.resMyMission?["data"]?["data"]
+                                    ?[widget.index]?["reward_exp"]
+                                .toString() ??
+                            "",
                         "icon": "false",
                       },
                       {
                         "title": "USDT",
-                        "amount": "250",
+                        "amount": RegExp(r'(\d+)')
+                                .firstMatch(widget.resMyMission?["data"]
+                                            ?["data"]?[widget.index]?["reward"]
+                                        ?["name"] ??
+                                    "")
+                                ?.group(0) ??
+                            "",
                         "icon": "true",
                       }
                     ]
@@ -133,7 +162,7 @@ class _TabContentProfileMyMissionComponentState
                                     ],
                                   ),
                                 Text(
-                                  item["amount"]!,
+                                  item["amount"] ?? "",
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -143,7 +172,7 @@ class _TabContentProfileMyMissionComponentState
                                   width: 4,
                                 ),
                                 Text(
-                                  item["title"]!,
+                                  item["title"] ?? "",
                                   style: const TextStyle(
                                       color: greySecondaryColor,
                                       fontSize: 12,
@@ -159,7 +188,17 @@ class _TabContentProfileMyMissionComponentState
                       child: AvatarStack(
                     height: 24,
                     avatars: [
-                      for (var n = 0; n < 5; n++) NetworkImage(getAvatarUrl(n))
+                      for (var n = 0;
+                          n <
+                              widget
+                                  .resMyMission?["data"]?["data"]?[widget.index]
+                                      ?["display_players"]
+                                  ?.length;
+                          n++)
+                        NetworkImage(getAvatarUrl(
+                            indexMyMissions: widget.index,
+                            indexDisplayPlayers: n,
+                            resMyMission: widget.resMyMission))
                     ],
                   ))
                 ]),
@@ -172,8 +211,8 @@ class _TabContentProfileMyMissionComponentState
   }
 }
 
-String getAvatarUrl(int n) {
-  final url = 'https://i.pravatar.cc/150?img=$n';
-  // final url = 'https://robohash.org/$n?bgset=bg1';
+String getAvatarUrl({indexMyMissions, indexDisplayPlayers, resMyMission}) {
+  final url = resMyMission?["data"]?["data"]?[indexMyMissions]
+      ?["display_players"]?[indexDisplayPlayers]?["image"];
   return url;
 }
