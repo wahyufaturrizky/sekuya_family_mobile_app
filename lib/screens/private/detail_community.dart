@@ -56,8 +56,6 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
   @override
   void initState() {
     super.initState();
-
-    print(widget.args?.id);
   }
 
   @override
@@ -109,9 +107,14 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      'NFT Communities',
-                                      style: TextStyle(
+                                    Text(
+                                      widget.args?.resCommunities?["data"]
+                                                      ?["data"]?[
+                                                  widget.args
+                                                      ?.indexResCommunities]
+                                              ["name"] ??
+                                          "",
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
@@ -242,9 +245,12 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                     const SizedBox(
                       height: 15,
                     ),
-                    const Text(
-                      'dictum cursus mauris varius tristique aliquet. Morbi cursus urna in nibh diam dolor lacus sit. Tristique rhoncus amet a congue laoreet amet sodales. Laoreet integer nullam pharetra maecenas sit. Purus adipiscing turpis vestibulum interdum egestas. Ornare tincidunt nunc orci',
-                      style: TextStyle(
+                    Text(
+                      widget.args?.resCommunities?["data"]?["data"]
+                                  ?[widget.args?.indexResCommunities]
+                              ["description"] ??
+                          "",
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w400),

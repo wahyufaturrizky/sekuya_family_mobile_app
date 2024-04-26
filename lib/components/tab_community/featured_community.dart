@@ -13,20 +13,25 @@ import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class TabContentCommunityFeaturedComponentApp extends StatelessWidget {
-  const TabContentCommunityFeaturedComponentApp({super.key, this.item = 0});
+  const TabContentCommunityFeaturedComponentApp(
+      {super.key, this.index, this.resCommunities});
 
-  final int item;
+  final dynamic resCommunities;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return TabContentCommunityFeaturedComponent(item: item);
+    return TabContentCommunityFeaturedComponent(
+        resCommunities: resCommunities, index: index);
   }
 }
 
 class TabContentCommunityFeaturedComponent extends StatefulWidget {
-  const TabContentCommunityFeaturedComponent({super.key, this.item = 0});
+  const TabContentCommunityFeaturedComponent(
+      {super.key, this.index, this.resCommunities});
 
-  final int item;
+  final dynamic resCommunities;
+  final int? index;
 
   @override
   State<TabContentCommunityFeaturedComponent> createState() =>
@@ -36,7 +41,8 @@ class TabContentCommunityFeaturedComponent extends StatefulWidget {
 class _TabContentCommunityFeaturedComponentState
     extends State<TabContentCommunityFeaturedComponent> {
   void goToDetailCommunity() {
-    final arguments = MyArgumentsDataDetailCommunityClass(widget.item);
+    final arguments = MyArgumentsDataDetailCommunityClass(
+        widget.resCommunities, widget.index);
 
     Application.router.navigateTo(context, "/communityDetailScreens",
         transition: TransitionType.native,
@@ -58,32 +64,46 @@ class _TabContentCommunityFeaturedComponentState
           padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Image.asset('assets/images/ic_crypto.png'),
+                  // if (widget.resCommunities?["data"]?["data"]?[widget.index]
+                  //         ?["image"] !=
+                  //     null)
+                  //   Image.network(
+                  //     widget.resCommunities?["data"]?["data"]?[widget.index]
+                  //             ?["image"] ??
+                  //         "",
+                  //     width: 32,
+                  //     height: 32,
+                  //   ),
                   const SizedBox(
                     width: 12,
                   ),
-                  const Text(
-                    '1000xp',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
+                  // Text(
+                  //   widget.resCommunities?["data"]?["data"]?[widget.index]
+                  //           ?["name"] ??
+                  //       "",
+                  //   style: const TextStyle(
+                  //       color: Colors.white,
+                  //       fontSize: 14,
+                  //       fontWeight: FontWeight.w500),
+                  // ),
                 ],
               ),
               const SizedBox(
                 height: 12,
               ),
-              const Text(
-                'Description lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500),
-              ),
+              // Text(
+              //   widget.resCommunities?["data"]?["data"]?[widget.index]
+              //           ?["description"] ??
+              //       "",
+              //   style: const TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 12,
+              //       fontWeight: FontWeight.w500),
+              // ),
               const SizedBox(
                 height: 12,
               ),
@@ -118,9 +138,11 @@ class _TabContentCommunityFeaturedComponentState
 }
 
 class MyArgumentsDataDetailCommunityClass {
-  final int id;
+  final dynamic resCommunities;
+  final int? indexResCommunities;
 
   MyArgumentsDataDetailCommunityClass(
-    this.id,
+    this.resCommunities,
+    this.indexResCommunities,
   );
 }
