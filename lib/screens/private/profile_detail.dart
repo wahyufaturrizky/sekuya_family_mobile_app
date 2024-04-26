@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
+import 'package:sekuya_family_mobile_app/components/spinner.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
@@ -75,14 +76,24 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
   Future<dynamic> getDataProfile() async {
     try {
-      var res = await handleGetDataProfile();
       setState(() {
-        resProfile = res;
-
-        email.text = resProfile["data"]?["email"];
-        username.text = resProfile["data"]?["username"];
+        isLoading = true;
       });
+      var res = await handleGetDataProfile();
+
+      if (res != null) {
+        setState(() {
+          resProfile = res;
+
+          email.text = resProfile["data"]?["email"];
+          username.text = resProfile["data"]?["username"];
+          isLoading = false;
+        });
+      }
     } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       print('Error getDataProfile = $e');
     }
   }
@@ -152,10 +163,15 @@ class _ProfileDetailState extends State<ProfileDetail> {
         'Pick image error: $_pickImageError',
         textAlign: TextAlign.center,
       );
-    } else {
-      return const CircleAvatar(
-        backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=1'),
+    } else if (resProfile?["data"]?["profilePic"] != null) {
+      return CircleAvatar(
+        backgroundImage: NetworkImage(resProfile?["data"]?["profilePic"]),
         radius: 40,
+      );
+    } else {
+      return Text(
+        'Pick image error: $_pickImageError',
+        textAlign: TextAlign.center,
       );
     }
   }
@@ -176,9 +192,18 @@ class _ProfileDetailState extends State<ProfileDetail> {
         ],
       });
 
-      handleUpdateDataProfile(formData);
+      var res = await handleUpdateDataProfile(formData);
+
+      if (res != null) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       handleBack();
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       print(e);
     }
   }
@@ -203,179 +228,185 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
+    if (isLoading) {
+      return const MyWidgetSpinner();
+    } else {
+      return SafeArea(
+          child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          leading: IconButton(
+            color: Colors.white,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              handleBack();
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+          title: const Text(
+            'Edit Profile',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
         backgroundColor: Colors.black,
-        leading: IconButton(
-          color: Colors.white,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            handleBack();
-          },
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      ),
-      backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/bg_profile.png',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 170,
-                  alignment: Alignment.topCenter,
-                ),
-                Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if ((_picker.supportsImageSource(ImageSource.camera))) {
-                          _onImageButtonPressed(ImageSource.camera,
-                              context: context);
-                        }
-                      },
-                      child: CircleAvatar(
-                          radius: 40,
-                          child: !kIsWeb &&
-                                  defaultTargetPlatform ==
-                                      TargetPlatform.android
-                              ? FutureBuilder<void>(
-                                  future: retrieveLostData(),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<void> snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.none:
-                                      case ConnectionState.waiting:
-                                        return const Text(
-                                          'You have not yet picked an image.',
-                                          textAlign: TextAlign.center,
-                                        );
-                                      case ConnectionState.done:
-                                        return _previewImages();
-                                      case ConnectionState.active:
-                                        if (snapshot.hasError) {
-                                          return Text(
-                                            'Pick image/video error: ${snapshot.error}}',
-                                            textAlign: TextAlign.center,
-                                          );
-                                        } else {
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/bg_profile.png',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 170,
+                    alignment: Alignment.topCenter,
+                  ),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if ((_picker
+                              .supportsImageSource(ImageSource.camera))) {
+                            _onImageButtonPressed(ImageSource.camera,
+                                context: context);
+                          }
+                        },
+                        child: CircleAvatar(
+                            radius: 40,
+                            child: !kIsWeb &&
+                                    defaultTargetPlatform ==
+                                        TargetPlatform.android
+                                ? FutureBuilder<void>(
+                                    future: retrieveLostData(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<void> snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.none:
+                                        case ConnectionState.waiting:
                                           return const Text(
                                             'You have not yet picked an image.',
                                             textAlign: TextAlign.center,
                                           );
-                                        }
-                                    }
-                                  },
-                                )
-                              : _previewImages()),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              'Username',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            CustomTextField(
-              textField: TextField(
-                  controller: username,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
+                                        case ConnectionState.done:
+                                          return _previewImages();
+                                        case ConnectionState.active:
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                              'Pick image/video error: ${snapshot.error}}',
+                                              textAlign: TextAlign.center,
+                                            );
+                                          } else {
+                                            return const Text(
+                                              'You have not yet picked an image.',
+                                              textAlign: TextAlign.center,
+                                            );
+                                          }
+                                      }
+                                    },
+                                  )
+                                : _previewImages()),
+                      )
+                    ],
                   ),
-                  decoration: kTextInputDecoration.copyWith(
-                    hintText: 'Username',
-                    hintStyle: const TextStyle(color: greySecondaryColor),
-                  )),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              'Email Address',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            CustomTextField(
-              textField: TextField(
-                  controller: email,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                  decoration: kTextInputDecoration.copyWith(
-                    hintText: 'Email address',
-                    hintStyle: const TextStyle(color: greySecondaryColor),
-                  )),
-            ),
-            Column(
-              children: [
-                {"title": "Connect to Discord", "icon": "ic_discord.png"},
-                {"title": "Connect to Telegram", "icon": "ic_telegram.png"},
-                {"title": "Connect to Twitter", "icon": "ic_twitter.png"},
-              ]
-                  .map((item) => Column(
-                        children: [
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Hero(
-                            tag: item["title"] ?? "",
-                            child: CustomButton(
-                                isOutlinedBackgroundColor: greyDarkColor,
-                                buttonText: item["title"] ?? "",
-                                isOutlined: true,
-                                onPressed: () {},
-                                sizeButtonIcon: 20,
-                                buttonIcon: item["icon"] ?? "",
-                                width: 500,
-                                paddingButton: 0),
-                          ),
-                        ],
-                      ))
-                  .toList(),
-            ),
-          ],
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Username',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CustomTextField(
+                textField: TextField(
+                    controller: username,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                    decoration: kTextInputDecoration.copyWith(
+                      hintText: 'Username',
+                      hintStyle: const TextStyle(color: greySecondaryColor),
+                    )),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Email Address',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CustomTextField(
+                textField: TextField(
+                    enabled: false,
+                    controller: email,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                    decoration: kTextInputDecoration.copyWith(
+                      hintText: 'Email address',
+                      hintStyle: const TextStyle(color: greySecondaryColor),
+                    )),
+              ),
+              Column(
+                children: [
+                  {"title": "Connect to Discord", "icon": "ic_discord.png"},
+                  {"title": "Connect to Telegram", "icon": "ic_telegram.png"},
+                  {"title": "Connect to Twitter", "icon": "ic_twitter.png"},
+                ]
+                    .map((item) => Column(
+                          children: [
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Hero(
+                              tag: item["title"] ?? "",
+                              child: CustomButton(
+                                  isOutlinedBackgroundColor: greyDarkColor,
+                                  buttonText: item["title"] ?? "",
+                                  isOutlined: true,
+                                  onPressed: () {},
+                                  sizeButtonIcon: 20,
+                                  buttonIcon: item["icon"] ?? "",
+                                  width: 500,
+                                  paddingButton: 0),
+                            ),
+                          ],
+                        ))
+                    .toList(),
+              ),
+            ],
+          ),
+          // This is the title in the app bar.
         ),
-        // This is the title in the app bar.
-      ),
-      bottomSheet: Container(
-          color: Colors.black,
-          child: CustomButton(
-              isLoading: isLoading,
-              buttonText: 'Save',
-              onPressed: () {
-                if (!isLoading) {
-                  handleUpdateProfile();
-                }
-              },
-              sizeButtonIcon: 20,
-              width: 500,
-              paddingButton: 0)),
-    ));
+        bottomSheet: Container(
+            color: Colors.black,
+            child: CustomButton(
+                isLoading: isLoading,
+                buttonText: 'Save',
+                onPressed: () {
+                  if (!isLoading) {
+                    handleUpdateProfile();
+                  }
+                },
+                sizeButtonIcon: 20,
+                width: 500,
+                paddingButton: 0)),
+      ));
+    }
   }
 }
 

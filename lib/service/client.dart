@@ -32,7 +32,6 @@ final dio = Dio()
 
             if (accessToken != '') {
               cachedCSRFToken = 'Bearer $accessToken';
-              print('cachedCSRFToken $cachedCSRFToken');
               if (cachedCSRFToken != null) {
                 requestOptions.headers[headerKey] = cachedCSRFToken;
               }
@@ -70,8 +69,6 @@ Future<dynamic> clientDio(
   try {
     String serviceUrl = serviceUrlParam;
     String method = methodParam;
-
-    print('object $data');
 
     final response = await dio.request(serviceUrl,
         options: Options(

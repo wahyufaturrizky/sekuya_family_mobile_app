@@ -63,8 +63,22 @@ class CustomButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (isLoading)
-                  const CircularProgressIndicator(
-                    color: yellowPrimaryColor,
+                  Row(
+                    children: [
+                      Center(
+                          child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                color: isOutlined
+                                    ? yellowPrimaryColor
+                                    : Colors.white,
+                              ))),
+                      const SizedBox(
+                        width: 8,
+                      )
+                    ],
                   ),
                 if (buttonIcon != "")
                   CircleAvatar(

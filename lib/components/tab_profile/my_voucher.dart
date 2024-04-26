@@ -9,18 +9,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/util/format_date.dart';
 
 class TabContentProfileMyVoucherComponentApp extends StatelessWidget {
-  const TabContentProfileMyVoucherComponentApp({super.key});
+  const TabContentProfileMyVoucherComponentApp(
+      {super.key, this.resMyVoucher, this.index});
+
+  final dynamic resMyVoucher;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentProfileMyVoucherComponent();
+    return TabContentProfileMyVoucherComponent(
+        resMyVoucher: resMyVoucher, index: index);
   }
 }
 
 class TabContentProfileMyVoucherComponent extends StatefulWidget {
-  const TabContentProfileMyVoucherComponent({super.key});
+  const TabContentProfileMyVoucherComponent(
+      {super.key, this.resMyVoucher, this.index});
+
+  final dynamic resMyVoucher;
+  final int? index;
 
   @override
   State<TabContentProfileMyVoucherComponent> createState() =>
@@ -42,19 +52,24 @@ class _TabContentProfileMyVoucherComponentState
         },
         child: Container(
           padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage('assets/images/bg_voucher.png'),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.5), BlendMode.dstATop),
+              image: NetworkImage(widget.resMyVoucher?["data"]?["data"]
+                      ?[widget.index]?["image"] ??
+                  ""),
             ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Voucher lorem ipsum dolor',
-                style: TextStyle(
+              Text(
+                widget.resMyVoucher?["data"]?["data"]?[widget.index]?["name"] ??
+                    "",
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -63,10 +78,12 @@ class _TabContentProfileMyVoucherComponentState
               const SizedBox(
                 height: 12,
               ),
-              const Text(
-                'Check out various interesting voucher promos for you.',
-                style: TextStyle(
-                    color: greySecondaryColor,
+              Text(
+                widget.resMyVoucher?["data"]?["data"]?[widget.index]
+                        ?["description"] ??
+                    "",
+                style: const TextStyle(
+                    color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w400),
               ),
@@ -79,9 +96,9 @@ class _TabContentProfileMyVoucherComponentState
                   const SizedBox(
                     width: 8,
                   ),
-                  const Text(
-                    'Berlaku hingga 23 Juni 2024',
-                    style: TextStyle(
+                  Text(
+                    'Berlaku hingga ${handleFormatDate(widget.resMyVoucher?["data"]?["data"]?[widget.index]?["expired_at"] ?? "")}',
+                    style: const TextStyle(
                         color: yellowPrimaryColor,
                         fontSize: 12,
                         fontWeight: FontWeight.w500),
