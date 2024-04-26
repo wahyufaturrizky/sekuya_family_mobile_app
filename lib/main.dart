@@ -7,14 +7,16 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:sekuya_family_mobile_app/service/client.dart';
 
 import 'components/app/app_component.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +33,26 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+        print('REQUEST[${options.method}] => PATH: ${options.path}');
+        return handler.next(options);
+      },
+      onResponse: (Response response, ResponseInterceptorHandler handler) {
+        print(
+            'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+        return handler.next(response);
+      },
+      onError: (DioException error, ErrorInterceptorHandler handler) {
+        print(
+            'ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');
+
+        return handler.next(error);
+      },
+    ),
+  );
 
   runApp(const AppComponent());
 }

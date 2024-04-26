@@ -18,9 +18,8 @@ import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart'
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/service/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-final dio = Dio();
 
 class ProfileComponentApp extends StatelessWidget {
   const ProfileComponentApp({super.key});
@@ -60,23 +59,18 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   Future<dynamic> handleGetDataProfile() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final response = await dio.request(
+        '/profile/info',
+        options: Options(
+          method: 'GET',
+        ),
+      );
 
-      final accessToken = prefs.getString('access_token') ?? '';
+      var decodeJsonRes = jsonDecode(response.toString());
 
-      if (accessToken != '') {
-        final response = await dio.get('$baseUrl/profile/info',
-            options: Options(headers: {
-              'Authorization': 'Bearer $accessToken',
-            }));
-
-        var decodeJsonRes = jsonDecode(response.toString());
-        print(decodeJsonRes);
-
-        setState(() {
-          resProfile = decodeJsonRes;
-        });
-      }
+      setState(() {
+        resProfile = decodeJsonRes;
+      });
     } catch (e) {
       print('Error get dashboard =  $e');
     }

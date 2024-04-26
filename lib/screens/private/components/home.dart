@@ -13,9 +13,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-final dio = Dio();
+import 'package:sekuya_family_mobile_app/service/client.dart';
 
 class HomeComponentApp extends StatelessWidget {
   const HomeComponentApp({super.key});
@@ -44,24 +42,30 @@ class _HomeComponentState extends State<HomeComponent> {
 
   Future<dynamic> handleGetDataDashboard() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final response = await dio.request(
+        '/dashboard',
+        options: Options(
+          method: 'GET',
+        ),
+      );
 
-      final accessToken = prefs.getString('access_token') ?? '';
+      var decodeJsonRes = jsonDecode(response.toString());
 
-      if (accessToken != '') {
-        final response = await dio.get('$baseUrl/dashboard',
-            options: Options(headers: {
-              'Authorization': 'Bearer $accessToken',
-            }));
-
-        var decodeJsonRes = jsonDecode(response.toString());
-
-        setState(() {
-          resDashboard = decodeJsonRes;
-        });
+      setState(() {
+        resDashboard = decodeJsonRes;
+      });
+    } on DioException catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        print(e.response?.data);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.requestOptions);
+        print(e.message);
       }
-    } catch (e) {
-      print('Error get dashboard =  $e');
     }
   }
 
