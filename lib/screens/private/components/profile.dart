@@ -7,8 +7,6 @@
  * See LICENSE for distribution and usage details.
  */
 
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
@@ -18,7 +16,7 @@ import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart'
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
-import 'package:sekuya_family_mobile_app/service/client.dart';
+import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileComponentApp extends StatelessWidget {
@@ -54,25 +52,18 @@ class _ProfileComponentState extends State<ProfileComponent> {
   @override
   void initState() {
     super.initState();
-    handleGetDataProfile();
+    getDataProfile();
   }
 
-  Future<dynamic> handleGetDataProfile() async {
+  Future<dynamic> getDataProfile() async {
     try {
-      final response = await dio.request(
-        '/profile/info',
-        options: Options(
-          method: 'GET',
-        ),
-      );
-
-      var decodeJsonRes = jsonDecode(response.toString());
+      var res = await handleGetDataProfile();
 
       setState(() {
-        resProfile = decodeJsonRes;
+        resProfile = res;
       });
-    } catch (e) {
-      print('Error get dashboard =  $e');
+    } on DioException catch (e) {
+      print('Error getDataProfile = $e');
     }
   }
 

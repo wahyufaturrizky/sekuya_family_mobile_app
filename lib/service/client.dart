@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -55,3 +64,35 @@ final dio = Dio()
       ),
     ],
   );
+
+Future<dynamic> clientDio(
+    {serviceUrlParam = "", methodParam = "GET", data}) async {
+  try {
+    String serviceUrl = serviceUrlParam;
+    String method = methodParam;
+
+    print('object $data');
+
+    final response = await dio.request(serviceUrl,
+        options: Options(
+          method: method,
+        ),
+        data: data);
+
+    var decodeJsonRes = jsonDecode(response.toString());
+
+    return decodeJsonRes;
+  } on DioException catch (e) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx and is also not 304.
+    if (e.response != null) {
+      print(e.response?.data);
+      print(e.response?.headers);
+      print(e.response?.requestOptions);
+    } else {
+      // Something happened in setting up or sending the request that triggered an Error
+      print(e.requestOptions);
+      print(e.message);
+    }
+  }
+}

@@ -7,17 +7,17 @@
  * See LICENSE for distribution and usage details.
  */
 
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-final dio = Dio();
+import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 
 class ProfileDetailApp extends StatelessWidget {
   const ProfileDetailApp({super.key});
@@ -46,37 +46,62 @@ class ProfileDetail extends StatefulWidget {
 }
 
 class _ProfileDetailState extends State<ProfileDetail> {
-  late String username;
   bool isLoading = false;
   var resProfile;
+  dynamic _pickImageError;
+  List<XFile>? _mediaFileList;
+  String? _retrieveDataError;
+
+  final username = TextEditingController();
+  final email = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    handleGetDataProfile();
+    getDataProfile();
   }
 
-  Future<dynamic> handleGetDataProfile() async {
+  @override
+  void dispose() {
+    username.dispose();
+    email.dispose();
+    super.dispose();
+  }
+
+  void _setImageFileListFromFile(XFile? value) {
+    _mediaFileList = value == null ? null : <XFile>[value];
+  }
+
+  Future<dynamic> getDataProfile() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      var res = await handleGetDataProfile();
+      setState(() {
+        resProfile = res;
 
-      final accessToken = prefs.getString('access_token') ?? '';
+        email.text = resProfile["data"]?["email"];
+        username.text = resProfile["data"]?["username"];
+      });
+    } on DioException catch (e) {
+      print('Error getDataProfile = $e');
+    }
+  }
 
-      if (accessToken != '') {
-        final response = await dio.get('$baseUrl/profile/info',
-            options: Options(headers: {
-              'Authorization': 'Bearer $accessToken',
-            }));
-
-        var decodeJsonRes = jsonDecode(response.toString());
-        print(decodeJsonRes);
-
-        setState(() {
-          resProfile = decodeJsonRes;
-        });
-      }
+  Future<void> _onImageButtonPressed(
+    ImageSource source, {
+    required BuildContext context,
+  }) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+      );
+      setState(() {
+        _setImageFileListFromFile(pickedFile);
+      });
     } catch (e) {
-      print('Error get dashboard =  $e');
+      setState(() {
+        _pickImageError = e;
+      });
     }
   }
 
@@ -92,14 +117,87 @@ class _ProfileDetailState extends State<ProfileDetail> {
     });
   }
 
+  Text? _getRetrieveErrorWidget() {
+    if (_retrieveDataError != null) {
+      final Text result = Text(_retrieveDataError!);
+      _retrieveDataError = null;
+      return result;
+    }
+    return null;
+  }
+
+  Widget _previewImages() {
+    final Text? retrieveError = _getRetrieveErrorWidget();
+    if (retrieveError != null) {
+      return retrieveError;
+    }
+    if (_mediaFileList != null) {
+      return ClipOval(
+          child: SizedBox.fromSize(
+              size: const Size.fromRadius(40), // I
+              child: Semantics(
+                label: 'image_picker_example_picked_image',
+                child: Image.file(
+                  fit: BoxFit.cover,
+                  File(_mediaFileList![0].path),
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
+                    return const Center(
+                        child: Text('This image type is not supported'));
+                  },
+                ),
+              )));
+    } else if (_pickImageError != null) {
+      return Text(
+        'Pick image error: $_pickImageError',
+        textAlign: TextAlign.center,
+      );
+    } else {
+      return const CircleAvatar(
+        backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=1'),
+        radius: 40,
+      );
+    }
+  }
+
   Future<dynamic> handleUpdateProfile() async {
     try {
       setState(() {
         isLoading = true;
       });
+
+      final formData = FormData.fromMap({
+        'username': username.text.toString(),
+        'profilePic': [
+          await MultipartFile.fromFile(
+            _mediaFileList![0].path.toString(),
+            filename: _mediaFileList![0].path.split('/').last,
+          )
+        ],
+      });
+
+      handleUpdateDataProfile(formData);
       handleBack();
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> retrieveLostData() async {
+    final LostDataResponse response = await _picker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        if (response.files == null) {
+          _setImageFileListFromFile(response.file);
+        } else {
+          _mediaFileList = response.files;
+        }
+      });
+    } else {
+      _retrieveDataError = response.exception!.code;
     }
   }
 
@@ -141,11 +239,48 @@ class _ProfileDetailState extends State<ProfileDetail> {
                 ),
                 Column(
                   children: [
-                    CircleAvatar(
-                      backgroundImage:
-                          NetworkImage('https://i.pravatar.cc/150?img=1'),
-                      radius: 40,
-                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if ((_picker.supportsImageSource(ImageSource.camera))) {
+                          _onImageButtonPressed(ImageSource.camera,
+                              context: context);
+                        }
+                      },
+                      child: CircleAvatar(
+                          radius: 40,
+                          child: !kIsWeb &&
+                                  defaultTargetPlatform ==
+                                      TargetPlatform.android
+                              ? FutureBuilder<void>(
+                                  future: retrieveLostData(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<void> snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.none:
+                                      case ConnectionState.waiting:
+                                        return const Text(
+                                          'You have not yet picked an image.',
+                                          textAlign: TextAlign.center,
+                                        );
+                                      case ConnectionState.done:
+                                        return _previewImages();
+                                      case ConnectionState.active:
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                            'Pick image/video error: ${snapshot.error}}',
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } else {
+                                          return const Text(
+                                            'You have not yet picked an image.',
+                                            textAlign: TextAlign.center,
+                                          );
+                                        }
+                                    }
+                                  },
+                                )
+                              : _previewImages()),
+                    )
                   ],
                 ),
               ],
@@ -163,9 +298,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
             ),
             CustomTextField(
               textField: TextField(
-                  onChanged: (value) {
-                    username = value;
-                  },
+                  controller: username,
                   style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -188,9 +321,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
             ),
             CustomTextField(
               textField: TextField(
-                  onChanged: (value) {
-                    username = value;
-                  },
+                  controller: email,
                   style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
