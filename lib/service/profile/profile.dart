@@ -28,3 +28,8 @@ Future<dynamic> handleGetDataMyVoucher() {
 Future<dynamic> handleGetDataMyMissios() {
   return clientDio(serviceUrlParam: "/profile/my-missions", methodParam: "GET");
 }
+
+Future<dynamic> handleGetDataMyCommunities() {
+  return clientDio(
+      serviceUrlParam: "/profile/my-communities", methodParam: "GET");
+}

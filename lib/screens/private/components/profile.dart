@@ -37,7 +37,10 @@ class ProfileComponent extends StatefulWidget {
 }
 
 class _ProfileComponentState extends State<ProfileComponent> {
-  bool isLoading = false;
+  bool isLoadingResProfile = false;
+  bool isLoadingResMyVoucher = false;
+  bool isLoadingResMyMission = false;
+  bool isLoadingCommunities = false;
   final List<String> tabs = <String>[
     'My Mission',
     'My Communities',
@@ -47,6 +50,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
   var resProfile;
   var resMyVoucher;
   var resMyMission;
+  var resMyCommunities;
 
   final List<String> menu = <String>[
     'Edit Profile',
@@ -59,24 +63,25 @@ class _ProfileComponentState extends State<ProfileComponent> {
     getDataProfile();
     getDataMyVoucher();
     getDataMyMissions();
+    getDataMyCommunities();
   }
 
   Future<dynamic> getDataMyVoucher() async {
     try {
       setState(() {
-        isLoading = true;
+        isLoadingResMyVoucher = true;
       });
       var res = await handleGetDataMyVoucher();
 
       if (res != null) {
         setState(() {
           resMyVoucher = res;
-          isLoading = false;
+          isLoadingResMyVoucher = false;
         });
       }
     } on DioException catch (e) {
       setState(() {
-        isLoading = false;
+        isLoadingResMyVoucher = false;
       });
       print('Error getDataProfile = $e');
     }
@@ -85,19 +90,19 @@ class _ProfileComponentState extends State<ProfileComponent> {
   Future<dynamic> getDataProfile() async {
     try {
       setState(() {
-        isLoading = true;
+        isLoadingResProfile = true;
       });
       var res = await handleGetDataProfile();
 
       if (res != null) {
         setState(() {
           resProfile = res;
-          isLoading = false;
+          isLoadingResProfile = false;
         });
       }
     } on DioException catch (e) {
       setState(() {
-        isLoading = false;
+        isLoadingResProfile = false;
       });
       print('Error getDataVoucher = $e');
     }
@@ -106,21 +111,42 @@ class _ProfileComponentState extends State<ProfileComponent> {
   Future<dynamic> getDataMyMissions() async {
     try {
       setState(() {
-        isLoading = true;
+        isLoadingResMyMission = true;
       });
       var res = await handleGetDataMyMissios();
 
       if (res != null) {
         setState(() {
           resMyMission = res;
-          isLoading = false;
+          isLoadingResMyMission = false;
         });
       }
     } on DioException catch (e) {
       setState(() {
-        isLoading = false;
+        isLoadingResMyMission = false;
       });
       print('Error getDataProfile = $e');
+    }
+  }
+
+  Future<dynamic> getDataMyCommunities() async {
+    try {
+      setState(() {
+        isLoadingCommunities = true;
+      });
+      var res = await handleGetDataMyCommunities();
+
+      if (res != null) {
+        setState(() {
+          resMyCommunities = res;
+          isLoadingCommunities = false;
+        });
+      }
+    } on DioException catch (e) {
+      setState(() {
+        isLoadingCommunities = false;
+      });
+      print('Error getDataMyCommunities = $e');
     }
   }
 
@@ -142,6 +168,11 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   @override
   Widget build(BuildContext context) {
+    var isLoading = isLoadingResProfile ||
+        isLoadingResMyVoucher ||
+        isLoadingResMyMission ||
+        isLoadingCommunities;
+
     if (isLoading) {
       return const MyWidgetSpinner();
     } else {
@@ -363,7 +394,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                         resMyMission: resMyMission,
                                         index: index)
                                     : name == "My Communities"
-                                        ? const TabContentProfileMyCommunityComponentApp()
+                                        ? TabContentProfileMyCommunityComponentApp(
+                                            resMyCommunities: resMyCommunities,
+                                            index: index)
                                         : TabContentProfileMyVoucherComponentApp(
                                             resMyVoucher: resMyVoucher,
                                             index: index);
@@ -371,7 +404,8 @@ class _ProfileComponentState extends State<ProfileComponent> {
                               childCount: name == "My Mission"
                                   ? resMyMission?["data"]?["data"]?.length
                                   : name == "My Communities"
-                                      ? 5
+                                      ? resMyCommunities?["data"]?["data"]
+                                          ?.length
                                       : resMyVoucher?["data"]?["data"]?.length,
                             ),
                           ),

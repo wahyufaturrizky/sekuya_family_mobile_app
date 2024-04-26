@@ -190,10 +190,11 @@ class _TabContentProfileMyMissionComponentState
                     avatars: [
                       for (var n = 0;
                           n <
-                              widget
-                                  .resMyMission?["data"]?["data"]?[widget.index]
-                                      ?["display_players"]
-                                  ?.length;
+                              (widget
+                                      .resMyMission?["data"]?["data"]
+                                          ?[widget.index]?["display_players"]
+                                      ?.length ??
+                                  2);
                           n++)
                         NetworkImage(getAvatarUrl(
                             indexMyMissions: widget.index,
@@ -214,5 +215,10 @@ class _TabContentProfileMyMissionComponentState
 String getAvatarUrl({indexMyMissions, indexDisplayPlayers, resMyMission}) {
   final url = resMyMission?["data"]?["data"]?[indexMyMissions]
       ?["display_players"]?[indexDisplayPlayers]?["image"];
-  return url;
+
+  if (url != null) {
+    return url;
+  } else {
+    return "";
+  }
 }
