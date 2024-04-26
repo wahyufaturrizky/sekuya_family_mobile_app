@@ -105,25 +105,34 @@ class _VoucherDetailState extends State<VoucherDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.asset(
-              'assets/images/bg_jco.png',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              alignment: Alignment.topCenter,
-            ),
+            if (widget.args?.resVoucher?["data"]?["data"]
+                    ?[widget.args?.indexResVoucher]?["image"] !=
+                null)
+              Image.network(
+                widget.args?.resVoucher?["data"]?["data"]
+                        ?[widget.args?.indexResVoucher]?["image"] ??
+                    "",
+                fit: BoxFit.cover,
+                width: double.infinity,
+                alignment: Alignment.topCenter,
+              ),
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Voucher lorem ipsum dolor',
-              style: TextStyle(
+            Text(
+              widget.args?.resVoucher?["data"]?["data"]
+                      ?[widget.args?.indexResVoucher]["name"] ??
+                  "",
+              style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
                   color: Colors.white),
             ),
-            const Text(
-              'Check out various interesting voucher.',
-              style: TextStyle(
+            Text(
+              widget.args?.resVoucher?["data"]?["data"]
+                      ?[widget.args?.indexResVoucher]["description"] ??
+                  "",
+              style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,
                   color: greySecondaryColor),
@@ -154,7 +163,24 @@ class _VoucherDetailState extends State<VoucherDetail> {
               height: 16,
             ),
             Column(
-                children: expandRule.asMap().entries.map((item) {
+                children: [
+              {
+                "title": "Term and Conditions",
+                "rule": widget
+                    .args
+                    ?.resVoucher?["data"]?["data"]
+                        ?[widget.args?.indexResVoucher]["termsAndConditions"]
+                    ?.map((item) => item),
+              },
+              {
+                "title": "How to use",
+                "rule": widget
+                    .args
+                    ?.resVoucher?["data"]?["data"]
+                        ?[widget.args?.indexResVoucher]["howToUse"]
+                    ?.map((item) => item),
+              },
+            ].asMap().entries.map((item) {
               return Builder(builder: (BuildContext context) {
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),

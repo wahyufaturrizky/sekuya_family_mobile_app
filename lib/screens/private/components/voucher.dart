@@ -7,10 +7,12 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/tab_voucher/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/service/voucher/profile.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
@@ -34,6 +36,36 @@ class _VoucherComponentState extends State<VoucherComponent> {
   late String search;
   String? filterStatus;
   String? filterReward;
+  bool isLoadingResVoucher = false;
+
+  var resVoucher;
+
+  @override
+  void initState() {
+    super.initState();
+    getDataVoucher();
+  }
+
+  Future<dynamic> getDataVoucher() async {
+    try {
+      setState(() {
+        isLoadingResVoucher = true;
+      });
+      var res = await handleGetDataVoucher();
+
+      if (res != null) {
+        setState(() {
+          resVoucher = res;
+          isLoadingResVoucher = false;
+        });
+      }
+    } on DioException catch (e) {
+      setState(() {
+        isLoadingResVoucher = false;
+      });
+      print('Error getDataProfile = $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +192,8 @@ class _VoucherComponentState extends State<VoucherComponent> {
                     itemExtent: 180.0,
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        return TabContentVoucherComponentApp(item: index);
+                        return TabContentVoucherComponentApp(
+                            index: index, resVoucher: resVoucher);
                       },
                       childCount: 10,
                     ),
