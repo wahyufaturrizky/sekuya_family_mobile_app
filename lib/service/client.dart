@@ -75,11 +75,13 @@ Future<dynamic> clientDio(
           method: method,
         ),
         data: data);
+    print('@client response $response');
 
     var decodeJsonRes = jsonDecode(response.toString());
 
     return decodeJsonRes;
   } on DioException catch (e) {
+    print('@client error $e');
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx and is also not 304.
     if (e.response != null) {

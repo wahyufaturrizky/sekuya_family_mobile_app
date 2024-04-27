@@ -14,20 +14,22 @@ import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class TabContentMissionComponentApp extends StatelessWidget {
-  const TabContentMissionComponentApp({super.key, this.item = 0});
+  const TabContentMissionComponentApp({super.key, this.resMission, this.index});
 
-  final int item;
+  final dynamic resMission;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return TabContentMissionComponent(item: item);
+    return TabContentMissionComponent(resMission: resMission, index: index);
   }
 }
 
 class TabContentMissionComponent extends StatefulWidget {
-  const TabContentMissionComponent({super.key, this.item = 0});
+  const TabContentMissionComponent({super.key, this.resMission, this.index});
 
-  final int item;
+  final dynamic resMission;
+  final int? index;
 
   @override
   State<TabContentMissionComponent> createState() =>
@@ -37,7 +39,8 @@ class TabContentMissionComponent extends StatefulWidget {
 class _TabContentMissionComponentState
     extends State<TabContentMissionComponent> {
   void goToDetailMission() {
-    final arguments = MyArgumentsDataDetailMissionClass(widget.item);
+    final arguments =
+        MyArgumentsDataDetailMissionClass(widget.resMission, widget.index);
 
     Application.router.navigateTo(context, "/detailMissionScreen",
         transition: TransitionType.native,
@@ -66,16 +69,20 @@ class _TabContentMissionComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Mission ipsumece dolor sit amet',
-                        style: TextStyle(
+                      Text(
+                        widget.resMission?["data"]?["data"]?[widget.index]
+                                ?["name"] ??
+                            "",
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600),
                       ),
                       Chip(
-                          label: const Text(
-                            'On Going',
+                          label: Text(
+                            widget.resMission?["data"]?["data"]?[widget.index]
+                                    ?["status"] ??
+                                "",
                           ),
                           color: MaterialStateProperty.all<Color>(
                               bluePrimaryColor.withOpacity(0.2)),
@@ -90,14 +97,18 @@ class _TabContentMissionComponentState
                       CircleAvatar(
                         radius: 12,
                         backgroundColor: Colors.transparent,
-                        child: Image.asset('assets/images/ic_apple.png'),
+                        child: Image.network(widget.resMission?["data"]?["data"]
+                                ?[widget.index]?["reward"]?["image"] ??
+                            ""),
                       ),
                       const SizedBox(
                         width: 8,
                       ),
-                      const Text(
-                        'NFT Communities',
-                        style: TextStyle(
+                      Text(
+                        widget.resMission?["data"]?["data"]?[widget.index]
+                                ?["community_name"] ??
+                            "",
+                        style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600),
@@ -116,17 +127,28 @@ class _TabContentMissionComponentState
                     children: [
                       {
                         "title": "Task",
-                        "amount": "10",
+                        "amount": widget.resMission?["data"]?["data"]
+                                    ?[widget.index]?["total_task"]
+                                .toString() ??
+                            "",
                         "icon": "false",
                       },
                       {
                         "title": "Xp",
-                        "amount": "120",
+                        "amount": widget.resMission?["data"]?["data"]
+                                    ?[widget.index]?["reward_exp"]
+                                .toString() ??
+                            "",
                         "icon": "false",
                       },
                       {
                         "title": "USDT",
-                        "amount": "250",
+                        "amount": RegExp(r'(\d+)')
+                                .firstMatch(widget.resMission?["data"]?["data"]
+                                        ?[widget.index]?["reward"]?["name"] ??
+                                    "")
+                                ?.group(0) ??
+                            "",
                         "icon": "true",
                       }
                     ]
@@ -147,7 +169,7 @@ class _TabContentMissionComponentState
                                     ],
                                   ),
                                 Text(
-                                  item["amount"]!,
+                                  item["amount"] ?? "",
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -157,7 +179,7 @@ class _TabContentMissionComponentState
                                   width: 4,
                                 ),
                                 Text(
-                                  item["title"]!,
+                                  item["title"] ?? "",
                                   style: const TextStyle(
                                       color: greySecondaryColor,
                                       fontSize: 12,
@@ -173,7 +195,18 @@ class _TabContentMissionComponentState
                       child: AvatarStack(
                     height: 24,
                     avatars: [
-                      for (var n = 0; n < 5; n++) NetworkImage(getAvatarUrl(n))
+                      for (var n = 0;
+                          n <
+                              (widget
+                                      .resMission?["data"]?["data"]
+                                          ?[widget.index]?["display_players"]
+                                      ?.length ??
+                                  2);
+                          n++)
+                        NetworkImage(getAvatarUrl(
+                            indexMissions: widget.index,
+                            indexDisplayPlayers: n,
+                            resMission: widget.resMission))
                     ],
                   ))
                 ]),
@@ -186,16 +219,23 @@ class _TabContentMissionComponentState
   }
 }
 
-String getAvatarUrl(int n) {
-  final url = 'https://i.pravatar.cc/150?img=$n';
-  // final url = 'https://robohash.org/$n?bgset=bg1';
-  return url;
+String getAvatarUrl({indexMissions, indexDisplayPlayers, resMission}) {
+  final url = resMission?["data"]?["data"]?[indexMissions]?["display_players"]
+      ?[indexDisplayPlayers]?["image"];
+
+  if (url != null) {
+    return url;
+  } else {
+    return "";
+  }
 }
 
 class MyArgumentsDataDetailMissionClass {
-  final int id;
+  final dynamic resMission;
+  final int? indexResMission;
 
   MyArgumentsDataDetailMissionClass(
-    this.id,
+    this.resMission,
+    this.indexResMission,
   );
 }

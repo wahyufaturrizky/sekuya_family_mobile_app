@@ -13,7 +13,7 @@ import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/spinner.dart';
 import 'package:sekuya_family_mobile_app/components/tab_voucher/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
-import 'package:sekuya_family_mobile_app/service/voucher/profile.dart';
+import 'package:sekuya_family_mobile_app/service/voucher/voucher.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
@@ -74,8 +74,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
 
     if (isLoading) {
       return const MyWidgetSpinner();
-    }
-    {
+    } else {
       return NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -203,7 +202,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                           return TabContentVoucherComponentApp(
                               index: index, resVoucher: resVoucher);
                         },
-                        childCount: 10,
+                        childCount: resVoucher?["data"]?["data"]?.length,
                       ),
                     ),
                   ),
