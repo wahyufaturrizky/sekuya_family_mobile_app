@@ -67,85 +67,121 @@ class _ProfileComponentState extends State<ProfileComponent> {
   }
 
   Future<dynamic> getDataMyVoucher() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoadingResMyVoucher = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingResMyVoucher = true;
+        });
+      }
+
       var res = await handleGetDataMyVoucher();
 
       if (res != null) {
+        if (mounted) {
+          setState(() {
+            resMyVoucher = res;
+            isLoadingResMyVoucher = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
         setState(() {
-          resMyVoucher = res;
           isLoadingResMyVoucher = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoadingResMyVoucher = false;
-      });
+
       print('Error getDataProfile = $e');
     }
   }
 
   Future<dynamic> getDataProfile() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoadingResProfile = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingResProfile = true;
+        });
+      }
+
       var res = await handleGetDataProfile();
 
       if (res != null) {
+        if (mounted) {
+          setState(() {
+            resProfile = res;
+            isLoadingResProfile = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
         setState(() {
-          resProfile = res;
           isLoadingResProfile = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoadingResProfile = false;
-      });
+
       print('Error getDataVoucher = $e');
     }
   }
 
   Future<dynamic> getDataMyMissions() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoadingResMyMission = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingResMyMission = true;
+        });
+      }
+
       var res = await handleGetDataMyMissios();
 
       if (res != null) {
+        if (mounted) {
+          setState(() {
+            resMyMission = res;
+            isLoadingResMyMission = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
         setState(() {
-          resMyMission = res;
           isLoadingResMyMission = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoadingResMyMission = false;
-      });
+
       print('Error getDataProfile = $e');
     }
   }
 
   Future<dynamic> getDataMyCommunities() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoadingCommunities = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingCommunities = true;
+        });
+      }
+
       var res = await handleGetDataMyCommunities();
 
       if (res != null) {
+        if (mounted) {
+          setState(() {
+            resMyCommunities = res;
+            isLoadingCommunities = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
         setState(() {
-          resMyCommunities = res;
           isLoadingCommunities = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoadingCommunities = false;
-      });
+
       print('Error getDataMyCommunities = $e');
     }
   }

@@ -42,22 +42,31 @@ class _HomeComponentState extends State<HomeComponent> {
   }
 
   Future<dynamic> getDataDashboard() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
+
       var res = await handleGetDataDashboard();
 
       if (res != null) {
+        if (mounted) {
+          setState(() {
+            resDashboard = res;
+            isLoading = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
         setState(() {
-          resDashboard = res;
           isLoading = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+
       print('Error getDataProfile = $e');
     }
   }

@@ -75,25 +75,34 @@ class _ProfileDetailState extends State<ProfileDetail> {
   }
 
   Future<dynamic> getDataProfile() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
+
       var res = await handleGetDataProfile();
 
       if (res != null) {
-        setState(() {
-          resProfile = res;
+        if (mounted) {
+          setState(() {
+            resProfile = res;
 
-          email.text = resProfile["data"]?["email"];
-          username.text = resProfile["data"]?["username"];
+            email.text = resProfile["data"]?["email"];
+            username.text = resProfile["data"]?["username"];
+            isLoading = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
           isLoading = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+
       print('Error getDataProfile = $e');
     }
   }

@@ -73,22 +73,31 @@ class _CommunityComponentState extends State<CommunityComponent> {
   }
 
   Future<dynamic> getDataCommunities() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoadingResCommunities = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingResCommunities = true;
+        });
+      }
+
       var res = await handleGetDataCommunities();
 
       if (res != null) {
+        if (mounted) {
+          setState(() {
+            resCommunities = res;
+            isLoadingResCommunities = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
         setState(() {
-          resCommunities = res;
           isLoadingResCommunities = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoadingResCommunities = false;
-      });
+
       print('Error getDataProfile = $e');
     }
   }
