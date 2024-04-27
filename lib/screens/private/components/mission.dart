@@ -48,22 +48,31 @@ class _MissionComponentState extends State<MissionComponent> {
   }
 
   Future<dynamic> getDataMission() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoadingResMission = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingResMission = true;
+        });
+      }
+
       var res = await handleGetDataMission();
 
       if (res != null) {
-        setState(() {
-          resMission = res;
-          resMission = false;
-        });
+        if (mounted) {
+          setState(() {
+            resMission = res;
+            resMission = false;
+          });
+        }
       }
     } on DioException catch (e) {
-      setState(() {
-        isLoadingResMission = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingResMission = false;
+        });
+      }
+
       print('Error getDataProfile = $e');
     }
   }

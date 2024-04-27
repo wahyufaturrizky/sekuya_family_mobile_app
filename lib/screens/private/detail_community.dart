@@ -11,6 +11,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/leaderboard.dart';
+import 'package:sekuya_family_mobile_app/components/tab_community/members.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
@@ -336,7 +337,9 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                             (BuildContext context, int index) {
                               return name == "Mission"
                                   ? const TabContentCommunityComponentApp()
-                                  : const TabContentCommunityLeaderBoardComponentApp();
+                                  : name == "Leaderboard"
+                                      ? const TabContentCommunityLeaderBoardComponentApp()
+                                      : const TabContentCommunityMembersComponentApp();
                             },
                             childCount: 10,
                           ),

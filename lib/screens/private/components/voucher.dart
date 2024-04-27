@@ -48,22 +48,31 @@ class _VoucherComponentState extends State<VoucherComponent> {
   }
 
   Future<dynamic> getDataVoucher() async {
+    if (!mounted) return;
     try {
-      setState(() {
-        isLoadingResVoucher = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingResVoucher = true;
+        });
+      }
+
       var res = await handleGetDataVoucher();
 
       if (res != null) {
+        if (mounted) {
+          setState(() {
+            resVoucher = res;
+            isLoadingResVoucher = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
         setState(() {
-          resVoucher = res;
           isLoadingResVoucher = false;
         });
       }
-    } on DioException catch (e) {
-      setState(() {
-        isLoadingResVoucher = false;
-      });
+
       print('Error getDataProfile = $e');
     }
   }
@@ -93,6 +102,8 @@ class _VoucherComponentState extends State<VoucherComponent> {
                         children: [
                           Positioned(
                               top: 0,
+                              left: 0,
+                              right: 0,
                               child: Container(
                                 child: Image.asset(
                                   'assets/images/bg_voucher_redeem.png',
@@ -101,7 +112,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                 ),
                               )),
                           Positioned(
-                              top: 60,
+                              top: 80,
                               width: 350,
                               child: Container(
                                   padding: const EdgeInsets.all(16),
@@ -150,9 +161,13 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                                       kTextInputDecoration
                                                           .copyWith(
                                                     hintText: 'Input code',
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        EdgeInsets.all(4),
                                                     hintStyle: const TextStyle(
                                                         color:
-                                                            greySecondaryColor),
+                                                            greySecondaryColor,
+                                                        fontSize: 14),
                                                   )),
                                             ),
                                           ),
@@ -162,8 +177,9 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                           CustomButton(
                                               buttonText: 'Find',
                                               onPressed: () {},
-                                              sizeButtonIcon: 20,
                                               width: 100,
+                                              labelSize: 14,
+                                              height: 40,
                                               paddingButton: 0)
                                         ],
                                       )

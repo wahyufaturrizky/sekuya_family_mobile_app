@@ -94,13 +94,17 @@ class _TabContentMissionComponentState
                   ),
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Colors.transparent,
-                        child: Image.network(widget.resMission?["data"]?["data"]
-                                ?[widget.index]?["reward"]?["image"] ??
-                            ""),
-                      ),
+                      if (widget.resMission?["data"]?["data"]?[widget.index]
+                              ?["reward"]?["image"] !=
+                          null)
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.transparent,
+                          child: Image.network(widget.resMission?["data"]
+                                      ?["data"]?[widget.index]?["reward"]
+                                  ?["image"] ??
+                              ""),
+                        ),
                       const SizedBox(
                         width: 8,
                       ),
@@ -195,18 +199,21 @@ class _TabContentMissionComponentState
                       child: AvatarStack(
                     height: 24,
                     avatars: [
-                      for (var n = 0;
-                          n <
-                              (widget
-                                      .resMission?["data"]?["data"]
-                                          ?[widget.index]?["display_players"]
-                                      ?.length ??
-                                  2);
-                          n++)
-                        NetworkImage(getAvatarUrl(
-                            indexMissions: widget.index,
-                            indexDisplayPlayers: n,
-                            resMission: widget.resMission))
+                      if (widget.resMission?["data"]?["data"]?[widget.index]
+                              ?["display_players"] !=
+                          null)
+                        for (var n = 0;
+                            n <
+                                (widget
+                                        .resMission?["data"]?["data"]
+                                            ?[widget.index]?["display_players"]
+                                        ?.length ??
+                                    2);
+                            n++)
+                          NetworkImage(getAvatarUrl(
+                              indexMissions: widget.index,
+                              indexDisplayPlayers: n,
+                              resMission: widget.resMission))
                     ],
                   ))
                 ]),

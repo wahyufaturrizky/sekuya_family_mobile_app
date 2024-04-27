@@ -47,7 +47,8 @@ class ProfileDetail extends StatefulWidget {
 }
 
 class _ProfileDetailState extends State<ProfileDetail> {
-  bool isLoading = false;
+  bool isLoadingGetProfile = false;
+  bool isLoadingUpdateProfile = false;
   var resProfile;
   dynamic _pickImageError;
   List<XFile>? _mediaFileList;
@@ -79,7 +80,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
     try {
       if (mounted) {
         setState(() {
-          isLoading = true;
+          isLoadingGetProfile = true;
         });
       }
 
@@ -92,14 +93,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
             email.text = resProfile["data"]?["email"];
             username.text = resProfile["data"]?["username"];
-            isLoading = false;
+            isLoadingGetProfile = false;
           });
         }
       }
     } on DioException catch (e) {
       if (mounted) {
         setState(() {
-          isLoading = false;
+          isLoadingGetProfile = false;
         });
       }
 
@@ -133,7 +134,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
         routeSettings: RouteSettings(arguments: arguments));
 
     setState(() {
-      isLoading = false;
+      isLoadingUpdateProfile = false;
     });
   }
 
@@ -188,7 +189,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
   Future<dynamic> handleUpdateProfile() async {
     try {
       setState(() {
-        isLoading = true;
+        isLoadingUpdateProfile = true;
       });
 
       final formData = FormData.fromMap({
@@ -204,14 +205,11 @@ class _ProfileDetailState extends State<ProfileDetail> {
       var res = await handleUpdateDataProfile(formData);
 
       if (res != null) {
-        setState(() {
-          isLoading = false;
-        });
+        handleBack();
       }
-      handleBack();
     } catch (e) {
       setState(() {
-        isLoading = false;
+        isLoadingUpdateProfile = false;
       });
       print(e);
     }
@@ -237,6 +235,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
   @override
   Widget build(BuildContext context) {
+    var isLoading = isLoadingGetProfile;
     if (isLoading) {
       return const MyWidgetSpinner();
     } else {
@@ -404,10 +403,10 @@ class _ProfileDetailState extends State<ProfileDetail> {
         bottomSheet: Container(
             color: Colors.black,
             child: CustomButton(
-                isLoading: isLoading,
+                isLoading: isLoadingUpdateProfile,
                 buttonText: 'Save',
                 onPressed: () {
-                  if (!isLoading) {
+                  if (!isLoadingUpdateProfile) {
                     handleUpdateProfile();
                   }
                 },

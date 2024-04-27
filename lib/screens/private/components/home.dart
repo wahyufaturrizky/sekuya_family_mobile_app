@@ -347,7 +347,7 @@ class _HomeComponentState extends State<HomeComponent> {
               children: resDashboard != null
                   ? (resDashboard?["data"]?["featuredCommunities"]
                           as List<dynamic>)
-                      .map((i) {
+                      .map((item) {
                       return Builder(
                         builder: (BuildContext context) {
                           return Card(
@@ -359,14 +359,20 @@ class _HomeComponentState extends State<HomeComponent> {
                               onTap: () {
                                 debugPrint('Card tapped.');
                               },
-                              child: SizedBox(
+                              child: Container(
                                 width: 200,
                                 height: 150,
+                                decoration: BoxDecoration(
+                                    image: (item?["cover_image"] != null)
+                                        ? DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(
+                                              item?["cover_image"] ?? "",
+                                            ))
+                                        : null),
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Image.asset(
-                                      'assets/images/banner_home.png',
-                                    ),
                                     Container(
                                       decoration: const BoxDecoration(
                                           boxShadow: [
@@ -377,85 +383,56 @@ class _HomeComponentState extends State<HomeComponent> {
                                           ]),
                                       child: Column(
                                         children: [
-                                          const Text(
-                                            'NFT Communities',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
-                                          ),
+                                          if (item?["name"] != null)
+                                            Text(
+                                              item?["name"] ?? "",
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
                                           const SizedBox(
                                             height: 4,
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  CircleAvatar(
-                                                    radius: 10,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    child: Image.asset(
-                                                        'assets/images/ic_apple.png'),
-                                                  ),
-                                                  const Text(
-                                                    '10',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                width: 12,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  CircleAvatar(
-                                                    radius: 10,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    child: Image.asset(
-                                                        'assets/images/ic_apple.png'),
-                                                  ),
-                                                  const Text(
-                                                    '10',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                width: 12,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  CircleAvatar(
-                                                    radius: 10,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    child: Image.asset(
-                                                        'assets/images/ic_apple.png'),
-                                                  ),
-                                                  const Text(
-                                                    '10',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
+                                          if (item != null)
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                item?["total_task"]
+                                                        .toString() ??
+                                                    "",
+                                                item?["total_players"]
+                                                        .toString() ??
+                                                    "",
+                                                item["reward_exp"].toString() ??
+                                                    ""
+                                              ]
+                                                  .map((item) => Row(
+                                                        children: [
+                                                          Image.asset(
+                                                              'assets/images/ic_count.png'),
+                                                          const SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Text(
+                                                            item,
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 12,
+                                                          ),
+                                                        ],
+                                                      ))
+                                                  .toList(),
+                                            )
                                         ],
                                       ),
                                     ),

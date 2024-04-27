@@ -11,25 +11,25 @@ import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail_bottom_sheet.dart';
 
-class TabContentCommunityLeaderBoardComponentApp extends StatelessWidget {
-  const TabContentCommunityLeaderBoardComponentApp({super.key});
+class TabContentCommunityMembersComponentApp extends StatelessWidget {
+  const TabContentCommunityMembersComponentApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentCommunityLeaderBoardComponent();
+    return const TabContentCommunityMembersComponent();
   }
 }
 
-class TabContentCommunityLeaderBoardComponent extends StatefulWidget {
-  const TabContentCommunityLeaderBoardComponent({super.key});
+class TabContentCommunityMembersComponent extends StatefulWidget {
+  const TabContentCommunityMembersComponent({super.key});
 
   @override
-  State<TabContentCommunityLeaderBoardComponent> createState() =>
-      _TabContentCommunityLeaderBoardComponentState();
+  State<TabContentCommunityMembersComponent> createState() =>
+      _TabContentCommunityMembersComponentState();
 }
 
-class _TabContentCommunityLeaderBoardComponentState
-    extends State<TabContentCommunityLeaderBoardComponent> {
+class _TabContentCommunityMembersComponentState
+    extends State<TabContentCommunityMembersComponent> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -40,6 +40,7 @@ class _TabContentCommunityLeaderBoardComponentState
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
           debugPrint('Card tapped.');
+
           showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
