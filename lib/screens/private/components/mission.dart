@@ -81,7 +81,7 @@ class _MissionComponentState extends State<MissionComponent> {
   Widget build(BuildContext context) {
     var isLoading = isLoadingResMission;
 
-    if (!isLoading) {
+    if (isLoading) {
       return const MyWidgetSpinner();
     } else {
       return NestedScrollView(
