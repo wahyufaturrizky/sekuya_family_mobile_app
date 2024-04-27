@@ -14,6 +14,7 @@ const Color yellowPrimaryColor = Color.fromRGBO(252, 193, 63, 1);
 const Color greySoftColor = Color.fromRGBO(71, 71, 71, 1);
 const Color greenColor = Color.fromRGBO(3, 166, 29, 1);
 const String baseUrl = 'https://api.sekuyafamily.xellar.co/api/v1';
+const String baseUrlXellarLabs = 'https://api.sekuyalabs.xellar.co/api/v1';
 const InputDecoration kTextInputDecoration = InputDecoration(
   border: InputBorder.none,
   hintText: '',

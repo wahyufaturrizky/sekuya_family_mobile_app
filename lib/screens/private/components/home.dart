@@ -73,7 +73,7 @@ class _HomeComponentState extends State<HomeComponent> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    if (!isLoading) {
       return const Center(
         child: SizedBox(
           width: 50,
