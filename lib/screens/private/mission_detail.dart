@@ -550,7 +550,68 @@ class _MissionDetailState extends State<MissionDetail> {
                       ))
                     ],
                   )
-                ])
+                ]),
+            const SizedBox(
+              height: 16,
+            ),
+            const Text(
+              'Players',
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.white),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+                height: 260,
+                child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            mainAxisExtent: 60,
+                            crossAxisSpacing: 16),
+                    itemCount: 2,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                          color: blackPrimaryColor,
+                          child: InkWell(
+                              splashColor: yellowPrimaryColor.withAlpha(30),
+                              onTap: () {
+                                debugPrint('Card tapped.');
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: greySecondaryColor, width: 1),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8))),
+                                  child: const Row(
+                                    children: [
+                                      Center(
+                                          child: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Colors.transparent,
+                                        backgroundImage: NetworkImage(
+                                            'https://i.pravatar.cc/150?img=1'),
+                                      )),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        'full name',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ))));
+                    })),
           ],
         ),
         // This is the title in the app bar.
