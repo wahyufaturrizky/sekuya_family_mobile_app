@@ -43,7 +43,7 @@ class _TabContentCommunityLeaderBoardComponentState
           showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return const ProfileDetailBottomSheet();
+                return const ProfileDetailBottomSheetApp();
               });
         },
         child: const Padding(

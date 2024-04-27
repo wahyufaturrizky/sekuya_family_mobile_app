@@ -9,6 +9,7 @@
 
 import 'dart:io';
 
+import 'package:avatar_stack/avatar_stack.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/screens/private/lucky_winner_bottom_sheet%20copy.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 
 class MissionDetailApp extends StatelessWidget {
@@ -402,6 +404,78 @@ class _MissionDetailState extends State<MissionDetail> {
             const SizedBox(
               height: 16,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Lucky Winner',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const LuckyWinnerBottomSheetApp();
+                          });
+                    },
+                    child: const Text(
+                      'See All',
+                      style: TextStyle(
+                          color: yellowPrimaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                    ))
+              ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  border: Border.all(color: blackPrimaryColor),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.black),
+              child: Row(children: [
+                const Flexible(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage:
+                            NetworkImage('https://i.pravatar.cc/150?img=1'),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'full name',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                    child: AvatarStack(
+                  height: 24,
+                  avatars: [
+                    for (var n = 0; n < 3; n++) NetworkImage(getAvatarUrl(n))
+                  ],
+                ))
+              ]),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
             const Text(
               'Tasks',
               style: TextStyle(
@@ -687,6 +761,12 @@ class _MissionDetailState extends State<MissionDetail> {
           );
         });
   }
+}
+
+String getAvatarUrl(int n) {
+  final url = 'https://i.pravatar.cc/150?img=$n';
+  // final url = 'https://robohash.org/$n?bgset=bg1';
+  return url;
 }
 
 typedef OnPickImageCallback = void Function(
