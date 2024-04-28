@@ -91,31 +91,41 @@ class _TabContentProfileMyCommunityComponentState
                     fontWeight: FontWeight.w500),
               ),
               const SizedBox(
-                height: 12,
+                height: 8,
               ),
               Row(
                 children: [
-                  widget.resMyCommunities?["data"]?["data"]?[widget.index]
-                              ?["total_mission"]
-                          .toString() ??
-                      "",
-                  widget.resMyCommunities?["data"]?["data"]?[widget.index]
-                              ?["total_players"]
-                          .toString() ??
-                      "",
-                  widget.resMyCommunities?["data"]?["data"]?[widget.index]
-                              ?["level"]
-                          .toString() ??
-                      ""
+                  {
+                    "title": "total mission",
+                    "value": widget.resMyCommunities?["data"]?["data"]
+                            ?[widget.index]?["totalMission"]
+                        .toString(),
+                  },
+                  {
+                    "title": "total players",
+                    "value": widget.resMyCommunities?["data"]?["data"]
+                            ?[widget.index]?["totalPlayers"]
+                        .toString(),
+                  },
+                  {
+                    "title": "level",
+                    "value": widget.resMyCommunities?["data"]?["data"]
+                            ?[widget.index]?["level"]
+                        .toString(),
+                  },
                 ]
                     .map((item) => Row(
                           children: [
-                            Image.asset('assets/images/ic_count.png'),
+                            Image.asset(item["title"] == "total mission"
+                                ? 'assets/images/ic_total_mission.png'
+                                : item["title"] == "total players"
+                                    ? 'assets/images/ic_total_player.png'
+                                    : 'assets/images/ic_level_community.png'),
                             const SizedBox(
                               width: 8,
                             ),
                             Text(
-                              item,
+                              item["value"].toString(),
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
@@ -127,7 +137,10 @@ class _TabContentProfileMyCommunityComponentState
                           ],
                         ))
                     .toList(),
-              )
+              ),
+              const SizedBox(
+                height: 8,
+              ),
             ],
           ),
         ),

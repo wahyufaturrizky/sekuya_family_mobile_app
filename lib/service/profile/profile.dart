@@ -25,6 +25,10 @@ Future<dynamic> handleGetDataMyVoucher() {
   return clientDio(serviceUrlParam: "/profile/my-vouchers", methodParam: "GET");
 }
 
+Future<dynamic> handleGetDataMyReward() {
+  return clientDio(serviceUrlParam: "/profile/my-reward", methodParam: "GET");
+}
+
 Future<dynamic> handleGetDataMyMissios() {
   return clientDio(serviceUrlParam: "/profile/my-missions", methodParam: "GET");
 }

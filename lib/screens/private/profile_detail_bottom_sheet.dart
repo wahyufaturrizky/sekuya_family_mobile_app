@@ -261,11 +261,11 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                                     width: 200,
                                     height: 150,
                                     decoration: BoxDecoration(
-                                        image: (item?["cover_image"] != null)
+                                        image: (item?["coverImage"] != null)
                                             ? DecorationImage(
                                                 fit: BoxFit.cover,
                                                 image: NetworkImage(
-                                                  item?["cover_image"] ?? "",
+                                                  item?["coverImage"] ?? "",
                                                 ))
                                             : null),
                                     child: Column(
@@ -292,31 +292,47 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                                                           FontWeight.w600),
                                                 ),
                                               const SizedBox(
-                                                height: 4,
+                                                height: 8,
                                               ),
                                               if (item != null)
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    item?["total_mission"]
-                                                            .toString() ??
-                                                        "",
-                                                    item?["total_players"]
-                                                            .toString() ??
-                                                        "",
-                                                    item["level"].toString() ??
-                                                        ""
+                                                    {
+                                                      "title": "total mission",
+                                                      "value":
+                                                          item?["totalMission"]
+                                                              .toString(),
+                                                    },
+                                                    {
+                                                      "title": "total players",
+                                                      "value":
+                                                          item?["totalPlayers"]
+                                                              .toString(),
+                                                    },
+                                                    {
+                                                      "title": "level",
+                                                      "value": item?["level"]
+                                                          .toString(),
+                                                    },
                                                   ]
                                                       .map((item) => Row(
                                                             children: [
-                                                              Image.asset(
-                                                                  'assets/images/ic_count.png'),
+                                                              Image.asset(item[
+                                                                          "title"] ==
+                                                                      "total mission"
+                                                                  ? 'assets/images/ic_total_mission.png'
+                                                                  : item["title"] ==
+                                                                          "total players"
+                                                                      ? 'assets/images/ic_total_player.png'
+                                                                      : 'assets/images/ic_level_community.png'),
                                                               const SizedBox(
                                                                 width: 8,
                                                               ),
                                                               Text(
-                                                                item,
+                                                                item["value"]
+                                                                    .toString(),
                                                                 style: const TextStyle(
                                                                     color: Colors
                                                                         .white,
@@ -332,7 +348,10 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                                                             ],
                                                           ))
                                                       .toList(),
-                                                )
+                                                ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
                                             ],
                                           ),
                                         ),

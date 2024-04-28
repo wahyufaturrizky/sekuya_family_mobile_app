@@ -297,7 +297,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                   children: [
                                     Image.asset(
                                       item.key == "discord"
-                                          ? 'assets/images/ic_discord.png'
+                                          ? 'assets/images/ic_discord_community.png'
                                           : item.key == "instagram"
                                               ? 'assets/images/ic_instagram.png'
                                               : item.key == "facebook"

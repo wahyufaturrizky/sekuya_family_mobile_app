@@ -77,22 +77,26 @@ class _TabContentProfileMyMissionComponentState
                                 "",
                           ),
                           color: MaterialStateProperty.all<Color>(
-                              bluePrimaryColor.withOpacity(0.2)),
-                          labelStyle: const TextStyle(color: bluePrimaryColor),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ))
+                              blueSecondaryColor),
+                          labelStyle:
+                              const TextStyle(color: blueSolidSecondaryColor),
+                          shape: const StadiumBorder(
+                              side: BorderSide(color: Colors.transparent)))
                     ],
                   ),
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Colors.transparent,
-                        child: Image.network(widget.resMyMission?["data"]
-                                ?["data"]?[widget.index]?["reward"]?["image"] ??
-                            ""),
-                      ),
+                      if (widget.resMyMission?["data"]?["data"]?[widget.index]
+                              ?["reward"]?["image"] !=
+                          null)
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.transparent,
+                          child: Image.network(widget.resMyMission?["data"]
+                                      ?["data"]?[widget.index]?["reward"]
+                                  ?["image"] ??
+                              ""),
+                        ),
                       const SizedBox(
                         width: 8,
                       ),
@@ -153,12 +157,20 @@ class _TabContentProfileMyMissionComponentState
                                 if (item["icon"] == "true")
                                   Row(
                                     children: [
-                                      CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: Colors.transparent,
-                                        child: Image.asset(
-                                            'assets/images/ic_apple.png'),
-                                      ),
+                                      if (widget.resMyMission?["data"]?["data"]
+                                                  ?[widget.index]?["reward"]
+                                              ?["image"] !=
+                                          null)
+                                        CircleAvatar(
+                                            radius: 12,
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.network(
+                                              widget.resMyMission?["data"]
+                                                      ?["data"]?[widget.index]
+                                                  ?["reward"]?["image"],
+                                              width: 14,
+                                              height: 14,
+                                            )),
                                     ],
                                   ),
                                 Text(
@@ -188,18 +200,21 @@ class _TabContentProfileMyMissionComponentState
                       child: AvatarStack(
                     height: 24,
                     avatars: [
-                      for (var n = 0;
-                          n <
-                              (widget
-                                      .resMyMission?["data"]?["data"]
-                                          ?[widget.index]?["display_players"]
-                                      ?.length ??
-                                  2);
-                          n++)
-                        NetworkImage(getAvatarUrl(
-                            indexMyMissions: widget.index,
-                            indexDisplayPlayers: n,
-                            resMyMission: widget.resMyMission))
+                      if (widget.resMyMission?["data"]?["data"]?[widget.index]
+                              ?["display_players"] !=
+                          null)
+                        for (var n = 0;
+                            n <
+                                (widget
+                                        .resMyMission?["data"]?["data"]
+                                            ?[widget.index]?["display_players"]
+                                        ?.length ??
+                                    2);
+                            n++)
+                          NetworkImage(getAvatarUrl(
+                              indexMyMissions: widget.index,
+                              indexDisplayPlayers: n,
+                              resMyMission: widget.resMyMission))
                     ],
                   ))
                 ]),

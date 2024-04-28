@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/spinner.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart';
+import 'package:sekuya_family_mobile_app/components/tab_profile/my_reward.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
@@ -41,15 +42,18 @@ class _ProfileComponentState extends State<ProfileComponent> {
   bool isLoadingResMyVoucher = false;
   bool isLoadingResMyMission = false;
   bool isLoadingCommunities = false;
+  bool isLoadingReward = false;
   final List<String> tabs = <String>[
     'My Mission',
     'My Communities',
-    'My Voucher'
+    'My Voucher',
+    'My Reward',
   ];
 
   var resProfile;
   var resMyVoucher;
   var resMyMission;
+  var resMyReward;
   var resMyCommunities;
 
   final List<String> menu = <String>[
@@ -64,6 +68,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
     getDataMyVoucher();
     getDataMyMissions();
     getDataMyCommunities();
+    getDataMyReward();
   }
 
   Future<dynamic> getDataMyVoucher() async {
@@ -89,6 +94,36 @@ class _ProfileComponentState extends State<ProfileComponent> {
       if (mounted) {
         setState(() {
           isLoadingResMyVoucher = false;
+        });
+      }
+
+      print('Error getDataProfile = $e');
+    }
+  }
+
+  Future<dynamic> getDataMyReward() async {
+    if (!mounted) return;
+    try {
+      if (mounted) {
+        setState(() {
+          isLoadingReward = true;
+        });
+      }
+
+      var res = await handleGetDataMyReward();
+
+      if (res != null) {
+        if (mounted) {
+          setState(() {
+            resMyReward = res;
+            isLoadingReward = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoadingReward = false;
         });
       }
 
@@ -207,9 +242,10 @@ class _ProfileComponentState extends State<ProfileComponent> {
     var isLoading = isLoadingResProfile ||
         isLoadingResMyVoucher ||
         isLoadingResMyMission ||
-        isLoadingCommunities;
+        isLoadingCommunities ||
+        isLoadingReward;
 
-    if (isLoading) {
+    if (!isLoading) {
       return const MyWidgetSpinner();
     } else {
       return DefaultTabController(
@@ -419,10 +455,13 @@ class _ProfileComponentState extends State<ProfileComponent> {
                         SliverPadding(
                           padding: const EdgeInsets.all(8.0),
                           sliver: SliverFixedExtentList(
-                            itemExtent: (name == "My Mission" ||
-                                    name == "My Communities")
+                            itemExtent: name == "My Mission"
                                 ? 170.0
-                                : 140,
+                                : name == "My Communities"
+                                    ? 150.0
+                                    : name == "My Reward"
+                                        ? 170.0
+                                        : 140,
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
                                 return name == "My Mission"
@@ -433,16 +472,24 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                         ? TabContentProfileMyCommunityComponentApp(
                                             resMyCommunities: resMyCommunities,
                                             index: index)
-                                        : TabContentProfileMyVoucherComponentApp(
-                                            resMyVoucher: resMyVoucher,
-                                            index: index);
+                                        : name == "My Reward"
+                                            ? TabContentProfileMyRewardComponentApp(
+                                                resMyReward: resMyReward,
+                                                index: index)
+                                            : TabContentProfileMyVoucherComponentApp(
+                                                resMyVoucher: resMyVoucher,
+                                                index: index);
                               },
                               childCount: name == "My Mission"
                                   ? resMyMission?["data"]?["data"]?.length
                                   : name == "My Communities"
                                       ? resMyCommunities?["data"]?["data"]
                                           ?.length
-                                      : resMyVoucher?["data"]?["data"]?.length,
+                                      : name == "My Reward"
+                                          ? resMyReward?["data"]?["data"]
+                                              ?.length
+                                          : resMyVoucher?["data"]?["data"]
+                                              ?.length,
                             ),
                           ),
                         ),

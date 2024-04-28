@@ -19,6 +19,7 @@ import 'package:sekuya_family_mobile_app/components/spinner.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileDetailApp extends StatelessWidget {
   const ProfileDetailApp({super.key});
@@ -233,6 +234,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
     }
   }
 
+  Future<void> _launchUrl(val) async {
+    final Uri url = Uri.parse(val);
+
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var isLoading = isLoadingGetProfile;
@@ -370,28 +379,25 @@ class _ProfileDetailState extends State<ProfileDetail> {
                     )),
               ),
               Column(
-                children: [
-                  {"title": "Connect to Discord", "icon": "ic_discord.png"},
-                  {"title": "Connect to Telegram", "icon": "ic_telegram.png"},
-                  {"title": "Connect to Twitter", "icon": "ic_twitter.png"},
-                ]
+                children: (resProfile?["data"]?["linkedAccount"]
+                        as Map<String, dynamic>)
+                    .entries
                     .map((item) => Column(
                           children: [
                             const SizedBox(
                               height: 16,
                             ),
-                            Hero(
-                              tag: item["title"] ?? "",
-                              child: CustomButton(
-                                  isOutlinedBackgroundColor: greyDarkColor,
-                                  buttonText: item["title"] ?? "",
-                                  isOutlined: true,
-                                  onPressed: () {},
-                                  sizeButtonIcon: 20,
-                                  buttonIcon: item["icon"] ?? "",
-                                  width: 500,
-                                  paddingButton: 0),
-                            ),
+                            CustomButton(
+                                isOutlinedBackgroundColor: greyDarkColor,
+                                buttonText: 'Connect to ${item.key}',
+                                isOutlined: true,
+                                onPressed: () {
+                                  _launchUrl(item.value);
+                                },
+                                sizeButtonIcon: 20,
+                                buttonIcon: 'ic_${item.key}.png',
+                                width: 500,
+                                paddingButton: 0)
                           ],
                         ))
                     .toList(),
