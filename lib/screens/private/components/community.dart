@@ -195,13 +195,10 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Center(
-                                                    child: CircleAvatar(
-                                                  radius: 12,
-                                                  backgroundColor:
-                                                      Colors.transparent,
                                                   child: Image.asset(
-                                                      'assets/images/${gridMenu[index]["icon"]}'),
-                                                )),
+                                                    'assets/images/${gridMenu[index]["icon"]}',
+                                                  ),
+                                                ),
                                                 const SizedBox(
                                                   height: 8,
                                                 ),
@@ -241,7 +238,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                     SliverPadding(
                       padding: const EdgeInsets.all(8.0),
                       sliver: SliverFixedExtentList(
-                        itemExtent: 170.0,
+                        itemExtent: 150.0,
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             return TabContentCommunityFeaturedComponentApp(

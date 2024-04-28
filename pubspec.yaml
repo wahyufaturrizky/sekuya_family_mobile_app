@@ -46,6 +46,7 @@ dependencies:
   firebase_crashlytics: ^3.5.3
   image_picker: ^1.1.0
   intl: ^0.19.0
+  url_launcher: ^6.2.6
 
 dev_dependencies:
   flutter_test:
@@ -109,6 +110,16 @@ flutter:
     - assets/images/ic_jco.png
     - assets/images/ic_cube.png
     - assets/images/ic_globe.png
+    - assets/images/ic_doc.png
+    - assets/images/ic_players.png
+    - assets/images/ic_level.png
+    - assets/images/ic_total_mission.png
+    - assets/images/ic_total_player.png
+    - assets/images/ic_level_community.png
+    - assets/images/ic_level_detail_community.png
+    - assets/images/ic_instagram.png
+    - assets/images/ic_facebook.png
+    - assets/images/ic_twitter_social.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

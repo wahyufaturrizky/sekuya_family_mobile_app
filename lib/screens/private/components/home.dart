@@ -182,13 +182,14 @@ class _HomeComponentState extends State<HomeComponent> {
                                           ),
                                           Row(
                                             children: [
-                                              CircleAvatar(
-                                                radius: 12,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                child: Image.network(
-                                                    item["image"]),
-                                              ),
+                                              if (item["image"] != null)
+                                                CircleAvatar(
+                                                  radius: 12,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: Image.network(
+                                                      item["image"]),
+                                                ),
                                               const SizedBox(
                                                 width: 8,
                                               ),
@@ -242,18 +243,19 @@ class _HomeComponentState extends State<HomeComponent> {
                                                     )
                                                   ],
                                                 ),
-                                                const Column(
+                                                Column(
                                                   children: [
                                                     Text(
-                                                      '10',
-                                                      style: TextStyle(
+                                                      item["total_players"]
+                                                          .toString(),
+                                                      style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 10,
                                                           fontWeight:
                                                               FontWeight.w600),
                                                     ),
-                                                    Text(
-                                                      'Task',
+                                                    const Text(
+                                                      'Xp',
                                                       style: TextStyle(
                                                           color:
                                                               greySecondaryColor,
@@ -267,17 +269,24 @@ class _HomeComponentState extends State<HomeComponent> {
                                                   children: [
                                                     Row(
                                                       children: [
-                                                        CircleAvatar(
-                                                          radius: 10,
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          child: Image.asset(
-                                                              'assets/images/ic_apple.png'),
-                                                        ),
-                                                        const Text(
-                                                          '10',
-                                                          style: TextStyle(
+                                                        if (item["image"] !=
+                                                            null)
+                                                          CircleAvatar(
+                                                            radius: 10,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            child:
+                                                                Image.network(
+                                                              item["image"],
+                                                              width: 14,
+                                                              height: 14,
+                                                            ),
+                                                          ),
+                                                        Text(
+                                                          item["level"]
+                                                              .toString(),
+                                                          style: const TextStyle(
                                                               color:
                                                                   Colors.white,
                                                               fontSize: 10,
@@ -288,7 +297,7 @@ class _HomeComponentState extends State<HomeComponent> {
                                                       ],
                                                     ),
                                                     const Text(
-                                                      'Task',
+                                                      'USDT',
                                                       style: TextStyle(
                                                           color:
                                                               greySecondaryColor,
@@ -385,7 +394,9 @@ class _HomeComponentState extends State<HomeComponent> {
                                         children: [
                                           if (item?["name"] != null)
                                             Text(
-                                              item?["name"] ?? "",
+                                              item?["name"].substring(0, 18) +
+                                                      '...' ??
+                                                  "",
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                   color: Colors.white,
@@ -393,31 +404,48 @@ class _HomeComponentState extends State<HomeComponent> {
                                                   fontWeight: FontWeight.w600),
                                             ),
                                           const SizedBox(
-                                            height: 4,
+                                            height: 8,
                                           ),
                                           if (item != null)
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                item?["total_task"]
-                                                        .toString() ??
-                                                    "",
-                                                item?["total_players"]
-                                                        .toString() ??
-                                                    "",
-                                                item["reward_exp"].toString() ??
-                                                    ""
+                                                {
+                                                  "value": item?["total_task"]
+                                                          .toString() ??
+                                                      "",
+                                                  "title": "total task"
+                                                },
+                                                {
+                                                  "value":
+                                                      item?["total_players"]
+                                                              .toString() ??
+                                                          "",
+                                                  "title": "total players"
+                                                },
+                                                {
+                                                  "value": item["reward_exp"]
+                                                      .toString(),
+                                                  "title": "reward exp"
+                                                }
                                               ]
                                                   .map((item) => Row(
                                                         children: [
-                                                          Image.asset(
-                                                              'assets/images/ic_count.png'),
+                                                          Image.asset(item[
+                                                                      "title"] ==
+                                                                  "total task"
+                                                              ? 'assets/images/ic_doc.png'
+                                                              : item["title"] ==
+                                                                      "total players"
+                                                                  ? 'assets/images/ic_players.png'
+                                                                  : 'assets/images/ic_level.png'),
                                                           const SizedBox(
                                                             width: 8,
                                                           ),
                                                           Text(
-                                                            item,
+                                                            item["value"]
+                                                                .toString(),
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .white,
@@ -432,7 +460,10 @@ class _HomeComponentState extends State<HomeComponent> {
                                                         ],
                                                       ))
                                                   .toList(),
-                                            )
+                                            ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
                                         ],
                                       ),
                                     ),

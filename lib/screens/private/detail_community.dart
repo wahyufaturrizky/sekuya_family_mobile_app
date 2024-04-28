@@ -16,6 +16,7 @@ import 'package:sekuya_family_mobile_app/components/tab_community/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CommunityComponentDetailApp extends StatelessWidget {
   const CommunityComponentDetailApp({super.key, this.args});
@@ -54,6 +55,14 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
     });
   }
 
+  Future<void> _launchUrl(val) async {
+    final Uri url = Uri.parse(val);
+
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -79,11 +88,24 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                     Stack(
                       alignment: Alignment.bottomLeft,
                       children: [
-                        Image.asset(
-                          'assets/images/banner_home.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
+                        if (widget.args?.resCommunities?["data"]?["data"]
+                                        ?[widget.args?.indexResCommunities]
+                                    ["coverImage"] !=
+                                null &&
+                            !widget
+                                .args
+                                ?.resCommunities?["data"]?["data"]
+                                    ?[widget.args?.indexResCommunities]
+                                    ["coverImage"]
+                                .contains("googleapis"))
+                          Image.network(
+                            widget.args?.resCommunities?["data"]?["data"]
+                                    ?[widget.args?.indexResCommunities]
+                                ["coverImage"],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 150,
+                          ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -101,9 +123,26 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                             ),
                             Row(
                               children: [
-                                Image.asset(
-                                  'assets/images/ic_community.png',
-                                ),
+                                if (widget.args?.resCommunities?["data"]
+                                                    ?["data"]?[
+                                                widget
+                                                    .args?.indexResCommunities]
+                                            ["image"] !=
+                                        null &&
+                                    !widget
+                                        .args
+                                        ?.resCommunities?["data"]?["data"]
+                                            ?[widget.args?.indexResCommunities]
+                                            ["image"]
+                                        .contains("googleapis"))
+                                  Image.network(
+                                    widget.args?.resCommunities?["data"]
+                                                ?["data"]
+                                            ?[widget.args?.indexResCommunities]
+                                        ["image"],
+                                    width: 48,
+                                    height: 48,
+                                  ),
                                 const SizedBox(width: 12),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,17 +159,20 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
                                     Row(
                                       children: [
                                         Image.asset(
-                                          'assets/images/ic_chart.png',
+                                          'assets/images/ic_level_detail_community.png',
                                         ),
                                         const SizedBox(width: 12),
                                         const Text(
                                           'LEVEL 4',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 16,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ],
@@ -147,102 +189,67 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                       height: 15,
                     ),
                     Row(
-                      children: [
-                        Expanded(
-                            child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '2',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Mission',
-                                style: TextStyle(
-                                    color: greySecondaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
-                          ),
-                        )),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                            child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '2',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Members',
-                                style: TextStyle(
-                                    color: greySecondaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
-                          ),
-                        )),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                            child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '2',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Created',
-                                style: TextStyle(
-                                    color: greySecondaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
-                          ),
-                        )),
-                      ],
-                    ),
+                        children: [
+                      {
+                        "title": "Mission",
+                        "value": widget
+                            .args
+                            ?.resCommunities?["data"]?["data"]
+                                ?[widget.args?.indexResCommunities]
+                                ["totalMission"]
+                            .toString(),
+                      },
+                      {
+                        "title": "Members",
+                        "value": widget
+                            .args
+                            ?.resCommunities?["data"]?["data"]
+                                ?[widget.args?.indexResCommunities]
+                                ["totalPlayers"]
+                            .toString(),
+                      },
+                      {
+                        "title": "Created",
+                        "value": widget
+                            .args
+                            ?.resCommunities?["data"]?["data"]
+                                ?[widget.args?.indexResCommunities]["level"]
+                            .toString(),
+                      },
+                    ]
+                            .map((item) => Expanded(
+                                    child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      color: blackSolidPrimaryColor,
+                                      borderRadius: BorderRadius.circular(4)),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item["value"].toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        item["title"].toString(),
+                                        style: const TextStyle(
+                                            color: greySecondaryColor,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400),
+                                      )
+                                    ],
+                                  ),
+                                )))
+                            .toList()),
                     const SizedBox(
                       height: 15,
                     ),
@@ -268,37 +275,46 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                     ),
                     const SizedBox(height: 8),
                     Row(
-                        children: [
-                      {"title": "abc", "like": "1.8K"},
-                      {"title": "abc", "like": "1.8K"},
-                      {"title": "abc", "like": "1.8K"},
-                      {"title": "abc", "like": "1.8K"},
-                    ].map((i) {
+                        children: (widget.args?.resCommunities?["data"]?["data"]
+                                    ?[widget.args?.indexResCommunities]
+                                ?["social"] as Map<String, dynamic>)
+                            .entries
+                            .map((item) {
                       return Builder(
                         builder: (BuildContext context) {
-                          return Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: blackSolidPrimaryColor,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/images/ic_discord.png',
+                          return GestureDetector(
+                              onTap: () {
+                                _launchUrl(item.value);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: blackSolidPrimaryColor,
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  i["like"]!,
-                                  style: const TextStyle(
-                                      color: yellowPrimaryColor,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      item.key == "discord"
+                                          ? 'assets/images/ic_discord.png'
+                                          : item.key == "instagram"
+                                              ? 'assets/images/ic_instagram.png'
+                                              : item.key == "facebook"
+                                                  ? 'assets/images/ic_facebook.png'
+                                                  : 'assets/images/ic_twitter_social.png',
+                                    ),
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      '0',
+                                      style: TextStyle(
+                                          color: yellowPrimaryColor,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          );
+                              ));
                         },
                       );
                     }).toList()),

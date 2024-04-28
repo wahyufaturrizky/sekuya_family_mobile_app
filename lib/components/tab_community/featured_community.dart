@@ -68,55 +68,81 @@ class _TabContentCommunityFeaturedComponentState
             children: [
               Row(
                 children: [
-                  // if (widget.resCommunities?["data"]?["data"]?[widget.index]
-                  //         ?["image"] !=
-                  //     null)
-                  //   Image.network(
-                  //     widget.resCommunities?["data"]?["data"]?[widget.index]
-                  //             ?["image"] ??
-                  //         "",
-                  //     width: 32,
-                  //     height: 32,
-                  //   ),
+                  if (widget.resCommunities?["data"]?["data"]?[widget.index]
+                              ?["image"] !=
+                          null &&
+                      !widget.resCommunities?["data"]?["data"]?[widget.index]
+                              ?["image"]
+                          .contains("googleapis"))
+                    Image.network(
+                      widget.resCommunities?["data"]?["data"]?[widget.index]
+                              ?["image"] ??
+                          "",
+                      width: 32,
+                      height: 32,
+                    ),
                   const SizedBox(
                     width: 12,
                   ),
-                  // Text(
-                  //   widget.resCommunities?["data"]?["data"]?[widget.index]
-                  //           ?["name"] ??
-                  //       "",
-                  //   style: const TextStyle(
-                  //       color: Colors.white,
-                  //       fontSize: 14,
-                  //       fontWeight: FontWeight.w500),
-                  // ),
+                  Text(
+                    widget.resCommunities?["data"]?["data"]?[widget.index]
+                            ?["name"] ??
+                        "",
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ],
               ),
               const SizedBox(
                 height: 12,
               ),
-              // Text(
-              //   widget.resCommunities?["data"]?["data"]?[widget.index]
-              //           ?["description"] ??
-              //       "",
-              //   style: const TextStyle(
-              //       color: Colors.white,
-              //       fontSize: 12,
-              //       fontWeight: FontWeight.w500),
-              // ),
+              Text(
+                widget.resCommunities?["data"]?["data"]?[widget.index]
+                        ?["description"] ??
+                    "",
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500),
+              ),
               const SizedBox(
                 height: 12,
               ),
               Row(
-                children: ['22', '122', '102']
+                children: [
+                  {
+                    "title": "total mission",
+                    "value": widget.resCommunities?["data"]?["data"]
+                            ?[widget.index]?["totalMission"]
+                        .toString(),
+                  },
+                  {
+                    "title": "total players",
+                    "value": widget.resCommunities?["data"]?["data"]
+                            ?[widget.index]?["totalPlayers"]
+                        .toString(),
+                  },
+                  {
+                    "title": "level",
+                    "value": widget.resCommunities?["data"]?["data"]
+                            ?[widget.index]?["level"]
+                        .toString(),
+                  },
+                ]
                     .map((item) => Row(
                           children: [
-                            Image.asset('assets/images/ic_count.png'),
+                            Image.asset(item["title"] == "total mission"
+                                ? 'assets/images/ic_total_mission.png'
+                                : item["title"] == "total players"
+                                    ? 'assets/images/ic_total_player.png'
+                                    : 'assets/images/ic_level_community.png'),
                             const SizedBox(
                               width: 8,
                             ),
                             Text(
-                              item,
+                              item["value"].toString(),
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
