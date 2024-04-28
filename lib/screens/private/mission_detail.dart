@@ -149,10 +149,17 @@ class _MissionDetailState extends State<MissionDetail> {
         textAlign: TextAlign.center,
       );
     } else {
-      return const Text(
-        'You have not yet picked an image.',
-        textAlign: TextAlign.center,
+      return Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+              image: AssetImage("assets/images/upload_img_placeholder.png"),
+              fit: BoxFit.cover),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: greyColor, width: 2),
+        ),
       );
+      // You have not yet picked an image.
     }
   }
 
@@ -248,12 +255,10 @@ class _MissionDetailState extends State<MissionDetail> {
                     label: const Text(
                       'On Going',
                     ),
-                    color: MaterialStateProperty.all<Color>(
-                        bluePrimaryColor.withOpacity(0.2)),
-                    labelStyle: const TextStyle(color: bluePrimaryColor),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    )),
+                    color: MaterialStateProperty.all<Color>(blueSecondaryColor),
+                    labelStyle: const TextStyle(color: blueSolidSecondaryColor),
+                    shape: const StadiumBorder(
+                        side: BorderSide(color: Colors.transparent))),
                 const SizedBox(
                   width: 16,
                 ),
@@ -560,6 +565,7 @@ class _MissionDetailState extends State<MissionDetail> {
                             buttonText: 'Follow',
                             onPressed: () {},
                             height: 50,
+                            width: 500,
                           ),
                           const SizedBox(
                             height: 16,
@@ -567,10 +573,6 @@ class _MissionDetailState extends State<MissionDetail> {
                           Container(
                             height: 200,
                             width: 150,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: yellowPrimaryColor),
-                            ),
                             child: !kIsWeb &&
                                     defaultTargetPlatform ==
                                         TargetPlatform.android
@@ -604,19 +606,31 @@ class _MissionDetailState extends State<MissionDetail> {
                                   )
                                 : _previewImages(),
                           ),
+                          const SizedBox(
+                            height: 16,
+                          ),
                           if (_picker.supportsImageSource(ImageSource.camera))
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
-                              child: FloatingActionButton(
+                            CustomButton(
+                                isOutlinedBackgroundColor: greyDarkColor,
+                                buttonText: 'Add Image',
+                                isOutlined: true,
                                 onPressed: () {
                                   _onImageButtonPressed(ImageSource.camera,
                                       context: context);
                                 },
-                                heroTag: 'image2',
-                                tooltip: 'Take a Photo',
-                                child: const Icon(Icons.camera_alt),
-                              ),
-                            ),
+                                sizeButtonIcon: 20,
+                                buttonIcon: 'ic_plus.png',
+                                width: 500,
+                                paddingButton: 0),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          CustomButton(
+                            isLoading: isLoading,
+                            buttonText: 'Submit',
+                            onPressed: () {},
+                            width: 500,
+                          ),
                           const SizedBox(
                             height: 16,
                           ),

@@ -122,6 +122,8 @@ flutter:
     - assets/images/ic_twitter_social.png
     - assets/images/ic_copy.png
     - assets/images/ic_discord_community.png
+    - assets/images/ic_plus.png
+    - assets/images/upload_img_placeholder.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

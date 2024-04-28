@@ -85,11 +85,11 @@ class _TabContentMissionComponentState
                                 "",
                           ),
                           color: MaterialStateProperty.all<Color>(
-                              bluePrimaryColor.withOpacity(0.2)),
-                          labelStyle: const TextStyle(color: bluePrimaryColor),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ))
+                              blueSecondaryColor),
+                          labelStyle:
+                              const TextStyle(color: blueSolidSecondaryColor),
+                          shape: const StadiumBorder(
+                              side: BorderSide(color: Colors.transparent)))
                     ],
                   ),
                   Row(
