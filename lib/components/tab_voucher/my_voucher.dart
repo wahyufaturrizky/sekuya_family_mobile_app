@@ -65,7 +65,7 @@ class _TabContentVoucherComponentState
               fit: BoxFit.cover,
               image: NetworkImage(widget.resVoucher?["data"]?["data"]
                       ?[widget.index]?["image"] ??
-                  ""),
+                  "https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg"),
             ),
           ),
           child: Column(

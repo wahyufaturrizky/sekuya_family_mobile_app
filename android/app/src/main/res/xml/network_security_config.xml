@@ -4,5 +4,6 @@
         <domain includeSubdomains="true">10.0.2.2</domain>
         <domain includeSubdomains="true">https://api.sekuyafamily.xellar.co</domain>
         <domain includeSubdomains="true">https://api.sekuyalabs.xellar.co</domain>
+        <domain includeSubdomains="true">https://ralfvanveen.com</domain>
     </domain-config>
 </network-security-config>

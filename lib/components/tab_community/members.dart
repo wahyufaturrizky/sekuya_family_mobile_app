@@ -57,16 +57,6 @@ class _TabContentCommunityMembersComponentState
                 children: [
                   Row(
                     children: [
-                      Text(
-                        '1st',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
                       CircleAvatar(
                         radius: 12,
                         backgroundImage:

@@ -81,7 +81,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
   Widget build(BuildContext context) {
     var isLoading = isLoadingResVoucher;
 
-    if (isLoading) {
+    if (!isLoading) {
       return const MyWidgetSpinner();
     } else {
       return NestedScrollView(
@@ -218,7 +218,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                           return TabContentVoucherComponentApp(
                               index: index, resVoucher: resVoucher);
                         },
-                        childCount: resVoucher?["data"]?["data"]?.length,
+                        childCount: resVoucher?["data"]?["data"]?.length ?? 5,
                       ),
                     ),
                   ),

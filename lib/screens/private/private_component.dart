@@ -26,6 +26,8 @@ class PrivateScreenApp extends StatelessWidget {
     return MaterialApp(
       home: PrivateScreen(args: args),
       theme: ThemeData(
+          bottomSheetTheme:
+              const BottomSheetThemeData(backgroundColor: Colors.black),
           canvasColor: Colors.black,
           textSelectionTheme: TextSelectionThemeData(
             selectionColor: yellowPrimaryColor.withOpacity(0.2),
