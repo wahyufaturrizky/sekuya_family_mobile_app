@@ -36,40 +36,16 @@ class _CommunityComponentState extends State<CommunityComponent> {
   final List<String> tabs = <String>['Mission', 'Leaderboard', 'Members'];
 
   bool isLoadingResCommunities = false;
+  bool isLoadingResCommunitiesCategories = false;
 
   var resCommunities;
-
-  final List<Map<String, String>> gridMenu = <Map<String, String>>[
-    {
-      "title": "Trending",
-      "icon": "ic_trending.png",
-    },
-    {
-      "title": "High Level",
-      "icon": "ic_high_level.png",
-    },
-    {
-      "title": "Newest",
-      "icon": "ic_newest.png",
-    },
-    {
-      "title": "Most Member",
-      "icon": "ic_most_member.png",
-    },
-    {
-      "title": "Top Mission",
-      "icon": "ic_top_mission.png",
-    },
-    {
-      "title": "???",
-      "icon": "ic_trending.png",
-    },
-  ];
+  var resCommunitiesCategories;
 
   @override
   void initState() {
     super.initState();
     getDataCommunities();
+    getDataCommunitiesCategories();
   }
 
   Future<dynamic> getDataCommunities() async {
@@ -102,9 +78,40 @@ class _CommunityComponentState extends State<CommunityComponent> {
     }
   }
 
+  Future<dynamic> getDataCommunitiesCategories() async {
+    if (!mounted) return;
+    try {
+      if (mounted) {
+        setState(() {
+          isLoadingResCommunitiesCategories = true;
+        });
+      }
+
+      var res = await handleGetDataCommunitiesCategories();
+
+      if (res != null) {
+        if (mounted) {
+          setState(() {
+            resCommunitiesCategories = res;
+            isLoadingResCommunitiesCategories = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoadingResCommunitiesCategories = false;
+        });
+      }
+
+      print('Error getDataProfile = $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var isLoading = isLoadingResCommunities;
+    var isLoading =
+        isLoadingResCommunities || isLoadingResCommunitiesCategories;
 
     if (isLoading) {
       return const MyWidgetSpinner();
@@ -172,7 +179,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                       crossAxisCount: 3,
                                       mainAxisSpacing: 16,
                                       crossAxisSpacing: 16),
-                              itemCount: 6,
+                              itemCount:
+                                  resCommunitiesCategories?["data"]?.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Card(
                                     color: Colors.black,
@@ -194,17 +202,26 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Center(
-                                                  child: Image.asset(
-                                                    'assets/images/${gridMenu[index]["icon"]}',
+                                                if (resCommunitiesCategories?[
+                                                            "data"]?[index]
+                                                        ?["image"] !=
+                                                    null)
+                                                  Center(
+                                                    child: Image.network(
+                                                      resCommunitiesCategories?[
+                                                              "data"]?[index]
+                                                          ?["image"],
+                                                      height: 40,
+                                                      width: 40,
+                                                    ),
                                                   ),
-                                                ),
                                                 const SizedBox(
                                                   height: 8,
                                                 ),
                                                 Center(
                                                     child: Text(
-                                                  gridMenu[index]["title"]!,
+                                                  resCommunitiesCategories?[
+                                                      "data"]?[index]?["label"],
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 12,

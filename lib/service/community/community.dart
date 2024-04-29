@@ -13,6 +13,11 @@ Future<dynamic> handleGetDataCommunities() {
   return clientDio(serviceUrlParam: "/communities", methodParam: "GET");
 }
 
+Future<dynamic> handleGetDataCommunitiesCategories() {
+  return clientDio(
+      serviceUrlParam: "/communities/categories", methodParam: "GET");
+}
+
 Future<dynamic> handleJoinCommunities(id) {
   return clientDio(
     serviceUrlParam: '/communities/$id/join',
