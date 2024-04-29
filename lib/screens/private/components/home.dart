@@ -217,98 +217,81 @@ class _HomeComponentState extends State<HomeComponent> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                      item["total_mission"]
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ),
-                                                    const Text(
-                                                      'Task',
-                                                      style: TextStyle(
-                                                          color:
-                                                              greySecondaryColor,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    )
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                      item["total_players"]
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ),
-                                                    const Text(
-                                                      'Xp',
-                                                      style: TextStyle(
-                                                          color:
-                                                              greySecondaryColor,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    )
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        if (item["image"] !=
-                                                            null)
-                                                          CircleAvatar(
-                                                            radius: 10,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            child:
-                                                                Image.network(
-                                                              item["image"],
-                                                              width: 14,
-                                                              height: 14,
-                                                            ),
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  {
+                                                    "title": "Task",
+                                                    "value":
+                                                        item["total_mission"]
+                                                            .toString(),
+                                                  },
+                                                  {
+                                                    "title": "Xp",
+                                                    "value":
+                                                        item["total_players"]
+                                                            .toString(),
+                                                  },
+                                                  {
+                                                    "title": "USDT",
+                                                    "value": item["level"]
+                                                        .toString(),
+                                                    "image": item["image"]
+                                                        .toString(),
+                                                  },
+                                                ]
+                                                    .map(
+                                                      (itemMission) => Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              if (itemMission[
+                                                                      "image"] !=
+                                                                  null)
+                                                                CircleAvatar(
+                                                                  radius: 10,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  child: Image
+                                                                      .network(
+                                                                    itemMission[
+                                                                        "image"]!,
+                                                                    width: 14,
+                                                                    height: 14,
+                                                                  ),
+                                                                ),
+                                                              Text(
+                                                                itemMission[
+                                                                        "value"]
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        Text(
-                                                          item["level"]
-                                                              .toString(),
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const Text(
-                                                      'USDT',
-                                                      style: TextStyle(
-                                                          color:
-                                                              greySecondaryColor,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w500),
+                                                          Text(
+                                                            itemMission["title"]
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    greySecondaryColor,
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          )
+                                                        ],
+                                                      ),
                                                     )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                    .toList()),
                                           ],
                                         ),
                                       ),

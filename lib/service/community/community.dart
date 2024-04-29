@@ -12,3 +12,17 @@ import 'package:sekuya_family_mobile_app/service/client.dart';
 Future<dynamic> handleGetDataCommunities() {
   return clientDio(serviceUrlParam: "/communities", methodParam: "GET");
 }
+
+Future<dynamic> handleJoinCommunities(id) {
+  return clientDio(
+    serviceUrlParam: '/communities/$id/join',
+    methodParam: "POST",
+  );
+}
+
+Future<dynamic> handleLeaveCommunities(id) {
+  return clientDio(
+    serviceUrlParam: '/communities/$id/leave',
+    methodParam: "POST",
+  );
+}
