@@ -12,3 +12,11 @@ import 'package:sekuya_family_mobile_app/service/client.dart';
 Future<dynamic> handleGetDataMission() {
   return clientDio(serviceUrlParam: "/mission", methodParam: "GET");
 }
+
+Future<dynamic> handleTaskSubmission(data, idMission) {
+  return clientDio(
+    serviceUrlParam: '/profile/$idMission/task-submission',
+    methodParam: "POST",
+    data: data,
+  );
+}

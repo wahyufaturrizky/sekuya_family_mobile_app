@@ -10,6 +10,7 @@
 import 'dart:io';
 
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/lucky_winner_bottom_sheet%20copy.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
+import 'package:sekuya_family_mobile_app/service/mission/mission.dart';
 
 class MissionDetailApp extends StatelessWidget {
   const MissionDetailApp({super.key, this.args});
@@ -53,7 +55,7 @@ class MissionDetail extends StatefulWidget {
 
 class _MissionDetailState extends State<MissionDetail> {
   late String username;
-  bool isLoading = false;
+  bool isLoadingTaskMission = false;
   List<XFile>? _mediaFileList;
   dynamic _pickImageError;
   String? _retrieveDataError;
@@ -74,10 +76,39 @@ class _MissionDetailState extends State<MissionDetail> {
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,
         routeSettings: RouteSettings(arguments: arguments));
+  }
 
-    setState(() {
-      isLoading = false;
-    });
+  Future<dynamic> handleUpdateProfile() async {
+    try {
+      setState(() {
+        isLoadingTaskMission = true;
+      });
+
+      String idMission =
+          widget.args?.resMission[widget.args?.indexResMission]._id;
+
+      final formData = FormData.fromMap({
+        'taskId': idMission,
+        'additionalAttribute': "test additional attribute",
+        'proof': [
+          await MultipartFile.fromFile(
+            _mediaFileList![0].path.toString(),
+            filename: _mediaFileList![0].path.split('/').last,
+          )
+        ],
+      });
+
+      var res = await handleTaskSubmission(formData, idMission);
+
+      if (res != null) {
+        handleBack();
+      }
+    } catch (e) {
+      setState(() {
+        isLoadingTaskMission = false;
+      });
+      print(e);
+    }
   }
 
   Future<void> _onImageButtonPressed(
@@ -561,7 +592,6 @@ class _MissionDetailState extends State<MissionDetail> {
                             height: 16,
                           ),
                           CustomButton(
-                            isLoading: isLoading,
                             buttonText: 'Follow',
                             onPressed: () {},
                             height: 50,
@@ -626,7 +656,6 @@ class _MissionDetailState extends State<MissionDetail> {
                             height: 16,
                           ),
                           CustomButton(
-                            isLoading: isLoading,
                             buttonText: 'Submit',
                             onPressed: () {},
                             width: 500,

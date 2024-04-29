@@ -255,7 +255,7 @@ class _MissionComponentState extends State<MissionComponent> {
                             index: index,
                           );
                         },
-                        childCount: resMission?["data"]?["data"]?.length,
+                        childCount: resMission?["data"]?["data"]?.length ?? 2,
                       ),
                     ),
                   ),

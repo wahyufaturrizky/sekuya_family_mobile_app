@@ -202,29 +202,44 @@ class _VoucherComponentState extends State<VoucherComponent> {
         body: Builder(
           builder: (BuildContext context) {
             return Container(
-              color: Colors.black,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(8.0),
-                    sliver: SliverFixedExtentList(
-                      itemExtent: 180.0,
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return TabContentVoucherComponentApp(
-                              index: index, resVoucher: resVoucher);
-                        },
-                        childCount: resVoucher?["data"]?["data"]?.length ?? 5,
+                color: Colors.black,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: CustomScrollView(
+                        slivers: <Widget>[
+                          SliverOverlapInjector(
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                    context),
+                          ),
+                          SliverPadding(
+                            padding: const EdgeInsets.all(8.0),
+                            sliver: SliverFixedExtentList(
+                              itemExtent: 180.0,
+                              delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return TabContentVoucherComponentApp(
+                                      index: index, resVoucher: resVoucher);
+                                },
+                                childCount:
+                                    resVoucher?["data"]?["data"]?.length ?? 2,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: CustomButton(
+                        buttonText: 'Claim',
+                        onPressed: () {},
+                        width: 500,
+                      ),
+                    )
+                  ],
+                ));
           },
         ),
       );

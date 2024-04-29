@@ -74,11 +74,12 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
 
       if (res != null) {
         const snackBar = SnackBar(
+            backgroundColor: yellowPrimaryColor,
             behavior: SnackBarBehavior.floating,
             duration: Duration(milliseconds: 2000),
             content: Text(
               "👋🏻 Success join community",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: blackSolidPrimaryColor),
             ));
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

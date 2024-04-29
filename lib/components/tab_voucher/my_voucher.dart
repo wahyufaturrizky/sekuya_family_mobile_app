@@ -110,7 +110,7 @@ class _TabContentVoucherComponentState
                         fontWeight: FontWeight.w500),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
