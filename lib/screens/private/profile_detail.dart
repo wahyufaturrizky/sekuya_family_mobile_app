@@ -133,10 +133,6 @@ class _ProfileDetailState extends State<ProfileDetail> {
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,
         routeSettings: RouteSettings(arguments: arguments));
-
-    setState(() {
-      isLoadingUpdateProfile = false;
-    });
   }
 
   Text? _getRetrieveErrorWidget() {
@@ -187,7 +183,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
     }
   }
 
-  Future<dynamic> handleUpdateProfile() async {
+  Future<dynamic> handleUpdateProfile(context) async {
     try {
       setState(() {
         isLoadingUpdateProfile = true;
@@ -195,18 +191,33 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
       final formData = FormData.fromMap({
         'username': username.text.toString(),
-        'profilePic': [
-          await MultipartFile.fromFile(
-            _mediaFileList![0].path.toString(),
-            filename: _mediaFileList![0].path.split('/').last,
-          )
-        ],
+        'profilePic': _mediaFileList != null
+            ? [
+                await MultipartFile.fromFile(
+                  _mediaFileList![0].path.toString(),
+                  filename: _mediaFileList![0].path.split('/').last,
+                )
+              ]
+            : [resProfile?["data"]?["profilePic"]],
       });
 
       var res = await handleUpdateDataProfile(formData);
 
       if (res != null) {
-        handleBack();
+        const snackBar = SnackBar(
+            backgroundColor: yellowPrimaryColor,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(milliseconds: 2000),
+            content: Text(
+              "👋🏻 Success update profile",
+              style: TextStyle(color: blackSolidPrimaryColor),
+            ));
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        setState(() {
+          isLoadingUpdateProfile = false;
+        });
       }
     } catch (e) {
       setState(() {
@@ -413,7 +424,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                 buttonText: 'Save',
                 onPressed: () {
                   if (!isLoadingUpdateProfile) {
-                    handleUpdateProfile();
+                    handleUpdateProfile(context);
                   }
                 },
                 sizeButtonIcon: 20,
