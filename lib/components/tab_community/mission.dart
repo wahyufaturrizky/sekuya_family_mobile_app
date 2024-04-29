@@ -11,25 +11,34 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
-class TabContentCommunityComponentApp extends StatelessWidget {
-  const TabContentCommunityComponentApp({super.key});
+class TabContentCommunityMissionsComponentApp extends StatelessWidget {
+  const TabContentCommunityMissionsComponentApp(
+      {super.key, this.resCommunitiesMissions, this.index});
+
+  final dynamic resCommunitiesMissions;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentCommunityComponent();
+    return TabContentCommunityMissionsComponent(
+        resCommunitiesMissions: resCommunitiesMissions, index: index);
   }
 }
 
-class TabContentCommunityComponent extends StatefulWidget {
-  const TabContentCommunityComponent({super.key});
+class TabContentCommunityMissionsComponent extends StatefulWidget {
+  const TabContentCommunityMissionsComponent(
+      {super.key, this.resCommunitiesMissions, this.index});
+
+  final dynamic resCommunitiesMissions;
+  final int? index;
 
   @override
-  State<TabContentCommunityComponent> createState() =>
-      _TabContentCommunityComponentState();
+  State<TabContentCommunityMissionsComponent> createState() =>
+      _TabContentCommunityMissionsComponentState();
 }
 
-class _TabContentCommunityComponentState
-    extends State<TabContentCommunityComponent> {
+class _TabContentCommunityMissionsComponentState
+    extends State<TabContentCommunityMissionsComponent> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -52,16 +61,19 @@ class _TabContentCommunityComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Mission ipsumece dolor sit amet',
-                        style: TextStyle(
+                      Text(
+                        widget.resCommunitiesMissions?["data"]?["data"]
+                            ?[widget.index]?["name"],
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600),
                       ),
                       Chip(
-                          label: const Text(
-                            'On Going',
+                          label: Text(
+                            widget.resCommunitiesMissions?["data"]?["data"]
+                                    ?[widget.index]?["status"] ??
+                                "",
                           ),
                           color: MaterialStateProperty.all<Color>(
                               blueSecondaryColor),
@@ -81,9 +93,10 @@ class _TabContentCommunityComponentState
                       const SizedBox(
                         width: 8,
                       ),
-                      const Text(
-                        'NFT Communities',
-                        style: TextStyle(
+                      Text(
+                        widget.resCommunitiesMissions?["data"]?["data"]
+                            ?[widget.index]?["description"],
+                        style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600),
@@ -102,7 +115,11 @@ class _TabContentCommunityComponentState
                     children: [
                       {
                         "title": "Task",
-                        "amount": "10",
+                        "amount": widget
+                            .resCommunitiesMissions?["data"]?["data"]
+                                ?[widget.index]?["tasks"]
+                            .length
+                            .toString(),
                         "icon": "false",
                       },
                       {

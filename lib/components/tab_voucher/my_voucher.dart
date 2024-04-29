@@ -61,12 +61,15 @@ class _TabContentVoucherComponentState
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(widget.resVoucher?["data"]?["data"]
-                      ?[widget.index]?["image"] ??
-                  "https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg"),
-            ),
+            image: widget.resVoucher?["data"]?["data"]?[widget.index]
+                        ?["image"] !=
+                    null
+                ? DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.resVoucher?["data"]?["data"]
+                        ?[widget.index]?["image"]),
+                  )
+                : null,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

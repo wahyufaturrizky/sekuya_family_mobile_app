@@ -13,6 +13,25 @@ Future<dynamic> handleGetDataCommunities() {
   return clientDio(serviceUrlParam: "/communities", methodParam: "GET");
 }
 
+Future<dynamic> handleGetDataCommunitiesDetail(id) {
+  return clientDio(serviceUrlParam: "/communities/$id", methodParam: "GET");
+}
+
+Future<dynamic> handleGetDataCommunitiesMissions(id) {
+  return clientDio(
+      serviceUrlParam: "/communities/$id/missions", methodParam: "GET");
+}
+
+Future<dynamic> handleGetDataCommunitiesLeaderboards(id) {
+  return clientDio(
+      serviceUrlParam: "/communities/$id/leaderboards", methodParam: "GET");
+}
+
+Future<dynamic> handleGetDataCommunitiesMembers(id) {
+  return clientDio(
+      serviceUrlParam: "/communities/$id/members", methodParam: "GET");
+}
+
 Future<dynamic> handleGetDataCommunitiesCategories() {
   return clientDio(
       serviceUrlParam: "/communities/categories", methodParam: "GET");

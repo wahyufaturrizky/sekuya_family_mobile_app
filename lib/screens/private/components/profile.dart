@@ -440,6 +440,23 @@ class _ProfileComponentState extends State<ProfileComponent> {
           },
           body: TabBarView(
             children: tabs.map((String name) {
+              var childCountMyMission = resMyMission?["data"]?["data"] != null
+                  ? resMyMission?["data"]?["data"]?.length
+                  : 0;
+
+              var childCountMyCommunities =
+                  resMyCommunities?["data"]?["data"] != null
+                      ? resMyCommunities?["data"]?["data"]?.length
+                      : 0;
+
+              var childCountMyReward = resMyReward?["data"]?["data"] != null
+                  ? resMyReward?["data"]?["data"]?.length
+                  : 0;
+
+              var childCountMyVoucher = resMyVoucher?["data"]?["data"] != null
+                  ? resMyVoucher?["data"]?["data"]?.length
+                  : 0;
+
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
@@ -481,15 +498,12 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                                 index: index);
                               },
                               childCount: name == "My Mission"
-                                  ? resMyMission?["data"]?["data"]?.length
+                                  ? childCountMyMission
                                   : name == "My Communities"
-                                      ? resMyCommunities?["data"]?["data"]
-                                          ?.length
+                                      ? childCountMyCommunities
                                       : name == "My Reward"
-                                          ? resMyReward?["data"]?["data"]
-                                              ?.length
-                                          : resMyVoucher?["data"]?["data"]
-                                              ?.length,
+                                          ? childCountMyReward
+                                          : childCountMyVoucher,
                             ),
                           ),
                         ),
