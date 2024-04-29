@@ -12,16 +12,25 @@ import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail_bottom_sheet.dart';
 
 class TabContentCommunityMembersComponentApp extends StatelessWidget {
-  const TabContentCommunityMembersComponentApp({super.key});
+  const TabContentCommunityMembersComponentApp(
+      {super.key, this.resCommunitiesMembers, this.index});
+
+  final dynamic resCommunitiesMembers;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentCommunityMembersComponent();
+    return TabContentCommunityMembersComponent(
+        resCommunitiesMembers: resCommunitiesMembers, index: index);
   }
 }
 
 class TabContentCommunityMembersComponent extends StatefulWidget {
-  const TabContentCommunityMembersComponent({super.key});
+  const TabContentCommunityMembersComponent(
+      {super.key, this.resCommunitiesMembers, this.index});
+
+  final dynamic resCommunitiesMembers;
+  final int? index;
 
   @override
   State<TabContentCommunityMembersComponent> createState() =>
@@ -47,8 +56,8 @@ class _TabContentCommunityMembersComponentState
                 return const ProfileDetailBottomSheetApp();
               });
         },
-        child: const Padding(
-          padding: EdgeInsets.all(12),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -57,17 +66,24 @@ class _TabContentCommunityMembersComponentState
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/150?img=1'),
-                      ),
-                      SizedBox(
+                      if (widget.resCommunitiesMembers?["data"]?["data"]
+                              ?[widget.index]?["profilePic"] !=
+                          null)
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundImage: NetworkImage(
+                              widget.resCommunitiesMembers?["data"]?["data"]
+                                      ?[widget.index]?["profilePic"] ??
+                                  ""),
+                        ),
+                      const SizedBox(
                         width: 8,
                       ),
                       Text(
-                        'Wahyu Fatur Rizki',
-                        style: TextStyle(
+                        widget.resCommunitiesMembers?["data"]?["data"]
+                                ?[widget.index]?["username"] ??
+                            "",
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500),
@@ -75,8 +91,8 @@ class _TabContentCommunityMembersComponentState
                     ],
                   ),
                   Text(
-                    '1000xp',
-                    style: TextStyle(
+                    '${widget.resCommunitiesMembers?["data"]?["data"]?[widget.index]?["xp"] ?? ""} xp',
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.w500),

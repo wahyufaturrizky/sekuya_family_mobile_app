@@ -12,16 +12,25 @@ import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail_bottom_sheet.dart';
 
 class TabContentCommunityLeaderBoardComponentApp extends StatelessWidget {
-  const TabContentCommunityLeaderBoardComponentApp({super.key});
+  const TabContentCommunityLeaderBoardComponentApp(
+      {super.key, this.resCommunitiesLeaderboards, this.index});
+
+  final dynamic resCommunitiesLeaderboards;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return const TabContentCommunityLeaderBoardComponent();
+    return TabContentCommunityLeaderBoardComponent(
+        resCommunitiesLeaderboards: resCommunitiesLeaderboards, index: index);
   }
 }
 
 class TabContentCommunityLeaderBoardComponent extends StatefulWidget {
-  const TabContentCommunityLeaderBoardComponent({super.key});
+  const TabContentCommunityLeaderBoardComponent(
+      {super.key, this.resCommunitiesLeaderboards, this.index});
+
+  final dynamic resCommunitiesLeaderboards;
+  final int? index;
 
   @override
   State<TabContentCommunityLeaderBoardComponent> createState() =>
@@ -46,8 +55,8 @@ class _TabContentCommunityLeaderBoardComponentState
                 return const ProfileDetailBottomSheetApp();
               });
         },
-        child: const Padding(
-          padding: EdgeInsets.all(12),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -56,27 +65,33 @@ class _TabContentCommunityLeaderBoardComponentState
                 children: [
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         '1st',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 8,
                       ),
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/150?img=1'),
-                      ),
-                      SizedBox(
+                      if (widget.resCommunitiesLeaderboards?["data"]?["data"]
+                              ?[widget.index]?["profilePic"] !=
+                          null)
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundImage: NetworkImage(
+                              widget.resCommunitiesLeaderboards?["data"]
+                                  ?["data"]?[widget.index]?["profilePic"]),
+                        ),
+                      const SizedBox(
                         width: 8,
                       ),
                       Text(
-                        'Wahyu Fatur Rizki',
-                        style: TextStyle(
+                        widget.resCommunitiesLeaderboards?["data"]?["data"]
+                                ?[widget.index]?["username"] ??
+                            "",
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500),
@@ -84,8 +99,8 @@ class _TabContentCommunityLeaderBoardComponentState
                     ],
                   ),
                   Text(
-                    '1000xp',
-                    style: TextStyle(
+                    '${widget.resCommunitiesLeaderboards?["data"]?["data"]?[widget.index]?["exp"].toString() ?? ""} xp',
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.w500),

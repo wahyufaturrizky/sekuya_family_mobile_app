@@ -661,8 +661,14 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                 resCommunitiesMissions,
                                             index: index)
                                         : name == "Leaderboard"
-                                            ? const TabContentCommunityLeaderBoardComponentApp()
-                                            : const TabContentCommunityMembersComponentApp();
+                                            ? TabContentCommunityLeaderBoardComponentApp(
+                                                resCommunitiesLeaderboards:
+                                                    resCommunitiesLeaderboards,
+                                                index: index)
+                                            : TabContentCommunityMembersComponentApp(
+                                                resCommunitiesMembers:
+                                                    resCommunitiesMembers,
+                                                index: index);
                                   },
                                       childCount: name == "Mission"
                                           ? childCountCommunitiesMissions
