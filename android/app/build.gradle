@@ -84,10 +84,4 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    // ADD the API-only library to all variants
-    implementation("com.google.firebase:firebase-appdistribution-api-ktx:16.0.0-beta12")
-
-    // ADD the full SDK implementation to the "beta" variant only (example)
-    betaImplementation("com.google.firebase:firebase-appdistribution:16.0.0-beta12")
-}
+dependencies {}
