@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "433294916757-5f4v7hnqiccnnisg4j9rulr4ca85j5qk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sekuya_family_mobile_app",
+            "certificate_hash": "982b628add58a6005005a8ef43c123ece5759c2f"
+          }
+        },
+        {
           "client_id": "433294916757-dlgb3oem7pco6r78177c05goio7tdaba.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -26,6 +34,58 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.sekuya_family_mobile_app",
+            "certificate_hash": "970aaa1a2f5a00ef590c387ab63e63b77319119f"
+          }
+        },
+        {
+          "client_id": "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0dAPTnmmqZtmkrMTxguSLuQMl3Aj8m9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "433294916757-kov26lh9dh5hqdvm1uvpi49sh33q72ub.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sekuyaFamilyMobileApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433294916757:android:e76718826a3e3671b96f9c",
+        "android_client_info": {
+          "package_name": "com.sekuya.familyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433294916757-fu8qmk5bb6148d1n6uvgnq8nto5vkjq9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sekuya.familyapp",
+            "certificate_hash": "982b628add58a6005005a8ef43c123ece5759c2f"
+          }
+        },
+        {
+          "client_id": "433294916757-sot1j7k927noneadd6ihk5p979uub6r4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sekuya.familyapp",
             "certificate_hash": "970aaa1a2f5a00ef590c387ab63e63b77319119f"
           }
         },

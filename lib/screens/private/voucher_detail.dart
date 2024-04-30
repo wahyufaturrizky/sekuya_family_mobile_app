@@ -173,19 +173,17 @@ class _VoucherDetailState extends State<VoucherDetail> {
                 children: [
               {
                 "title": "Term and Conditions",
-                "rule": widget
-                    .args
-                    ?.resVoucher?["data"]?[widget.args?.indexResVoucher]
-                        ["termsAndConditions"]
-                    ?.map((item) => item),
+                "rule": [
+                  widget.args?.resVoucher?["data"]
+                      ?[widget.args?.indexResVoucher]["tnc"]
+                ],
               },
               {
                 "title": "How to use",
-                "rule": widget
-                    .args
-                    ?.resVoucher?["data"]?[widget.args?.indexResVoucher]
-                        ["howToUse"]
-                    ?.map((item) => item),
+                "rule": [
+                  widget.args?.resVoucher?["data"]
+                      ?[widget.args?.indexResVoucher]["htu"]
+                ],
               },
             ].asMap().entries.map((item) {
               return Builder(builder: (BuildContext context) {
