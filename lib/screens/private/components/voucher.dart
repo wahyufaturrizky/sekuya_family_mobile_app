@@ -38,6 +38,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
   String? filterStatus;
   String? filterReward;
   bool isLoadingResVoucher = false;
+  static const pageSize = 5;
 
   final codeController = TextEditingController();
 
@@ -46,7 +47,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
   @override
   void initState() {
     super.initState();
-    getDataVoucher(pageSize: 5);
+    getDataVoucher();
   }
 
   handleSearchByCode() {
@@ -54,7 +55,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
     getDataVoucher(code: code);
   }
 
-  Future<dynamic> getDataVoucher({pageKey = 1, code, pageSize}) async {
+  Future<dynamic> getDataVoucher({pageKey = 1, code}) async {
     if (!mounted) return;
     try {
       if (mounted) {

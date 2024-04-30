@@ -84,7 +84,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
     super.dispose();
   }
 
-  Future<dynamic> getDataCommunities({pageKey, search, filterByValue}) async {
+  Future<dynamic> getDataCommunities(
+      {pageKey = 1, search, filterByValue}) async {
     if (!mounted) return;
     try {
       if (mounted) {

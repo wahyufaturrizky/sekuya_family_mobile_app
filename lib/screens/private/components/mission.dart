@@ -7,6 +7,8 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
@@ -34,10 +36,13 @@ class MissionComponent extends StatefulWidget {
 }
 
 class _MissionComponentState extends State<MissionComponent> {
-  late String search;
   String? filterStatus;
   String? filterReward;
   bool isLoadingResMission = false;
+  Timer? _debounce;
+  static const pageSize = 5;
+
+  Duration _debouceDuration = const Duration(milliseconds: 500);
 
   final searchController = TextEditingController();
 
@@ -45,12 +50,24 @@ class _MissionComponentState extends State<MissionComponent> {
 
   @override
   void initState() {
+    searchController.addListener(_onSearchChanged);
+    getDataMission();
+
     super.initState();
-    getDataMission(pageSize: 5);
   }
 
-  Future<dynamic> getDataMission(
-      {search, filter_by_value, pageKey = 1, pageSize}) async {
+  _onSearchChanged() async {
+    final search = searchController.text;
+
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(_debouceDuration, () async {
+      await getDataMission(
+        search: search,
+      );
+    });
+  }
+
+  Future<dynamic> getDataMission({search, filter_by_value, pageKey = 1}) async {
     if (!mounted) return;
     try {
       if (mounted) {
@@ -136,9 +153,7 @@ class _MissionComponentState extends State<MissionComponent> {
                   ),
                   CustomTextField(
                     textField: TextField(
-                        onChanged: (value) {
-                          search = value;
-                        },
+                        controller: searchController,
                         style: const TextStyle(
                           fontSize: 20,
                           color: Colors.white,
@@ -185,6 +200,8 @@ class _MissionComponentState extends State<MissionComponent> {
                               setState(() {
                                 filterStatus = value!;
                               });
+
+                              getDataMission(filter_by_value: value);
                             },
                             items: list
                                 .map<DropdownMenuItem<String>>((String value) {
@@ -225,6 +242,7 @@ class _MissionComponentState extends State<MissionComponent> {
                               setState(() {
                                 filterReward = value!;
                               });
+                              getDataMission(filter_by_value: value);
                             },
                             items: list
                                 .map<DropdownMenuItem<String>>((String value) {
