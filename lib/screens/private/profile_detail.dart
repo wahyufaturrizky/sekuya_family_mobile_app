@@ -210,7 +210,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
             duration: Duration(milliseconds: 2000),
             content: Text(
               "👋🏻 Success update profile",
-              style: TextStyle(color: yellowPrimaryColor),
+              style: TextStyle(color: Colors.white),
             ));
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

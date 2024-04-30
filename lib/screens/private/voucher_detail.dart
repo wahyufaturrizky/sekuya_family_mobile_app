@@ -105,23 +105,24 @@ class _VoucherDetailState extends State<VoucherDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (widget.args?.resVoucher?["data"]?["data"]
-                    ?[widget.args?.indexResVoucher]?["image"] !=
+            if (widget.args?.resVoucher?["data"]?[widget.args?.indexResVoucher]
+                    ?["coverImage"] !=
                 null)
               Image.network(
-                widget.args?.resVoucher?["data"]?["data"]
-                        ?[widget.args?.indexResVoucher]?["image"] ??
+                widget.args?.resVoucher?["data"]?[widget.args?.indexResVoucher]
+                        ?["coverImage"] ??
                     "",
                 fit: BoxFit.cover,
                 width: double.infinity,
-                alignment: Alignment.topCenter,
+                alignment: Alignment.center,
+                height: 140,
               ),
             const SizedBox(
               height: 16,
             ),
             Text(
-              widget.args?.resVoucher?["data"]?["data"]
-                      ?[widget.args?.indexResVoucher]["name"] ??
+              widget.args?.resVoucher?["data"]?[widget.args?.indexResVoucher]
+                      ["name"] ??
                   "",
               style: const TextStyle(
                   fontWeight: FontWeight.w600,
@@ -129,8 +130,8 @@ class _VoucherDetailState extends State<VoucherDetail> {
                   color: Colors.white),
             ),
             Text(
-              widget.args?.resVoucher?["data"]?["data"]
-                      ?[widget.args?.indexResVoucher]["description"] ??
+              widget.args?.resVoucher?["data"]?[widget.args?.indexResVoucher]
+                      ["description"] ??
                   "",
               style: const TextStyle(
                   fontWeight: FontWeight.w400,
@@ -142,17 +143,23 @@ class _VoucherDetailState extends State<VoucherDetail> {
             ),
             Row(
               children: [
-                CircleAvatar(
-                  radius: 12,
-                  backgroundColor: greyColor,
-                  child: Image.asset('assets/images/ic_jco.png'),
-                ),
+                if (widget.args?.resVoucher?["data"]
+                        ?[widget.args?.indexResVoucher]?["coverImage"] !=
+                    null)
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: greyColor,
+                    child: Image.network(widget.args?.resVoucher?["data"]
+                        ?[widget.args?.indexResVoucher]?["image"]),
+                  ),
                 const SizedBox(
                   width: 8,
                 ),
-                const Text(
-                  'J.Coffee',
-                  style: TextStyle(
+                Text(
+                  widget.args?.resVoucher?["data"]
+                          ?[widget.args?.indexResVoucher]?["name"] ??
+                      "",
+                  style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 12,
                       color: Colors.white),
@@ -168,16 +175,16 @@ class _VoucherDetailState extends State<VoucherDetail> {
                 "title": "Term and Conditions",
                 "rule": widget
                     .args
-                    ?.resVoucher?["data"]?["data"]
-                        ?[widget.args?.indexResVoucher]["termsAndConditions"]
+                    ?.resVoucher?["data"]?[widget.args?.indexResVoucher]
+                        ["termsAndConditions"]
                     ?.map((item) => item),
               },
               {
                 "title": "How to use",
                 "rule": widget
                     .args
-                    ?.resVoucher?["data"]?["data"]
-                        ?[widget.args?.indexResVoucher]["howToUse"]
+                    ?.resVoucher?["data"]?[widget.args?.indexResVoucher]
+                        ["howToUse"]
                     ?.map((item) => item),
               },
             ].asMap().entries.map((item) {

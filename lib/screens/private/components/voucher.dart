@@ -38,11 +38,13 @@ class _VoucherComponentState extends State<VoucherComponent> {
   String? filterStatus;
   String? filterReward;
   bool isLoadingResVoucher = false;
+  bool isLoadingClaimVoucher = false;
   static const pageSize = 5;
 
   final codeController = TextEditingController();
 
   var resVoucher;
+  var resClaimVoucher;
 
   @override
   void initState() {
@@ -66,7 +68,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
 
       var queryParameters;
 
-      if (code != "") {
+      if (code != null) {
         queryParameters = {
           'code': code,
         };
@@ -94,12 +96,51 @@ class _VoucherComponentState extends State<VoucherComponent> {
         });
       }
 
-      print('Error getDataProfile = $e');
+      print('Error getDataVoucher = $e');
+    }
+  }
+
+  Future<dynamic> onSubmitClaimVoucher(context) async {
+    if (!mounted) return;
+    try {
+      if (mounted) {
+        setState(() {
+          isLoadingClaimVoucher = true;
+        });
+      }
+
+      var data = {
+        'code': codeController.text,
+      };
+
+      var res = await handleClaimVoucher(data);
+
+      if (res != null) {
+        if (mounted) {
+          getDataVoucher();
+
+          setState(() {
+            resClaimVoucher = res;
+            isLoadingClaimVoucher = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoadingClaimVoucher = false;
+        });
+      }
+
+      print('Error onSubmitClaimVoucher = $e');
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
+    var dataVoucher = resVoucher?["data"]?.map((e) => e["isClaimed"]);
+    var isClaimed = dataVoucher?.contains(true);
+
     return NestedScrollView(
       floatHeaderSlivers: true,
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -230,7 +271,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                       SliverPadding(
                         padding: const EdgeInsets.all(8.0),
                         sliver: SliverFixedExtentList(
-                          itemExtent: 180.0,
+                          itemExtent: 120.0,
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               return TabContentVoucherComponentApp(
@@ -243,14 +284,34 @@ class _VoucherComponentState extends State<VoucherComponent> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: CustomButton(
-                    buttonText: 'Claim',
-                    onPressed: () {},
-                    width: 500,
-                  ),
-                )
+                if (resVoucher?["data"].length > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: CustomButton(
+                      buttonText: 'Claim',
+                      isLoading: isLoadingClaimVoucher,
+                      onPressed: () {
+                        if (isClaimed) {
+                          const snackBar = SnackBar(
+                              backgroundColor: blackSolidPrimaryColor,
+                              behavior: SnackBarBehavior.floating,
+                              duration: Duration(milliseconds: 2000),
+                              content: Text(
+                                "👋🏻 Voucher already claimed",
+                                style: TextStyle(color: Colors.white),
+                              ));
+
+                          ScaffoldMessenger.of(mainContext)
+                              .showSnackBar(snackBar);
+                        } else {
+                          if (!isLoadingClaimVoucher) {
+                            onSubmitClaimVoucher(mainContext);
+                          }
+                        }
+                      },
+                      width: 500,
+                    ),
+                  )
               ],
             );
           }

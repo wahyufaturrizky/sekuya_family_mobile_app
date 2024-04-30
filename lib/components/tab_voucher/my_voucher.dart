@@ -61,23 +61,23 @@ class _TabContentVoucherComponentState
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            image: widget.resVoucher?["data"]?["data"]?[widget.index]
-                        ?["image"] !=
-                    null
-                ? DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.resVoucher?["data"]?["data"]
-                        ?[widget.index]?["image"]),
-                  )
-                : null,
+            image:
+                widget.resVoucher?["data"]?[widget.index]?["coverImage"] != null
+                    ? DecorationImage(
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                        image: NetworkImage(widget.resVoucher?["data"]
+                            ?[widget.index]?["coverImage"]),
+                      )
+                    : null,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.resVoucher?["data"]?["data"]?[widget.index]?["name"] ??
-                    "",
+                widget.resVoucher?["data"]?[widget.index]?["name"] ?? "",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -88,31 +88,11 @@ class _TabContentVoucherComponentState
                 height: 12,
               ),
               Text(
-                widget.resVoucher?["data"]?["data"]?[widget.index]
-                        ?["description"] ??
-                    "",
+                widget.resVoucher?["data"]?[widget.index]?["description"] ?? "",
                 style: const TextStyle(
-                    color: greySecondaryColor,
+                    color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w400),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Row(
-                children: [
-                  Image.asset('assets/images/ic_timer.png'),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    'Berlaku hingga ${handleFormatDate(widget.resVoucher?["data"]?["data"]?[widget.index]?["expired_at"] ?? "")}',
-                    style: const TextStyle(
-                        color: yellowPrimaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
               ),
             ],
           ),
