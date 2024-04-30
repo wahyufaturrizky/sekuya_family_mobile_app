@@ -74,19 +74,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "433294916757-5png5jngar9ni0v53jt9rie1kg8a999t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sekuya.familyapp",
+            "certificate_hash": "eba9f393976663dc26679b016a984c3feda3f599"
+          }
+        },
+        {
           "client_id": "433294916757-fu8qmk5bb6148d1n6uvgnq8nto5vkjq9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sekuya.familyapp",
             "certificate_hash": "982b628add58a6005005a8ef43c123ece5759c2f"
-          }
-        },
-        {
-          "client_id": "433294916757-sot1j7k927noneadd6ihk5p979uub6r4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sekuya.familyapp",
-            "certificate_hash": "970aaa1a2f5a00ef590c387ab63e63b77319119f"
           }
         },
         {
