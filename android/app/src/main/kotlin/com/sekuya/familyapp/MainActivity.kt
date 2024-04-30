@@ -1,4 +1,4 @@
-package com.example.sekuya_family_mobile_app
+package com.sekuya.familyapp
 
 import io.flutter.embedding.android.FlutterActivity
 
