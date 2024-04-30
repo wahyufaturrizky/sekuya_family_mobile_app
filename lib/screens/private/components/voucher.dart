@@ -39,15 +39,22 @@ class _VoucherComponentState extends State<VoucherComponent> {
   String? filterReward;
   bool isLoadingResVoucher = false;
 
+  final codeController = TextEditingController();
+
   var resVoucher;
 
   @override
   void initState() {
     super.initState();
-    getDataVoucher();
+    getDataVoucher(pageSize: 5);
   }
 
-  Future<dynamic> getDataVoucher() async {
+  handleSearchByCode() {
+    final code = codeController.text;
+    getDataVoucher(code: code);
+  }
+
+  Future<dynamic> getDataVoucher({pageKey = 1, code, pageSize}) async {
     if (!mounted) return;
     try {
       if (mounted) {
@@ -56,7 +63,20 @@ class _VoucherComponentState extends State<VoucherComponent> {
         });
       }
 
-      var res = await handleGetDataVoucher();
+      var queryParameters;
+
+      if (code != "") {
+        queryParameters = {
+          'code': code,
+        };
+      } else {
+        queryParameters = {
+          'page': pageKey.toString(),
+          'limit': pageSize.toString(),
+        };
+      }
+
+      var res = await handleGetDataVoucher(queryParameters);
 
       if (res != null) {
         if (mounted) {
@@ -79,128 +99,124 @@ class _VoucherComponentState extends State<VoucherComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var isLoading = isLoadingResVoucher;
-
-    if (!isLoading) {
-      return const MyWidgetSpinner();
-    } else {
-      return NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          // These are the slivers that show up in the "outer" scroll view.
-          return <Widget>[
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 220,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                child: Image.asset(
-                                  'assets/images/bg_voucher_redeem.png',
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.topCenter,
-                                ),
-                              )),
-                          Positioned(
-                              top: 80,
-                              width: 350,
-                              child: Container(
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: const BoxDecoration(
-                                      color: blackPrimaryColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(12))),
-                                  child: Column(
-                                    children: [
-                                      const Center(
-                                        child: Text(
-                                          'Reedem Voucher',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold),
+    return NestedScrollView(
+      floatHeaderSlivers: true,
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        // These are the slivers that show up in the "outer" scroll view.
+        return <Widget>[
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: SliverAppBar(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 220,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              child: Image.asset(
+                                'assets/images/bg_voucher_redeem.png',
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                              ),
+                            )),
+                        Positioned(
+                            top: 80,
+                            width: 350,
+                            child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: const BoxDecoration(
+                                    color: blackPrimaryColor,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12))),
+                                child: Column(
+                                  children: [
+                                    const Center(
+                                      child: Text(
+                                        'Reedem Voucher',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    const Center(
+                                      child: Text(
+                                        'Lorem ipsum dolor sit amet, consectetur adipis',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: greySecondaryColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      const Center(
-                                        child: Text(
-                                          'Lorem ipsum dolor sit amet, consectetur adipis',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: greySecondaryColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: CustomTextField(
+                                            textField: TextField(
+                                                controller: codeController,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                ),
+                                                decoration: kTextInputDecoration
+                                                    .copyWith(
+                                                  hintText: 'Input code',
+                                                  isDense: true,
+                                                  contentPadding:
+                                                      const EdgeInsets.all(4),
+                                                  hintStyle: const TextStyle(
+                                                      color: greySecondaryColor,
+                                                      fontSize: 14),
+                                                )),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 16,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: CustomTextField(
-                                              textField: TextField(
-                                                  onChanged: (value) {
-                                                    search = value;
-                                                  },
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white,
-                                                  ),
-                                                  decoration:
-                                                      kTextInputDecoration
-                                                          .copyWith(
-                                                    hintText: 'Input code',
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        EdgeInsets.all(4),
-                                                    hintStyle: const TextStyle(
-                                                        color:
-                                                            greySecondaryColor,
-                                                        fontSize: 14),
-                                                  )),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          CustomButton(
-                                              buttonText: 'Find',
-                                              onPressed: () {},
-                                              width: 100,
-                                              labelSize: 14,
-                                              height: 40,
-                                              paddingButton: 0)
-                                        ],
-                                      )
-                                    ],
-                                  )))
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                floating: true,
-                expandedHeight: 220.0,
-                toolbarHeight: 220,
-                backgroundColor: Colors.black,
-                forceElevated: innerBoxIsScrolled,
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        CustomButton(
+                                            buttonText: 'Find',
+                                            onPressed: () {
+                                              handleSearchByCode();
+                                            },
+                                            width: 100,
+                                            labelSize: 14,
+                                            height: 40,
+                                            paddingButton: 0)
+                                      ],
+                                    )
+                                  ],
+                                )))
+                      ],
+                    ),
+                  )
+                ],
               ),
+              floating: true,
+              expandedHeight: 220.0,
+              toolbarHeight: 220,
+              backgroundColor: Colors.black,
+              forceElevated: innerBoxIsScrolled,
             ),
-          ];
-        },
-        body: Builder(
-          builder: (BuildContext context) {
+          ),
+        ];
+      },
+      body: Builder(
+        builder: (BuildContext context) {
+          if (isLoadingResVoucher) {
+            return const MyWidgetSpinner();
+          } else {
             return Column(
               children: [
                 Expanded(
@@ -219,8 +235,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                               return TabContentVoucherComponentApp(
                                   index: index, resVoucher: resVoucher);
                             },
-                            childCount:
-                                resVoucher?["data"]?["data"]?.length ?? 3,
+                            childCount: resVoucher?["data"]?.length ?? 0,
                           ),
                         ),
                       ),
@@ -237,9 +252,9 @@ class _VoucherComponentState extends State<VoucherComponent> {
                 )
               ],
             );
-          },
-        ),
-      );
-    }
+          }
+        },
+      ),
+    );
   }
 }

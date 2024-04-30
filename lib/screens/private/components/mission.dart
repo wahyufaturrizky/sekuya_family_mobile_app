@@ -39,15 +39,18 @@ class _MissionComponentState extends State<MissionComponent> {
   String? filterReward;
   bool isLoadingResMission = false;
 
+  final searchController = TextEditingController();
+
   var resMission;
 
   @override
   void initState() {
     super.initState();
-    getDataMission();
+    getDataMission(pageSize: 5);
   }
 
-  Future<dynamic> getDataMission() async {
+  Future<dynamic> getDataMission(
+      {search, filter_by_value, pageKey = 1, pageSize}) async {
     if (!mounted) return;
     try {
       if (mounted) {
@@ -56,13 +59,31 @@ class _MissionComponentState extends State<MissionComponent> {
         });
       }
 
-      var res = await handleGetDataMission();
+      var queryParameters;
+
+      if (search != null) {
+        queryParameters = {
+          'search': search,
+        };
+      } else if (filter_by_value != null) {
+        queryParameters = {
+          'filter_by_value': filter_by_value,
+          'filter_by': 'status',
+        };
+      } else {
+        queryParameters = {
+          'page': pageKey.toString(),
+          'limit': pageSize.toString(),
+        };
+      }
+
+      var res = await handleGetDataMission(queryParameters);
 
       if (res != null) {
         if (mounted) {
           setState(() {
             resMission = res;
-            resMission = false;
+            isLoadingResMission = false;
           });
         }
       }
@@ -79,163 +100,160 @@ class _MissionComponentState extends State<MissionComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var isLoading = isLoadingResMission;
-
-    if (!isLoading) {
-      return const MyWidgetSpinner();
-    } else {
-      return NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          // These are the slivers that show up in the "outer" scroll view.
-          return <Widget>[
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Center(
-                      child: Text(
-                        'Missions',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+    return NestedScrollView(
+      floatHeaderSlivers: true,
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        // These are the slivers that show up in the "outer" scroll view.
+        return <Widget>[
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: SliverAppBar(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Center(
+                    child: Text(
+                      'Missions',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const Center(
+                    child: Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipis',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: greySecondaryColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const Center(
-                      child: Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipis',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: greySecondaryColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  CustomTextField(
+                    textField: TextField(
+                        onChanged: (value) {
+                          search = value;
+                        },
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    CustomTextField(
-                      textField: TextField(
-                          onChanged: (value) {
-                            search = value;
-                          },
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
+                        decoration: kTextInputDecoration.copyWith(
+                          hintText: 'Search',
+                          prefixIcon: const Icon(Icons.search),
+                          prefixIconColor: greySecondaryColor,
+                          hintStyle: const TextStyle(color: greySecondaryColor),
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          width: 170,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.0),
+                            border: Border.all(
+                                color: Colors.white,
+                                style: BorderStyle.solid,
+                                width: 0.80),
                           ),
-                          decoration: kTextInputDecoration.copyWith(
-                            hintText: 'Search',
-                            prefixIcon: const Icon(Icons.search),
-                            prefixIconColor: greySecondaryColor,
-                            hintStyle:
-                                const TextStyle(color: greySecondaryColor),
+                          child: DropdownButton<String>(
+                            value: filterStatus,
+                            hint: const Text(
+                              'All Status',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            icon: const Icon(Icons.expand_more),
+                            iconEnabledColor: Colors.white,
+                            elevation: 16,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                            underline: Container(height: 0),
+                            isExpanded: true,
+                            onChanged: (String? value) {
+                              // This is called when the user selects an item.
+                              setState(() {
+                                filterStatus = value!;
+                              });
+                            },
+                            items: list
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                ),
+                              );
+                            }).toList(),
                           )),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                            padding: const EdgeInsets.only(left: 16, right: 16),
-                            width: 170,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40.0),
-                              border: Border.all(
-                                  color: Colors.white,
-                                  style: BorderStyle.solid,
-                                  width: 0.80),
-                            ),
-                            child: DropdownButton<String>(
-                              value: filterStatus,
-                              hint: const Text(
-                                'All Status',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: const Icon(Icons.expand_more),
-                              iconEnabledColor: Colors.white,
-                              elevation: 16,
-                              style: const TextStyle(
+                      Container(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          width: 170,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.0),
+                            border: Border.all(
                                 color: Colors.white,
-                              ),
-                              underline: Container(height: 0),
-                              isExpanded: true,
-                              onChanged: (String? value) {
-                                // This is called when the user selects an item.
-                                setState(() {
-                                  filterStatus = value!;
-                                });
-                              },
-                              items: list.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                  ),
-                                );
-                              }).toList(),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.only(left: 16, right: 16),
-                            width: 170,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40.0),
-                              border: Border.all(
-                                  color: Colors.white,
-                                  style: BorderStyle.solid,
-                                  width: 0.80),
+                                style: BorderStyle.solid,
+                                width: 0.80),
+                          ),
+                          child: DropdownButton<String>(
+                            value: filterReward,
+                            hint: const Text(
+                              'All Reward',
+                              style: TextStyle(color: Colors.white),
                             ),
-                            child: DropdownButton<String>(
-                              value: filterReward,
-                              hint: const Text(
-                                'All Reward',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: const Icon(Icons.expand_more),
-                              iconEnabledColor: Colors.white,
-                              elevation: 16,
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                              underline: Container(height: 0),
-                              isExpanded: true,
-                              onChanged: (String? value) {
-                                // This is called when the user selects an item.
-                                setState(() {
-                                  filterReward = value!;
-                                });
-                              },
-                              items: list.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                  ),
-                                );
-                              }).toList(),
-                            )),
-                      ],
-                    )
-                  ],
-                ),
-                floating: true,
-                expandedHeight: 190.0,
-                toolbarHeight: 190,
-                backgroundColor: Colors.black,
-                forceElevated: innerBoxIsScrolled,
+                            icon: const Icon(Icons.expand_more),
+                            iconEnabledColor: Colors.white,
+                            elevation: 16,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                            underline: Container(height: 0),
+                            isExpanded: true,
+                            onChanged: (String? value) {
+                              // This is called when the user selects an item.
+                              setState(() {
+                                filterReward = value!;
+                              });
+                            },
+                            items: list
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                ),
+                              );
+                            }).toList(),
+                          )),
+                    ],
+                  )
+                ],
               ),
+              floating: true,
+              expandedHeight: 190.0,
+              toolbarHeight: 190,
+              backgroundColor: Colors.black,
+              forceElevated: innerBoxIsScrolled,
             ),
-          ];
-        },
-        body: Builder(
-          builder: (BuildContext context) {
+          ),
+        ];
+      },
+      body: Builder(
+        builder: (BuildContext context) {
+          if (isLoadingResMission) {
+            return const MyWidgetSpinner();
+          } else {
             return Container(
               color: Colors.black,
               child: CustomScrollView(
@@ -255,16 +273,16 @@ class _MissionComponentState extends State<MissionComponent> {
                             index: index,
                           );
                         },
-                        childCount: resMission?["data"]?["data"]?.length ?? 2,
+                        childCount: resMission?["data"]?.length ?? 0,
                       ),
                     ),
                   ),
                 ],
               ),
             );
-          },
-        ),
-      );
-    }
+          }
+        },
+      ),
+    );
   }
 }

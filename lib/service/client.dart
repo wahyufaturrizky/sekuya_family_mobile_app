@@ -65,7 +65,7 @@ final dio = Dio()
   );
 
 Future<dynamic> clientDio(
-    {serviceUrlParam = "", methodParam = "GET", data}) async {
+    {serviceUrlParam = "", methodParam = "GET", data, queryParameters}) async {
   try {
     String serviceUrl = serviceUrlParam;
     String method = methodParam;
@@ -74,6 +74,7 @@ Future<dynamic> clientDio(
         options: Options(
           method: method,
         ),
+        queryParameters: queryParameters,
         data: data);
     print('@client response $response');
 

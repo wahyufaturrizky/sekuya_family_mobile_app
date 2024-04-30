@@ -205,12 +205,12 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
       if (res != null) {
         const snackBar = SnackBar(
-            backgroundColor: yellowPrimaryColor,
+            backgroundColor: blackSolidPrimaryColor,
             behavior: SnackBarBehavior.floating,
             duration: Duration(milliseconds: 2000),
             content: Text(
               "👋🏻 Success update profile",
-              style: TextStyle(color: blackSolidPrimaryColor),
+              style: TextStyle(color: yellowPrimaryColor),
             ));
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -7,6 +7,8 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
@@ -32,23 +34,57 @@ class CommunityComponent extends StatefulWidget {
 }
 
 class _CommunityComponentState extends State<CommunityComponent> {
-  late String search;
   final List<String> tabs = <String>['Mission', 'Leaderboard', 'Members'];
+
+  Timer? _debounce;
+
+  Duration _debouceDuration = const Duration(milliseconds: 500);
+
+  final searchController = TextEditingController();
+
+  static const pageSize = 5;
 
   bool isLoadingResCommunities = false;
   bool isLoadingResCommunitiesCategories = false;
 
   var resCommunities;
   var resCommunitiesCategories;
+  var filterByValueState;
 
   @override
   void initState() {
-    super.initState();
     getDataCommunities();
+
     getDataCommunitiesCategories();
+
+    searchController.addListener(_onSearchChanged);
+
+    super.initState();
   }
 
-  Future<dynamic> getDataCommunities() async {
+  _onSearchChanged() async {
+    final search = searchController.text;
+
+    setState(() {
+      filterByValueState = "";
+    });
+
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(_debouceDuration, () async {
+      await getDataCommunities(
+        search: search,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  Future<dynamic> getDataCommunities({pageKey, search, filterByValue}) async {
     if (!mounted) return;
     try {
       if (mounted) {
@@ -57,7 +93,24 @@ class _CommunityComponentState extends State<CommunityComponent> {
         });
       }
 
-      var res = await handleGetDataCommunities();
+      var queryParameters;
+
+      if (search != null) {
+        queryParameters = {
+          'search': search,
+        };
+      } else if (filterByValue != null) {
+        queryParameters = {
+          'filter_by_value': filterByValue.toUpperCase(),
+        };
+      } else {
+        queryParameters = {
+          'page': pageKey.toString(),
+          'limit': pageSize.toString(),
+        };
+      }
+
+      var res = await handleGetDataCommunities(queryParameters);
 
       if (res != null) {
         if (mounted) {
@@ -110,67 +163,61 @@ class _CommunityComponentState extends State<CommunityComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var isLoading =
-        isLoadingResCommunities || isLoadingResCommunitiesCategories;
-
-    if (isLoading) {
-      return const MyWidgetSpinner();
-    } else {
-      return NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            // These are the slivers that show up in the "outer" scroll view.
-            return <Widget>[
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverAppBar(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Center(
-                        child: Text(
-                          'Communities',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
+    return NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          // These are the slivers that show up in the "outer" scroll view.
+          return <Widget>[
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SliverAppBar(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Center(
+                      child: Text(
+                        'Communities',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const Center(
+                      child: Text(
+                        'Lorem ipsum dolor sit amet, consectetur adipis',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: greySecondaryColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const Center(
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipis',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: greySecondaryColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomTextField(
+                      textField: TextField(
+                          controller: searchController,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      CustomTextField(
-                        textField: TextField(
-                            onChanged: (value) {
-                              search = value;
-                            },
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                            decoration: kTextInputDecoration.copyWith(
-                              hintText: 'Search',
-                              prefixIcon: const Icon(Icons.search),
-                              prefixIconColor: greySecondaryColor,
-                              hintStyle:
-                                  const TextStyle(color: greySecondaryColor),
-                            )),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
+                          decoration: kTextInputDecoration.copyWith(
+                            hintText: 'Search',
+                            prefixIcon: const Icon(Icons.search),
+                            prefixIconColor: greySecondaryColor,
+                            hintStyle:
+                                const TextStyle(color: greySecondaryColor),
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    if (isLoadingResCommunitiesCategories)
+                      const MyWidgetSpinner(),
+                    if (!isLoadingResCommunitiesCategories)
                       SizedBox(
                           height: 260,
                           child: GridView.builder(
@@ -187,13 +234,29 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                     child: InkWell(
                                         splashColor:
                                             yellowPrimaryColor.withAlpha(30),
-                                        onTap: () {
-                                          debugPrint('Card tapped.');
+                                        onTap: () async {
+                                          getDataCommunities(
+                                              filterByValue:
+                                                  resCommunitiesCategories?[
+                                                          "data"]?[index]
+                                                      ?["label"]);
+
+                                          setState(() {
+                                            filterByValueState =
+                                                resCommunitiesCategories?[
+                                                    "data"]?[index]?["label"];
+                                          });
                                         },
                                         child: Container(
                                             decoration: BoxDecoration(
                                                 border: Border.all(
-                                                    color: greySecondaryColor,
+                                                    color: filterByValueState ==
+                                                            resCommunitiesCategories?[
+                                                                        "data"]
+                                                                    ?[index]
+                                                                ?["label"]
+                                                        ? yellowPrimaryColor
+                                                        : greySecondaryColor,
                                                     width: 1),
                                                 borderRadius:
                                                     const BorderRadius.all(
@@ -231,19 +294,22 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                               ],
                                             ))));
                               })),
-                    ],
-                  ),
-                  floating: true,
-                  expandedHeight: 400.0,
-                  toolbarHeight: 400,
-                  backgroundColor: Colors.black,
-                  forceElevated: innerBoxIsScrolled,
+                  ],
                 ),
+                floating: true,
+                expandedHeight: 400.0,
+                toolbarHeight: 400,
+                backgroundColor: Colors.black,
+                forceElevated: innerBoxIsScrolled,
               ),
-            ];
-          },
-          body: Builder(
-            builder: (BuildContext context) {
+            ),
+          ];
+        },
+        body: Builder(
+          builder: (BuildContext context) {
+            if (isLoadingResCommunities) {
+              return const MyWidgetSpinner();
+            } else {
               return Container(
                 color: Colors.black,
                 child: CustomScrollView(
@@ -261,15 +327,16 @@ class _CommunityComponentState extends State<CommunityComponent> {
                             return TabContentCommunityFeaturedComponentApp(
                                 index: index, resCommunities: resCommunities);
                           },
-                          childCount: resCommunities?["data"]?["data"]?.length,
+                          childCount:
+                              resCommunities?["data"]?["data"]?.length ?? 0,
                         ),
                       ),
                     ),
                   ],
                 ),
               );
-            },
-          ));
-    }
+            }
+          },
+        ));
   }
 }

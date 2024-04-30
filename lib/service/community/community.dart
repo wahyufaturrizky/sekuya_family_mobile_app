@@ -9,8 +9,11 @@
 
 import 'package:sekuya_family_mobile_app/service/client.dart';
 
-Future<dynamic> handleGetDataCommunities() {
-  return clientDio(serviceUrlParam: "/communities", methodParam: "GET");
+Future<dynamic> handleGetDataCommunities(queryParameters) {
+  return clientDio(
+      serviceUrlParam: "/communities",
+      methodParam: "GET",
+      queryParameters: queryParameters);
 }
 
 Future<dynamic> handleGetDataCommunitiesDetail(id) {
