@@ -87,7 +87,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
         if (mounted) {
           setState(() {
             resCommunitiesDetail = res;
-            isJoined = res["data"]?["isJoined"];
+            isJoined = res?["data"]?["isJoined"];
             isLoadingCommunitiesDetail = false;
           });
         }

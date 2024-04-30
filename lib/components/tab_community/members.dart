@@ -91,7 +91,7 @@ class _TabContentCommunityMembersComponentState
                     ],
                   ),
                   Text(
-                    '${widget.resCommunitiesMembers?["data"]?["data"]?[widget.index]?["xp"] ?? ""} xp',
+                    '${widget.resCommunitiesMembers?["data"]?["data"]?[widget.index]?["exp"] ?? ""} xp',
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
