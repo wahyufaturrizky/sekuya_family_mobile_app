@@ -78,14 +78,14 @@ class _MissionDetailState extends State<MissionDetail> {
         routeSettings: RouteSettings(arguments: arguments));
   }
 
-  Future<dynamic> handleUpdateProfile() async {
+  Future<dynamic> handlePostTaskSubmission() async {
     try {
       setState(() {
         isLoadingTaskMission = true;
       });
 
-      String idMission =
-          widget.args?.resMission[widget.args?.indexResMission]._id;
+      String idMission = widget.args
+          ?.resMission?["data"]?["data"]?[widget.args?.indexResMission]._id;
 
       final formData = FormData.fromMap({
         'taskId': idMission,

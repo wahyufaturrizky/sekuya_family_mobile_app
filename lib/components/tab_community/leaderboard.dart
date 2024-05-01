@@ -41,9 +41,57 @@ class _TabContentCommunityLeaderBoardComponentState
     extends State<TabContentCommunityLeaderBoardComponent> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: blackPrimaryColor,
-      clipBehavior: Clip.hardEdge,
+    var indexingRank = widget.index! + 1;
+    var rank = indexingRank == 1
+        ? '${indexingRank}st'
+        : indexingRank == 2
+            ? '${indexingRank}nd'
+            : indexingRank == 3
+                ? '${indexingRank}rd'
+                : '${indexingRank}th';
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(4),
+          border: widget.index == 0 || widget.index == 1 || widget.index == 2
+              ? Border(
+                  top: BorderSide(
+                    color: widget.index == 0
+                        ? yellowPrimaryColor
+                        : widget.index == 1
+                            ? greySecondWinnerColor
+                            : redThirdWinnerColor,
+                    width: 1,
+                  ),
+                  bottom: BorderSide(
+                    color: widget.index == 0
+                        ? yellowPrimaryColor
+                        : widget.index == 1
+                            ? greySecondWinnerColor
+                            : redThirdWinnerColor,
+                    width: 1,
+                  ),
+                  right: BorderSide(
+                    color: widget.index == 0
+                        ? yellowPrimaryColor
+                        : widget.index == 1
+                            ? greySecondWinnerColor
+                            : redThirdWinnerColor,
+                    width: 1,
+                  ),
+                  left: BorderSide(
+                    color: widget.index == 0
+                        ? yellowPrimaryColor
+                        : widget.index == 1
+                            ? greySecondWinnerColor
+                            : redThirdWinnerColor,
+                    width: 8,
+                  ),
+                )
+              : Border.all(
+                  color: blackPrimaryColor,
+                  width: 1,
+                )),
       margin: const EdgeInsets.symmetric(vertical: 12),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
@@ -65,9 +113,20 @@ class _TabContentCommunityLeaderBoardComponentState
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        '1st',
-                        style: TextStyle(
+                      if (widget.index == 0 ||
+                          widget.index == 1 ||
+                          widget.index == 2)
+                        Container(
+                            margin: const EdgeInsets.only(right: 4),
+                            child: CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: AssetImage(
+                                  'assets/images/ic_${widget.index}.png'),
+                            )),
+                      Text(
+                        rank,
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold),

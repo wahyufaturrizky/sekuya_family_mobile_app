@@ -115,21 +115,26 @@ class _TabContentCommunityMissionsComponentState
                     children: [
                       {
                         "title": "Task",
-                        "amount": widget
-                            .resCommunitiesMissions?["data"]?["data"]
-                                ?[widget.index]?["tasks"]
-                            .length
+                        "amount": widget.resCommunitiesMissions?["data"]
+                                ?["data"]?[widget.index]?["totalTasks"]
                             .toString(),
                         "icon": "false",
                       },
                       {
                         "title": "Xp",
-                        "amount": "120",
+                        "amount": widget.resCommunitiesMissions?["data"]
+                                ?["data"]?[widget.index]?["totalExp"]
+                            .toString(),
                         "icon": "false",
                       },
                       {
-                        "title": "USDT",
-                        "amount": "250",
+                        "title": widget.resCommunitiesMissions?["data"]?["data"]
+                                ?[widget.index]?["rewards"]?[0]?["name"]
+                            ?.split(" ")?[1],
+                        "amount": widget.resCommunitiesMissions?["data"]
+                                ?["data"]?[widget.index]?["rewards"]?[0]
+                                ?["name"]
+                            ?.split(" ")?[0],
                         "icon": "true",
                       }
                     ]
@@ -176,7 +181,14 @@ class _TabContentCommunityMissionsComponentState
                       child: AvatarStack(
                     height: 24,
                     avatars: [
-                      for (var n = 0; n < 5; n++) NetworkImage(getAvatarUrl(n))
+                      for (var n = 0;
+                          n <
+                              widget.resCommunitiesMissions?["data"]?["data"]
+                                  ?[widget.index]?["totalPlayers"];
+                          n++)
+                        NetworkImage(widget.resCommunitiesMissions?["data"]
+                                ?["data"]?[widget.index]?["playerSamples"]?[n]
+                            ?["profilePic"])
                     ],
                   ))
                 ]),

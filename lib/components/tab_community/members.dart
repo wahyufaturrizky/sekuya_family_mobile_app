@@ -41,9 +41,12 @@ class _TabContentCommunityMembersComponentState
     extends State<TabContentCommunityMembersComponent> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: blackPrimaryColor,
-      clipBehavior: Clip.hardEdge,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: blackPrimaryColor, width: 1),
+      ),
       margin: const EdgeInsets.symmetric(vertical: 12),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
