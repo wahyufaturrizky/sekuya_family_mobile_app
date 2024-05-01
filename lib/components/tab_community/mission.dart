@@ -85,17 +85,22 @@ class _TabContentCommunityMissionsComponentState
                   ),
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Colors.transparent,
-                        child: Image.asset('assets/images/ic_apple.png'),
-                      ),
+                      if (widget.resCommunitiesMissions?["data"]?["data"]
+                              ?[widget.index]?["community"]?["image"] !=
+                          null)
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.transparent,
+                          child: Image.network(
+                              widget.resCommunitiesMissions?["data"]?["data"]
+                                  ?[widget.index]?["community"]?["image"]),
+                        ),
                       const SizedBox(
                         width: 8,
                       ),
                       Text(
                         widget.resCommunitiesMissions?["data"]?["data"]
-                            ?[widget.index]?["description"],
+                            ?[widget.index]?["community"]?["name"],
                         style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
@@ -118,14 +123,14 @@ class _TabContentCommunityMissionsComponentState
                         "amount": widget.resCommunitiesMissions?["data"]
                                 ?["data"]?[widget.index]?["totalTasks"]
                             .toString(),
-                        "icon": "false",
+                        "icon": "",
                       },
                       {
                         "title": "Xp",
                         "amount": widget.resCommunitiesMissions?["data"]
                                 ?["data"]?[widget.index]?["totalExp"]
                             .toString(),
-                        "icon": "false",
+                        "icon": "",
                       },
                       {
                         "title": widget.resCommunitiesMissions?["data"]?["data"]
@@ -135,7 +140,8 @@ class _TabContentCommunityMissionsComponentState
                                 ?["data"]?[widget.index]?["rewards"]?[0]
                                 ?["name"]
                             ?.split(" ")?[0],
-                        "icon": "true",
+                        "icon": widget.resCommunitiesMissions?["data"]?["data"]
+                            ?[widget.index]?["rewards"]?[0]?["image"],
                       }
                     ]
                         .map(
@@ -143,16 +149,14 @@ class _TabContentCommunityMissionsComponentState
                             margin: const EdgeInsets.only(right: 10),
                             child: Row(
                               children: [
-                                if (item["icon"] == "true")
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: Colors.transparent,
-                                        child: Image.asset(
-                                            'assets/images/ic_apple.png'),
-                                      ),
-                                    ],
+                                if (item["icon"] != "")
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 4),
+                                    child: CircleAvatar(
+                                      radius: 12,
+                                      backgroundColor: Colors.transparent,
+                                      child: Image.network(item["icon"]),
+                                    ),
                                   ),
                                 Text(
                                   item["amount"]!,

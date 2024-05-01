@@ -95,23 +95,20 @@ class _TabContentMissionComponentState
                   Row(
                     children: [
                       if (widget.resMission?["data"]?["data"]?[widget.index]
-                              ?["reward"]?["image"] !=
+                              ?["community"]?["image"] !=
                           null)
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
                           child: Image.network(widget.resMission?["data"]
-                                      ?["data"]?[widget.index]?["reward"]
-                                  ?["image"] ??
-                              ""),
+                              ?["data"]?[widget.index]?["community"]?["image"]),
                         ),
                       const SizedBox(
                         width: 8,
                       ),
                       Text(
                         widget.resMission?["data"]?["data"]?[widget.index]
-                                ?["community_name"] ??
-                            "",
+                            ?["community"]?["name"],
                         style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
@@ -132,28 +129,28 @@ class _TabContentMissionComponentState
                       {
                         "title": "Task",
                         "amount": widget.resMission?["data"]?["data"]
-                                    ?[widget.index]?["total_task"]
+                                    ?[widget.index]?["totalTasks"]
                                 .toString() ??
                             "",
-                        "icon": "false",
+                        "icon": "",
                       },
                       {
                         "title": "Xp",
                         "amount": widget.resMission?["data"]?["data"]
-                                    ?[widget.index]?["reward_exp"]
+                                    ?[widget.index]?["totalExp"]
                                 .toString() ??
                             "",
-                        "icon": "false",
+                        "icon": "",
                       },
                       {
-                        "title": "USDT",
-                        "amount": RegExp(r'(\d+)')
-                                .firstMatch(widget.resMission?["data"]?["data"]
-                                        ?[widget.index]?["reward"]?["name"] ??
-                                    "")
-                                ?.group(0) ??
-                            "",
-                        "icon": "true",
+                        "title": widget.resMission?["data"]?["data"]
+                                ?[widget.index]?["rewards"]?[0]?["name"]
+                            ?.split(" ")?[1],
+                        "amount": widget.resMission?["data"]?["data"]
+                                ?[widget.index]?["rewards"]?[0]?["name"]
+                            ?.split(" ")?[0],
+                        "icon": widget.resMission?["data"]?["data"]
+                            ?[widget.index]?["rewards"]?[0]?["image"],
                       }
                     ]
                         .map(
@@ -161,16 +158,14 @@ class _TabContentMissionComponentState
                             margin: const EdgeInsets.only(right: 10),
                             child: Row(
                               children: [
-                                if (item["icon"] == "true")
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: Colors.transparent,
-                                        child: Image.asset(
-                                            'assets/images/ic_apple.png'),
-                                      ),
-                                    ],
+                                if (item["icon"] != "")
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 4),
+                                    child: CircleAvatar(
+                                      radius: 12,
+                                      backgroundColor: Colors.transparent,
+                                      child: Image.network(item["icon"]),
+                                    ),
                                   ),
                                 Text(
                                   item["amount"] ?? "",
@@ -199,21 +194,14 @@ class _TabContentMissionComponentState
                       child: AvatarStack(
                     height: 24,
                     avatars: [
-                      if (widget.resMission?["data"]?["data"]?[widget.index]
-                              ?["display_players"] !=
-                          null)
-                        for (var n = 0;
-                            n <
-                                (widget
-                                        .resMission?["data"]?["data"]
-                                            ?[widget.index]?["display_players"]
-                                        ?.length ??
-                                    2);
-                            n++)
-                          NetworkImage(getAvatarUrl(
-                              indexMissions: widget.index,
-                              indexDisplayPlayers: n,
-                              resMission: widget.resMission))
+                      for (var n = 0;
+                          n <
+                              widget.resMission?["data"]?["data"]?[widget.index]
+                                  ?["totalPlayers"];
+                          n++)
+                        NetworkImage(widget.resMission?["data"]?["data"]
+                                ?[widget.index]?["playerSamples"]?[n]
+                            ?["profilePic"])
                     ],
                   ))
                 ]),
@@ -223,17 +211,6 @@ class _TabContentMissionComponentState
         ),
       ),
     );
-  }
-}
-
-String getAvatarUrl({indexMissions, indexDisplayPlayers, resMission}) {
-  final url = resMission?["data"]?["data"]?[indexMissions]?["display_players"]
-      ?[indexDisplayPlayers]?["image"];
-
-  if (url != null) {
-    return url;
-  } else {
-    return "";
   }
 }
 

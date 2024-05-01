@@ -10,6 +10,7 @@
 import 'dart:io';
 
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:date_count_down/date_count_down.dart';
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +23,7 @@ import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/lucky_winner_bottom_sheet%20copy.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 import 'package:sekuya_family_mobile_app/service/mission/mission.dart';
+import 'package:sekuya_family_mobile_app/util/format_date.dart';
 
 class MissionDetailApp extends StatelessWidget {
   const MissionDetailApp({super.key, this.args});
@@ -78,17 +80,17 @@ class _MissionDetailState extends State<MissionDetail> {
         routeSettings: RouteSettings(arguments: arguments));
   }
 
-  Future<dynamic> handlePostTaskSubmission() async {
+  Future<dynamic> handlePostTaskSubmission(taskId) async {
     try {
       setState(() {
         isLoadingTaskMission = true;
       });
 
-      String idMission = widget.args
-          ?.resMission?["data"]?["data"]?[widget.args?.indexResMission]._id;
+      String idMission = widget.args?.resMission?["data"]?["data"]
+          ?[widget.args?.indexResMission]?["_id"];
 
       final formData = FormData.fromMap({
-        'taskId': idMission,
+        'taskId': taskId,
         'additionalAttribute': "test additional attribute",
         'proof': [
           await MultipartFile.fromFile(
@@ -101,7 +103,9 @@ class _MissionDetailState extends State<MissionDetail> {
       var res = await handleTaskSubmission(formData, idMission);
 
       if (res != null) {
-        handleBack();
+        setState(() {
+          isLoadingTaskMission = false;
+        });
       }
     } catch (e) {
       setState(() {
@@ -238,9 +242,11 @@ class _MissionDetailState extends State<MissionDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Voucher lorem ipsum dolor',
-              style: TextStyle(
+            Text(
+              widget.args?.resMission?["data"]?["data"]
+                      ?[widget.args?.indexResMission]?["name"] ??
+                  "",
+              style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
                   color: Colors.white),
@@ -250,17 +256,23 @@ class _MissionDetailState extends State<MissionDetail> {
             ),
             Row(
               children: [
-                Image.asset(
-                  'assets/images/ic_community.png',
-                  width: 32,
-                  height: 32,
-                ),
+                if (widget.args?.resMission?["data"]?["data"]
+                            ?[widget.args?.indexResMission]?["community"]
+                        ?["image"] !=
+                    null)
+                  Image.network(
+                    widget.args?.resMission?["data"]?["data"]
+                        ?[widget.args?.indexResMission]?["community"]?["image"],
+                    width: 32,
+                    height: 32,
+                  ),
                 const SizedBox(
                   width: 8,
                 ),
-                const Text(
-                  'NFT Communities',
-                  style: TextStyle(
+                Text(
+                  widget.args?.resMission?["data"]?["data"]
+                      ?[widget.args?.indexResMission]?["community"]?["name"],
+                  style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                       color: Colors.white),
@@ -270,9 +282,11 @@ class _MissionDetailState extends State<MissionDetail> {
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Check out various interesting voucher.',
-              style: TextStyle(
+            Text(
+              widget.args?.resMission?["data"]?["data"]
+                      ?[widget.args?.indexResMission]?["description"] ??
+                  "",
+              style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,
                   color: greySecondaryColor),
@@ -283,8 +297,10 @@ class _MissionDetailState extends State<MissionDetail> {
             Row(
               children: [
                 Chip(
-                    label: const Text(
-                      'On Going',
+                    label: Text(
+                      widget.args?.resMission?["data"]?["data"]
+                              ?[widget.args?.indexResMission]?["status"] ??
+                          "",
                     ),
                     color: MaterialStateProperty.all<Color>(blueSecondaryColor),
                     labelStyle: const TextStyle(color: blueSolidSecondaryColor),
@@ -293,13 +309,25 @@ class _MissionDetailState extends State<MissionDetail> {
                 const SizedBox(
                   width: 16,
                 ),
-                const Text(
-                  '20 Apr 2024 - 30 May 2024',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      color: Colors.white),
-                ),
+                Row(
+                  children: [
+                    Text(
+                      '${handleFormatDate(widget.args?.resMission?["data"]?["data"]?[widget.args?.indexResMission]?["startDate"])} - ',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: Colors.white),
+                    ),
+                    Text(
+                      handleFormatDate(widget.args?.resMission?["data"]?["data"]
+                          ?[widget.args?.indexResMission]?["endDate"]),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: Colors.white),
+                    ),
+                  ],
+                )
               ],
             ),
             const SizedBox(
@@ -324,42 +352,14 @@ class _MissionDetailState extends State<MissionDetail> {
                     const SizedBox(
                       height: 8,
                     ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          {
-                            "title": "1",
-                            "type": "Days",
-                          },
-                          {
-                            "title": "23",
-                            "type": "Hours",
-                          },
-                          {
-                            "title": "32",
-                            "type": "Minutes",
-                          },
-                          {
-                            "title": "44",
-                            "type": "Seconds",
-                          },
-                        ]
-                            .map((item) => Column(
-                                  children: [
-                                    Text(
-                                      item["title"].toString(),
-                                      style: const TextStyle(
-                                          color: yellowPrimaryColor,
-                                          fontSize: 16),
-                                    ),
-                                    Text(
-                                      item["type"].toString(),
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 12),
-                                    ),
-                                  ],
-                                ))
-                            .toList()),
+                    CountDownText(
+                      due: DateTime.parse(widget.args?.resMission?["data"]
+                          ?["data"]?[widget.args?.indexResMission]?["endDate"]),
+                      finishedText: "Mission End",
+                      showLabel: true,
+                      longDateName: true,
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ],
                 )),
             const SizedBox(
@@ -375,67 +375,78 @@ class _MissionDetailState extends State<MissionDetail> {
             const SizedBox(
               height: 16,
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                  color: blackPrimaryColor,
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/ic_cube.png',
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '150 Xp',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500),
+            Column(
+              children: (widget.args?.resMission?["data"]?["data"]
+                          ?[widget.args?.indexResMission]?["rewards"]
+                      as List<dynamic>)
+                  .map((itemReward) => Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(
+                            color: blackPrimaryColor,
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        child: Row(
+                          children: [
+                            if (itemReward["image"] != null)
+                              Image.network(
+                                itemReward["image"],
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                              ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${itemReward["value"].toString()} Xp',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  LinearProgressIndicator(
+                                    value: itemReward["value"] * 0.01,
+                                    color: yellowPrimaryColor,
+                                    backgroundColor: greyThirdColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    itemReward["description"],
+                                    style: const TextStyle(
+                                        color: greySecondaryColor,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Chip(
+                                label: Text(
+                                  '${itemReward["maxQty"] / itemReward["value"]}%',
+                                ),
+                                color: MaterialStateProperty.all<Color>(
+                                    blackSolidPrimaryColor),
+                                labelStyle: const TextStyle(
+                                    color: yellowPrimaryColor,
+                                    fontWeight: FontWeight.w600),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    side: const BorderSide(
+                                        color: Colors.transparent))),
+                          ],
                         ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        LinearProgressIndicator(
-                          value: 0.6,
-                          color: yellowPrimaryColor,
-                          backgroundColor: greyThirdColor,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'For all task completed',
-                          style: TextStyle(
-                              color: greySecondaryColor,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Chip(
-                      label: const Text(
-                        '40%',
-                      ),
-                      color: MaterialStateProperty.all<Color>(
-                          blackSolidPrimaryColor),
-                      labelStyle: const TextStyle(
-                          color: yellowPrimaryColor,
-                          fontWeight: FontWeight.w600),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(color: Colors.transparent))),
-                ],
-              ),
+                      ))
+                  .toList(),
             ),
             const SizedBox(
               height: 16,
@@ -522,152 +533,176 @@ class _MissionDetailState extends State<MissionDetail> {
             const SizedBox(
               height: 16,
             ),
-            ExpansionTile(
-                iconColor: Colors.white,
-                title: Row(
-                  children: [
-                    Image.asset('assets/images/ic_globe.png'),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Join ipsum dolor sit amet',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: Colors.white),
-                          ),
-                          Text(
-                            '10xp',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.check_circle,
-                      color: greenColor,
-                    )
-                  ],
-                ),
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: greySoftColor),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20))),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.black,
-                            radius: 16,
-                            child: Text(
-                              '1',
-                              style: TextStyle(color: yellowPrimaryColor),
+            Column(
+              children: (widget.args?.resMission?["data"]?["data"]
+                          ?[widget.args?.indexResMission]?["tasks"]
+                      as List<dynamic>)
+                  .map(
+                    (itemTask) => ExpansionTile(
+                        iconColor: Colors.white,
+                        title: Row(
+                          children: [
+                            if (itemTask["image"] != null)
+                              Image.network(
+                                itemTask["image"],
+                                width: 24,
+                                height: 24,
+                                fit: BoxFit.cover,
+                              ),
+                            const SizedBox(
+                              width: 16,
                             ),
-                          )),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    itemTask["name"].toString(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                  const Text(
+                                    '10xp',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                        fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(
+                              Icons.check_circle,
+                              color: greenColor,
+                            )
+                          ],
+                        ),
                         children: [
-                          const Text(
-                            'Follow Instagram @sekuya',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          CustomButton(
-                            buttonText: 'Follow',
-                            onPressed: () {},
-                            height: 50,
-                            width: 500,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Container(
-                            height: 200,
-                            width: 150,
-                            child: !kIsWeb &&
-                                    defaultTargetPlatform ==
-                                        TargetPlatform.android
-                                ? FutureBuilder<void>(
-                                    future: retrieveLostData(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<void> snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.none:
-                                        case ConnectionState.waiting:
-                                          return const Text(
-                                            'You have not yet picked an image.',
-                                            textAlign: TextAlign.center,
-                                          );
-                                        case ConnectionState.done:
-                                          return _previewImages();
-                                        case ConnectionState.active:
-                                          if (snapshot.hasError) {
-                                            return Text(
-                                              'Pick image/video error: ${snapshot.error}}',
-                                              textAlign: TextAlign.center,
-                                            );
-                                          } else {
-                                            return const Text(
-                                              'You have not yet picked an image.',
-                                              textAlign: TextAlign.center,
-                                            );
-                                          }
-                                      }
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: greySoftColor),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: const CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    radius: 16,
+                                    child: Text(
+                                      '1',
+                                      style:
+                                          TextStyle(color: yellowPrimaryColor),
+                                    ),
+                                  )),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    itemTask["dsecription"].toString(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  CustomButton(
+                                    buttonText: 'Follow',
+                                    onPressed: () {},
+                                    height: 50,
+                                    width: 500,
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Container(
+                                    height: 200,
+                                    width: 150,
+                                    child: !kIsWeb &&
+                                            defaultTargetPlatform ==
+                                                TargetPlatform.android
+                                        ? FutureBuilder<void>(
+                                            future: retrieveLostData(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<void> snapshot) {
+                                              switch (
+                                                  snapshot.connectionState) {
+                                                case ConnectionState.none:
+                                                case ConnectionState.waiting:
+                                                  return const Text(
+                                                    'You have not yet picked an image.',
+                                                    textAlign: TextAlign.center,
+                                                  );
+                                                case ConnectionState.done:
+                                                  return _previewImages();
+                                                case ConnectionState.active:
+                                                  if (snapshot.hasError) {
+                                                    return Text(
+                                                      'Pick image/video error: ${snapshot.error}}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    );
+                                                  } else {
+                                                    return const Text(
+                                                      'You have not yet picked an image.',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    );
+                                                  }
+                                              }
+                                            },
+                                          )
+                                        : _previewImages(),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  if (_picker
+                                      .supportsImageSource(ImageSource.camera))
+                                    CustomButton(
+                                        isOutlinedBackgroundColor:
+                                            greyDarkColor,
+                                        buttonText: 'Add Image',
+                                        isOutlined: true,
+                                        onPressed: () {
+                                          _onImageButtonPressed(
+                                              ImageSource.camera,
+                                              context: context);
+                                        },
+                                        sizeButtonIcon: 20,
+                                        buttonIcon: 'ic_plus.png',
+                                        width: 500,
+                                        paddingButton: 0),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  CustomButton(
+                                    buttonText: 'Submit',
+                                    isLoading: isLoadingTaskMission,
+                                    onPressed: () {
+                                      handlePostTaskSubmission('0');
                                     },
-                                  )
-                                : _previewImages(),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          if (_picker.supportsImageSource(ImageSource.camera))
-                            CustomButton(
-                                isOutlinedBackgroundColor: greyDarkColor,
-                                buttonText: 'Add Image',
-                                isOutlined: true,
-                                onPressed: () {
-                                  _onImageButtonPressed(ImageSource.camera,
-                                      context: context);
-                                },
-                                sizeButtonIcon: 20,
-                                buttonIcon: 'ic_plus.png',
-                                width: 500,
-                                paddingButton: 0),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          CustomButton(
-                            buttonText: 'Submit',
-                            onPressed: () {},
-                            width: 500,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                        ],
-                      ))
-                    ],
+                                    width: 500,
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                ],
+                              ))
+                            ],
+                          )
+                        ]),
                   )
-                ]),
+                  .toList(),
+            ),
             const SizedBox(
               height: 16,
             ),
