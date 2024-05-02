@@ -104,7 +104,7 @@ class _HomeComponentState extends State<HomeComponent> {
                   return Container(
                     child: resDashboard != null
                         ? Image.network(
-                            resDashboard?["data"]?["coverImage"] ?? "",
+                            resDashboard?["data"]?["coverImage"],
                             fit: BoxFit.cover,
                             width: double.infinity,
                           )
@@ -139,7 +139,7 @@ class _HomeComponentState extends State<HomeComponent> {
           ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 20),
-            height: 160,
+            height: 150,
             child: ListView(
               // This next line does the trick.
               scrollDirection: Axis.horizontal,
@@ -182,21 +182,24 @@ class _HomeComponentState extends State<HomeComponent> {
                                           ),
                                           Row(
                                             children: [
-                                              if (item["image"] != null)
+                                              if (item?["community"]
+                                                      ?["image"] !=
+                                                  null)
                                                 CircleAvatar(
                                                   radius: 12,
                                                   backgroundColor:
                                                       Colors.transparent,
                                                   child: Image.network(
-                                                      item["image"]),
+                                                      item?["community"]
+                                                          ?["image"]),
                                                 ),
                                               const SizedBox(
                                                 width: 8,
                                               ),
                                               Text(
-                                                item["description"]
-                                                        .substring(0, 15) +
-                                                    '...',
+                                                item["description"].length > 15
+                                                    ? '${item["description"].substring(0, 15)}...'
+                                                    : item["description"],
                                                 style: const TextStyle(
                                                     color: greySecondaryColor,
                                                     fontSize: 14,
@@ -223,22 +226,23 @@ class _HomeComponentState extends State<HomeComponent> {
                                                 children: [
                                                   {
                                                     "title": "Task",
-                                                    "value":
-                                                        item["total_mission"]
-                                                            .toString(),
+                                                    "value": item["totalTasks"]
+                                                        .toString(),
                                                   },
                                                   {
                                                     "title": "Xp",
-                                                    "value":
-                                                        item["total_players"]
-                                                            .toString(),
+                                                    "value": item["totalExp"]
+                                                        .toString(),
                                                   },
                                                   {
-                                                    "title": "USDT",
-                                                    "value": item["level"]
-                                                        .toString(),
-                                                    "image": item["image"]
-                                                        .toString(),
+                                                    "title": item?["rewards"]
+                                                            ?[0]?["name"]
+                                                        ?.split(" ")?[1],
+                                                    "value": item?["rewards"]
+                                                            ?[0]?["name"]
+                                                        ?.split(" ")?[0],
+                                                    "image": item?["rewards"]
+                                                        ?[0]?["image"],
                                                   },
                                                 ]
                                                     .map(
@@ -355,11 +359,11 @@ class _HomeComponentState extends State<HomeComponent> {
                                 width: 200,
                                 height: 150,
                                 decoration: BoxDecoration(
-                                    image: (item?["cover_image"] != null)
+                                    image: (item?["coverImage"] != null)
                                         ? DecorationImage(
                                             fit: BoxFit.cover,
                                             image: NetworkImage(
-                                              item?["cover_image"] ?? "",
+                                              item?["coverImage"],
                                             ))
                                         : null),
                                 child: Column(
@@ -377,9 +381,9 @@ class _HomeComponentState extends State<HomeComponent> {
                                         children: [
                                           if (item?["name"] != null)
                                             Text(
-                                              item?["name"].substring(0, 18) +
-                                                      '...' ??
-                                                  "",
+                                              item?["name"].length > 18
+                                                  ? '${item?["name"]?.substring(0, 18)}...'
+                                                  : item?["name"],
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                   color: Colors.white,
@@ -395,21 +399,20 @@ class _HomeComponentState extends State<HomeComponent> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 {
-                                                  "value": item?["total_task"]
+                                                  "value": item?["totalMission"]
                                                           .toString() ??
                                                       "",
                                                   "title": "total task"
                                                 },
                                                 {
-                                                  "value":
-                                                      item?["total_players"]
-                                                              .toString() ??
-                                                          "",
+                                                  "value": item?["totalPlayers"]
+                                                          .toString() ??
+                                                      "",
                                                   "title": "total players"
                                                 },
                                                 {
-                                                  "value": item["reward_exp"]
-                                                      .toString(),
+                                                  "value":
+                                                      'Lv${item["level"].toString()}',
                                                   "title": "reward exp"
                                                 }
                                               ]
