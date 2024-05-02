@@ -389,7 +389,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                   image: AssetImage(
                                       'assets/images/bg_progress_xp.png'),
                                   fit: BoxFit.fill)),
-                          child: const Column(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
@@ -397,26 +397,26 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Level 4',
-                                    style: TextStyle(
+                                    'Level ${resProfile["data"]?["level"]}',
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    '255 xp',
-                                    style: TextStyle(
+                                    '${resProfile["data"]?["exp"]} xp',
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               LinearProgressIndicator(
-                                value: 0.6,
+                                value: resProfile["data"]?["nextExp"] * 0.01,
                                 color: yellowPrimaryColor,
                                 backgroundColor: greyThirdColor,
                               )
