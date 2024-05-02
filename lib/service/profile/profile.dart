@@ -13,6 +13,10 @@ Future<dynamic> handleGetDataProfile() {
   return clientDio(serviceUrlParam: "/profile/info", methodParam: "GET");
 }
 
+Future<dynamic> handleGetDataDetailProfile(id) {
+  return clientDio(serviceUrlParam: "/users/$id", methodParam: "GET");
+}
+
 Future<dynamic> handleUpdateDataProfile(data) {
   return clientDio(
     serviceUrlParam: "/profile/info",

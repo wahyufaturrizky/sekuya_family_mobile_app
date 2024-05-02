@@ -14,12 +14,14 @@ import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 
 class ProfileDetailBottomSheetApp extends StatelessWidget {
-  const ProfileDetailBottomSheetApp({super.key});
+  const ProfileDetailBottomSheetApp({super.key, this.detailProfile});
+
+  final dynamic detailProfile;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const ProfileDetailBottomSheet(),
+      home: ProfileDetailBottomSheet(detailProfile: detailProfile),
       theme: ThemeData(
         canvasColor: Colors.black,
         textSelectionTheme: TextSelectionThemeData(
@@ -33,7 +35,9 @@ class ProfileDetailBottomSheetApp extends StatelessWidget {
 }
 
 class ProfileDetailBottomSheet extends StatefulWidget {
-  const ProfileDetailBottomSheet({super.key});
+  const ProfileDetailBottomSheet({super.key, this.detailProfile});
+
+  final dynamic detailProfile;
 
   @override
   State<ProfileDetailBottomSheet> createState() =>
@@ -41,41 +45,41 @@ class ProfileDetailBottomSheet extends StatefulWidget {
 }
 
 class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
-  bool isLoadingGetProfile = false;
+  bool isLoadingGetDetailProfile = false;
   bool isLoadingCommunities = false;
 
-  var resMyCommunities;
-  var resProfile;
+  var resDetailProfile;
   @override
   void initState() {
     super.initState();
-    getDataProfile();
-    getDataMyCommunities();
+    getDataDetailProfile();
   }
 
-  Future<dynamic> getDataProfile() async {
+  Future<dynamic> getDataDetailProfile() async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingGetProfile = true;
+          isLoadingGetDetailProfile = true;
         });
       }
 
-      var res = await handleGetDataProfile();
+      final String id = widget.detailProfile?["_id"];
+
+      var res = await handleGetDataDetailProfile(id);
 
       if (res != null) {
         if (mounted) {
           setState(() {
-            resProfile = res;
-            isLoadingGetProfile = false;
+            resDetailProfile = res;
+            isLoadingGetDetailProfile = false;
           });
         }
       }
     } on DioException catch (e) {
       if (mounted) {
         setState(() {
-          isLoadingGetProfile = false;
+          isLoadingGetDetailProfile = false;
         });
       }
 
@@ -83,39 +87,9 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
     }
   }
 
-  Future<dynamic> getDataMyCommunities() async {
-    if (!mounted) return;
-    try {
-      if (mounted) {
-        setState(() {
-          isLoadingCommunities = true;
-        });
-      }
-
-      var res = await handleGetDataMyCommunities();
-
-      if (res != null) {
-        if (mounted) {
-          setState(() {
-            resMyCommunities = res;
-            isLoadingCommunities = false;
-          });
-        }
-      }
-    } on DioException catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoadingCommunities = false;
-        });
-      }
-
-      print('Error getDataMyCommunities = $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    var isLoading = isLoadingGetProfile || isLoadingCommunities;
+    var isLoading = isLoadingGetDetailProfile;
     if (isLoading) {
       return const MyWidgetSpinner();
     } else {
@@ -138,30 +112,26 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                   ),
                   Column(
                     children: [
-                      if (resProfile?["data"]?["profilePic"] != null)
+                      if (resDetailProfile?["data"]?["profilePic"] != null)
                         CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(resProfile?["data"]?["profilePic"]),
+                          backgroundImage: NetworkImage(
+                              resDetailProfile?["data"]?["profilePic"]),
                           radius: 40,
                         ),
                       const SizedBox(
                         height: 12,
                       ),
-                      if (resProfile != null)
+                      if (resDetailProfile != null)
                         Text(
-                          resProfile["data"]?["username"] == ""
-                              ? "-"
-                              : resProfile["data"]?["username"],
+                          resDetailProfile?["data"]?["username"] ?? "",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
-                      if (resProfile != null)
+                      if (resDetailProfile != null)
                         Text(
-                          resProfile["data"]?["email"] == ""
-                              ? "-"
-                              : resProfile["data"]?["email"],
+                          resDetailProfile?["data"]?["email"],
                           style: const TextStyle(
                               color: greySecondaryColor,
                               fontSize: 14,
@@ -195,33 +165,33 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                       image: DecorationImage(
                           image: AssetImage('assets/images/bg_progress_xp.png'),
                           fit: BoxFit.fill)),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Level 4',
-                            style: TextStyle(
+                            'Level ${resDetailProfile?["data"]?["level"]}',
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            '255 xp',
-                            style: TextStyle(
+                            '${resDetailProfile?["data"]?["exp"]} xp',
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       LinearProgressIndicator(
-                        value: 0.6,
+                        value: resDetailProfile?["data"]?["nextExp"] * 0.01,
                         color: yellowPrimaryColor,
                         backgroundColor: greyThirdColor,
                       )
@@ -243,8 +213,9 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                 child: ListView(
                   // This next line does the trick.
                   scrollDirection: Axis.horizontal,
-                  children: resMyCommunities != null
-                      ? (resMyCommunities?["data"]?["data"] as List<dynamic>)
+                  children: resDetailProfile?["data"]?["communities"] != null
+                      ? (resDetailProfile?["data"]?["communities"]
+                              as List<dynamic>)
                           .map((item) {
                           return Builder(
                             builder: (BuildContext context) {
@@ -265,7 +236,7 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                                             ? DecorationImage(
                                                 fit: BoxFit.cover,
                                                 image: NetworkImage(
-                                                  item?["coverImage"] ?? "",
+                                                  item?["coverImage"],
                                                 ))
                                             : null),
                                     child: Column(

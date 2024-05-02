@@ -97,7 +97,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
         });
       }
 
-      print('Error getDataProfile = $e');
+      print('Error getDataMyVoucher = $e');
     }
   }
 
@@ -127,7 +127,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
         });
       }
 
-      print('Error getDataProfile = $e');
+      print('Error getDataMyReward = $e');
     }
   }
 
@@ -157,7 +157,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
         });
       }
 
-      print('Error getDataVoucher = $e');
+      print('Error getDataProfile = $e');
     }
   }
 
@@ -187,7 +187,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
         });
       }
 
-      print('Error getDataProfile = $e');
+      print('Error getDataMyMissions = $e');
     }
   }
 
@@ -342,9 +342,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
                               ),
                               if (resProfile != null)
                                 Text(
-                                  resProfile["data"]?["username"] == ""
+                                  resProfile?["data"]?["username"] == ""
                                       ? "-"
-                                      : resProfile["data"]?["username"],
+                                      : resProfile?["data"]?["username"],
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
@@ -352,9 +352,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                 ),
                               if (resProfile != null)
                                 Text(
-                                  resProfile["data"]?["email"] == ""
+                                  resProfile?["data"]?["email"] == ""
                                       ? "-"
-                                      : resProfile["data"]?["email"],
+                                      : resProfile?["data"]?["email"],
                                   style: const TextStyle(
                                       color: greySecondaryColor,
                                       fontSize: 14,
@@ -397,14 +397,14 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Level ${resProfile["data"]?["level"]}',
+                                    'Level ${resProfile?["data"]?["level"]}',
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    '${resProfile["data"]?["exp"]} xp',
+                                    '${resProfile?["data"]?["exp"] ?? ""} xp',
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
@@ -415,11 +415,12 @@ class _ProfileComponentState extends State<ProfileComponent> {
                               const SizedBox(
                                 height: 8,
                               ),
-                              LinearProgressIndicator(
-                                value: resProfile["data"]?["nextExp"] * 0.01,
-                                color: yellowPrimaryColor,
-                                backgroundColor: greyThirdColor,
-                              )
+                              if (resProfile?["data"]?["nextExp"] != null)
+                                LinearProgressIndicator(
+                                  value: resProfile?["data"]?["nextExp"] * 0.01,
+                                  color: yellowPrimaryColor,
+                                  backgroundColor: greyThirdColor,
+                                )
                             ],
                           )),
                     ],

@@ -211,10 +211,12 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
   }
 
   Future<void> _launchUrl(val) async {
-    final Uri url = Uri.parse(val);
+    if (val != "") {
+      final Uri url = Uri.parse(val);
 
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+      }
     }
   }
 

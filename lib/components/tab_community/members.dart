@@ -56,7 +56,9 @@ class _TabContentCommunityMembersComponentState
           showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return const ProfileDetailBottomSheetApp();
+                return ProfileDetailBottomSheetApp(
+                    detailProfile: widget.resCommunitiesMembers?["data"]
+                        ?["data"]?[widget.index]);
               });
         },
         child: Padding(

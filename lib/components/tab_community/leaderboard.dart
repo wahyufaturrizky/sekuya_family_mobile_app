@@ -100,7 +100,9 @@ class _TabContentCommunityLeaderBoardComponentState
           showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return const ProfileDetailBottomSheetApp();
+                return ProfileDetailBottomSheetApp(
+                    detailProfile: widget.resCommunitiesLeaderboards?["data"]
+                        ?["data"]?[widget.index]);
               });
         },
         child: Padding(
