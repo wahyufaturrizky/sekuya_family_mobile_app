@@ -91,6 +91,16 @@ class _BadgeListBottomSheetState extends State<BadgeListBottomSheet> {
             const SizedBox(
               height: 16,
             ),
+            const Text(
+              "Collection Badge",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
             SizedBox(
                 height: 260,
                 child: GridView.builder(
