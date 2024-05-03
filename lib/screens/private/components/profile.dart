@@ -18,6 +18,7 @@ import 'package:sekuya_family_mobile_app/components/tab_profile/my_reward.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/screens/private/badge_list_bottom_sheet.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -238,7 +239,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     var isLoading = isLoadingResProfile ||
         isLoadingResMyVoucher ||
         isLoadingResMyMission ||
@@ -370,12 +371,23 @@ class _ProfileComponentState extends State<ProfileComponent> {
                       Wrap(
                         alignment: WrapAlignment.center,
                         spacing: 16.0,
-                        children: [1, 2, 3]
-                            .map((item) => const CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      'https://i.pravatar.cc/150?img=1'),
+                        children: [
+                          1,
+                          2,
+                          3,
+                        ]
+                            .map((item) => GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      context: mainContext,
+                                      builder: (BuildContext context) {
+                                        return BadgeListBottomSheetApp(
+                                            detailProfile: resProfile);
+                                      });
+                                },
+                                child: const CircleAvatar(
                                   radius: 20,
-                                ))
+                                )))
                             .toList(),
                       ),
                       const SizedBox(

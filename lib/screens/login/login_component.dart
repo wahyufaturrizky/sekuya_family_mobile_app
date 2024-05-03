@@ -80,6 +80,13 @@ class _LoginScreenState extends State<LoginScreen> {
       final accessToken = prefs.getString('access_token') ?? '';
 
       if (accessToken != '') {
+        await FirebaseAnalytics.instance.logEvent(
+          name: "access_token_Load_Success",
+          parameters: {
+            "value": accessToken,
+          },
+        );
+
         Application.router.navigateTo(
           context,
           "/privateScreens",

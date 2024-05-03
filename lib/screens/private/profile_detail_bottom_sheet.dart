@@ -46,7 +46,6 @@ class ProfileDetailBottomSheet extends StatefulWidget {
 
 class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
   bool isLoadingGetDetailProfile = false;
-  bool isLoadingCommunities = false;
 
   var resDetailProfile;
   @override
