@@ -170,7 +170,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                             )),
                         Positioned(
                             top: 80,
-                            width: 350,
+                            width: MediaQuery.of(context).size.width * 0.8,
                             child: Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: const BoxDecoration(
@@ -269,7 +269,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                             context),
                       ),
                       SliverPadding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         sliver: SliverFixedExtentList(
                           itemExtent: 120.0,
                           delegate: SliverChildBuilderDelegate(

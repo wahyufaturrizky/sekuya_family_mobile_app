@@ -160,6 +160,7 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
               Container(
                   height: 56,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/bg_progress_xp.png'),
@@ -199,15 +200,19 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
               const SizedBox(
                 height: 15,
               ),
-              const Text(
-                'Communities',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Communities',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.only(left: 16),
                 height: 150,
                 child: ListView(
                   // This next line does the trick.

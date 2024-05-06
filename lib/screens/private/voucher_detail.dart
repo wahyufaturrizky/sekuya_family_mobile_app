@@ -102,6 +102,8 @@ class _VoucherDetailState extends State<VoucherDetail> {
       ),
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -217,7 +219,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
           ],
         ),
         // This is the title in the app bar.
-      ),
+      )),
     ));
   }
 }

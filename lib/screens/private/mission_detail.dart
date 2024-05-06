@@ -239,6 +239,8 @@ class _MissionDetailState extends State<MissionDetail> {
       ),
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -767,7 +769,7 @@ class _MissionDetailState extends State<MissionDetail> {
           ],
         ),
         // This is the title in the app bar.
-      ),
+      )),
     ));
   }
 

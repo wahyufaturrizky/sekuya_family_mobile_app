@@ -173,7 +173,7 @@ class _MissionComponentState extends State<MissionComponent> {
                     children: [
                       Container(
                           padding: const EdgeInsets.only(left: 16, right: 16),
-                          width: 170,
+                          width: MediaQuery.of(context).size.width * 0.4,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40.0),
                             border: Border.all(
@@ -215,7 +215,7 @@ class _MissionComponentState extends State<MissionComponent> {
                           )),
                       Container(
                           padding: const EdgeInsets.only(left: 16, right: 16),
-                          width: 170,
+                          width: MediaQuery.of(context).size.width * 0.4,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40.0),
                             border: Border.all(
@@ -281,7 +281,7 @@ class _MissionComponentState extends State<MissionComponent> {
                         context),
                   ),
                   SliverPadding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverFixedExtentList(
                       itemExtent: 180.0,
                       delegate: SliverChildBuilderDelegate(

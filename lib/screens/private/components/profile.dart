@@ -549,7 +549,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                   context),
                         ),
                         SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           sliver: SliverFixedExtentList(
                             itemExtent: name == "My Mission"
                                 ? 170.0

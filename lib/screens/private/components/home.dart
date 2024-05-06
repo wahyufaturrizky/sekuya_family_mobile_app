@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 /*
  * Sekuya Family Mobile App
  * Created by Wahyu Fatur Rizki
@@ -117,28 +119,32 @@ class _HomeComponentState extends State<HomeComponent> {
           const SizedBox(
             height: 15,
           ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Featured Mission',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'See All',
-                style: TextStyle(
-                    color: yellowPrimaryColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
-              )
-            ],
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Featured Mission',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'See All',
+                  style: TextStyle(
+                      color: yellowPrimaryColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
           ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.only(left: 16),
             height: 150,
             child: ListView(
               // This next line does the trick.
@@ -314,28 +320,34 @@ class _HomeComponentState extends State<HomeComponent> {
           const SizedBox(
             height: 15,
           ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Featured Communities',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'See All',
-                style: TextStyle(
-                    color: yellowPrimaryColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Featured Communities',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'See All',
+                  style: TextStyle(
+                      color: yellowPrimaryColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
           ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.only(left: 16),
             height: 150,
             child: ListView(
               // This next line does the trick.

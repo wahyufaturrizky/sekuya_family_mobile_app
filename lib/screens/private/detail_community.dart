@@ -652,7 +652,8 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                     .sliverOverlapAbsorberHandleFor(context),
                               ),
                               SliverPadding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 sliver: SliverFixedExtentList(
                                   itemExtent: name == "Mission" ? 170.0 : 80,
                                   delegate: SliverChildBuilderDelegate(

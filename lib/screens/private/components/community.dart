@@ -320,7 +320,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                           context),
                     ),
                     SliverPadding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       sliver: SliverFixedExtentList(
                         itemExtent: 150.0,
                         delegate: SliverChildBuilderDelegate(
