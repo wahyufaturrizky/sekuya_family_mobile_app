@@ -18,8 +18,10 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.width = 280,
     this.height = 60,
+    this.border = 2.5,
     this.buttonIcon = "",
     this.isOutlinedBackgroundColor = greyColor,
+    this.isOutlinedBorderColor = Colors.transparent,
     this.sizeButtonIcon = 20,
     this.labelSize = 18,
     this.paddingButton = 0,
@@ -28,8 +30,10 @@ class CustomButton extends StatelessWidget {
 
   final String buttonText;
   final Color isOutlinedBackgroundColor;
+  final Color isOutlinedBorderColor;
   final bool isOutlined;
   final bool isLoading;
+  final double border;
   final Function onPressed;
   final double width;
   final double height;
@@ -54,8 +58,8 @@ class CustomButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: isOutlined ? isOutlinedBackgroundColor : yellowPrimaryColor,
             border: isOutlined
-                ? null
-                : Border.all(color: yellowPrimaryColor, width: 2.5),
+                ? Border.all(color: isOutlinedBorderColor, width: border)
+                : Border.all(color: yellowPrimaryColor, width: border),
             borderRadius: BorderRadius.circular(30),
           ),
           child: Center(

@@ -8,7 +8,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class BadgeListBottomSheetApp extends StatelessWidget {
@@ -52,7 +51,7 @@ class _BadgeListBottomSheetState extends State<BadgeListBottomSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: const BoxDecoration(
                   color: blackSolidPrimaryColor,
                   borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -75,10 +74,10 @@ class _BadgeListBottomSheetState extends State<BadgeListBottomSheet> {
                         spacing: 24,
                         children: [1, 2, 3]
                             .map(
-                              (item) => const Placeholder(
-                                color: Colors.white,
-                                fallbackHeight: 40,
-                                fallbackWidth: 40,
+                              (item) => Image.asset(
+                                "assets/images/empty_badge.png",
+                                height: 40,
+                                width: 40,
                               ),
                             )
                             .toList(),
@@ -117,20 +116,20 @@ class _BadgeListBottomSheetState extends State<BadgeListBottomSheet> {
                               splashColor: yellowPrimaryColor.withAlpha(30),
                               onTap: () {},
                               child: Container(
-                                  child: const Column(
+                                  child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(
-                                    child: Placeholder(
-                                      color: Colors.white,
-                                      fallbackHeight: 40,
-                                      fallbackWidth: 40,
+                                    child: Image.asset(
+                                      "assets/images/empty_badge.png",
+                                      height: 40,
+                                      width: 40,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
-                                  Center(
+                                  const Center(
                                       child: Text(
                                     "Badge",
                                     style: TextStyle(
