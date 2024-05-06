@@ -11,6 +11,8 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/spinner.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart';
@@ -18,6 +20,7 @@ import 'package:sekuya_family_mobile_app/components/tab_profile/my_reward.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_voucher.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/screens/private/badge_list_bottom_sheet.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -238,7 +241,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     var isLoading = isLoadingResProfile ||
         isLoadingResMyVoucher ||
         isLoadingResMyMission ||
@@ -370,12 +373,87 @@ class _ProfileComponentState extends State<ProfileComponent> {
                       Wrap(
                         alignment: WrapAlignment.center,
                         spacing: 16.0,
-                        children: [1, 2, 3]
-                            .map((item) => const CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      'https://i.pravatar.cc/150?img=1'),
+                        children: [
+                          1,
+                          2,
+                          3,
+                        ]
+                            .map((item) => GestureDetector(
+                                onTap: () {
+                                  // showModalBottomSheet(
+                                  //     context: mainContext,
+                                  //     builder: (BuildContext context) {
+                                  //       return BadgeListBottomSheetApp(
+                                  //           detailProfile: resProfile);
+                                  //     });
+
+                                  showDialog<String>(
+                                    context: mainContext,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      backgroundColor: blackSolidPrimaryColor,
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            child: Image.asset(
+                                                "assets/images/test_badge.png"),
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          const Text('You Get New Badge',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white)),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          const Text(
+                                              'dictum cursus mauris varius tristique aliquet. dictum cur mauris varius tristique aliquet. ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: greySecondaryColor)),
+                                        ],
+                                      ),
+                                      actionsAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      actions: <Widget>[
+                                        CustomButton(
+                                          buttonText: 'See Later',
+                                          isOutlined: true,
+                                          border: 1,
+                                          isOutlinedBackgroundColor:
+                                              blackSolidPrimaryColor,
+                                          isOutlinedBorderColor:
+                                              yellowPrimaryColor,
+                                          labelSize: 12,
+                                          width: 120,
+                                          height: 36,
+                                          onPressed: () {
+                                            Navigator.pop(context, 'Cancel');
+                                          },
+                                        ),
+                                        CustomButton(
+                                          buttonText: 'See My Badge',
+                                          onPressed: () {
+                                            Navigator.pop(context, 'OK');
+                                          },
+                                          labelSize: 12,
+                                          height: 36,
+                                          width: 120,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: const CircleAvatar(
                                   radius: 20,
-                                ))
+                                )))
                             .toList(),
                       ),
                       const SizedBox(

@@ -59,13 +59,6 @@ class PrivateScreen extends StatefulWidget {
 
 class _PrivateScreenState extends State<PrivateScreen> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeComponentApp(),
-    MissionComponentApp(),
-    CommunityComponentApp(),
-    VoucherComponentApp(),
-    ProfileComponentApp(),
-  ];
 
   @override
   void initState() {
@@ -104,10 +97,18 @@ class _PrivateScreenState extends State<PrivateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgetOptions = <Widget>[
+      const HomeComponentApp(),
+      const MissionComponentApp(),
+      const CommunityComponentApp(),
+      const VoucherComponentApp(),
+      const ProfileComponentApp(),
+    ];
+
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.black,
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
