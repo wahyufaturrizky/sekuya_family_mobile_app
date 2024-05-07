@@ -44,6 +44,12 @@ class _CommunityComponentState extends State<CommunityComponent> {
 
   static const pageSize = 5;
 
+  var totalPages;
+  var currentPageState = 0;
+  var noDataAnymore = false;
+
+  late ScrollController? nestedScrollViewContoller = ScrollController();
+
   bool isLoadingResCommunities = false;
   bool isLoadingResCommunitiesCategories = false;
 
@@ -58,6 +64,18 @@ class _CommunityComponentState extends State<CommunityComponent> {
     getDataCommunitiesCategories();
 
     searchController.addListener(_onSearchChanged);
+
+    nestedScrollViewContoller?.addListener(() {
+      if (nestedScrollViewContoller!.position.atEdge) {
+        bool isTop = nestedScrollViewContoller!.position.pixels == 0;
+        if (isTop) {
+          print('At the top');
+        } else {
+          print('At the bottom');
+          getDataCommunities(pageKey: currentPageState + 1);
+        }
+      }
+    });
 
     super.initState();
   }
@@ -115,10 +133,30 @@ class _CommunityComponentState extends State<CommunityComponent> {
 
       if (res != null) {
         if (mounted) {
-          setState(() {
-            resCommunities = res;
-            isLoadingResCommunities = false;
-          });
+          if (res?["data"]?["meta"]?["totalPages"] > currentPageState) {
+            var response = {
+              ...res,
+              "data": {
+                ...res["data"],
+                "data": [
+                  ...res?["data"]?["data"],
+                  ...resCommunities?["data"]?["data"] ?? []
+                ]
+              }
+            };
+
+            setState(() {
+              resCommunities = response;
+              isLoadingResCommunities = false;
+              totalPages = res?["data"]?["meta"]?["totalPages"];
+              currentPageState = res?["data"]?["meta"]?["page"];
+            });
+          } else {
+            setState(() {
+              noDataAnymore = true;
+              isLoadingResCommunities = false;
+            });
+          }
         }
       }
     } on DioException catch (e) {
@@ -166,6 +204,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
   Widget build(BuildContext context) {
     return NestedScrollView(
         floatHeaderSlivers: true,
+        controller: nestedScrollViewContoller,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           // These are the slivers that show up in the "outer" scroll view.
           return <Widget>[
@@ -311,30 +350,42 @@ class _CommunityComponentState extends State<CommunityComponent> {
             if (isLoadingResCommunities) {
               return const MyWidgetSpinner();
             } else {
-              return Container(
-                color: Colors.black,
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverOverlapInjector(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverFixedExtentList(
-                        itemExtent: 150.0,
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            return TabContentCommunityFeaturedComponentApp(
-                                index: index, resCommunities: resCommunities);
-                          },
-                          childCount:
-                              resCommunities?["data"]?["data"]?.length ?? 0,
+              return Column(
+                children: [
+                  Expanded(
+                      child: Container(
+                    color: Colors.black,
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        SliverOverlapInjector(
+                          handle:
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                  context),
                         ),
-                      ),
+                        SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          sliver: SliverFixedExtentList(
+                            itemExtent: 150.0,
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                return TabContentCommunityFeaturedComponentApp(
+                                    index: index,
+                                    resCommunities: resCommunities);
+                              },
+                              childCount:
+                                  resCommunities?["data"]?["data"]?.length ?? 0,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  )),
+                  if (noDataAnymore)
+                    const Center(
+                      child: Text("👋🏻 Hi your reach the end of the list",
+                          style: TextStyle(color: Colors.white, fontSize: 14)),
+                    )
+                ],
               );
             }
           },

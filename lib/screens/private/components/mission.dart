@@ -42,6 +42,12 @@ class _MissionComponentState extends State<MissionComponent> {
   Timer? _debounce;
   static const pageSize = 5;
 
+  var totalPages;
+  var currentPageState = 0;
+  var noDataAnymore = false;
+
+  late ScrollController? nestedScrollViewContoller = ScrollController();
+
   Duration _debouceDuration = const Duration(milliseconds: 500);
 
   final searchController = TextEditingController();
@@ -52,6 +58,18 @@ class _MissionComponentState extends State<MissionComponent> {
   void initState() {
     searchController.addListener(_onSearchChanged);
     getDataMission();
+
+    nestedScrollViewContoller?.addListener(() {
+      if (nestedScrollViewContoller!.position.atEdge) {
+        bool isTop = nestedScrollViewContoller!.position.pixels == 0;
+        if (isTop) {
+          print('At the top');
+        } else {
+          print('At the bottom');
+          getDataMission(pageKey: currentPageState + 1);
+        }
+      }
+    });
 
     super.initState();
   }
@@ -98,10 +116,30 @@ class _MissionComponentState extends State<MissionComponent> {
 
       if (res != null) {
         if (mounted) {
-          setState(() {
-            resMission = res;
-            isLoadingResMission = false;
-          });
+          if (res?["data"]?["meta"]?["totalPages"] > currentPageState) {
+            var response = {
+              ...res,
+              "data": {
+                ...res["data"],
+                "data": [
+                  ...res?["data"]?["data"],
+                  ...resMission?["data"]?["data"] ?? []
+                ]
+              }
+            };
+
+            setState(() {
+              resMission = response;
+              isLoadingResMission = false;
+              totalPages = res?["data"]?["meta"]?["totalPages"];
+              currentPageState = res?["data"]?["meta"]?["page"];
+            });
+          } else {
+            setState(() {
+              noDataAnymore = true;
+              isLoadingResMission = false;
+            });
+          }
         }
       }
     } on DioException catch (e) {
@@ -118,6 +156,7 @@ class _MissionComponentState extends State<MissionComponent> {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
+      controller: nestedScrollViewContoller,
       floatHeaderSlivers: true,
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         // These are the slivers that show up in the "outer" scroll view.
@@ -272,31 +311,42 @@ class _MissionComponentState extends State<MissionComponent> {
           if (isLoadingResMission) {
             return const MyWidgetSpinner();
           } else {
-            return Container(
-              color: Colors.black,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverFixedExtentList(
-                      itemExtent: 180.0,
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return TabContentMissionComponentApp(
-                            resMission: resMission,
-                            index: index,
-                          );
-                        },
-                        childCount: resMission?["data"]?["data"]?.length ?? 0,
+            return Column(
+              children: [
+                Expanded(
+                    child: Container(
+                  color: Colors.black,
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverOverlapInjector(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context),
                       ),
-                    ),
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverFixedExtentList(
+                          itemExtent: 180.0,
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return TabContentMissionComponentApp(
+                                resMission: resMission,
+                                index: index,
+                              );
+                            },
+                            childCount:
+                                resMission?["data"]?["data"]?.length ?? 0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                )),
+                if (noDataAnymore)
+                  const Center(
+                    child: Text("👋🏻 Hi your reach the end of the list",
+                        style: TextStyle(color: Colors.white, fontSize: 14)),
+                  )
+              ],
             );
           }
         },
