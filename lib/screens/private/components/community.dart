@@ -46,6 +46,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
 
   var totalPages;
   var currentPageState = 0;
+  int itemPerPageState = 0;
   var noDataAnymore = false;
 
   late ScrollController? nestedScrollViewContoller = ScrollController();
@@ -145,11 +146,14 @@ class _CommunityComponentState extends State<CommunityComponent> {
               }
             };
 
+            int tempItemPerPageState = res?["data"]?["data"]?.length;
+
             setState(() {
               resCommunities = response;
               isLoadingResCommunities = false;
               totalPages = res?["data"]?["meta"]?["totalPages"];
               currentPageState = res?["data"]?["meta"]?["page"];
+              itemPerPageState = itemPerPageState + tempItemPerPageState;
             });
           } else {
             setState(() {
@@ -367,8 +371,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                               return TabContentCommunityFeaturedComponentApp(
                                   index: index, resCommunities: resCommunities);
                             },
-                            childCount:
-                                resCommunities?["data"]?["data"]?.length ?? 0,
+                            childCount: itemPerPageState,
                           ),
                         ),
                       ),

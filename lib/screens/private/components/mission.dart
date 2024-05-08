@@ -44,6 +44,7 @@ class _MissionComponentState extends State<MissionComponent> {
 
   var totalPages;
   var currentPageState = 0;
+  int itemPerPageState = 0;
   var noDataAnymore = false;
 
   late ScrollController? nestedScrollViewContoller = ScrollController();
@@ -128,11 +129,14 @@ class _MissionComponentState extends State<MissionComponent> {
               }
             };
 
+            int tempItemPerPageState = res?["data"]?["data"]?.length;
+
             setState(() {
               resMission = response;
               isLoadingResMission = false;
               totalPages = res?["data"]?["meta"]?["totalPages"];
               currentPageState = res?["data"]?["meta"]?["page"];
+              itemPerPageState = itemPerPageState + tempItemPerPageState;
             });
           } else {
             setState(() {
@@ -330,7 +334,7 @@ class _MissionComponentState extends State<MissionComponent> {
                               index: index,
                             );
                           },
-                          childCount: resMission?["data"]?["data"]?.length ?? 0,
+                          childCount: itemPerPageState,
                         ),
                       ),
                     ),
