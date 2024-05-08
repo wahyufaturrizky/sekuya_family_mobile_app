@@ -17,7 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Authors
 
-- [@wahyufaturrizki](https://github.com/wahyufaturrizky)
+- [@wahyufaturrizki](https://www.linkedin.com/in/wahyu-fatur-rizky/)
 
 ## Features
 
