@@ -261,6 +261,68 @@ class _VoucherComponentState extends State<VoucherComponent> {
           } else {
             return Column(
               children: [
+                if (resVoucher?["data"].length == 0)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        {
+                          "title": "Complete the mission",
+                          "desc":
+                              "Unlock a variety of rewards by completing community missions.",
+                          "img": "voucher_img_01"
+                        },
+                        {
+                          "title": "Get Voucher Code",
+                          "desc":
+                              "Receive the voucher code as a reward upon completing the mission.",
+                          "img": "voucher_img_02"
+                        },
+                        {
+                          "title": "Claim Voucher",
+                          "desc":
+                              "Search and claim your voucher by using the voucher code you've received.",
+                          "img": "voucher_img_03"
+                        },
+                      ]
+                          .map((item) => Container(
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                      'assets/images/${item["img"]}.png'),
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                  Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.65,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item["title"].toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                            item["desc"].toString(),
+                                            style: const TextStyle(
+                                              color: greySecondaryColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                            ),
+                                          )
+                                        ],
+                                      ))
+                                ],
+                              )))
+                          .toList(),
+                    ),
+                  ),
                 Expanded(
                   child: CustomScrollView(
                     slivers: <Widget>[

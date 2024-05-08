@@ -347,47 +347,42 @@ class _CommunityComponentState extends State<CommunityComponent> {
         },
         body: Builder(
           builder: (BuildContext context) {
-            if (isLoadingResCommunities) {
-              return const MyWidgetSpinner();
-            } else {
-              return Column(
-                children: [
-                  Expanded(
-                      child: Container(
-                    color: Colors.black,
-                    child: CustomScrollView(
-                      slivers: <Widget>[
-                        SliverOverlapInjector(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                  context),
-                        ),
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverFixedExtentList(
-                            itemExtent: 150.0,
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return TabContentCommunityFeaturedComponentApp(
-                                    index: index,
-                                    resCommunities: resCommunities);
-                              },
-                              childCount:
-                                  resCommunities?["data"]?["data"]?.length ?? 0,
-                            ),
+            return Column(
+              children: [
+                Expanded(
+                    child: Container(
+                  color: Colors.black,
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverOverlapInjector(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverFixedExtentList(
+                          itemExtent: 150.0,
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return TabContentCommunityFeaturedComponentApp(
+                                  index: index, resCommunities: resCommunities);
+                            },
+                            childCount:
+                                resCommunities?["data"]?["data"]?.length ?? 0,
                           ),
                         ),
-                      ],
-                    ),
-                  )),
-                  if (noDataAnymore)
-                    const Center(
-                      child: Text("👋🏻 Hi your reach the end of the list",
-                          style: TextStyle(color: Colors.white, fontSize: 14)),
-                    )
-                ],
-              );
-            }
+                      ),
+                    ],
+                  ),
+                )),
+                if (noDataAnymore)
+                  const Center(
+                    child: Text("👋🏻 Hi your reach the end of the list",
+                        style: TextStyle(color: Colors.white, fontSize: 14)),
+                  ),
+                if (isLoadingResCommunities) const MyWidgetSpinner()
+              ],
+            );
           },
         ));
   }
