@@ -140,8 +140,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
               "data": {
                 ...res["data"],
                 "data": [
+                  ...resCommunities?["data"]?["data"] ?? [],
                   ...res?["data"]?["data"],
-                  ...resCommunities?["data"]?["data"] ?? []
                 ]
               }
             };

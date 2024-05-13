@@ -25,19 +25,30 @@ Future<dynamic> handleUpdateDataProfile(data) {
   );
 }
 
-Future<dynamic> handleGetDataMyVoucher() {
-  return clientDio(serviceUrlParam: "/profile/my-vouchers", methodParam: "GET");
-}
-
-Future<dynamic> handleGetDataMyReward() {
-  return clientDio(serviceUrlParam: "/profile/my-reward", methodParam: "GET");
-}
-
-Future<dynamic> handleGetDataMyMissios() {
-  return clientDio(serviceUrlParam: "/profile/my-missions", methodParam: "GET");
-}
-
-Future<dynamic> handleGetDataMyCommunities() {
+Future<dynamic> handleGetDataMyVoucher(queryParameters) {
   return clientDio(
-      serviceUrlParam: "/profile/my-communities", methodParam: "GET");
+      serviceUrlParam: "/profile/my-vouchers",
+      methodParam: "GET",
+      queryParameters: queryParameters);
+}
+
+Future<dynamic> handleGetDataMyReward(queryParameters) {
+  return clientDio(
+      serviceUrlParam: "/profile/my-reward",
+      methodParam: "GET",
+      queryParameters: queryParameters);
+}
+
+Future<dynamic> handleGetDataMyMissios(queryParameters) {
+  return clientDio(
+      serviceUrlParam: "/profile/my-missions",
+      methodParam: "GET",
+      queryParameters: queryParameters);
+}
+
+Future<dynamic> handleGetDataMyCommunities(queryParameters) {
+  return clientDio(
+      serviceUrlParam: "/profile/my-communities",
+      methodParam: "GET",
+      queryParameters: queryParameters);
 }

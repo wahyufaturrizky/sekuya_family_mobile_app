@@ -123,8 +123,8 @@ class _MissionComponentState extends State<MissionComponent> {
               "data": {
                 ...res["data"],
                 "data": [
+                  ...resMission?["data"]?["data"] ?? [],
                   ...res?["data"]?["data"],
-                  ...resMission?["data"]?["data"] ?? []
                 ]
               }
             };
