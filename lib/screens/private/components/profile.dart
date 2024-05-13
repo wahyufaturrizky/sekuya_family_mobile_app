@@ -737,72 +737,75 @@ class _ProfileComponentState extends State<ProfileComponent> {
               builder: (BuildContext context) {
                 return Column(
                   children: [
-                    Container(
-                      color: Colors.black,
-                      child: CustomScrollView(
-                        key: PageStorageKey<String>(name),
-                        slivers: <Widget>[
-                          SliverOverlapInjector(
-                            handle:
-                                NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                    context),
-                          ),
-                          SliverPadding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            sliver: SliverFixedExtentList(
-                              itemExtent: name == "My Mission"
-                                  ? 170.0
-                                  : name == "My Communities"
-                                      ? 150.0
-                                      : name == "My Reward"
-                                          ? 170.0
-                                          : 140,
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return name == "My Mission"
-                                      ? TabContentProfileMyMissionComponentApp(
-                                          resMyMission: resMyMission,
-                                          index: index)
-                                      : name == "My Communities"
-                                          ? TabContentProfileMyCommunityComponentApp(
-                                              resMyCommunities:
-                                                  resMyCommunities,
-                                              index: index)
-                                          : name == "My Reward"
-                                              ? TabContentProfileMyRewardComponentApp(
-                                                  resMyReward: resMyReward,
-                                                  index: index)
-                                              : TabContentProfileMyVoucherComponentApp(
-                                                  resMyVoucher: resMyVoucher,
-                                                  index: index);
-                                },
-                                childCount: name == "My Mission"
-                                    ? itemPerPageMyMission
+                    Expanded(
+                      child: Container(
+                        color: Colors.black,
+                        child: CustomScrollView(
+                          key: PageStorageKey<String>(name),
+                          slivers: <Widget>[
+                            SliverOverlapInjector(
+                              handle: NestedScrollView
+                                  .sliverOverlapAbsorberHandleFor(context),
+                            ),
+                            SliverPadding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              sliver: SliverFixedExtentList(
+                                itemExtent: name == "My Mission"
+                                    ? 170.0
                                     : name == "My Communities"
-                                        ? itemPerPageMyCommunities
-                                        : name == "My Voucher"
-                                            ? itemPerPageMyVoucher
-                                            : itemPerPageMyReward,
+                                        ? 150.0
+                                        : name == "My Reward"
+                                            ? 170.0
+                                            : 140,
+                                delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return name == "My Mission"
+                                        ? TabContentProfileMyMissionComponentApp(
+                                            resMyMission: resMyMission,
+                                            index: index)
+                                        : name == "My Communities"
+                                            ? TabContentProfileMyCommunityComponentApp(
+                                                resMyCommunities:
+                                                    resMyCommunities,
+                                                index: index)
+                                            : name == "My Reward"
+                                                ? TabContentProfileMyRewardComponentApp(
+                                                    resMyReward: resMyReward,
+                                                    index: index)
+                                                : TabContentProfileMyVoucherComponentApp(
+                                                    resMyVoucher: resMyVoucher,
+                                                    index: index);
+                                  },
+                                  childCount: name == "My Mission"
+                                      ? itemPerPageMyMission
+                                      : name == "My Communities"
+                                          ? itemPerPageMyCommunities
+                                          : name == "My Voucher"
+                                              ? itemPerPageMyVoucher
+                                              : itemPerPageMyReward,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                    if (noDataAnymoreMyCommunities ||
-                        noDataAnymoreMyMission ||
-                        noDataAnymoreMyReward ||
-                        noDataAnymoreMyVoucher)
+                    if ((name == "My Mission" && noDataAnymoreMyMission) ||
+                        (name == "My Communities" &&
+                            noDataAnymoreMyCommunities) ||
+                        (name == "My Voucher" && noDataAnymoreMyVoucher) ||
+                        (name == "My Reward" && noDataAnymoreMyReward))
                       const Center(
                         child: Text("👋🏻 Hi your reach the end of the list",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 14)),
                       ),
-                    if (isLoadingResMyMission ||
-                        isLoadingCommunities ||
-                        isLoadingResMyVoucher ||
-                        isLoadingReward)
-                      const MyWidgetSpinner()
+                    if ((name == "My Mission" && isLoadingResMyMission) ||
+                        (name == "My Communities" && isLoadingCommunities) ||
+                        (name == "My Voucher" && isLoadingResMyVoucher) ||
+                        (name == "My Reward" && isLoadingReward))
+                      const MyWidgetSpinner(),
                   ],
                 );
               },
