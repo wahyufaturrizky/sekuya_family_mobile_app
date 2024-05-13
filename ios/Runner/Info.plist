@@ -13,7 +13,7 @@
 	<key>GIDClientID</key>
 	<string>433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com</string>
 	<key>CFBundleDisplayName</key>
-	<string>Sekuya Family Mobile App</string>
+	<string>Sekuya+</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
