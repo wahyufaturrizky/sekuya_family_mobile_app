@@ -142,10 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
             idToken: googleKey.idToken,
           );
 
-          final AuthCredential credentialWeb = GoogleAuthProvider.credential(
-            idToken:
-                "eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYjc2MmY4NzFjZGIzYmFlMDA0NGM2NDk2MjJmYzEzOTZlZGEzZTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MzMyOTQ5MTY3NTcta292MjZsaDlkaDVocWR2bTF1dnBpNDlzaDMzcTcydWIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MzMyOTQ5MTY3NTcta292MjZsaDlkaDVocWR2bTF1dnBpNDlzaDMzcTcydWIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDExMjQ5NTUyMDc5MjQ4NDQ5MDQiLCJlbWFpbCI6IndhaHl1ZmF0dXJyaXpreXlAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJOS29nTGlYSmZpRnplTFdxcldCczJRIiwibm9uY2UiOiJKRXdnM2xOSUROaXZXNkJveEt6RmpNZ2RRWXJZWHY2SC1uVjZ5aG5TTHBBIiwibmFtZSI6IldhaHl1IEZhdHVyIFJpemtpIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0pTT2c0VWUzcUw0elQ1Y1F6MEFKSUdVcjlWczZMcXBGVFQ4bGtfLWRnbTZqeUhZMVdubWc9czk2LWMiLCJnaXZlbl9uYW1lIjoiV2FoeXUiLCJmYW1pbHlfbmFtZSI6IkZhdHVyIFJpemtpIiwiaWF0IjoxNzE1Njc3MTE2LCJleHAiOjE3MTU2ODA3MTZ9.SjbzAPn7tqizg4YbkzOVV2OvAbnfBSts4f8lLX1dUts7M4-fm16dINiLExqyz1djxAbijAYL99SZdU-hKX1M6WorNGYG51NbeX3b_nIGPfn1vwNXvAOUg82rBOydnKDNJQ4d6v4USB0GJbL2qktvTBVrTsaCKVTkskjpa_Rb1dljFO04bOFzyVLJQ7jisyGmgPkvfO0CQmsUWhSvk_iFhppUzPM6O2X1uqcwFh6zErB9Y9_SQ-ucmjwIaFqUXJ4jn1B8adJarQVZifom_EplgcXoN67qEj2KqryVgwIq7P8rAKvubVNLgD_iTayPNCAL9TseF3lwenNJvAFqFNPxiw",
-          );
+          final AuthCredential credentialWeb =
+              GoogleAuthProvider.credential(idToken: googleKey.idToken);
 
           FirebaseAuth.instance
               .signInWithCredential(kIsWeb ? credentialWeb : credential)
@@ -156,9 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     contentType: Headers.jsonContentType,
                     responseType: ResponseType.json),
                 data: {
-                  'id_token': kIsWeb
-                      ? "eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYjc2MmY4NzFjZGIzYmFlMDA0NGM2NDk2MjJmYzEzOTZlZGEzZTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MzMyOTQ5MTY3NTcta292MjZsaDlkaDVocWR2bTF1dnBpNDlzaDMzcTcydWIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MzMyOTQ5MTY3NTcta292MjZsaDlkaDVocWR2bTF1dnBpNDlzaDMzcTcydWIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDExMjQ5NTUyMDc5MjQ4NDQ5MDQiLCJlbWFpbCI6IndhaHl1ZmF0dXJyaXpreXlAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJOS29nTGlYSmZpRnplTFdxcldCczJRIiwibm9uY2UiOiJKRXdnM2xOSUROaXZXNkJveEt6RmpNZ2RRWXJZWHY2SC1uVjZ5aG5TTHBBIiwibmFtZSI6IldhaHl1IEZhdHVyIFJpemtpIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0pTT2c0VWUzcUw0elQ1Y1F6MEFKSUdVcjlWczZMcXBGVFQ4bGtfLWRnbTZqeUhZMVdubWc9czk2LWMiLCJnaXZlbl9uYW1lIjoiV2FoeXUiLCJmYW1pbHlfbmFtZSI6IkZhdHVyIFJpemtpIiwiaWF0IjoxNzE1Njc3MTE2LCJleHAiOjE3MTU2ODA3MTZ9.SjbzAPn7tqizg4YbkzOVV2OvAbnfBSts4f8lLX1dUts7M4-fm16dINiLExqyz1djxAbijAYL99SZdU-hKX1M6WorNGYG51NbeX3b_nIGPfn1vwNXvAOUg82rBOydnKDNJQ4d6v4USB0GJbL2qktvTBVrTsaCKVTkskjpa_Rb1dljFO04bOFzyVLJQ7jisyGmgPkvfO0CQmsUWhSvk_iFhppUzPM6O2X1uqcwFh6zErB9Y9_SQ-ucmjwIaFqUXJ4jn1B8adJarQVZifom_EplgcXoN67qEj2KqryVgwIq7P8rAKvubVNLgD_iTayPNCAL9TseF3lwenNJvAFqFNPxiw"
-                      : googleKey.idToken,
+                  'id_token': googleKey.idToken,
                   'access_token': googleKey.accessToken,
                   'provider': credential.providerId,
                 }).then((valResFromXellar) {
