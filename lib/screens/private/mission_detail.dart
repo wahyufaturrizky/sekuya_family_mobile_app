@@ -155,30 +155,7 @@ class _MissionDetailState extends State<MissionDetail> {
     if (retrieveError != null) {
       return retrieveError;
     }
-    if (_mediaFileList != null) {
-      return Semantics(
-        label: 'image_picker_example_picked_images',
-        child: ListView.builder(
-          key: UniqueKey(),
-          itemBuilder: (BuildContext context, int index) {
-            // Why network for web?
-            // See https://pub.dev/packages/image_picker_for_web#limitations-on-the-web-platform
-            return Semantics(
-              label: 'image_picker_example_picked_image',
-              child: Image.file(
-                File(_mediaFileList![index].path),
-                errorBuilder: (BuildContext context, Object error,
-                    StackTrace? stackTrace) {
-                  return const Center(
-                      child: Text('This image type is not supported'));
-                },
-              ),
-            );
-          },
-          itemCount: _mediaFileList!.length,
-        ),
-      );
-    } else if (_pickImageError != null) {
+    if (_pickImageError != null) {
       return Text(
         'Pick image error: $_pickImageError',
         textAlign: TextAlign.center,
@@ -559,15 +536,15 @@ class _MissionDetailState extends State<MissionDetail> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    itemTask["name"].toString(),
+                                    itemTask["name"] ?? "",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                         color: Colors.white),
                                   ),
-                                  const Text(
-                                    '10xp',
-                                    style: TextStyle(
+                                  Text(
+                                    '${itemTask["exp"] ?? ""}xp',
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         color: Colors.white,
                                         fontSize: 12),
@@ -583,7 +560,7 @@ class _MissionDetailState extends State<MissionDetail> {
                         ),
                         children: [
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
                                   decoration: BoxDecoration(
@@ -602,105 +579,161 @@ class _MissionDetailState extends State<MissionDetail> {
                               const SizedBox(
                                 width: 16,
                               ),
-                              Expanded(
+                              Flexible(
+                                child: Text(
+                                  itemTask["description"] ?? "",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            child: Row(
+                              children: [
+                                Chip(
+                                    avatar: const Icon(
+                                      Icons.check_circle,
+                                      color: greenColor,
+                                    ),
+                                    label: const Text(
+                                      'Done',
+                                    ),
+                                    color: MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                    labelStyle: const TextStyle(
+                                        color: greenColor,
+                                        fontWeight: FontWeight.w500),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        side: const BorderSide(
+                                            color: greenColor))),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: greySoftColor),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: const CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    radius: 16,
+                                    child: Text(
+                                      '2',
+                                      style:
+                                          TextStyle(color: yellowPrimaryColor),
+                                    ),
+                                  )),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              const Flexible(
                                   child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    itemTask["dsecription"].toString(),
+                                    "Proof",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  const SizedBox(
-                                    height: 16,
+                                  SizedBox(
+                                    height: 8,
                                   ),
-                                  CustomButton(
-                                    buttonText: 'Follow',
-                                    onPressed: () {},
-                                    height: 50,
-                                    width: 500,
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  Container(
-                                    height: 200,
-                                    width: 150,
-                                    child: !kIsWeb &&
-                                            defaultTargetPlatform ==
-                                                TargetPlatform.android
-                                        ? FutureBuilder<void>(
-                                            future: retrieveLostData(),
-                                            builder: (BuildContext context,
-                                                AsyncSnapshot<void> snapshot) {
-                                              switch (
-                                                  snapshot.connectionState) {
-                                                case ConnectionState.none:
-                                                case ConnectionState.waiting:
-                                                  return const Text(
-                                                    'You have not yet picked an image.',
-                                                    textAlign: TextAlign.center,
-                                                  );
-                                                case ConnectionState.done:
-                                                  return _previewImages();
-                                                case ConnectionState.active:
-                                                  if (snapshot.hasError) {
-                                                    return Text(
-                                                      'Pick image/video error: ${snapshot.error}}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    );
-                                                  } else {
-                                                    return const Text(
-                                                      'You have not yet picked an image.',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    );
-                                                  }
-                                              }
-                                            },
-                                          )
-                                        : _previewImages(),
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  if (_picker
-                                      .supportsImageSource(ImageSource.camera))
-                                    CustomButton(
-                                        isOutlinedBackgroundColor:
-                                            greyDarkColor,
-                                        buttonText: 'Add Image',
-                                        isOutlined: true,
-                                        onPressed: () {
-                                          _onImageButtonPressed(
-                                              ImageSource.camera,
-                                              context: context);
-                                        },
-                                        sizeButtonIcon: 20,
-                                        buttonIcon: 'ic_plus.png',
-                                        width: 500,
-                                        paddingButton: 0),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  CustomButton(
-                                    buttonText: 'Submit',
-                                    isLoading: isLoadingTaskMission,
-                                    onPressed: () {
-                                      handlePostTaskSubmission('0');
-                                    },
-                                    width: 500,
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
+                                  Text(
+                                    "dictum cursus mauris varius tristique aliquet. Morbi cursus urna in nibh diam dolor lacus sit.",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
                                   ),
                                 ],
                               ))
                             ],
-                          )
+                          ),
+                          CustomButton(
+                            buttonText: 'Follow',
+                            onPressed: () {},
+                            height: 50,
+                            width: 500,
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            height: 200,
+                            width: 150,
+                            child: !kIsWeb &&
+                                    defaultTargetPlatform ==
+                                        TargetPlatform.android
+                                ? FutureBuilder<void>(
+                                    future: retrieveLostData(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<void> snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.none:
+                                        case ConnectionState.waiting:
+                                          return const Text(
+                                            'You have not yet picked an image.',
+                                            textAlign: TextAlign.center,
+                                          );
+                                        case ConnectionState.done:
+                                          return _previewImages();
+                                        case ConnectionState.active:
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                              'Pick image/video error: ${snapshot.error}}',
+                                              textAlign: TextAlign.center,
+                                            );
+                                          } else {
+                                            return const Text(
+                                              'You have not yet picked an image.',
+                                              textAlign: TextAlign.center,
+                                            );
+                                          }
+                                      }
+                                    },
+                                  )
+                                : _previewImages(),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          if (_picker.supportsImageSource(ImageSource.camera))
+                            CustomButton(
+                                isOutlinedBackgroundColor: greyDarkColor,
+                                buttonText: 'Add Image',
+                                isOutlined: true,
+                                onPressed: () {
+                                  _onImageButtonPressed(ImageSource.camera,
+                                      context: context);
+                                },
+                                sizeButtonIcon: 20,
+                                buttonIcon: 'ic_plus.png',
+                                width: 500,
+                                paddingButton: 0),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          CustomButton(
+                            buttonText: 'Submit',
+                            isLoading: isLoadingTaskMission,
+                            onPressed: () {
+                              handlePostTaskSubmission('0');
+                            },
+                            width: 500,
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
                         ]),
                   )
                   .toList(),

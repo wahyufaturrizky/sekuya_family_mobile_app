@@ -194,12 +194,32 @@ class _LoginScreenState extends State<LoginScreen> {
           }).catchError((err) {
             print('Error signInWithCredential = $err');
 
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Error signInWithCredential'),
+                  content: Text(err.toString()),
+                );
+              },
+            );
+
             setState(() {
               isLoading = false;
             });
           });
         }).catchError((err) {
           print('Error signInWithProvider = $err');
+
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Error signInWithProvider'),
+                content: Text(err.toString()),
+              );
+            },
+          );
 
           setState(() {
             isLoading = false;
@@ -208,12 +228,32 @@ class _LoginScreenState extends State<LoginScreen> {
       }).catchError((err) {
         print('Error signIn = $err');
 
+        showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error signIn'),
+              content: Text(err.toString()),
+            );
+          },
+        );
+
         setState(() {
           isLoading = false;
         });
       });
     } catch (error) {
       print("Error during Google sign-in: $error");
+
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error during Google sign-in'),
+            content: Text(error.toString()),
+          );
+        },
+      );
 
       setState(() {
         isLoading = false;

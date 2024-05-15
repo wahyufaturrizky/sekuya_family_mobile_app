@@ -473,6 +473,10 @@ class _ProfileComponentState extends State<ProfileComponent> {
             if (!tabController.indexIsChanging) {
               setState(() {
                 tabIndex = tabController.index;
+                noDataAnymoreMyCommunities = false;
+                noDataAnymoreMyMission = false;
+                noDataAnymoreMyReward = false;
+                noDataAnymoreMyVoucher = false;
               });
             }
           });
