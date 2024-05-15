@@ -7,6 +7,7 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:avatar_stack/avatar_stack.dart';
@@ -15,6 +16,7 @@ import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
@@ -62,6 +64,107 @@ class _MissionDetailState extends State<MissionDetail> {
   dynamic _pickImageError;
   String? _retrieveDataError;
 
+  static const String _kLocationServicesDisabledMessage =
+      'Location services are disabled.';
+  static const String _kPermissionDeniedMessage = 'Permission denied.';
+  static const String _kPermissionDeniedForeverMessage =
+      'Permission denied forever.';
+  static const String _kPermissionGrantedMessage = 'Permission granted.';
+
+  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+  final List<_PositionItem> _positionItems = <_PositionItem>[];
+  StreamSubscription<Position>? _positionStreamSubscription;
+  StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
+  bool positionStreamStarted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _toggleServiceStatusStream();
+  }
+
+  void _toggleServiceStatusStream() {
+    if (_serviceStatusStreamSubscription == null) {
+      final serviceStatusStream = _geolocatorPlatform.getServiceStatusStream();
+      _serviceStatusStreamSubscription =
+          serviceStatusStream.handleError((error) {
+        _serviceStatusStreamSubscription?.cancel();
+        _serviceStatusStreamSubscription = null;
+      }).listen((serviceStatus) {
+        String serviceStatusValue;
+        if (serviceStatus == ServiceStatus.enabled) {
+          if (positionStreamStarted) {
+            _toggleListening();
+          }
+          serviceStatusValue = 'enabled';
+        } else {
+          if (_positionStreamSubscription != null) {
+            setState(() {
+              _positionStreamSubscription?.cancel();
+              _positionStreamSubscription = null;
+              _updatePositionList(
+                  _PositionItemType.log, 'Position Stream has been canceled');
+            });
+          }
+          serviceStatusValue = 'disabled';
+        }
+        _updatePositionList(
+          _PositionItemType.log,
+          'Location service has been $serviceStatusValue',
+        );
+      });
+    }
+  }
+
+  void _toggleListening() {
+    if (_positionStreamSubscription == null) {
+      final positionStream = _geolocatorPlatform.getPositionStream();
+      _positionStreamSubscription = positionStream.handleError((error) {
+        _positionStreamSubscription?.cancel();
+        _positionStreamSubscription = null;
+      }).listen((position) => _updatePositionList(
+            _PositionItemType.position,
+            position.toString(),
+          ));
+      _positionStreamSubscription?.pause();
+    }
+
+    setState(() {
+      if (_positionStreamSubscription == null) {
+        return;
+      }
+
+      String statusDisplayValue;
+      if (_positionStreamSubscription!.isPaused) {
+        _positionStreamSubscription!.resume();
+        statusDisplayValue = 'resumed';
+      } else {
+        _positionStreamSubscription!.pause();
+        statusDisplayValue = 'paused';
+      }
+
+      _updatePositionList(
+        _PositionItemType.log,
+        'Listening for position updates $statusDisplayValue',
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    if (_positionStreamSubscription != null) {
+      _positionStreamSubscription!.cancel();
+      _positionStreamSubscription = null;
+    }
+
+    super.dispose();
+  }
+
+  void _updatePositionList(_PositionItemType type, String displayValue) {
+    _positionItems.add(_PositionItem(type, displayValue));
+    setState(() {});
+  }
+
   void _setImageFileListFromFile(XFile? value) {
     _mediaFileList = value == null ? null : <XFile>[value];
   }
@@ -80,7 +183,7 @@ class _MissionDetailState extends State<MissionDetail> {
         routeSettings: RouteSettings(arguments: arguments));
   }
 
-  Future<dynamic> handlePostTaskSubmission(taskId) async {
+  Future<dynamic> handlePostTaskSubmission({taskId, taskCategoryKey}) async {
     try {
       setState(() {
         isLoadingTaskMission = true;
@@ -91,8 +194,9 @@ class _MissionDetailState extends State<MissionDetail> {
 
       final formData = FormData.fromMap({
         'taskId': taskId,
-        'additionalAttribute': "test additional attribute",
-        'proof': [
+        'taskCategoryKey': taskCategoryKey,
+        'additionalAttribute': "{\"lat\": -122.4194, \"long\": -122.4194}",
+        'imageProof': [
           await MultipartFile.fromFile(
             _mediaFileList![0].path.toString(),
             filename: _mediaFileList![0].path.split('/').last,
@@ -115,29 +219,92 @@ class _MissionDetailState extends State<MissionDetail> {
     }
   }
 
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handlePermission();
+
+    if (!hasPermission) {
+      return;
+    }
+
+    final position = await _geolocatorPlatform.getCurrentPosition();
+    _updatePositionList(
+      _PositionItemType.position,
+      position.toString(),
+    );
+  }
+
+  Future<bool> _handlePermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      _updatePositionList(
+        _PositionItemType.log,
+        _kLocationServicesDisabledMessage,
+      );
+
+      return false;
+    }
+
+    permission = await _geolocatorPlatform.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await _geolocatorPlatform.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        _updatePositionList(
+          _PositionItemType.log,
+          _kPermissionDeniedMessage,
+        );
+
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      _updatePositionList(
+        _PositionItemType.log,
+        _kPermissionDeniedForeverMessage,
+      );
+
+      return false;
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    _updatePositionList(
+      _PositionItemType.log,
+      _kPermissionGrantedMessage,
+    );
+    return true;
+  }
+
   Future<void> _onImageButtonPressed(
     ImageSource source, {
     required BuildContext context,
   }) async {
     if (context.mounted) {
-      await _displayPickImageDialog(context, false, (double? maxWidth,
-          double? maxHeight, int? quality, int? limit) async {
-        try {
-          final XFile? pickedFile = await _picker.pickImage(
-            source: source,
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
-            imageQuality: quality,
-          );
-          setState(() {
-            _setImageFileListFromFile(pickedFile);
-          });
-        } catch (e) {
-          setState(() {
-            _pickImageError = e;
-          });
-        }
-      });
+      try {
+        final XFile? pickedFile = await _picker.pickImage(
+          source: source,
+        );
+        setState(() {
+          _setImageFileListFromFile(pickedFile);
+        });
+      } catch (e) {
+        setState(() {
+          _pickImageError = e;
+        });
+      }
     }
   }
 
@@ -155,7 +322,23 @@ class _MissionDetailState extends State<MissionDetail> {
     if (retrieveError != null) {
       return retrieveError;
     }
-    if (_pickImageError != null) {
+    if (_mediaFileList != null) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(8),
+          image: DecorationImage(
+            image: FileImage(
+              File(_mediaFileList![0].path),
+            ),
+          ),
+          border: Border.all(
+            color: greyColor,
+            width: 2,
+          ),
+        ),
+      );
+    } else if (_pickImageError != null) {
       return Text(
         'Pick image error: $_pickImageError',
         textAlign: TextAlign.center,
@@ -163,12 +346,25 @@ class _MissionDetailState extends State<MissionDetail> {
     } else {
       return Container(
         decoration: BoxDecoration(
-          image: const DecorationImage(
-              image: AssetImage("assets/images/upload_img_placeholder.png"),
-              fit: BoxFit.cover),
-          color: Colors.white,
+          color: Colors.black,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: greyColor, width: 2),
+          border: Border.all(
+            color: greyColor,
+            width: 2,
+          ),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Add Image',
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Icon(Icons.add, color: Colors.white)
+          ],
         ),
       );
       // You have not yet picked an image.
@@ -217,7 +413,7 @@ class _MissionDetailState extends State<MissionDetail> {
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
           child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -614,6 +810,15 @@ class _MissionDetailState extends State<MissionDetail> {
                               ],
                             ),
                           ),
+                          CustomButton(
+                            buttonText: 'Follow',
+                            onPressed: () {},
+                            height: 50,
+                            width: 500,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -659,67 +864,110 @@ class _MissionDetailState extends State<MissionDetail> {
                               ))
                             ],
                           ),
-                          CustomButton(
-                            buttonText: 'Follow',
-                            onPressed: () {},
-                            height: 50,
-                            width: 500,
-                          ),
                           const SizedBox(
                             height: 16,
                           ),
-                          Container(
-                            height: 200,
-                            width: 150,
-                            child: !kIsWeb &&
-                                    defaultTargetPlatform ==
-                                        TargetPlatform.android
-                                ? FutureBuilder<void>(
-                                    future: retrieveLostData(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<void> snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.none:
-                                        case ConnectionState.waiting:
-                                          return const Text(
-                                            'You have not yet picked an image.',
-                                            textAlign: TextAlign.center,
-                                          );
-                                        case ConnectionState.done:
-                                          return _previewImages();
-                                        case ConnectionState.active:
-                                          if (snapshot.hasError) {
-                                            return Text(
-                                              'Pick image/video error: ${snapshot.error}}',
-                                              textAlign: TextAlign.center,
-                                            );
-                                          } else {
-                                            return const Text(
-                                              'You have not yet picked an image.',
-                                              textAlign: TextAlign.center,
-                                            );
+                          GestureDetector(
+                            onTap: () {
+                              if (_picker
+                                  .supportsImageSource(ImageSource.camera)) {
+                                _onImageButtonPressed(ImageSource.camera,
+                                    context: context);
+                              }
+                            },
+                            child: Container(
+                                height: 200,
+                                width: 150,
+                                child: !kIsWeb &&
+                                        defaultTargetPlatform ==
+                                            TargetPlatform.android
+                                    ? FutureBuilder<void>(
+                                        future: retrieveLostData(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<void> snapshot) {
+                                          switch (snapshot.connectionState) {
+                                            case ConnectionState.none:
+                                            case ConnectionState.waiting:
+                                              return const Text(
+                                                'You have not yet picked an image.',
+                                                textAlign: TextAlign.center,
+                                              );
+                                            case ConnectionState.done:
+                                              return _previewImages();
+                                            case ConnectionState.active:
+                                              if (snapshot.hasError) {
+                                                return Text(
+                                                  'Pick image/video error: ${snapshot.error}}',
+                                                  textAlign: TextAlign.center,
+                                                );
+                                              } else {
+                                                return const Text(
+                                                  'You have not yet picked an image.',
+                                                  textAlign: TextAlign.center,
+                                                );
+                                              }
                                           }
-                                      }
-                                    },
-                                  )
-                                : _previewImages(),
+                                        },
+                                      )
+                                    : _previewImages()),
                           ),
                           const SizedBox(
                             height: 16,
                           ),
-                          if (_picker.supportsImageSource(ImageSource.camera))
-                            CustomButton(
-                                isOutlinedBackgroundColor: greyDarkColor,
-                                buttonText: 'Add Image',
-                                isOutlined: true,
-                                onPressed: () {
-                                  _onImageButtonPressed(ImageSource.camera,
-                                      context: context);
+                          Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: _positionItems.length,
+                                itemBuilder: (context, index) {
+                                  final positionItem = _positionItems[index];
+
+                                  if (positionItem.type ==
+                                      _PositionItemType.log) {
+                                    return ListTile(
+                                      title: Text(positionItem.displayValue,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    );
+                                  } else {
+                                    return ListTile(
+                                      title: Text(
+                                        positionItem.displayValue,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    );
+                                  }
                                 },
-                                sizeButtonIcon: 20,
-                                buttonIcon: 'ic_plus.png',
-                                width: 500,
-                                paddingButton: 0),
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _getCurrentPosition();
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.pin_drop_outlined,
+                                  color: yellowPrimaryColor,
+                                ),
+                                Text(
+                                  "Get Current Location",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: yellowPrimaryColor,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: yellowPrimaryColor,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                           const SizedBox(
                             height: 16,
                           ),
@@ -727,7 +975,10 @@ class _MissionDetailState extends State<MissionDetail> {
                             buttonText: 'Submit',
                             isLoading: isLoadingTaskMission,
                             onPressed: () {
-                              handlePostTaskSubmission('0');
+                              handlePostTaskSubmission(
+                                taskId: itemTask["id"],
+                                taskCategoryKey: itemTask["taskCategoryKey"],
+                              );
                             },
                             width: 500,
                           ),
@@ -805,81 +1056,24 @@ class _MissionDetailState extends State<MissionDetail> {
       )),
     ));
   }
-
-  Future<void> _displayPickImageDialog(
-      BuildContext context, bool isMulti, OnPickImageCallback onPick) async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Add optional parameters'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: maxWidthController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                      hintText: 'Enter maxWidth if desired'),
-                ),
-                TextField(
-                  controller: maxHeightController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                      hintText: 'Enter maxHeight if desired'),
-                ),
-                TextField(
-                  controller: qualityController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                      hintText: 'Enter quality if desired'),
-                ),
-                if (isMulti)
-                  TextField(
-                    controller: limitController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        hintText: 'Enter limit if desired'),
-                  ),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('CANCEL'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                  child: const Text('PICK'),
-                  onPressed: () {
-                    final double? width = maxWidthController.text.isNotEmpty
-                        ? double.parse(maxWidthController.text)
-                        : null;
-                    final double? height = maxHeightController.text.isNotEmpty
-                        ? double.parse(maxHeightController.text)
-                        : null;
-                    final int? quality = qualityController.text.isNotEmpty
-                        ? int.parse(qualityController.text)
-                        : null;
-                    final int? limit = limitController.text.isNotEmpty
-                        ? int.parse(limitController.text)
-                        : null;
-                    onPick(width, height, quality, limit);
-                    Navigator.of(context).pop();
-                  }),
-            ],
-          );
-        });
-  }
 }
 
 String getAvatarUrl(int n) {
   final url = 'https://i.pravatar.cc/150?img=$n';
   // final url = 'https://robohash.org/$n?bgset=bg1';
   return url;
+}
+
+enum _PositionItemType {
+  log,
+  position,
+}
+
+class _PositionItem {
+  _PositionItem(this.type, this.displayValue);
+
+  final _PositionItemType type;
+  final String displayValue;
 }
 
 typedef OnPickImageCallback = void Function(

@@ -8,7 +8,6 @@
  */
 
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -17,6 +16,7 @@ import 'package:sekuya_family_mobile_app/service/client.dart';
 
 import 'components/app/app_component.dart';
 import 'firebase_options.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
