@@ -8,6 +8,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:avatar_stack/avatar_stack.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sekuya_family_mobile_app/api_key.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -26,6 +28,8 @@ import 'package:sekuya_family_mobile_app/screens/private/lucky_winner_bottom_she
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 import 'package:sekuya_family_mobile_app/service/mission/mission.dart';
 import 'package:sekuya_family_mobile_app/util/format_date.dart';
+
+final dio = Dio();
 
 class MissionDetailApp extends StatelessWidget {
   const MissionDetailApp({super.key, this.args});
@@ -63,6 +67,9 @@ class _MissionDetailState extends State<MissionDetail> {
   List<XFile>? _mediaFileList;
   dynamic _pickImageError;
   String? _retrieveDataError;
+  var lat;
+  var long;
+  var nameLocation;
 
   static const String _kLocationServicesDisabledMessage =
       'Location services are disabled.';
@@ -160,9 +167,38 @@ class _MissionDetailState extends State<MissionDetail> {
     super.dispose();
   }
 
-  void _updatePositionList(_PositionItemType type, String displayValue) {
+  void _updatePositionList(_PositionItemType type, String displayValue) async {
     _positionItems.add(_PositionItem(type, displayValue));
-    setState(() {});
+
+    if (type != _PositionItemType.log) {
+      RegExp regExp = RegExp(
+          r'Latitude:\s*([-+]?[0-9]*\.?[0-9]+),\s*Longitude:\s*([-+]?[0-9]*\.?[0-9]+)');
+
+      Match? match = regExp.firstMatch(displayValue);
+
+      if (match != null) {
+        double latitude = double.parse(match.group(1)!);
+        double longitude = double.parse(match.group(2)!);
+
+        print('Latitude: $latitude, Longitude: $longitude');
+
+        final response = await dio.get(
+            '$baseUrlMapGoogleApi/geocode/json?latlng=$latitude,$longitude&key=$apiKeyGoogleApi');
+
+        final res = jsonDecode(response.toString());
+
+        setState(() {
+          lat = latitude;
+          long = longitude;
+          nameLocation = res['results'][0]['formatted_address'];
+        });
+      } else {
+        print('No match found');
+      }
+
+      print(displayValue);
+      setState(() {});
+    }
   }
 
   void _setImageFileListFromFile(XFile? value) {
@@ -195,7 +231,7 @@ class _MissionDetailState extends State<MissionDetail> {
       final formData = FormData.fromMap({
         'taskId': taskId,
         'taskCategoryKey': taskCategoryKey,
-        'additionalAttribute': '{"lat":100,"long":100}',
+        'additionalAttribute': '{"lat":$lat,"long":$long}',
         'imageProof': [
           await MultipartFile.fromFile(
             _mediaFileList![0].path.toString(),
@@ -914,57 +950,59 @@ class _MissionDetailState extends State<MissionDetail> {
                           const SizedBox(
                             height: 16,
                           ),
-                          Column(
-                            children: [
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: _positionItems.length,
-                                itemBuilder: (context, index) {
-                                  final positionItem = _positionItems[index];
+                          // Column(
+                          //   children: [
+                          //     ListView.builder(
+                          //       shrinkWrap: true,
+                          //       itemCount: _positionItems.length,
+                          //       itemBuilder: (context, index) {
+                          //         final positionItem = _positionItems[index];
 
-                                  if (positionItem.type ==
-                                      _PositionItemType.log) {
-                                    return ListTile(
-                                      title: Text(positionItem.displayValue,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                    );
-                                  } else {
-                                    return ListTile(
-                                      title: Text(
-                                        positionItem.displayValue,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
+                          //         if (positionItem.type ==
+                          //             _PositionItemType.log) {
+                          //           return ListTile(
+                          //             title: Text(positionItem.displayValue,
+                          //                 textAlign: TextAlign.center,
+                          //                 style: const TextStyle(
+                          //                   color: Colors.white,
+                          //                   fontWeight: FontWeight.bold,
+                          //                 )),
+                          //           );
+                          //         } else {
+                          //           return ListTile(
+                          //             title: Text(
+                          //               positionItem.displayValue,
+                          //               style: const TextStyle(
+                          //                   color: Colors.white),
+                          //             ),
+                          //           );
+                          //         }
+                          //       },
+                          //     ),
+                          //   ],
+                          // ),
                           GestureDetector(
                             onTap: () {
                               _getCurrentPosition();
                             },
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.pin_drop_outlined,
                                   color: yellowPrimaryColor,
                                 ),
-                                Text(
-                                  "Get Current Location",
-                                  style: TextStyle(
+                                Flexible(
+                                    child: Text(
+                                  nameLocation ?? "Get Current Location",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: yellowPrimaryColor,
                                     decoration: TextDecoration.underline,
                                     decorationColor: yellowPrimaryColor,
                                   ),
-                                )
+                                ))
                               ],
                             ),
                           ),

@@ -28,6 +28,7 @@ const Color greySoftColor = Color.fromRGBO(71, 71, 71, 1);
 const Color greenColor = Color.fromRGBO(3, 166, 29, 1);
 const String baseUrl = 'https://api.sekuyafamily.xellar.co/api/v1';
 const String baseUrlXellarLabs = 'https://api.sekuyalabs.xellar.co/api/v1';
+const String baseUrlMapGoogleApi = 'https://maps.googleapis.com/maps/api';
 const InputDecoration kTextInputDecoration = InputDecoration(
   border: InputBorder.none,
   hintText: '',
