@@ -16,7 +16,6 @@ import 'package:sekuya_family_mobile_app/service/client.dart';
 
 import 'components/app/app_component.dart';
 import 'firebase_options.dart';
-import 'package:geolocator/geolocator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
