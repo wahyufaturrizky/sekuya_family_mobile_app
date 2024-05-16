@@ -8,6 +8,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:avatar_stack/avatar_stack.dart';
@@ -195,7 +196,7 @@ class _MissionDetailState extends State<MissionDetail> {
       final formData = FormData.fromMap({
         'taskId': taskId,
         'taskCategoryKey': taskCategoryKey,
-        'additionalAttribute': "{\"lat\": -122.4194, \"long\": -122.4194}",
+        'additionalAttribute': '{"lat":100,"long":100}',
         'imageProof': [
           await MultipartFile.fromFile(
             _mediaFileList![0].path.toString(),
@@ -975,10 +976,12 @@ class _MissionDetailState extends State<MissionDetail> {
                             buttonText: 'Submit',
                             isLoading: isLoadingTaskMission,
                             onPressed: () {
-                              handlePostTaskSubmission(
-                                taskId: itemTask["id"],
-                                taskCategoryKey: itemTask["taskCategoryKey"],
-                              );
+                              if (!isLoadingTaskMission) {
+                                handlePostTaskSubmission(
+                                  taskId: itemTask["id"],
+                                  taskCategoryKey: itemTask["taskCategoryKey"],
+                                );
+                              }
                             },
                             width: 500,
                           ),
