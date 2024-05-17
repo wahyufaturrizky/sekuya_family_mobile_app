@@ -228,16 +228,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }).catchError((err) {
         print('Error signIn = $err');
 
-        showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Error signIn'),
-              content: Text(err.toString()),
-            );
-          },
-        );
-
         setState(() {
           isLoading = false;
         });

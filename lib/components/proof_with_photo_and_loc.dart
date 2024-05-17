@@ -20,7 +20,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       this.exp,
       this.description,
       this.onTapTakeCamera,
-      required this.retrieveLostData,
+      this.retrieveLostData,
       this.previewImages,
       this.onTapGetCurrentPosition,
       this.isLoadingNameLocation,
@@ -33,7 +33,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
   final dynamic exp;
   final dynamic description;
   final VoidCallback? onTapTakeCamera;
-  final Future<void> retrieveLostData;
+  final dynamic retrieveLostData;
   final dynamic previewImages;
   final dynamic onTapGetCurrentPosition;
   final bool? isLoadingNameLocation;
@@ -67,7 +67,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
       this.exp,
       this.description,
       this.onTapTakeCamera,
-      required this.retrieveLostData,
+      this.retrieveLostData,
       this.previewImages,
       this.onTapGetCurrentPosition,
       this.isLoadingNameLocation,
@@ -80,7 +80,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
   final dynamic exp;
   final dynamic description;
   final VoidCallback? onTapTakeCamera;
-  final Future<void> retrieveLostData;
+  final dynamic retrieveLostData;
   final dynamic previewImages;
   final dynamic onTapGetCurrentPosition;
   final bool? isLoadingNameLocation;
@@ -281,7 +281,7 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                               }
                             },
                           )
-                        : widget.previewImages!()),
+                        : widget.previewImages),
           ),
           const SizedBox(
             height: 16,

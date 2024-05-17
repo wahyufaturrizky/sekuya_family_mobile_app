@@ -15,12 +15,10 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:date_count_down/date_count_down.dart';
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/api_key.dart';
-import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/proof_with_photo_and_loc.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -770,7 +768,9 @@ class _MissionDetailState extends State<MissionDetail> {
                                         context: context);
                                   }
                                 },
-                                retrieveLostData: retrieveLostData(),
+                                retrieveLostData: () {
+                                  retrieveLostData();
+                                },
                                 previewImages: _previewImages(),
                                 onTapGetCurrentPosition: () {
                                   _getCurrentPosition();
