@@ -10,6 +10,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
+import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class ProofWithPhotoAndLocApp extends StatelessWidget {
@@ -254,34 +255,39 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 child:
                     !kIsWeb && defaultTargetPlatform == TargetPlatform.android
                         ? FutureBuilder<void>(
-                            future: widget.retrieveLostData,
+                            future: widget.retrieveLostData != null
+                                ? widget.retrieveLostData!()
+                                : null,
                             builder: (BuildContext context,
                                 AsyncSnapshot<void> snapshot) {
                               switch (snapshot.connectionState) {
                                 case ConnectionState.none:
                                 case ConnectionState.waiting:
-                                  return const Text(
-                                    'You have not yet picked an image.',
-                                    textAlign: TextAlign.center,
-                                  );
+                                  return const PlaceholderImageTaskApp();
                                 case ConnectionState.done:
-                                  return widget.previewImages;
+                                  return widget.previewImages!();
                                 case ConnectionState.active:
                                   if (snapshot.hasError) {
                                     return Text(
                                       'Pick image/video error: ${snapshot.error}}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
                                       textAlign: TextAlign.center,
                                     );
                                   } else {
                                     return const Text(
                                       'You have not yet picked an image.',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
                                       textAlign: TextAlign.center,
                                     );
                                   }
                               }
                             },
                           )
-                        : widget.previewImages),
+                        : widget.previewImages!()),
           ),
           const SizedBox(
             height: 16,

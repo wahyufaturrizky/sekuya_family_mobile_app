@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/api_key.dart';
+import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart';
 import 'package:sekuya_family_mobile_app/components/proof_with_photo_and_loc.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -384,29 +385,7 @@ class _MissionDetailState extends State<MissionDetail> {
         textAlign: TextAlign.center,
       );
     } else {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: greyColor,
-            width: 2,
-          ),
-        ),
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Add Image',
-              style: TextStyle(color: Colors.white),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Icon(Icons.add, color: Colors.white)
-          ],
-        ),
-      );
+      return const PlaceholderImageTaskApp();
       // You have not yet picked an image.
     }
   }
