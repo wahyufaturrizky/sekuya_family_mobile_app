@@ -8,29 +8,32 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class QuizApp extends StatelessWidget {
-  const QuizApp(
+  QuizApp(
       {super.key,
       this.image,
       this.name,
       this.exp,
       this.description,
+      this.additionalAttribute,
       this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
-      this.onExpansionChanged});
+      this.onExpansionChanged,
+      this.selectedChoice,
+      this.onChangedQuizChoice});
 
   final dynamic image;
   final dynamic name;
   final dynamic exp;
   final dynamic description;
+  final dynamic additionalAttribute;
   final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
@@ -38,6 +41,8 @@ class QuizApp extends StatelessWidget {
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
+  dynamic selectedChoice;
+  dynamic onChangedQuizChoice;
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +58,15 @@ class QuizApp extends StatelessWidget {
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       additionalAttributeAnswerNotes: additionalAttributeAnswerNotes,
       onExpansionChanged: onExpansionChanged,
+      additionalAttribute: additionalAttribute,
+      selectedChoice: selectedChoice,
+      onChangedQuizChoice: onChangedQuizChoice,
     );
   }
 }
 
 class Quiz extends StatefulWidget {
-  const Quiz(
+  Quiz(
       {super.key,
       this.image,
       this.name,
@@ -70,7 +78,10 @@ class Quiz extends StatefulWidget {
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
-      this.onExpansionChanged});
+      this.onExpansionChanged,
+      this.additionalAttribute,
+      this.selectedChoice,
+      this.onChangedQuizChoice});
 
   final dynamic image;
   final dynamic name;
@@ -83,14 +94,15 @@ class Quiz extends StatefulWidget {
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
+  final dynamic additionalAttribute;
+  dynamic onChangedQuizChoice;
+  dynamic selectedChoice;
 
   @override
   State<Quiz> createState() => _QuizState();
 }
 
 class _QuizState extends State<Quiz> {
-  var choice;
-
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
@@ -173,36 +185,32 @@ class _QuizState extends State<Quiz> {
           const SizedBox(
             height: 16,
           ),
-          Column(
-            children: <Widget>[
-              RadioListTile(
-                title: const Text(
-                  'Lafayette',
-                  style: TextStyle(color: Colors.white),
-                ),
-                value: choice,
-                groupValue: choice,
-                onChanged: (value) {
-                  setState(() {
-                    choice = value;
-                  });
-                },
-              ),
-              RadioListTile(
-                title: const Text(
-                  'Lafayette',
-                  style: TextStyle(color: Colors.white),
-                ),
-                value: choice,
-                groupValue: choice,
-                onChanged: (value) {
-                  setState(() {
-                    choice = value;
-                  });
-                },
-              ),
-            ],
-          ),
+          if (widget.additionalAttribute["question"].length > 0)
+            Column(
+                children:
+                    (widget.additionalAttribute?["question"] as List<dynamic>)
+                        .map((itemQuestion) => Container(
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                                color: greySmoothColor,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                    color: widget.selectedChoice == itemQuestion
+                                        ? yellowPrimaryColor
+                                        : Colors.transparent)),
+                            child: RadioListTile(
+                              activeColor: yellowPrimaryColor,
+                              title: Text(
+                                itemQuestion ?? "",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              value: itemQuestion ?? "",
+                              groupValue: widget.selectedChoice,
+                              onChanged: (value) {
+                                widget.onChangedQuizChoice(value);
+                              },
+                            )))
+                        .toList()),
           const SizedBox(
             height: 16,
           ),

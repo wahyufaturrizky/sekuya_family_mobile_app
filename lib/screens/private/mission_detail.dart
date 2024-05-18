@@ -78,6 +78,7 @@ class _MissionDetailState extends State<MissionDetail> {
   var nameLocation;
   var resMissionDetail;
   var isLoadingNameLocation = false;
+  var selectedChoice;
 
   final additionalAttributeAnswerNotes = TextEditingController();
   final additionalAttributeAnswerMultipleChoice = TextEditingController();
@@ -460,11 +461,12 @@ class _MissionDetailState extends State<MissionDetail> {
           formData = FormData.fromMap({
             'taskId': taskId,
             'taskCategoryKey': taskCategoryKey,
-            'additionalAttribute': additionalAttributeAnswerNotes.text,
+            'additionalAttribute': selectedChoice,
           });
           break;
         default:
-          if (additionalAttributeAnswerMultipleChoice.text.isEmpty) {
+          print(selectedChoice);
+          if (selectedChoice == null) {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
@@ -573,6 +575,12 @@ class _MissionDetailState extends State<MissionDetail> {
             getDataMissionDetail();
             setState(() {
               isLoadingTaskMission = false;
+              selectedChoice = '';
+              additionalAttributeAnswerMultipleChoice.text = '';
+              additionalAttributeAnswerNotes.text = '';
+              _mediaFileList = null;
+              lat = null;
+              long = null;
             });
           });
         }
@@ -1065,6 +1073,7 @@ class _MissionDetailState extends State<MissionDetail> {
                               ProofWithPhotoAndLocApp(
                                   image: itemTask["image"],
                                   onExpansionChanged: () {
+                                    selectedChoice = null;
                                     _mediaFileList = null;
                                     lat = null;
                                     long = null;
@@ -1108,6 +1117,7 @@ class _MissionDetailState extends State<MissionDetail> {
                               ProofWithPhotoApp(
                                   image: itemTask["image"],
                                   onExpansionChanged: () {
+                                    selectedChoice = null;
                                     _mediaFileList = null;
                                     lat = null;
                                     long = null;
@@ -1146,6 +1156,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                   image: itemTask["image"],
                                   name: itemTask["name"],
                                   onExpansionChanged: () {
+                                    selectedChoice = null;
                                     _mediaFileList = null;
                                     lat = null;
                                     long = null;
@@ -1184,9 +1195,18 @@ class _MissionDetailState extends State<MissionDetail> {
                               QuizApp(
                                   image: itemTask["image"],
                                   name: itemTask["name"],
+                                  selectedChoice: selectedChoice,
+                                  onChangedQuizChoice: (value) {
+                                    setState(() {
+                                      selectedChoice = value;
+                                    });
+                                  },
                                   description: itemTask["description"],
+                                  additionalAttribute:
+                                      itemTask["additionalAttribute"],
                                   exp: itemTask["exp"],
                                   onExpansionChanged: () {
+                                    selectedChoice = null;
                                     _mediaFileList = null;
                                     lat = null;
                                     long = null;
