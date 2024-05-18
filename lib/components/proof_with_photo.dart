@@ -13,8 +13,8 @@ import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
-class ProofWithPhotoAndLocApp extends StatelessWidget {
-  const ProofWithPhotoAndLocApp(
+class ProofWithPhotoApp extends StatelessWidget {
+  const ProofWithPhotoApp(
       {super.key,
       this.image,
       this.name,
@@ -23,9 +23,6 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
-      this.onTapGetCurrentPosition,
-      this.isLoadingNameLocation,
-      this.nameLocation,
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged});
@@ -37,34 +34,29 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
   final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
-  final dynamic onTapGetCurrentPosition;
-  final bool? isLoadingNameLocation;
-  final String? nameLocation;
   final bool? isLoadingTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
 
   @override
   Widget build(BuildContext context) {
-    return ProofWithPhotoAndLoc(
-        image: image,
-        name: name,
-        exp: exp,
-        description: description,
-        onTapTakeCamera: onTapTakeCamera,
-        retrieveLostData: retrieveLostData,
-        previewImages: previewImages,
-        onTapGetCurrentPosition: onTapGetCurrentPosition,
-        isLoadingNameLocation: isLoadingNameLocation,
-        nameLocation: nameLocation,
-        isLoadingTaskMission: isLoadingTaskMission,
-        onPressedSubmitTaskMission: onPressedSubmitTaskMission,
-        onExpansionChanged: onExpansionChanged);
+    return ProofWithPhoto(
+      image: image,
+      name: name,
+      exp: exp,
+      description: description,
+      onTapTakeCamera: onTapTakeCamera,
+      retrieveLostData: retrieveLostData,
+      previewImages: previewImages,
+      isLoadingTaskMission: isLoadingTaskMission,
+      onPressedSubmitTaskMission: onPressedSubmitTaskMission,
+      onExpansionChanged: onExpansionChanged,
+    );
   }
 }
 
-class ProofWithPhotoAndLoc extends StatefulWidget {
-  const ProofWithPhotoAndLoc(
+class ProofWithPhoto extends StatefulWidget {
+  const ProofWithPhoto(
       {super.key,
       this.image,
       this.name,
@@ -73,9 +65,6 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
       this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
-      this.onTapGetCurrentPosition,
-      this.isLoadingNameLocation,
-      this.nameLocation,
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged});
@@ -87,27 +76,24 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
   final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
-  final dynamic onTapGetCurrentPosition;
-  final bool? isLoadingNameLocation;
-  final String? nameLocation;
   final bool? isLoadingTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
 
   @override
-  State<ProofWithPhotoAndLoc> createState() => _ProofWithPhotoAndLocState();
+  State<ProofWithPhoto> createState() => _ProofWithPhotoState();
 }
 
-class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
+class _ProofWithPhotoState extends State<ProofWithPhoto> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-        iconColor: Colors.white,
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
           }
         },
+        iconColor: Colors.white,
         title: Row(
           children: [
             if (widget.image != null)
@@ -298,67 +284,6 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                             },
                           )
                         : widget.previewImages),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          // Column(
-          //   children: [
-          //     ListView.builder(
-          //       shrinkWrap: true,
-          //       itemCount: _positionItems.length,
-          //       itemBuilder: (context, index) {
-          //         final positionItem = _positionItems[index];
-
-          //         if (positionItem.type ==
-          //             _PositionItemType.log) {
-          //           return ListTile(
-          //             title: Text(positionItem.displayValue,
-          //                 textAlign: TextAlign.center,
-          //                 style: const TextStyle(
-          //                   color: Colors.white,
-          //                   fontWeight: FontWeight.bold,
-          //                 )),
-          //           );
-          //         } else {
-          //           return ListTile(
-          //             title: Text(
-          //               positionItem.displayValue,
-          //               style: const TextStyle(
-          //                   color: Colors.white),
-          //             ),
-          //           );
-          //         }
-          //       },
-          //     ),
-          //   ],
-          // ),
-          GestureDetector(
-            onTap: () {
-              widget.onTapGetCurrentPosition!();
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.pin_drop_outlined,
-                  color: yellowPrimaryColor,
-                ),
-                Flexible(
-                    child: Text(
-                  widget.isLoadingNameLocation!
-                      ? "Loading..."
-                      : widget.nameLocation ?? "Get Current Location",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: yellowPrimaryColor,
-                    decoration: TextDecoration.underline,
-                    decorationColor: yellowPrimaryColor,
-                  ),
-                ))
-              ],
-            ),
           ),
           const SizedBox(
             height: 16,

@@ -16,6 +16,10 @@ Future<dynamic> handleGetDataMission(queryParameters) {
       queryParameters: queryParameters);
 }
 
+Future<dynamic> handleGetDataMissionDetail(id) {
+  return clientDio(serviceUrlParam: "/missions/$id", methodParam: "GET");
+}
+
 Future<dynamic> handleTaskSubmission(data, idMission) {
   return clientDio(
     serviceUrlParam: '/missions/$idMission/task-submission',

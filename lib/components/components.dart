@@ -144,8 +144,14 @@ class ScreenTitle extends StatelessWidget {
 }
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({super.key, required this.textField});
+  const CustomTextField(
+      {super.key,
+      required this.textField,
+      this.borderRadius = 40.0,
+      this.borderWidth = 2.5});
   final TextField textField;
+  final double borderRadius;
+  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +160,9 @@ class CustomTextField extends StatelessWidget {
         horizontal: 20,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          width: 2.5,
+          width: borderWidth,
           color: Colors.white,
         ),
       ),

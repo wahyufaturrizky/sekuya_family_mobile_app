@@ -11,20 +11,20 @@ import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class PlaceholderImageTaskApp extends StatelessWidget {
-  const PlaceholderImageTaskApp({
-    super.key,
-  });
+  const PlaceholderImageTaskApp({super.key, this.label});
+
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return PlaceholderImageTask();
+    return PlaceholderImageTask(label: label);
   }
 }
 
 class PlaceholderImageTask extends StatefulWidget {
-  const PlaceholderImageTask({
-    super.key,
-  });
+  const PlaceholderImageTask({super.key, this.label});
+
+  final String? label;
 
   @override
   State<PlaceholderImageTask> createState() => _PlaceholderImageTaskState();
@@ -42,17 +42,19 @@ class _PlaceholderImageTaskState extends State<PlaceholderImageTask> {
           width: 2,
         ),
       ),
-      child: const Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Add Image',
-            style: TextStyle(color: Colors.white),
+            widget.label ?? 'Add Image',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          Icon(Icons.add, color: Colors.white)
+          if (widget.label != 'Add Image')
+            const Icon(Icons.add, color: Colors.white)
         ],
       ),
     );

@@ -19,8 +19,13 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/api_key.dart';
+import 'package:sekuya_family_mobile_app/components/answer_notes.dart';
+import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart';
+import 'package:sekuya_family_mobile_app/components/proof_with_photo.dart';
 import 'package:sekuya_family_mobile_app/components/proof_with_photo_and_loc.dart';
+import 'package:sekuya_family_mobile_app/components/quiz.dart';
+import 'package:sekuya_family_mobile_app/components/spinner.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
@@ -64,13 +69,18 @@ class MissionDetail extends StatefulWidget {
 class _MissionDetailState extends State<MissionDetail> {
   late String username;
   bool isLoadingTaskMission = false;
+  bool isLoadingMissionDetail = false;
   List<XFile>? _mediaFileList;
   dynamic _pickImageError;
   String? _retrieveDataError;
   var lat;
   var long;
   var nameLocation;
+  var resMissionDetail;
   var isLoadingNameLocation = false;
+
+  final additionalAttributeAnswerNotes = TextEditingController();
+  final additionalAttributeAnswerMultipleChoice = TextEditingController();
 
   static const String _kLocationServicesDisabledMessage =
       'Location services are disabled.';
@@ -87,8 +97,10 @@ class _MissionDetailState extends State<MissionDetail> {
 
   @override
   void initState() {
-    super.initState();
     _toggleServiceStatusStream();
+    getDataMissionDetail();
+
+    super.initState();
   }
 
   void _toggleServiceStatusStream() {
@@ -121,6 +133,39 @@ class _MissionDetailState extends State<MissionDetail> {
           'Location service has been $serviceStatusValue',
         );
       });
+    }
+  }
+
+  Future<dynamic> getDataMissionDetail() async {
+    if (!mounted) return;
+    try {
+      if (mounted) {
+        setState(() {
+          isLoadingMissionDetail = true;
+        });
+      }
+
+      String id = widget.args?.resMission?["data"]?["data"]
+          ?[widget.args?.indexResMission]?["_id"];
+
+      var res = await handleGetDataMissionDetail(id);
+
+      if (res != null) {
+        if (mounted) {
+          setState(() {
+            resMissionDetail = res;
+            isLoadingMissionDetail = false;
+          });
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoadingMissionDetail = false;
+        });
+      }
+
+      print('Error handleGetDataCommunitiesDetail = $e');
     }
   }
 
@@ -164,6 +209,9 @@ class _MissionDetailState extends State<MissionDetail> {
       _positionStreamSubscription!.cancel();
       _positionStreamSubscription = null;
     }
+
+    additionalAttributeAnswerNotes.dispose();
+    additionalAttributeAnswerMultipleChoice.dispose();
 
     super.dispose();
   }
@@ -230,24 +278,304 @@ class _MissionDetailState extends State<MissionDetail> {
       String idMission = widget.args?.resMission?["data"]?["data"]
           ?[widget.args?.indexResMission]?["_id"];
 
-      final formData = FormData.fromMap({
-        'taskId': taskId,
-        'taskCategoryKey': taskCategoryKey,
-        'additionalAttribute': '{"lat":$lat,"long":$long}',
-        'imageProof': [
-          await MultipartFile.fromFile(
-            _mediaFileList![0].path.toString(),
-            filename: _mediaFileList![0].path.split('/').last,
-          )
-        ],
-      });
+      var formData;
 
-      var res = await handleTaskSubmission(formData, idMission);
+      switch (taskCategoryKey) {
+        case "PROOF_WITH_PHOTO_AND_LOCATION":
+          if (_mediaFileList == null ||
+              _mediaFileList!.isEmpty ||
+              lat == null ||
+              long == null) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                backgroundColor: blackSolidPrimaryColor,
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text('Warning!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                        'Please provide the required photo, latitude, and longitude.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: greySecondaryColor)),
+                  ],
+                ),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: <Widget>[
+                  CustomButton(
+                    buttonText: 'OK',
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoadingTaskMission = false;
+                      });
+                    },
+                    labelSize: 12,
+                    height: 36,
+                    width: 120,
+                  ),
+                ],
+              ),
+            );
+            break;
+          }
 
-      if (res != null) {
-        setState(() {
-          isLoadingTaskMission = false;
-        });
+          formData = FormData.fromMap({
+            'taskId': taskId,
+            'taskCategoryKey': taskCategoryKey,
+            'additionalAttribute': '{"lat":$lat,"long":$long}',
+            'imageProof': [
+              await MultipartFile.fromFile(
+                _mediaFileList![0].path.toString(),
+                filename: _mediaFileList![0].path.split('/').last,
+              )
+            ],
+          });
+          break;
+        case "PROOF_WITH_PHOTO":
+          if (_mediaFileList == null || _mediaFileList!.isEmpty) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                backgroundColor: blackSolidPrimaryColor,
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text('Warning!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('Please provide the required photo.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: greySecondaryColor)),
+                  ],
+                ),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: <Widget>[
+                  CustomButton(
+                    buttonText: 'OK',
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoadingTaskMission = false;
+                      });
+                    },
+                    labelSize: 12,
+                    height: 36,
+                    width: 120,
+                  ),
+                ],
+              ),
+            );
+
+            break;
+          }
+
+          formData = FormData.fromMap({
+            'taskId': taskId,
+            'taskCategoryKey': taskCategoryKey,
+            'imageProof': [
+              await MultipartFile.fromFile(
+                _mediaFileList![0].path.toString(),
+                filename: _mediaFileList![0].path.split('/').last,
+              )
+            ],
+          });
+          break;
+        case "ANSWER_NOTES":
+          if (additionalAttributeAnswerNotes.text.isEmpty) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                backgroundColor: blackSolidPrimaryColor,
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text('Warning!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('Please provide the answer notes.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: greySecondaryColor)),
+                  ],
+                ),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: <Widget>[
+                  CustomButton(
+                    buttonText: 'OK',
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoadingTaskMission = false;
+                      });
+                    },
+                    labelSize: 12,
+                    height: 36,
+                    width: 120,
+                  ),
+                ],
+              ),
+            );
+
+            break;
+          }
+
+          formData = FormData.fromMap({
+            'taskId': taskId,
+            'taskCategoryKey': taskCategoryKey,
+            'additionalAttribute': additionalAttributeAnswerNotes.text,
+          });
+          break;
+        default:
+          if (additionalAttributeAnswerMultipleChoice.text.isEmpty) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                backgroundColor: blackSolidPrimaryColor,
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text('Warning!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('Please provide the answer for the multiple choice.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: greySecondaryColor)),
+                  ],
+                ),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: <Widget>[
+                  CustomButton(
+                    buttonText: 'OK',
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoadingTaskMission = false;
+                      });
+                    },
+                    labelSize: 12,
+                    height: 36,
+                    width: 120,
+                  ),
+                ],
+              ),
+            );
+
+            break;
+          }
+
+          formData = FormData.fromMap({
+            'taskId': taskId,
+            'taskCategoryKey': taskCategoryKey,
+            'additionalAttribute': additionalAttributeAnswerMultipleChoice.text,
+          });
+          break;
+      }
+
+      if (formData != null) {
+        var res = await handleTaskSubmission(formData, idMission);
+
+        if (res != null) {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              backgroundColor: blackSolidPrimaryColor,
+              content: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text('Message!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white)),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text('👋🏻 Success submit Task',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: greySecondaryColor)),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.center,
+              actions: <Widget>[
+                CustomButton(
+                  buttonText: 'OK',
+                  onPressed: () {
+                    Navigator.pop(context, 'OK');
+                    setState(() {
+                      isLoadingTaskMission = false;
+                    });
+                    getDataMissionDetail();
+                  },
+                  labelSize: 12,
+                  height: 36,
+                  width: 120,
+                ),
+              ],
+            ),
+          ).then((value) {
+            getDataMissionDetail();
+            setState(() {
+              isLoadingTaskMission = false;
+            });
+          });
+        }
       }
     } catch (e) {
       setState(() {
@@ -410,432 +738,555 @@ class _MissionDetailState extends State<MissionDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
+    if (isLoadingMissionDetail) {
+      return const MyWidgetSpinner();
+    } else {
+      return SafeArea(
+          child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          leading: IconButton(
+            color: Colors.white,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              handleBack();
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+          title: const Text(
+            'Detail Mission',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
         backgroundColor: Colors.black,
-        leading: IconButton(
-          color: Colors.white,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            handleBack();
-          },
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-        title: const Text(
-          'Detail Mission',
-          style: TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      ),
-      backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.args?.resMission?["data"]?["data"]
-                      ?[widget.args?.indexResMission]?["name"] ??
-                  "",
-              style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                  color: Colors.white),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                if (widget.args?.resMission?["data"]?["data"]
-                            ?[widget.args?.indexResMission]?["community"]
-                        ?["image"] !=
-                    null)
-                  Image.network(
-                    widget.args?.resMission?["data"]?["data"]
-                        ?[widget.args?.indexResMission]?["community"]?["image"],
-                    width: 32,
-                    height: 32,
+        body: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                resMissionDetail?["data"]?["data"]?["name"] ?? "",
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                    color: Colors.white),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  if (resMissionDetail?["data"]?["data"]?["community"]
+                          ?["image"] !=
+                      null)
+                    Image.network(
+                      resMissionDetail?["data"]?["data"]?["community"]
+                          ?["image"],
+                      width: 32,
+                      height: 32,
+                    ),
+                  const SizedBox(
+                    width: 8,
                   ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  widget.args?.resMission?["data"]?["data"]
-                      ?[widget.args?.indexResMission]?["community"]?["name"],
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              widget.args?.resMission?["data"]?["data"]
-                      ?[widget.args?.indexResMission]?["description"] ??
-                  "",
-              style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
-                  color: greySecondaryColor),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                Chip(
-                    label: Text(
-                      widget.args?.resMission?["data"]?["data"]
-                              ?[widget.args?.indexResMission]?["status"] ??
-                          "",
-                    ),
-                    color: MaterialStateProperty.all<Color>(blueSecondaryColor),
-                    labelStyle: const TextStyle(color: blueSolidSecondaryColor),
-                    shape: const StadiumBorder(
-                        side: BorderSide(color: Colors.transparent))),
-                const SizedBox(
-                  width: 16,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${handleFormatDate(widget.args?.resMission?["data"]?["data"]?[widget.args?.indexResMission]?["startDate"])} - ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      handleFormatDate(widget.args?.resMission?["data"]?["data"]
-                          ?[widget.args?.indexResMission]?["endDate"]),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: Colors.white),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    color: yellowPrimaryColor.withOpacity(0.2),
-                    border: Border.all(
-                      color: yellowPrimaryColor,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Mission will end on',
-                      style: TextStyle(
-                        color: Colors.white,
+                  Text(
+                    resMissionDetail?["data"]?["data"]?["community"]?["name"] ??
+                        "",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.white),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Text(
+                resMissionDetail?["data"]?["data"]?["description"] ?? "",
+                style: const TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: greySecondaryColor),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  Chip(
+                      label: Text(
+                        resMissionDetail?["data"]?["data"]?["status"] ?? "",
                       ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    CountDownText(
-                      due: DateTime.parse(widget.args?.resMission?["data"]
-                          ?["data"]?[widget.args?.indexResMission]?["endDate"]),
-                      finishedText: "Mission End",
-                      showLabel: true,
-                      longDateName: true,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ],
-                )),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              'Rewards',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.white),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Column(
-              children: (widget.args?.resMission?["data"]?["data"]
-                          ?[widget.args?.indexResMission]?["rewards"]
-                      as List<dynamic>)
-                  .map((itemReward) => Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                            color: blackPrimaryColor,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        child: Row(
-                          children: [
-                            if (itemReward["image"] != null)
-                              Image.network(
-                                itemReward["image"],
-                                width: 40,
-                                height: 40,
-                                fit: BoxFit.cover,
-                              ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${itemReward["value"].toString()} Xp',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  LinearProgressIndicator(
-                                    value: itemReward["value"] * 0.01,
-                                    color: yellowPrimaryColor,
-                                    backgroundColor: greyThirdColor,
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    itemReward["description"],
-                                    style: const TextStyle(
-                                        color: greySecondaryColor,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Chip(
-                                label: Text(
-                                  '${itemReward["maxQty"] / itemReward["value"]}%',
-                                ),
-                                color: MaterialStateProperty.all<Color>(
-                                    blackSolidPrimaryColor),
-                                labelStyle: const TextStyle(
-                                    color: yellowPrimaryColor,
-                                    fontWeight: FontWeight.w600),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    side: const BorderSide(
-                                        color: Colors.transparent))),
-                          ],
-                        ),
-                      ))
-                  .toList(),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'Lucky Winner',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-                GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const LuckyWinnerBottomSheetApp();
-                          });
-                    },
-                    child: const Text(
-                      'See All',
-                      style: TextStyle(
-                          color: yellowPrimaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                    ))
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  border: Border.all(color: blackPrimaryColor),
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.black),
-              child: Row(children: [
-                const Flexible(
-                  child: Row(
+                      color:
+                          MaterialStateProperty.all<Color>(blueSecondaryColor),
+                      labelStyle:
+                          const TextStyle(color: blueSolidSecondaryColor),
+                      shape: const StadiumBorder(
+                          side: BorderSide(color: Colors.transparent))),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Row(
                     children: [
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/150?img=1'),
-                      ),
-                      SizedBox(
-                        width: 8,
+                      Text(
+                        '${handleFormatDate(resMissionDetail?["data"]?["data"]?["startDate"])} - ',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.white),
                       ),
                       Text(
-                        'full name',
-                        style: TextStyle(
-                            color: Colors.white,
+                        handleFormatDate(
+                            resMissionDetail?["data"]?["data"]?["endDate"]),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500,
                             fontSize: 12,
-                            fontWeight: FontWeight.w500),
+                            color: Colors.white),
                       ),
                     ],
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      color: yellowPrimaryColor.withOpacity(0.2),
+                      border: Border.all(
+                        color: yellowPrimaryColor,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(8))),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Mission will end on',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      CountDownText(
+                        due: DateTime.parse(
+                            resMissionDetail?["data"]?["data"]?["endDate"]!),
+                        finishedText: "Mission End",
+                        showLabel: true,
+                        longDateName: true,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  )),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Rewards',
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Colors.white),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Column(
+                children: (resMissionDetail?["data"]?["data"]?["rewards"]
+                        as List<dynamic>)
+                    .map((itemReward) => Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                              color: blackPrimaryColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
+                          child: Row(
+                            children: [
+                              if (itemReward["image"] != null)
+                                Image.network(
+                                  itemReward["image"],
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${itemReward["value"].toString()} Xp',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    LinearProgressIndicator(
+                                      value: itemReward["value"] * 0.01,
+                                      color: yellowPrimaryColor,
+                                      backgroundColor: greyThirdColor,
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(
+                                      itemReward["description"],
+                                      style: const TextStyle(
+                                          color: greySecondaryColor,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Chip(
+                                  label: Text(
+                                    '${itemReward["maxQty"] / itemReward["value"]}%',
+                                  ),
+                                  color: MaterialStateProperty.all<Color>(
+                                      blackSolidPrimaryColor),
+                                  labelStyle: const TextStyle(
+                                      color: yellowPrimaryColor,
+                                      fontWeight: FontWeight.w600),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      side: const BorderSide(
+                                          color: Colors.transparent))),
+                            ],
+                          ),
+                        ))
+                    .toList(),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Lucky Winner',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
-                ),
-                Flexible(
-                    child: AvatarStack(
-                  height: 24,
-                  avatars: [
-                    for (var n = 0; n < 3; n++) NetworkImage(getAvatarUrl(n))
-                  ],
-                ))
-              ]),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              'Tasks',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.white),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Column(
-              children: (widget.args?.resMission?["data"]?["data"]
-                          ?[widget.args?.indexResMission]?["tasks"]
-                      as List<dynamic>)
-                  .map((itemTask) => Column(
-                        children: [
-                          if (itemTask["taskCategoryKey"] ==
-                              "PROOF_WITH_PHOTO_AND_LOCATION")
-                            ProofWithPhotoAndLocApp(
-                                image: itemTask["image"],
-                                name: itemTask["name"],
-                                description: itemTask["description"],
-                                exp: itemTask["exp"],
-                                onTapTakeCamera: () {
-                                  if (_picker.supportsImageSource(
-                                      ImageSource.camera)) {
-                                    _onImageButtonPressed(ImageSource.camera,
-                                        context: context);
-                                  }
-                                },
-                                retrieveLostData: () {
-                                  retrieveLostData();
-                                },
-                                previewImages: _previewImages(),
-                                onTapGetCurrentPosition: () {
-                                  _getCurrentPosition();
-                                },
-                                isLoadingNameLocation: isLoadingNameLocation,
-                                nameLocation: nameLocation,
-                                isLoadingTaskMission: isLoadingTaskMission,
-                                onPressedSubmitTaskMission: () {
-                                  if (!isLoadingTaskMission) {
-                                    handlePostTaskSubmission(
-                                      taskId: itemTask["id"],
-                                      taskCategoryKey:
-                                          itemTask["taskCategoryKey"],
-                                    );
-                                  }
-                                }),
-                        ],
+                  GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const LuckyWinnerBottomSheetApp();
+                            });
+                      },
+                      child: const Text(
+                        'See All',
+                        style: TextStyle(
+                            color: yellowPrimaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
                       ))
-                  .toList(),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              'Players',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.white),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            SizedBox(
-                height: 260,
-                child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 16,
-                            mainAxisExtent: 60,
-                            crossAxisSpacing: 16),
-                    itemCount: 2,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Card(
-                          color: blackPrimaryColor,
-                          child: InkWell(
-                              splashColor: yellowPrimaryColor.withAlpha(30),
-                              onTap: () {
-                                debugPrint('Card tapped.');
-                              },
-                              child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: greySecondaryColor, width: 1),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(8))),
-                                  child: const Row(
-                                    children: [
-                                      Center(
-                                          child: CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: Colors.transparent,
-                                        backgroundImage: NetworkImage(
-                                            'https://i.pravatar.cc/150?img=1'),
-                                      )),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        'full name',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ))));
-                    })),
-          ],
-        ),
-        // This is the title in the app bar.
-      )),
-    ));
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    border: Border.all(color: blackPrimaryColor),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.black),
+                child: Row(children: [
+                  const Flexible(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage:
+                              NetworkImage('https://i.pravatar.cc/150?img=1'),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          'full name',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                      child: AvatarStack(
+                    height: 24,
+                    avatars: [
+                      for (var n = 0; n < 3; n++) NetworkImage(getAvatarUrl(n))
+                    ],
+                  ))
+                ]),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Tasks',
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Colors.white),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Column(
+                children: (resMissionDetail?["data"]?["data"]?["tasks"]
+                        as List<dynamic>)
+                    .map((itemTask) => Column(
+                          children: [
+                            if (itemTask["taskCategoryKey"] ==
+                                    "PROOF_WITH_PHOTO_AND_LOCATION" &&
+                                !["APPROVED", "PENDING"]
+                                    .contains(itemTask["status"]))
+                              ProofWithPhotoAndLocApp(
+                                  image: itemTask["image"],
+                                  onExpansionChanged: () {
+                                    _mediaFileList = null;
+                                    lat = null;
+                                    long = null;
+                                    additionalAttributeAnswerNotes.text = "";
+                                    additionalAttributeAnswerMultipleChoice
+                                        .text = "";
+                                  },
+                                  name: itemTask["name"],
+                                  description: itemTask["description"],
+                                  exp: itemTask["exp"],
+                                  onTapTakeCamera: () {
+                                    if (_picker.supportsImageSource(
+                                        ImageSource.camera)) {
+                                      _onImageButtonPressed(ImageSource.camera,
+                                          context: context);
+                                    }
+                                  },
+                                  retrieveLostData: () async {
+                                    await retrieveLostData();
+                                  },
+                                  previewImages: _previewImages(),
+                                  onTapGetCurrentPosition: () {
+                                    _getCurrentPosition();
+                                  },
+                                  isLoadingNameLocation: isLoadingNameLocation,
+                                  nameLocation: nameLocation,
+                                  isLoadingTaskMission: isLoadingTaskMission,
+                                  onPressedSubmitTaskMission: () {
+                                    if (!isLoadingTaskMission) {
+                                      handlePostTaskSubmission(
+                                        taskId: itemTask["id"],
+                                        taskCategoryKey:
+                                            itemTask["taskCategoryKey"],
+                                      );
+                                    }
+                                  }),
+                            if (itemTask["taskCategoryKey"] ==
+                                    "PROOF_WITH_PHOTO" &&
+                                !["APPROVED", "PENDING"]
+                                    .contains(itemTask["status"]))
+                              ProofWithPhotoApp(
+                                  image: itemTask["image"],
+                                  onExpansionChanged: () {
+                                    _mediaFileList = null;
+                                    lat = null;
+                                    long = null;
+                                    additionalAttributeAnswerNotes.text = "";
+                                    additionalAttributeAnswerMultipleChoice
+                                        .text = "";
+                                  },
+                                  name: itemTask["name"],
+                                  description: itemTask["description"],
+                                  exp: itemTask["exp"],
+                                  onTapTakeCamera: () {
+                                    if (_picker.supportsImageSource(
+                                        ImageSource.camera)) {
+                                      _onImageButtonPressed(ImageSource.camera,
+                                          context: context);
+                                    }
+                                  },
+                                  retrieveLostData: () async {
+                                    await retrieveLostData();
+                                  },
+                                  previewImages: _previewImages(),
+                                  isLoadingTaskMission: isLoadingTaskMission,
+                                  onPressedSubmitTaskMission: () {
+                                    if (!isLoadingTaskMission) {
+                                      handlePostTaskSubmission(
+                                        taskId: itemTask["id"],
+                                        taskCategoryKey:
+                                            itemTask["taskCategoryKey"],
+                                      );
+                                    }
+                                  }),
+                            if (itemTask["taskCategoryKey"] == "ANSWER_NOTES" &&
+                                !["APPROVED", "PENDING"]
+                                    .contains(itemTask["status"]))
+                              AnswerNotesApp(
+                                  image: itemTask["image"],
+                                  name: itemTask["name"],
+                                  onExpansionChanged: () {
+                                    _mediaFileList = null;
+                                    lat = null;
+                                    long = null;
+                                    additionalAttributeAnswerNotes.text = "";
+                                    additionalAttributeAnswerMultipleChoice
+                                        .text = "";
+                                  },
+                                  additionalAttributeAnswerNotes:
+                                      additionalAttributeAnswerNotes,
+                                  description: itemTask["description"],
+                                  exp: itemTask["exp"],
+                                  onTapTakeCamera: () {
+                                    if (_picker.supportsImageSource(
+                                        ImageSource.camera)) {
+                                      _onImageButtonPressed(ImageSource.camera,
+                                          context: context);
+                                    }
+                                  },
+                                  retrieveLostData: () async {
+                                    await retrieveLostData();
+                                  },
+                                  previewImages: _previewImages(),
+                                  isLoadingTaskMission: isLoadingTaskMission,
+                                  onPressedSubmitTaskMission: () {
+                                    if (!isLoadingTaskMission) {
+                                      handlePostTaskSubmission(
+                                        taskId: itemTask["id"],
+                                        taskCategoryKey:
+                                            itemTask["taskCategoryKey"],
+                                      );
+                                    }
+                                  }),
+                            if (itemTask["taskCategoryKey"] == "QUIZ" &&
+                                !["APPROVED", "PENDING"]
+                                    .contains(itemTask["status"]))
+                              QuizApp(
+                                  image: itemTask["image"],
+                                  name: itemTask["name"],
+                                  description: itemTask["description"],
+                                  exp: itemTask["exp"],
+                                  onExpansionChanged: () {
+                                    _mediaFileList = null;
+                                    lat = null;
+                                    long = null;
+                                    additionalAttributeAnswerNotes.text = "";
+                                    additionalAttributeAnswerMultipleChoice
+                                        .text = "";
+                                  },
+                                  onTapTakeCamera: () {
+                                    if (_picker.supportsImageSource(
+                                        ImageSource.camera)) {
+                                      _onImageButtonPressed(ImageSource.camera,
+                                          context: context);
+                                    }
+                                  },
+                                  retrieveLostData: () async {
+                                    await retrieveLostData();
+                                  },
+                                  previewImages: _previewImages(),
+                                  isLoadingTaskMission: isLoadingTaskMission,
+                                  onPressedSubmitTaskMission: () {
+                                    if (!isLoadingTaskMission) {
+                                      handlePostTaskSubmission(
+                                        taskId: itemTask["id"],
+                                        taskCategoryKey:
+                                            itemTask["taskCategoryKey"],
+                                      );
+                                    }
+                                  }),
+                          ],
+                        ))
+                    .toList(),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Players',
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Colors.white),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              SizedBox(
+                  height: 260,
+                  child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16,
+                              mainAxisExtent: 60,
+                              crossAxisSpacing: 16),
+                      itemCount: 2,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                            color: blackPrimaryColor,
+                            child: InkWell(
+                                splashColor: yellowPrimaryColor.withAlpha(30),
+                                onTap: () {
+                                  debugPrint('Card tapped.');
+                                },
+                                child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: greySecondaryColor,
+                                            width: 1),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(8))),
+                                    child: const Row(
+                                      children: [
+                                        Center(
+                                            child: CircleAvatar(
+                                          radius: 12,
+                                          backgroundColor: Colors.transparent,
+                                          backgroundImage: NetworkImage(
+                                              'https://i.pravatar.cc/150?img=1'),
+                                        )),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          'full name',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ))));
+                      })),
+            ],
+          ),
+          // This is the title in the app bar.
+        )),
+      ));
+    }
   }
 }
 
