@@ -25,7 +25,8 @@ class ProofWithPhotoApp extends StatelessWidget {
       this.previewImages,
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
-      this.onExpansionChanged});
+      this.onExpansionChanged,
+      this.status});
 
   final dynamic image;
   final dynamic name;
@@ -37,6 +38,7 @@ class ProofWithPhotoApp extends StatelessWidget {
   final bool? isLoadingTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
+  final dynamic status;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +53,7 @@ class ProofWithPhotoApp extends StatelessWidget {
       isLoadingTaskMission: isLoadingTaskMission,
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       onExpansionChanged: onExpansionChanged,
+      status: status,
     );
   }
 }
@@ -67,7 +70,8 @@ class ProofWithPhoto extends StatefulWidget {
       this.previewImages,
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
-      this.onExpansionChanged});
+      this.onExpansionChanged,
+      this.status});
 
   final dynamic image;
   final dynamic name;
@@ -79,6 +83,7 @@ class ProofWithPhoto extends StatefulWidget {
   final bool? isLoadingTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
+  final dynamic status;
 
   @override
   State<ProofWithPhoto> createState() => _ProofWithPhotoState();
@@ -88,6 +93,7 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
+        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -127,9 +133,21 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
                 ],
               ),
             ),
-            const Icon(
-              Icons.check_circle,
-              color: greenColor,
+            Icon(
+              widget.status == "APPROVED"
+                  ? Icons.check_circle
+                  : widget.status == "PENDING"
+                      ? Icons.pending_actions
+                      : widget.status == "REJECTED"
+                          ? Icons.warning
+                          : Icons.fiber_new,
+              color: widget.status == "APPROVED"
+                  ? greenColor
+                  : widget.status == "PENDING"
+                      ? bluePrimaryColor
+                      : widget.status == "REJECTED"
+                          ? redSolidPrimaryColor
+                          : yellowPrimaryColor,
             )
           ],
         ),

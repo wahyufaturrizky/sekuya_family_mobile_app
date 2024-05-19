@@ -27,7 +27,8 @@ class QuizApp extends StatelessWidget {
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
       this.selectedChoice,
-      this.onChangedQuizChoice});
+      this.onChangedQuizChoice,
+      this.status});
 
   final dynamic image;
   final dynamic name;
@@ -43,6 +44,7 @@ class QuizApp extends StatelessWidget {
   final dynamic onExpansionChanged;
   dynamic selectedChoice;
   dynamic onChangedQuizChoice;
+  dynamic status;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,7 @@ class QuizApp extends StatelessWidget {
       additionalAttribute: additionalAttribute,
       selectedChoice: selectedChoice,
       onChangedQuizChoice: onChangedQuizChoice,
+      status: status,
     );
   }
 }
@@ -81,7 +84,8 @@ class Quiz extends StatefulWidget {
       this.onExpansionChanged,
       this.additionalAttribute,
       this.selectedChoice,
-      this.onChangedQuizChoice});
+      this.onChangedQuizChoice,
+      this.status});
 
   final dynamic image;
   final dynamic name;
@@ -97,6 +101,7 @@ class Quiz extends StatefulWidget {
   final dynamic additionalAttribute;
   dynamic onChangedQuizChoice;
   dynamic selectedChoice;
+  dynamic status;
 
   @override
   State<Quiz> createState() => _QuizState();
@@ -107,6 +112,7 @@ class _QuizState extends State<Quiz> {
   Widget build(BuildContext context) {
     return ExpansionTile(
         iconColor: Colors.white,
+        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -145,9 +151,21 @@ class _QuizState extends State<Quiz> {
                 ],
               ),
             ),
-            const Icon(
-              Icons.check_circle,
-              color: greenColor,
+            Icon(
+              widget.status == "APPROVED"
+                  ? Icons.check_circle
+                  : widget.status == "PENDING"
+                      ? Icons.pending_actions
+                      : widget.status == "REJECTED"
+                          ? Icons.warning
+                          : Icons.fiber_new,
+              color: widget.status == "APPROVED"
+                  ? greenColor
+                  : widget.status == "PENDING"
+                      ? bluePrimaryColor
+                      : widget.status == "REJECTED"
+                          ? redSolidPrimaryColor
+                          : yellowPrimaryColor,
             )
           ],
         ),

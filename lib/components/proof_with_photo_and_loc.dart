@@ -28,7 +28,8 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       this.nameLocation,
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
-      this.onExpansionChanged});
+      this.onExpansionChanged,
+      this.status});
 
   final dynamic image;
   final dynamic name;
@@ -43,23 +44,26 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
   final bool? isLoadingTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
+  final dynamic status;
 
   @override
   Widget build(BuildContext context) {
     return ProofWithPhotoAndLoc(
-        image: image,
-        name: name,
-        exp: exp,
-        description: description,
-        onTapTakeCamera: onTapTakeCamera,
-        retrieveLostData: retrieveLostData,
-        previewImages: previewImages,
-        onTapGetCurrentPosition: onTapGetCurrentPosition,
-        isLoadingNameLocation: isLoadingNameLocation,
-        nameLocation: nameLocation,
-        isLoadingTaskMission: isLoadingTaskMission,
-        onPressedSubmitTaskMission: onPressedSubmitTaskMission,
-        onExpansionChanged: onExpansionChanged);
+      image: image,
+      name: name,
+      exp: exp,
+      description: description,
+      onTapTakeCamera: onTapTakeCamera,
+      retrieveLostData: retrieveLostData,
+      previewImages: previewImages,
+      onTapGetCurrentPosition: onTapGetCurrentPosition,
+      isLoadingNameLocation: isLoadingNameLocation,
+      nameLocation: nameLocation,
+      isLoadingTaskMission: isLoadingTaskMission,
+      onPressedSubmitTaskMission: onPressedSubmitTaskMission,
+      onExpansionChanged: onExpansionChanged,
+      status: status,
+    );
   }
 }
 
@@ -78,7 +82,8 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
       this.nameLocation,
       this.isLoadingTaskMission,
       this.onPressedSubmitTaskMission,
-      this.onExpansionChanged});
+      this.onExpansionChanged,
+      this.status});
 
   final dynamic image;
   final dynamic name;
@@ -93,6 +98,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
   final bool? isLoadingTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
+  final dynamic status;
 
   @override
   State<ProofWithPhotoAndLoc> createState() => _ProofWithPhotoAndLocState();
@@ -103,6 +109,7 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
   Widget build(BuildContext context) {
     return ExpansionTile(
         iconColor: Colors.white,
+        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -141,9 +148,21 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 ],
               ),
             ),
-            const Icon(
-              Icons.check_circle,
-              color: greenColor,
+            Icon(
+              widget.status == "APPROVED"
+                  ? Icons.check_circle
+                  : widget.status == "PENDING"
+                      ? Icons.pending_actions
+                      : widget.status == "REJECTED"
+                          ? Icons.warning
+                          : Icons.fiber_new,
+              color: widget.status == "APPROVED"
+                  ? greenColor
+                  : widget.status == "PENDING"
+                      ? bluePrimaryColor
+                      : widget.status == "REJECTED"
+                          ? redSolidPrimaryColor
+                          : yellowPrimaryColor,
             )
           ],
         ),

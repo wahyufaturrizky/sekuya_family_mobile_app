@@ -1067,11 +1067,10 @@ class _MissionDetailState extends State<MissionDetail> {
                     .map((itemTask) => Column(
                           children: [
                             if (itemTask["taskCategoryKey"] ==
-                                    "PROOF_WITH_PHOTO_AND_LOCATION" &&
-                                !["APPROVED", "PENDING"]
-                                    .contains(itemTask["status"]))
+                                "PROOF_WITH_PHOTO_AND_LOCATION")
                               ProofWithPhotoAndLocApp(
                                   image: itemTask["image"],
+                                  status: itemTask["status"],
                                   onExpansionChanged: () {
                                     selectedChoice = null;
                                     _mediaFileList = null;
@@ -1111,11 +1110,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                     }
                                   }),
                             if (itemTask["taskCategoryKey"] ==
-                                    "PROOF_WITH_PHOTO" &&
-                                !["APPROVED", "PENDING"]
-                                    .contains(itemTask["status"]))
+                                "PROOF_WITH_PHOTO")
                               ProofWithPhotoApp(
                                   image: itemTask["image"],
+                                  status: itemTask["status"],
                                   onExpansionChanged: () {
                                     selectedChoice = null;
                                     _mediaFileList = null;
@@ -1149,12 +1147,11 @@ class _MissionDetailState extends State<MissionDetail> {
                                       );
                                     }
                                   }),
-                            if (itemTask["taskCategoryKey"] == "ANSWER_NOTES" &&
-                                !["APPROVED", "PENDING"]
-                                    .contains(itemTask["status"]))
+                            if (itemTask["taskCategoryKey"] == "ANSWER_NOTES")
                               AnswerNotesApp(
                                   image: itemTask["image"],
                                   name: itemTask["name"],
+                                  status: itemTask["status"],
                                   onExpansionChanged: () {
                                     selectedChoice = null;
                                     _mediaFileList = null;
@@ -1189,12 +1186,11 @@ class _MissionDetailState extends State<MissionDetail> {
                                       );
                                     }
                                   }),
-                            if (itemTask["taskCategoryKey"] == "QUIZ" &&
-                                !["APPROVED", "PENDING"]
-                                    .contains(itemTask["status"]))
+                            if (itemTask["taskCategoryKey"] == "QUIZ")
                               QuizApp(
                                   image: itemTask["image"],
                                   name: itemTask["name"],
+                                  status: itemTask["status"],
                                   selectedChoice: selectedChoice,
                                   onChangedQuizChoice: (value) {
                                     setState(() {
