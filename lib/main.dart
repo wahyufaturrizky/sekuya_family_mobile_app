@@ -10,12 +10,14 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/service/client.dart';
 
 import 'components/app/app_component.dart';
 import 'firebase_options.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
+  await FirebaseMessaging.instance.requestPermission(provisional: true);
+
+  await FirebaseInAppMessaging.instance.triggerEvent("eventName");
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);

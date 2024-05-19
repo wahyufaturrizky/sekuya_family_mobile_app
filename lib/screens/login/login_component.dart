@@ -10,6 +10,7 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -64,9 +65,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    super.initState();
     _loadAccessToken();
     _sendAnalyticsEvent();
+
+    super.initState();
   }
 
   Future<void> _sendAnalyticsEvent() async {
@@ -148,45 +150,77 @@ class _LoginScreenState extends State<LoginScreen> {
           FirebaseAuth.instance
               .signInWithCredential(kIsWeb ? credentialWeb : credential)
               .then((valCredential) {
-            dio.post('$baseUrl/auth/login',
-                options: Options(
-                    validateStatus: (_) => true,
-                    contentType: Headers.jsonContentType,
-                    responseType: ResponseType.json),
-                data: {
-                  'id_token': googleKey.idToken,
-                  'access_token': googleKey.accessToken,
-                  'provider': credential.providerId,
-                }).then((valResFromXellar) {
-              // print(valResFromXellar);
-              SharedPreferences.getInstance().then((prefs) {
-                prefs
-                    .setString('access_token',
-                        valResFromXellar.data['data']['accessToken'])
-                    .then((value) {
-                  Application.router.navigateTo(context, "/privateScreens",
-                      transition: TransitionType.native);
+            FirebaseMessaging.instance
+                .getToken()
+                .then((valTokenMessageAndroid) {
+              print('@valTokenMessageAndroid = $valTokenMessageAndroid');
 
-                  setState(() {
-                    isLoading = false;
+              FirebaseMessaging.instance
+                  .getAPNSToken()
+                  .then((valueAPNSTokeniOS) {
+                print('@valueAPNSTokeniOS = $valueAPNSTokeniOS');
+                var dataAuthLogin = TargetPlatform.iOS == defaultTargetPlatform
+                    ? {
+                        "id_token": googleKey.idToken,
+                        "access_token": googleKey.accessToken,
+                        "provider": credential.providerId,
+                        "fcm_token": valueAPNSTokeniOS,
+                      }
+                    : {
+                        'id_token': googleKey.idToken,
+                        'access_token': googleKey.accessToken,
+                        'provider': credential.providerId,
+                        "fcm_token": valTokenMessageAndroid,
+                      };
+
+                dio
+                    .post('$baseUrl/auth/login',
+                        options: Options(
+                            validateStatus: (_) => true,
+                            contentType: Headers.jsonContentType,
+                            responseType: ResponseType.json),
+                        data: dataAuthLogin)
+                    .then((valResFromXellar) {
+                  SharedPreferences.getInstance().then((prefs) {
+                    prefs
+                        .setString('access_token',
+                            valResFromXellar.data['data']['accessToken'])
+                        .then((value) {
+                      Application.router.navigateTo(context, "/privateScreens",
+                          transition: TransitionType.native);
+
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }).catchError((onError) {
+                      print(onError);
+
+                      setState(() {
+                        isLoading = false;
+                      });
+                    });
+                  }).catchError((onError) {
+                    print('onError SharedPreferences = $onError');
+
+                    setState(() {
+                      isLoading = false;
+                    });
                   });
                 }).catchError((onError) {
-                  print(onError);
+                  print('onError auth/login = $onError');
 
                   setState(() {
                     isLoading = false;
                   });
                 });
               }).catchError((onError) {
-                print('onError $onError');
-
+                print("onError Token APNS $onError");
                 setState(() {
                   isLoading = false;
                 });
               });
             }).catchError((onError) {
-              print('onError xellar = $onError');
-
+              print("onError valTokenMessageAndroid = $onError");
               setState(() {
                 isLoading = false;
               });
