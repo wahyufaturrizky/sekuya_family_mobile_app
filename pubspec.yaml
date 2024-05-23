@@ -137,6 +137,7 @@ flutter:
     - assets/images/voucher_img_01.png
     - assets/images/voucher_img_02.png
     - assets/images/voucher_img_03.png
+    - assets/images/empty_state.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

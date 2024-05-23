@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
+import 'package:sekuya_family_mobile_app/components/empty_list.dart';
 import 'package:sekuya_family_mobile_app/components/spinner.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart';
@@ -764,22 +765,69 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                             : 140,
                                 delegate: SliverChildBuilderDelegate(
                                   (BuildContext context, int index) {
-                                    return name == "My Mission"
-                                        ? TabContentProfileMyMissionComponentApp(
-                                            resMyMission: resMyMission,
-                                            index: index)
-                                        : name == "My Communities"
-                                            ? TabContentProfileMyCommunityComponentApp(
-                                                resMyCommunities:
-                                                    resMyCommunities,
-                                                index: index)
-                                            : name == "My Reward"
-                                                ? TabContentProfileMyRewardComponentApp(
-                                                    resMyReward: resMyReward,
-                                                    index: index)
-                                                : TabContentProfileMyVoucherComponentApp(
-                                                    resMyVoucher: resMyVoucher,
-                                                    index: index);
+                                    var bodyTab;
+
+                                    switch (name) {
+                                      case "My Mission":
+                                        if (resMyMission?["data"]?["data"]
+                                                ?.length ==
+                                            0) {
+                                          bodyTab =
+                                              const MyWidgetEmptyListApp();
+                                        } else {
+                                          bodyTab =
+                                              TabContentProfileMyMissionComponentApp(
+                                                  resMyMission: resMyMission,
+                                                  index: index);
+                                        }
+
+                                        break;
+                                      case "My Communities":
+                                        if (resMyCommunities?["data"]?["data"]
+                                                ?.length ==
+                                            0) {
+                                          bodyTab =
+                                              const MyWidgetEmptyListApp();
+                                        } else {
+                                          bodyTab =
+                                              TabContentProfileMyCommunityComponentApp(
+                                                  resMyCommunities:
+                                                      resMyCommunities,
+                                                  index: index);
+                                        }
+
+                                        break;
+                                      case "My Voucher":
+                                        if (resMyVoucher?["data"]?["data"]
+                                                ?.length ==
+                                            0) {
+                                          bodyTab =
+                                              const MyWidgetEmptyListApp();
+                                        } else {
+                                          bodyTab =
+                                              TabContentProfileMyVoucherComponentApp(
+                                                  resMyVoucher: resMyVoucher,
+                                                  index: index);
+                                        }
+
+                                        break;
+                                      default:
+                                        if (resMyReward?["data"]?["data"]
+                                                ?.length ==
+                                            0) {
+                                          bodyTab =
+                                              const MyWidgetEmptyListApp();
+                                        } else {
+                                          bodyTab =
+                                              TabContentProfileMyRewardComponentApp(
+                                                  resMyReward: resMyReward,
+                                                  index: index);
+                                        }
+
+                                        break;
+                                    }
+
+                                    return bodyTab;
                                   },
                                   childCount: name == "My Mission"
                                       ? itemPerPageMyMission

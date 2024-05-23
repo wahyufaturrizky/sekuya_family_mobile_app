@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
+class MyWidgetSpinnerApp extends StatelessWidget {
+  const MyWidgetSpinnerApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MyWidgetSpinner();
+  }
+}
+
 class MyWidgetSpinner extends StatefulWidget {
   const MyWidgetSpinner({super.key});
 
