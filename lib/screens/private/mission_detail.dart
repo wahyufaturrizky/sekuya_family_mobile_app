@@ -747,7 +747,7 @@ class _MissionDetailState extends State<MissionDetail> {
   @override
   Widget build(BuildContext context) {
     if (isLoadingMissionDetail) {
-      return const MyWidgetSpinner();
+      return const MyWidgetSpinnerApp();
     } else {
       return SafeArea(
           child: Scaffold(

@@ -260,7 +260,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                       height: 16,
                     ),
                     if (isLoadingResCommunitiesCategories)
-                      const MyWidgetSpinner(),
+                      const MyWidgetSpinnerApp(),
                     if (!isLoadingResCommunitiesCategories)
                       SizedBox(
                           height: 260,
@@ -383,7 +383,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                     child: Text("👋🏻 Hi your reach the end of the list",
                         style: TextStyle(color: Colors.white, fontSize: 14)),
                   ),
-                if (isLoadingResCommunities) const MyWidgetSpinner()
+                if (isLoadingResCommunities) const MyWidgetSpinnerApp()
               ],
             );
           },

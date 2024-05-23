@@ -742,6 +742,14 @@ class _ProfileComponentState extends State<ProfileComponent> {
               builder: (BuildContext context) {
                 return Column(
                   children: [
+                    if (name == "My Mission" && resMyMission == null)
+                      const MyWidgetEmptyListApp(),
+                    if (name == "My Communities" && resMyCommunities == null)
+                      const MyWidgetEmptyListApp(),
+                    if (name == "My Voucher" && resMyVoucher == null)
+                      const MyWidgetEmptyListApp(),
+                    if (name == "My Reward" && resMyReward == null)
+                      const MyWidgetEmptyListApp(),
                     Expanded(
                       child: Container(
                         color: Colors.black,
@@ -769,61 +777,29 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
                                     switch (name) {
                                       case "My Mission":
-                                        if (resMyMission?["data"]?["data"]
-                                                ?.length ==
-                                            0) {
-                                          bodyTab =
-                                              const MyWidgetEmptyListApp();
-                                        } else {
-                                          bodyTab =
-                                              TabContentProfileMyMissionComponentApp(
-                                                  resMyMission: resMyMission,
-                                                  index: index);
-                                        }
-
+                                        bodyTab =
+                                            TabContentProfileMyMissionComponentApp(
+                                                resMyMission: resMyMission,
+                                                index: index);
                                         break;
                                       case "My Communities":
-                                        if (resMyCommunities?["data"]?["data"]
-                                                ?.length ==
-                                            0) {
-                                          bodyTab =
-                                              const MyWidgetEmptyListApp();
-                                        } else {
-                                          bodyTab =
-                                              TabContentProfileMyCommunityComponentApp(
-                                                  resMyCommunities:
-                                                      resMyCommunities,
-                                                  index: index);
-                                        }
-
+                                        bodyTab =
+                                            TabContentProfileMyCommunityComponentApp(
+                                                resMyCommunities:
+                                                    resMyCommunities,
+                                                index: index);
                                         break;
                                       case "My Voucher":
-                                        if (resMyVoucher?["data"]?["data"]
-                                                ?.length ==
-                                            0) {
-                                          bodyTab =
-                                              const MyWidgetEmptyListApp();
-                                        } else {
-                                          bodyTab =
-                                              TabContentProfileMyVoucherComponentApp(
-                                                  resMyVoucher: resMyVoucher,
-                                                  index: index);
-                                        }
-
+                                        bodyTab =
+                                            TabContentProfileMyVoucherComponentApp(
+                                                resMyVoucher: resMyVoucher,
+                                                index: index);
                                         break;
                                       default:
-                                        if (resMyReward?["data"]?["data"]
-                                                ?.length ==
-                                            0) {
-                                          bodyTab =
-                                              const MyWidgetEmptyListApp();
-                                        } else {
-                                          bodyTab =
-                                              TabContentProfileMyRewardComponentApp(
-                                                  resMyReward: resMyReward,
-                                                  index: index);
-                                        }
-
+                                        bodyTab =
+                                            TabContentProfileMyRewardComponentApp(
+                                                resMyReward: resMyReward,
+                                                index: index);
                                         break;
                                     }
 

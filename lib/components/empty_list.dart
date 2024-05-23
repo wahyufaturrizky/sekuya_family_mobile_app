@@ -21,12 +21,18 @@ class MyWidgetEmptyList extends StatefulWidget {
 class _MyWidgetEmptyListState extends State<MyWidgetEmptyList> {
   @override
   Widget build(BuildContext context) {
-    return  Center(
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/empty_state.png'),)
-        ),
-      )
+    return Column(
+      children: [
+        Image.asset('assets/images/empty_state.png'),
+        const SizedBox(
+          width: 250,
+          child: Text(
+            "Looks like there's nothing here yet. Start exploring to fill this space",
+            style: TextStyle(color: greySecondaryColor),
+            textAlign: TextAlign.center,
+          ),
+        )
+      ],
     );
   }
 }

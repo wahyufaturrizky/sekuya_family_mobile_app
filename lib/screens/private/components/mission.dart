@@ -346,7 +346,7 @@ class _MissionComponentState extends State<MissionComponent> {
                   child: Text("👋🏻 Hi your reach the end of the list",
                       style: TextStyle(color: Colors.white, fontSize: 14)),
                 ),
-              if (isLoadingResMission) const MyWidgetSpinner()
+              if (isLoadingResMission) const MyWidgetSpinnerApp()
             ],
           );
         },

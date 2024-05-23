@@ -259,7 +259,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
   Widget build(BuildContext context) {
     var isLoading = isLoadingGetProfile;
     if (isLoading) {
-      return const MyWidgetSpinner();
+      return const MyWidgetSpinnerApp();
     } else {
       return SafeArea(
           child: Scaffold(

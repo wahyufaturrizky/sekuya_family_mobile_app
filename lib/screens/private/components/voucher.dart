@@ -257,7 +257,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
       body: Builder(
         builder: (BuildContext context) {
           if (isLoadingResVoucher) {
-            return const MyWidgetSpinner();
+            return const MyWidgetSpinnerApp();
           } else {
             return Column(
               children: [

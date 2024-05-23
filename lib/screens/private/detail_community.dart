@@ -301,7 +301,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
         isLoadingCommunitiesMembers;
 
     if (isLoading) {
-      return const MyWidgetSpinner();
+      return const MyWidgetSpinnerApp();
     } else {
       return Scaffold(
           backgroundColor: Colors.black,

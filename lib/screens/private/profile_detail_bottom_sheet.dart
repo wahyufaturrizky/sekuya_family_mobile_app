@@ -90,7 +90,7 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
   Widget build(BuildContext context) {
     var isLoading = isLoadingGetDetailProfile;
     if (isLoading) {
-      return const MyWidgetSpinner();
+      return const MyWidgetSpinnerApp();
     } else {
       return SafeArea(
           child: Scaffold(
