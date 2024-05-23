@@ -16,6 +16,7 @@ class Routes {
   static String demoSimple = "/demo";
   static String privateScreens = "/privateScreens";
   static String profileDetailScreens = "/profileDetailScreens";
+  static String notificationScreen = "/notificationScreen";
   static String communityDetailAppScreens = "/communityDetailScreens";
   static String detailVoucherScreen = "/detailVoucherScreen";
   static String detailMissionScreen = "/detailMissionScreen";
@@ -33,6 +34,7 @@ class Routes {
     router.define(demoSimple, handler: demoRouteHandler);
     router.define(privateScreens, handler: privateHandler);
     router.define(profileDetailScreens, handler: profileDetailHandler);
+    router.define(notificationScreen, handler: notificationlHandler);
     router.define(detailVoucherScreen, handler: voucherDetailHandler);
     router.define(detailMissionScreen, handler: missionDetailHandler);
     router.define(communityDetailAppScreens, handler: communityDetailHandler);

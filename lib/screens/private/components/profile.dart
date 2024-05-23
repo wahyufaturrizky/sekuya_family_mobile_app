@@ -504,9 +504,18 @@ class _ProfileComponentState extends State<ProfileComponent> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Icon(
-                                  Icons.more_vert,
-                                  color: Colors.transparent,
+                                GestureDetector(
+                                  onTap: () {
+                                    Application.router.navigateTo(
+                                      context,
+                                      "/notificationScreen",
+                                      transition: TransitionType.native,
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.notifications,
+                                    color: yellowPrimaryColor,
+                                  ),
                                 ),
                                 if (resProfile?["data"]?["profilePic"] != null)
                                   CircleAvatar(
@@ -742,13 +751,21 @@ class _ProfileComponentState extends State<ProfileComponent> {
               builder: (BuildContext context) {
                 return Column(
                   children: [
-                    if (name == "My Mission" && resMyMission == null)
+                    if (name == "My Mission" &&
+                        resMyMission == null &&
+                        !isLoadingResMyMission)
                       const MyWidgetEmptyListApp(),
-                    if (name == "My Communities" && resMyCommunities == null)
+                    if (name == "My Communities" &&
+                        resMyCommunities == null &&
+                        !isLoadingCommunities)
                       const MyWidgetEmptyListApp(),
-                    if (name == "My Voucher" && resMyVoucher == null)
+                    if (name == "My Voucher" &&
+                        resMyVoucher == null &&
+                        !isLoadingResMyVoucher)
                       const MyWidgetEmptyListApp(),
-                    if (name == "My Reward" && resMyReward == null)
+                    if (name == "My Reward" &&
+                        resMyReward == null &&
+                        !isLoadingReward)
                       const MyWidgetEmptyListApp(),
                     Expanded(
                       child: Container(
@@ -833,7 +850,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                         (name == "My Communities" && isLoadingCommunities) ||
                         (name == "My Voucher" && isLoadingResMyVoucher) ||
                         (name == "My Reward" && isLoadingReward))
-                      const MyWidgetSpinner(),
+                      const MyWidgetSpinnerApp(),
                   ],
                 );
               },
