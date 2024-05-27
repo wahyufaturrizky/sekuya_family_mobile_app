@@ -150,7 +150,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataMyReward(pageKey: currentPageMyVoucher + 1);
+          getDataMyReward(pageKey: currentPageMyReward + 1);
         }
       }
     });
@@ -177,10 +177,11 @@ class _ProfileComponentState extends State<ProfileComponent> {
       };
 
       var res = await handleGetDataMyVoucher(queryParameters);
+      print("@res ${res?["data"]?["meta"]?["totalPages"]}");
 
       if (res != null) {
         if (mounted) {
-          if (res?["data"]?["meta"]?["totalPages"] > currentPageMyMission) {
+          if (res?["data"]?["meta"]?["totalPages"] > currentPageMyVoucher) {
             var response = {
               ...res,
               "data": {
@@ -243,7 +244,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
       if (res != null) {
         if (mounted) {
-          if (res?["data"]?["meta"]?["totalPages"] > currentPageMyMission) {
+          if (res?["data"]?["meta"]?["totalPages"] > currentPageMyReward) {
             var response = {
               ...res,
               "data": {
@@ -455,6 +456,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   @override
   Widget build(BuildContext mainContext) {
+    print("@resMyVoucher $resMyVoucher");
     return DefaultTabController(
       length: tabs.length, // This is the number of tabs.
       child: NestedScrollView(

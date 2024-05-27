@@ -167,8 +167,11 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
           ],
         ),
         children: [
+          const SizedBox(
+            height: 16,
+          ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                   decoration: BoxDecoration(
@@ -197,38 +200,11 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
               )
             ],
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              children: [
-                Chip(
-                    avatar: const Icon(
-                      Icons.check_circle,
-                      color: greenColor,
-                    ),
-                    label: const Text(
-                      'Done',
-                    ),
-                    color: MaterialStateProperty.all<Color>(Colors.black),
-                    labelStyle: const TextStyle(
-                        color: greenColor, fontWeight: FontWeight.w500),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: const BorderSide(color: greenColor))),
-              ],
-            ),
-          ),
-          CustomButton(
-            buttonText: 'Follow',
-            onPressed: () {},
-            height: 50,
-            width: 500,
-          ),
           const SizedBox(
-            height: 8,
+            height: 16,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                   decoration: BoxDecoration(

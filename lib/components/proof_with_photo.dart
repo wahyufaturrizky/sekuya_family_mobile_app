@@ -152,8 +152,11 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
           ],
         ),
         children: [
+          const SizedBox(
+            height: 16,
+          ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                   decoration: BoxDecoration(
@@ -182,26 +185,29 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
               )
             ],
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              children: [
-                Chip(
-                    avatar: const Icon(
-                      Icons.check_circle,
-                      color: greenColor,
-                    ),
-                    label: const Text(
-                      'Done',
-                    ),
-                    color: MaterialStateProperty.all<Color>(Colors.black),
-                    labelStyle: const TextStyle(
-                        color: greenColor, fontWeight: FontWeight.w500),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: const BorderSide(color: greenColor))),
-              ],
-            ),
+          // Container(
+          //   margin: const EdgeInsets.symmetric(vertical: 8),
+          //   child: Row(
+          //     children: [
+          //       Chip(
+          //           avatar: const Icon(
+          //             Icons.check_circle,
+          //             color: greenColor,
+          //           ),
+          //           label: const Text(
+          //             'Done',
+          //           ),
+          //           color: MaterialStateProperty.all<Color>(Colors.black),
+          //           labelStyle: const TextStyle(
+          //               color: greenColor, fontWeight: FontWeight.w500),
+          //           shape: RoundedRectangleBorder(
+          //               borderRadius: BorderRadius.circular(20),
+          //               side: const BorderSide(color: greenColor))),
+          //     ],
+          //   ),
+          // ),
+          const SizedBox(
+            height: 16,
           ),
           CustomButton(
             buttonText: 'Follow',
@@ -210,10 +216,10 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
             width: 500,
           ),
           const SizedBox(
-            height: 8,
+            height: 16,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                   decoration: BoxDecoration(

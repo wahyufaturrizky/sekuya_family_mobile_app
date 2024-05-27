@@ -218,6 +218,9 @@ class _CommunityComponentState extends State<CommunityComponent> {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const SizedBox(
+                      height: 24,
+                    ),
                     const Center(
                       child: Text(
                         'Communities',
@@ -341,8 +344,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
                   ],
                 ),
                 floating: true,
-                expandedHeight: 400.0,
-                toolbarHeight: 400,
+                expandedHeight: 430.0,
+                toolbarHeight: 430,
                 backgroundColor: Colors.black,
                 forceElevated: innerBoxIsScrolled,
               ),

@@ -171,6 +171,9 @@ class _MissionComponentState extends State<MissionComponent> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const SizedBox(
+                    height: 24,
+                  ),
                   const Center(
                     child: Text(
                       'Missions',
@@ -302,8 +305,8 @@ class _MissionComponentState extends State<MissionComponent> {
                 ],
               ),
               floating: true,
-              expandedHeight: 190.0,
-              toolbarHeight: 190,
+              expandedHeight: 220.0,
+              toolbarHeight: 220,
               backgroundColor: Colors.black,
               forceElevated: innerBoxIsScrolled,
             ),
