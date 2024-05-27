@@ -7,7 +7,10 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:sekuya_family_mobile_app/components/tab_voucher/my_voucher.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/util/format_date.dart';
 
@@ -39,6 +42,15 @@ class TabContentProfileMyVoucherComponent extends StatefulWidget {
 
 class _TabContentProfileMyVoucherComponentState
     extends State<TabContentProfileMyVoucherComponent> {
+  void goToDetailVoucher() {
+    final arguments =
+        MyArgumentsDataDetailVoucherClass(widget.resMyVoucher, widget.index);
+
+    Application.router.navigateTo(context, "/detailVoucherScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -48,7 +60,7 @@ class _TabContentProfileMyVoucherComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          debugPrint('Card tapped.');
+          goToDetailVoucher();
         },
         child: Container(
           padding: const EdgeInsets.all(12),
