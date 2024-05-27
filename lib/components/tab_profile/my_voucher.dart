@@ -16,23 +16,23 @@ import 'package:sekuya_family_mobile_app/util/format_date.dart';
 
 class TabContentProfileMyVoucherComponentApp extends StatelessWidget {
   const TabContentProfileMyVoucherComponentApp(
-      {super.key, this.resMyVoucher, this.index});
+      {super.key, this.resVoucher, this.index});
 
-  final dynamic resMyVoucher;
+  final dynamic resVoucher;
   final int? index;
 
   @override
   Widget build(BuildContext context) {
     return TabContentProfileMyVoucherComponent(
-        resMyVoucher: resMyVoucher, index: index);
+        resVoucher: resVoucher, index: index);
   }
 }
 
 class TabContentProfileMyVoucherComponent extends StatefulWidget {
   const TabContentProfileMyVoucherComponent(
-      {super.key, this.resMyVoucher, this.index});
+      {super.key, this.resVoucher, this.index});
 
-  final dynamic resMyVoucher;
+  final dynamic resVoucher;
   final int? index;
 
   @override
@@ -43,8 +43,8 @@ class TabContentProfileMyVoucherComponent extends StatefulWidget {
 class _TabContentProfileMyVoucherComponentState
     extends State<TabContentProfileMyVoucherComponent> {
   void goToDetailVoucher() {
-    final arguments =
-        MyArgumentsDataDetailVoucherClass(widget.resMyVoucher, widget.index);
+    final arguments = MyArgumentsDataDetailVoucherClass(
+        widget.resVoucher?["data"], widget.index);
 
     Application.router.navigateTo(context, "/detailVoucherScreen",
         transition: TransitionType.native,
@@ -69,7 +69,7 @@ class _TabContentProfileMyVoucherComponentState
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.5), BlendMode.dstATop),
-              image: NetworkImage(widget.resMyVoucher?["data"]?["data"]
+              image: NetworkImage(widget.resVoucher?["data"]?["data"]
                       ?[widget.index]?["image"] ??
                   ""),
             ),
@@ -79,7 +79,7 @@ class _TabContentProfileMyVoucherComponentState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.resMyVoucher?["data"]?["data"]?[widget.index]?["name"] ??
+                widget.resVoucher?["data"]?["data"]?[widget.index]?["name"] ??
                     "",
                 style: const TextStyle(
                   color: Colors.white,
@@ -91,7 +91,7 @@ class _TabContentProfileMyVoucherComponentState
                 height: 12,
               ),
               Text(
-                widget.resMyVoucher?["data"]?["data"]?[widget.index]
+                widget.resVoucher?["data"]?["data"]?[widget.index]
                         ?["description"] ??
                     "",
                 style: const TextStyle(
@@ -109,7 +109,7 @@ class _TabContentProfileMyVoucherComponentState
                     width: 8,
                   ),
                   Text(
-                    'Berlaku hingga ${handleFormatDate(widget.resMyVoucher?["data"]?["data"]?[widget.index]?["expired_at"] ?? "")}',
+                    'Berlaku hingga ${handleFormatDate(widget.resVoucher?["data"]?["data"]?[widget.index]?["expired_at"] ?? "")}',
                     style: const TextStyle(
                         color: yellowPrimaryColor,
                         fontSize: 12,

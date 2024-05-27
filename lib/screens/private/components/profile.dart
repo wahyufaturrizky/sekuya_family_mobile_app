@@ -811,7 +811,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                       case "My Voucher":
                                         bodyTab =
                                             TabContentProfileMyVoucherComponentApp(
-                                                resMyVoucher: resMyVoucher,
+                                                resVoucher: resMyVoucher,
                                                 index: index);
                                         break;
                                       default:

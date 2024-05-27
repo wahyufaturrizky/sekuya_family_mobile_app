@@ -11,7 +11,6 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
-import 'package:sekuya_family_mobile_app/util/format_date.dart';
 
 class TabContentVoucherComponentApp extends StatelessWidget {
   const TabContentVoucherComponentApp({super.key, this.index, this.resVoucher});

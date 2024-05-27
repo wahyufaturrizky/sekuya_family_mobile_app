@@ -68,7 +68,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
   ];
 
   void handleBack() {
-    final arguments = MyArgumentsDataClass(false, false, true, false);
+    final arguments = MyArgumentsDataClass(false, false, false, true);
 
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,
@@ -124,7 +124,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
             ),
             Text(
               widget.args?.resVoucher?["data"]?[widget.args?.indexResVoucher]
-                      ["name"] ??
+                      ?["name"] ??
                   "",
               style: const TextStyle(
                   fontWeight: FontWeight.w600,
@@ -133,7 +133,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
             ),
             Text(
               widget.args?.resVoucher?["data"]?[widget.args?.indexResVoucher]
-                      ["description"] ??
+                      ?["description"] ??
                   "",
               style: const TextStyle(
                   fontWeight: FontWeight.w400,
@@ -177,14 +177,14 @@ class _VoucherDetailState extends State<VoucherDetail> {
                 "title": "Term and Conditions",
                 "rule": [
                   widget.args?.resVoucher?["data"]
-                      ?[widget.args?.indexResVoucher]["tnc"]
+                      ?[widget.args?.indexResVoucher]?["tnc"]
                 ],
               },
               {
                 "title": "How to use",
                 "rule": [
                   widget.args?.resVoucher?["data"]
-                      ?[widget.args?.indexResVoucher]["htu"]
+                      ?[widget.args?.indexResVoucher]?["htu"]
                 ],
               },
             ].asMap().entries.map((item) {
@@ -205,7 +205,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
                           ? (item.value["rule"] as List<dynamic>)
                               .map((itemRule) => ListTile(
                                       title: Text(
-                                    itemRule,
+                                    itemRule ?? "",
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
