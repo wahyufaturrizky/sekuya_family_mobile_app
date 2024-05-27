@@ -38,8 +38,8 @@ class TabContentVoucherComponent extends StatefulWidget {
 class _TabContentVoucherComponentState
     extends State<TabContentVoucherComponent> {
   void goToDetailVoucher() {
-    final arguments =
-        MyArgumentsDataDetailVoucherClass(widget.resVoucher, widget.index);
+    final arguments = MyArgumentsDataDetailVoucherClass(
+        widget.resVoucher, widget.index, true);
 
     Application.router.navigateTo(context, "/detailVoucherScreen",
         transition: TransitionType.native,
@@ -104,9 +104,11 @@ class _TabContentVoucherComponentState
 class MyArgumentsDataDetailVoucherClass {
   final dynamic resVoucher;
   final int? indexResVoucher;
+  final bool? isFromPageVoucher;
 
   MyArgumentsDataDetailVoucherClass(
     this.resVoucher,
     this.indexResVoucher,
+    this.isFromPageVoucher,
   );
 }

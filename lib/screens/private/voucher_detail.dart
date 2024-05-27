@@ -68,7 +68,9 @@ class _VoucherDetailState extends State<VoucherDetail> {
   ];
 
   void handleBack() {
-    final arguments = MyArgumentsDataClass(false, false, false, true);
+    final arguments = widget.args!.isFromPageVoucher == true
+        ? MyArgumentsDataClass(false, false, true, false)
+        : MyArgumentsDataClass(true, false, false, false);
 
     Application.router.navigateTo(context, "/privateScreens",
         transition: TransitionType.inFromLeft,

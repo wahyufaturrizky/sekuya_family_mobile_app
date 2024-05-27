@@ -44,7 +44,7 @@ class _TabContentProfileMyVoucherComponentState
     extends State<TabContentProfileMyVoucherComponent> {
   void goToDetailVoucher() {
     final arguments = MyArgumentsDataDetailVoucherClass(
-        widget.resVoucher?["data"], widget.index);
+        widget.resVoucher?["data"], widget.index, false);
 
     Application.router.navigateTo(context, "/detailVoucherScreen",
         transition: TransitionType.native,
