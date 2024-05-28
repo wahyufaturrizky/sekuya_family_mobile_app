@@ -56,7 +56,10 @@ class _TabContentMissionComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          goToDetailMission();
+          if (widget.resMission?["data"]?["data"]?[widget.index]?["_id"] !=
+              null) {
+            goToDetailMission();
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,7 +111,8 @@ class _TabContentMissionComponentState
                       ),
                       Text(
                         widget.resMission?["data"]?["data"]?[widget.index]
-                            ?["community"]?["name"],
+                                ?["community"]?["name"] ??
+                            "",
                         style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
@@ -158,7 +162,7 @@ class _TabContentMissionComponentState
                             margin: const EdgeInsets.only(right: 10),
                             child: Row(
                               children: [
-                                if (item["icon"] != "")
+                                if (item["icon"] != "" && item["icon"] != null)
                                   Container(
                                     margin: const EdgeInsets.only(right: 4),
                                     child: CircleAvatar(
@@ -190,20 +194,23 @@ class _TabContentMissionComponentState
                         )
                         .toList(),
                   ),
-                  Flexible(
-                      child: AvatarStack(
-                    height: 24,
-                    avatars: [
-                      for (var n = 0;
-                          n <
-                              widget.resMission?["data"]?["data"]?[widget.index]
-                                  ?["totalPlayers"];
-                          n++)
-                        NetworkImage(widget.resMission?["data"]?["data"]
-                                ?[widget.index]?["playerSamples"]?[n]
-                            ?["profilePic"])
-                    ],
-                  ))
+                  if (widget.resMission?["data"]?["data"]?[widget.index]
+                          ?["totalPlayers"] !=
+                      null)
+                    Flexible(
+                        child: AvatarStack(
+                      height: 24,
+                      avatars: [
+                        for (var n = 0;
+                            n <
+                                widget.resMission?["data"]?["data"]
+                                    ?[widget.index]?["totalPlayers"];
+                            n++)
+                          NetworkImage(widget.resMission?["data"]?["data"]
+                                  ?[widget.index]?["playerSamples"]?[n]
+                              ?["profilePic"])
+                      ],
+                    ))
                 ]),
               ),
             ),
