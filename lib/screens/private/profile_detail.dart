@@ -15,7 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
-import 'package:sekuya_family_mobile_app/components/spinner.dart';
+import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
@@ -176,10 +176,18 @@ class _ProfileDetailState extends State<ProfileDetail> {
         radius: 40,
       );
     } else {
-      return Text(
-        'Pick image error: $_pickImageError',
-        textAlign: TextAlign.center,
-      );
+      return Shimmer(
+          linearGradient: shimmerGradient,
+          child: isLoadingGetProfile
+              ? MyWidgetShimmerApp(
+                  isLoading: isLoadingGetProfile,
+                  child: const CircleAvatar(
+                    radius: 40,
+                  ))
+              : Text(
+                  'Pick image error: $_pickImageError',
+                  textAlign: TextAlign.center,
+                ));
     }
   }
 
@@ -257,31 +265,31 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
   @override
   Widget build(BuildContext context) {
-    var isLoading = isLoadingGetProfile;
-    if (isLoading) {
-      return const MyWidgetSpinnerApp();
-    } else {
-      return SafeArea(
-          child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          leading: IconButton(
-            color: Colors.white,
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              handleBack();
-            },
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
-          title: const Text(
-            'Edit Profile',
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ),
+    return SafeArea(
+        child: Scaffold(
+      appBar: AppBar(
         backgroundColor: Colors.black,
-        body: SingleChildScrollView(
+        leading: IconButton(
+          color: Colors.white,
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            handleBack();
+          },
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(),
+        ),
+        title: const Text(
+          'Edit Profile',
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+      backgroundColor: Colors.black,
+      body: Shimmer(
+        linearGradient: shimmerGradient,
+        child: SingleChildScrollView(
+          physics:
+              isLoadingGetProfile ? const NeverScrollableScrollPhysics() : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -351,27 +359,42 @@ class _ProfileDetailState extends State<ProfileDetail> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      const Text(
-                        'Username',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
+                      const Row(
+                        children: [
+                          Text(
+                            'Username',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 8,
                       ),
-                      CustomTextField(
-                        textField: TextField(
-                            controller: username,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                            decoration: kTextInputDecoration.copyWith(
-                              hintText: 'Username',
-                              hintStyle:
-                                  const TextStyle(color: greySecondaryColor),
+                      if (isLoadingGetProfile)
+                        MyWidgetShimmerApp(
+                            isLoading: isLoadingGetProfile,
+                            child: const Card(
+                              child: SizedBox(
+                                width: 320,
+                                height: 40,
+                              ),
                             )),
-                      ),
+                      if (!isLoadingGetProfile)
+                        CustomTextField(
+                          textField: TextField(
+                              controller: username,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                              decoration: kTextInputDecoration.copyWith(
+                                hintText: 'Username',
+                                hintStyle:
+                                    const TextStyle(color: greySecondaryColor),
+                              )),
+                        ),
                       const SizedBox(
                         height: 16,
                       ),
@@ -383,44 +406,57 @@ class _ProfileDetailState extends State<ProfileDetail> {
                       const SizedBox(
                         height: 8,
                       ),
-                      CustomTextField(
-                        textField: TextField(
-                            enabled: false,
-                            controller: email,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                            decoration: kTextInputDecoration.copyWith(
-                              hintText: 'Email address',
-                              hintStyle:
-                                  const TextStyle(color: greySecondaryColor),
+                      if (isLoadingGetProfile)
+                        MyWidgetShimmerApp(
+                            isLoading: isLoadingGetProfile,
+                            child: const Card(
+                              child: SizedBox(
+                                width: 320,
+                                height: 40,
+                              ),
                             )),
-                      ),
+                      if (!isLoadingGetProfile)
+                        CustomTextField(
+                          textField: TextField(
+                              enabled: false,
+                              controller: email,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                              decoration: kTextInputDecoration.copyWith(
+                                hintText: 'Email address',
+                                hintStyle:
+                                    const TextStyle(color: greySecondaryColor),
+                              )),
+                        ),
                       Column(
-                        children: (resProfile?["data"]?["linkedAccount"]
-                                as Map<String, dynamic>)
-                            .entries
-                            .map((item) => Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    CustomButton(
-                                        isOutlinedBackgroundColor:
-                                            greyDarkColor,
-                                        buttonText: 'Connect to ${item.key}',
-                                        isOutlined: true,
-                                        onPressed: () {
-                                          _launchUrl(item.value);
-                                        },
-                                        sizeButtonIcon: 20,
-                                        buttonIcon: 'ic_${item.key}.png',
-                                        width: 500,
-                                        paddingButton: 0)
-                                  ],
-                                ))
-                            .toList(),
+                        children: resProfile?["data"]?["linkedAccount"] != null
+                            ? (resProfile?["data"]?["linkedAccount"]
+                                    as Map<String, dynamic>)
+                                .entries
+                                .map((item) => Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        CustomButton(
+                                            isOutlinedBackgroundColor:
+                                                greyDarkColor,
+                                            buttonText:
+                                                'Connect to ${item.key}',
+                                            isOutlined: true,
+                                            onPressed: () {
+                                              _launchUrl(item.value);
+                                            },
+                                            sizeButtonIcon: 20,
+                                            buttonIcon: 'ic_${item.key}.png',
+                                            width: 500,
+                                            paddingButton: 0)
+                                      ],
+                                    ))
+                                .toList()
+                            : [],
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.15,
@@ -431,22 +467,27 @@ class _ProfileDetailState extends State<ProfileDetail> {
           ),
           // This is the title in the app bar.
         ),
-        bottomSheet: Container(
-            padding: const EdgeInsets.all(16),
-            color: Colors.black,
-            child: CustomButton(
-                isLoading: isLoadingUpdateProfile,
-                buttonText: 'Save',
-                onPressed: () {
-                  if (!isLoadingUpdateProfile) {
-                    handleUpdateProfile(context);
-                  }
-                },
-                sizeButtonIcon: 20,
-                width: 500,
-                paddingButton: 0)),
-      ));
-    }
+      ),
+      bottomSheet: Container(
+          padding: const EdgeInsets.all(16),
+          color: Colors.black,
+          child: Shimmer(
+            linearGradient: shimmerGradient,
+            child: MyWidgetShimmerApp(
+                isLoading: isLoadingGetProfile,
+                child: CustomButton(
+                    isLoading: isLoadingUpdateProfile,
+                    buttonText: 'Save',
+                    onPressed: () {
+                      if (!isLoadingUpdateProfile) {
+                        handleUpdateProfile(context);
+                      }
+                    },
+                    sizeButtonIcon: 20,
+                    width: 500,
+                    paddingButton: 0)),
+          )),
+    ));
   }
 }
 

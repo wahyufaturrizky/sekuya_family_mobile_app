@@ -13,7 +13,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/empty_list.dart';
-import 'package:sekuya_family_mobile_app/components/spinner.dart';
+import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_mission.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_reward.dart';
@@ -456,410 +456,449 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   @override
   Widget build(BuildContext mainContext) {
-    print("@resMyVoucher $resMyVoucher");
-    return DefaultTabController(
-      length: tabs.length, // This is the number of tabs.
-      child: NestedScrollView(
-        controller: tabIndex == 0
-            ? nestedScrollViewContollerMyMission
-            : tabIndex == 1
-                ? nestedScrollViewContollerMyCommunities
-                : tabIndex == 2
-                    ? nestedScrollViewContollerMyVoucher
-                    : nestedScrollViewContollerMyReward,
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          // These are the slivers that show up in the "outer" scroll view.
+    var isLoadingTab =
+        isLoadingCommunities || isLoadingResMyMission || isLoadingResMyVoucher;
 
-          final TabController tabController = DefaultTabController.of(context);
-          tabController.addListener(() {
-            if (!tabController.indexIsChanging) {
-              setState(() {
-                tabIndex = tabController.index;
-                noDataAnymoreMyCommunities = false;
-                noDataAnymoreMyMission = false;
-                noDataAnymoreMyReward = false;
-                noDataAnymoreMyVoucher = false;
+    return Shimmer(
+        linearGradient: shimmerGradient,
+        child: DefaultTabController(
+          length: tabs.length, // This is the number of tabs.
+          child: NestedScrollView(
+            physics: isLoadingTab ? const NeverScrollableScrollPhysics() : null,
+            controller: tabIndex == 0
+                ? nestedScrollViewContollerMyMission
+                : tabIndex == 1
+                    ? nestedScrollViewContollerMyCommunities
+                    : tabIndex == 2
+                        ? nestedScrollViewContollerMyVoucher
+                        : nestedScrollViewContollerMyReward,
+            floatHeaderSlivers: true,
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              // These are the slivers that show up in the "outer" scroll view.
+
+              final TabController tabController =
+                  DefaultTabController.of(context);
+              tabController.addListener(() {
+                if (!tabController.indexIsChanging) {
+                  setState(() {
+                    tabIndex = tabController.index;
+                    noDataAnymoreMyCommunities = false;
+                    noDataAnymoreMyMission = false;
+                    noDataAnymoreMyReward = false;
+                    noDataAnymoreMyVoucher = false;
+                  });
+                }
               });
-            }
-          });
-          return <Widget>[
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
+              return <Widget>[
+                SliverOverlapAbsorber(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  sliver: SliverAppBar(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Image.asset(
-                          'assets/images/bg_profile.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 170,
-                          alignment: Alignment.topCenter,
-                        ),
-                        Column(
+                        Stack(
+                          alignment: Alignment.center,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Image.asset(
+                              'assets/images/bg_profile.png',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 170,
+                              alignment: Alignment.topCenter,
+                            ),
+                            Column(
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Application.router.navigateTo(
-                                      context,
-                                      "/notificationScreen",
-                                      transition: TransitionType.native,
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Icons.notifications,
-                                    color: yellowPrimaryColor,
-                                  ),
-                                ),
-                                if (resProfile?["data"]?["profilePic"] != null)
-                                  CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        resProfile?["data"]?["profilePic"]),
-                                    radius: 40,
-                                  ),
-                                PopupMenuButton<String>(
-                                    color: Colors.black,
-                                    onSelected: (String item) {
-                                      if (item == 'Logout') {
-                                        handleLogout();
-                                      } else {
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
                                         Application.router.navigateTo(
                                           context,
-                                          "/profileDetailScreens",
+                                          "/notificationScreen",
                                           transition: TransitionType.native,
                                         );
-                                      }
-                                    },
-                                    itemBuilder: (BuildContext context) {
-                                      return menu
-                                          .map((item) => PopupMenuItem<String>(
-                                                value: item,
-                                                child: ListTile(
-                                                  leading: Icon(
-                                                    item == "Logout"
-                                                        ? Icons.login_outlined
-                                                        : Icons.edit,
-                                                    color: item == "Logout"
-                                                        ? redSolidPrimaryColor
-                                                        : Colors.white,
-                                                  ),
-                                                  title: Text(
-                                                    item == "Logout"
-                                                        ? 'Logout'
-                                                        : 'Edit Profile',
-                                                    style: TextStyle(
+                                      },
+                                      child: const Icon(
+                                        Icons.notifications,
+                                        color: yellowPrimaryColor,
+                                      ),
+                                    ),
+                                    MyWidgetShimmerApp(
+                                      isLoading: isLoadingResProfile,
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                            resProfile?["data"]
+                                                    ?["profilePic"] ??
+                                                ""),
+                                        radius: 40,
+                                      ),
+                                    ),
+                                    PopupMenuButton<String>(
+                                        color: Colors.black,
+                                        onSelected: (String item) {
+                                          if (item == 'Logout') {
+                                            handleLogout();
+                                          } else {
+                                            Application.router.navigateTo(
+                                              context,
+                                              "/profileDetailScreens",
+                                              transition: TransitionType.native,
+                                            );
+                                          }
+                                        },
+                                        itemBuilder: (BuildContext context) {
+                                          return menu
+                                              .map((item) =>
+                                                  PopupMenuItem<String>(
+                                                    value: item,
+                                                    child: ListTile(
+                                                      leading: Icon(
+                                                        item == "Logout"
+                                                            ? Icons
+                                                                .login_outlined
+                                                            : Icons.edit,
                                                         color: item == "Logout"
                                                             ? redSolidPrimaryColor
-                                                            : Colors.white),
-                                                  ),
-                                                ),
-                                              ))
-                                          .toList();
-                                    },
-                                    child: const Icon(
-                                      Icons.more_vert,
-                                      color: Colors.white,
-                                    ))
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            if (resProfile != null)
-                              Text(
-                                resProfile?["data"]?["username"] == ""
-                                    ? "-"
-                                    : resProfile?["data"]?["username"],
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            if (resProfile != null)
-                              Text(
-                                resProfile?["data"]?["email"] == ""
-                                    ? "-"
-                                    : resProfile?["data"]?["email"],
-                                style: const TextStyle(
-                                    color: greySecondaryColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 16.0,
-                      children: [
-                        1,
-                        2,
-                        3,
-                      ]
-                          .map((item) => GestureDetector(
-                              onTap: () {
-                                // showModalBottomSheet(
-                                //     context: mainContext,
-                                //     builder: (BuildContext context) {
-                                //       return BadgeListBottomSheetApp(
-                                //           detailProfile: resProfile);
-                                //     });
-
-                                showDialog<String>(
-                                  context: mainContext,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    backgroundColor: blackSolidPrimaryColor,
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          child: Image.asset(
-                                              "assets/images/test_badge.png"),
-                                        ),
-                                        const SizedBox(
-                                          height: 16,
-                                        ),
-                                        const Text('You Get New Badge',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white)),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        const Text(
-                                            'dictum cursus mauris varius tristique aliquet. dictum cur mauris varius tristique aliquet. ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
-                                                color: greySecondaryColor)),
-                                      ],
-                                    ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    actions: <Widget>[
-                                      CustomButton(
-                                        buttonText: 'See Later',
-                                        isOutlined: true,
-                                        border: 1,
-                                        isOutlinedBackgroundColor:
-                                            blackSolidPrimaryColor,
-                                        isOutlinedBorderColor:
-                                            yellowPrimaryColor,
-                                        labelSize: 12,
-                                        width: 120,
-                                        height: 36,
-                                        onPressed: () {
-                                          Navigator.pop(context, 'Cancel');
+                                                            : Colors.white,
+                                                      ),
+                                                      title: Text(
+                                                        item == "Logout"
+                                                            ? 'Logout'
+                                                            : 'Edit Profile',
+                                                        style: TextStyle(
+                                                            color: item ==
+                                                                    "Logout"
+                                                                ? redSolidPrimaryColor
+                                                                : Colors.white),
+                                                      ),
+                                                    ),
+                                                  ))
+                                              .toList();
                                         },
-                                      ),
-                                      CustomButton(
-                                        buttonText: 'See My Badge',
-                                        onPressed: () {
-                                          Navigator.pop(context, 'OK');
-                                        },
-                                        labelSize: 12,
-                                        height: 36,
-                                        width: 120,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              child: const CircleAvatar(
-                                radius: 20,
-                              )))
-                          .toList(),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                        height: 56,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/bg_progress_xp.png'),
-                                fit: BoxFit.fill)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                                        child: const Icon(
+                                          Icons.more_vert,
+                                          color: Colors.white,
+                                        ))
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 12,
+                                ),
                                 Text(
-                                  'Level ${resProfile?["data"]?["level"]}',
+                                  resProfile?["data"]?["username"] ?? "-",
                                   style: const TextStyle(
                                       color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  resProfile?["data"]?["email"] ?? "-",
+                                  style: const TextStyle(
+                                      color: greySecondaryColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500),
                                 ),
-                                Text(
-                                  '${resProfile?["data"]?["exp"] ?? ""} xp',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400),
-                                ),
                               ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            if (resProfile?["data"]?["nextExp"] != null)
-                              LinearProgressIndicator(
-                                value: resProfile?["data"]?["nextExp"] * 0.01,
-                                color: yellowPrimaryColor,
-                                backgroundColor: greyThirdColor,
-                              )
-                          ],
-                        )),
-                  ],
-                ),
-                // This is the title in the app bar.
-                floating: true,
-                expandedHeight: 300.0,
-                toolbarHeight: 300,
-                backgroundColor: Colors.black,
-                forceElevated: innerBoxIsScrolled,
-                bottom: TabBar(
-                  controller: tabController,
-                  // These are the widgets to put in each tab in the tab bar.
-                  tabs: tabs.map((String name) => Tab(text: name)).toList(),
-                ),
-              ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          children: tabs.map((String name) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Column(
-                  children: [
-                    if (name == "My Mission" &&
-                        resMyMission == null &&
-                        !isLoadingResMyMission)
-                      const MyWidgetEmptyListApp(),
-                    if (name == "My Communities" &&
-                        resMyCommunities == null &&
-                        !isLoadingCommunities)
-                      const MyWidgetEmptyListApp(),
-                    if (name == "My Voucher" &&
-                        resMyVoucher == null &&
-                        !isLoadingResMyVoucher)
-                      const MyWidgetEmptyListApp(),
-                    if (name == "My Reward" &&
-                        resMyReward == null &&
-                        !isLoadingReward)
-                      const MyWidgetEmptyListApp(),
-                    Expanded(
-                      child: Container(
-                        color: Colors.black,
-                        child: CustomScrollView(
-                          key: PageStorageKey<String>(name),
-                          slivers: <Widget>[
-                            SliverOverlapInjector(
-                              handle: NestedScrollView
-                                  .sliverOverlapAbsorberHandleFor(context),
-                            ),
-                            SliverPadding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              sliver: SliverFixedExtentList(
-                                itemExtent: name == "My Mission"
-                                    ? 170.0
-                                    : name == "My Communities"
-                                        ? 150.0
-                                        : name == "My Reward"
-                                            ? 170.0
-                                            : 140,
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    var bodyTab;
-
-                                    switch (name) {
-                                      case "My Mission":
-                                        bodyTab =
-                                            TabContentProfileMyMissionComponentApp(
-                                                resMyMission: resMyMission,
-                                                index: index);
-                                        break;
-                                      case "My Communities":
-                                        bodyTab =
-                                            TabContentProfileMyCommunityComponentApp(
-                                                resMyCommunities:
-                                                    resMyCommunities,
-                                                index: index);
-                                        break;
-                                      case "My Voucher":
-                                        bodyTab =
-                                            TabContentProfileMyVoucherComponentApp(
-                                                resVoucher: resMyVoucher,
-                                                index: index);
-                                        break;
-                                      default:
-                                        bodyTab =
-                                            TabContentProfileMyRewardComponentApp(
-                                                resMyReward: resMyReward,
-                                                index: index);
-                                        break;
-                                    }
-
-                                    return bodyTab;
-                                  },
-                                  childCount: name == "My Mission"
-                                      ? itemPerPageMyMission
-                                      : name == "My Communities"
-                                          ? itemPerPageMyCommunities
-                                          : name == "My Voucher"
-                                              ? itemPerPageMyVoucher
-                                              : itemPerPageMyReward,
-                                ),
-                              ),
                             ),
                           ],
                         ),
-                      ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 16.0,
+                          children: [
+                            1,
+                            2,
+                            3,
+                          ]
+                              .map((item) => GestureDetector(
+                                  onTap: () {
+                                    // showModalBottomSheet(
+                                    //     context: mainContext,
+                                    //     builder: (BuildContext context) {
+                                    //       return BadgeListBottomSheetApp(
+                                    //           detailProfile: resProfile);
+                                    //     });
+
+                                    showDialog<String>(
+                                      context: mainContext,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        backgroundColor: blackSolidPrimaryColor,
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              child: Image.asset(
+                                                  "assets/images/test_badge.png"),
+                                            ),
+                                            const SizedBox(
+                                              height: 16,
+                                            ),
+                                            const Text('You Get New Badge',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white)),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            const Text(
+                                                'dictum cursus mauris varius tristique aliquet. dictum cur mauris varius tristique aliquet. ',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: greySecondaryColor)),
+                                          ],
+                                        ),
+                                        actionsAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        actions: <Widget>[
+                                          CustomButton(
+                                            buttonText: 'See Later',
+                                            isOutlined: true,
+                                            border: 1,
+                                            isOutlinedBackgroundColor:
+                                                blackSolidPrimaryColor,
+                                            isOutlinedBorderColor:
+                                                yellowPrimaryColor,
+                                            labelSize: 12,
+                                            width: 120,
+                                            height: 36,
+                                            onPressed: () {
+                                              Navigator.pop(context, 'Cancel');
+                                            },
+                                          ),
+                                          CustomButton(
+                                            buttonText: 'See My Badge',
+                                            onPressed: () {
+                                              Navigator.pop(context, 'OK');
+                                            },
+                                            labelSize: 12,
+                                            height: 36,
+                                            width: 120,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: MyWidgetShimmerApp(
+                                      isLoading: isLoadingResProfile,
+                                      child: CircleAvatar(
+                                        radius: 20,
+                                      ))))
+                              .toList(),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        MyWidgetShimmerApp(
+                          isLoading: isLoadingResProfile,
+                          child: Container(
+                              height: 56,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/bg_progress_xp.png'),
+                                      fit: BoxFit.fill)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Level ${resProfile?["data"]?["level"]}',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        '${resProfile?["data"]?["exp"] ?? ""} xp',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  if (resProfile?["data"]?["nextExp"] != null)
+                                    LinearProgressIndicator(
+                                      value: resProfile?["data"]?["nextExp"] *
+                                          0.01,
+                                      color: yellowPrimaryColor,
+                                      backgroundColor: greyThirdColor,
+                                    )
+                                ],
+                              )),
+                        )
+                      ],
                     ),
-                    if ((name == "My Mission" && noDataAnymoreMyMission) ||
-                        (name == "My Communities" &&
-                            noDataAnymoreMyCommunities) ||
-                        (name == "My Voucher" && noDataAnymoreMyVoucher) ||
-                        (name == "My Reward" && noDataAnymoreMyReward))
-                      const Center(
-                        child: Text("👋🏻 Hi your reach the end of the list",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 14)),
-                      ),
-                    if ((name == "My Mission" && isLoadingResMyMission) ||
-                        (name == "My Communities" && isLoadingCommunities) ||
-                        (name == "My Voucher" && isLoadingResMyVoucher) ||
-                        (name == "My Reward" && isLoadingReward))
-                      const MyWidgetSpinnerApp(),
-                  ],
+                    // This is the title in the app bar.
+                    floating: true,
+                    expandedHeight: 300.0,
+                    toolbarHeight: 300,
+                    backgroundColor: Colors.black,
+                    forceElevated: innerBoxIsScrolled,
+                    bottom: TabBar(
+                      controller: tabController,
+                      // These are the widgets to put in each tab in the tab bar.
+                      tabs: tabs.map((String name) => Tab(text: name)).toList(),
+                    ),
+                  ),
+                ),
+              ];
+            },
+            body: TabBarView(
+              children: tabs.map((String name) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Column(
+                      children: [
+                        if (name == "My Mission" &&
+                            resMyMission == null &&
+                            !isLoadingResMyMission)
+                          const MyWidgetEmptyListApp(),
+                        if (name == "My Communities" &&
+                            resMyCommunities == null &&
+                            !isLoadingCommunities)
+                          const MyWidgetEmptyListApp(),
+                        if (name == "My Voucher" &&
+                            resMyVoucher == null &&
+                            !isLoadingResMyVoucher)
+                          const MyWidgetEmptyListApp(),
+                        if (name == "My Reward" &&
+                            resMyReward == null &&
+                            !isLoadingReward)
+                          const MyWidgetEmptyListApp(),
+                        Expanded(
+                          child: Container(
+                            color: Colors.black,
+                            child: CustomScrollView(
+                              key: PageStorageKey<String>(name),
+                              slivers: <Widget>[
+                                SliverOverlapInjector(
+                                  handle: NestedScrollView
+                                      .sliverOverlapAbsorberHandleFor(context),
+                                ),
+                                SliverPadding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  sliver: SliverFixedExtentList(
+                                    itemExtent: name == "My Mission"
+                                        ? 170.0
+                                        : name == "My Communities"
+                                            ? 150.0
+                                            : name == "My Reward"
+                                                ? 170.0
+                                                : 140,
+                                    delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                        var bodyTab;
+
+                                        switch (name) {
+                                          case "My Mission":
+                                            bodyTab = MyWidgetShimmerApp(
+                                              isLoading: isLoadingResMyMission,
+                                              child:
+                                                  TabContentProfileMyMissionComponentApp(
+                                                      resMyMission:
+                                                          resMyMission,
+                                                      index: index),
+                                            );
+
+                                            break;
+                                          case "My Communities":
+                                            bodyTab = MyWidgetShimmerApp(
+                                                isLoading: isLoadingCommunities,
+                                                child:
+                                                    TabContentProfileMyCommunityComponentApp(
+                                                        resMyCommunities:
+                                                            resMyCommunities,
+                                                        index: index));
+
+                                            break;
+                                          case "My Voucher":
+                                            bodyTab = MyWidgetShimmerApp(
+                                                isLoading:
+                                                    isLoadingResMyVoucher,
+                                                child:
+                                                    TabContentProfileMyVoucherComponentApp(
+                                                        resVoucher:
+                                                            resMyVoucher,
+                                                        index: index));
+
+                                            break;
+                                          default:
+                                            bodyTab = MyWidgetShimmerApp(
+                                                isLoading: isLoadingReward,
+                                                child:
+                                                    TabContentProfileMyRewardComponentApp(
+                                                        resMyReward:
+                                                            resMyReward,
+                                                        index: index));
+
+                                            break;
+                                        }
+
+                                        return bodyTab;
+                                      },
+                                      childCount: name == "My Mission"
+                                          ? itemPerPageMyMission == 0
+                                              ? 5
+                                              : itemPerPageMyMission
+                                          : name == "My Communities"
+                                              ? itemPerPageMyCommunities == 0
+                                                  ? 5
+                                                  : itemPerPageMyCommunities
+                                              : name == "My Voucher"
+                                                  ? itemPerPageMyVoucher == 0
+                                                      ? 5
+                                                      : itemPerPageMyVoucher
+                                                  : itemPerPageMyReward == 0
+                                                      ? 5
+                                                      : itemPerPageMyReward,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if ((name == "My Mission" && noDataAnymoreMyMission) ||
+                            (name == "My Communities" &&
+                                noDataAnymoreMyCommunities) ||
+                            (name == "My Voucher" && noDataAnymoreMyVoucher) ||
+                            (name == "My Reward" && noDataAnymoreMyReward))
+                          const Center(
+                            child: Text(
+                                "👋🏻 Hi your reach the end of the list",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14)),
+                          ),
+                      ],
+                    );
+                  },
                 );
-              },
-            );
-          }).toList(),
-        ),
-      ),
-    );
+              }).toList(),
+            ),
+          ),
+        ));
   }
 }
