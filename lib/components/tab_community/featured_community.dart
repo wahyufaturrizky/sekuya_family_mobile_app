@@ -58,7 +58,9 @@ class _TabContentCommunityFeaturedComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          goToDetailCommunity();
+          if (widget.resCommunities != null) {
+            goToDetailCommunity();
+          }
         },
         child: Padding(
           padding: const EdgeInsets.all(12),

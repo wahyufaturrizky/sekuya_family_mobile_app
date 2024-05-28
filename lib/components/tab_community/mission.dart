@@ -61,14 +61,15 @@ class _TabContentCommunityMissionsComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.resCommunitiesMissions?["data"]?["data"]
-                            ?[widget.index]?["name"],
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
-                      ),
+                      if (widget.resCommunitiesMissions != null)
+                        Text(
+                          widget.resCommunitiesMissions?["data"]?["data"]
+                              ?[widget.index]?["name"],
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
                       Chip(
                           label: Text(
                             widget.resCommunitiesMissions?["data"]?["data"]
@@ -100,7 +101,8 @@ class _TabContentCommunityMissionsComponentState
                       ),
                       Text(
                         widget.resCommunitiesMissions?["data"]?["data"]
-                            ?[widget.index]?["community"]?["name"],
+                                ?[widget.index]?["community"]?["name"] ??
+                            "",
                         style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
@@ -155,11 +157,11 @@ class _TabContentCommunityMissionsComponentState
                                     child: CircleAvatar(
                                       radius: 12,
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(item["icon"]),
+                                      child: Image.network(item["icon"] ?? ""),
                                     ),
                                   ),
                                 Text(
-                                  item["amount"]!,
+                                  item["amount"] ?? "",
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -169,7 +171,7 @@ class _TabContentCommunityMissionsComponentState
                                   width: 4,
                                 ),
                                 Text(
-                                  item["title"]!,
+                                  item["title"] ?? "",
                                   style: const TextStyle(
                                       color: greySecondaryColor,
                                       fontSize: 12,
@@ -181,20 +183,21 @@ class _TabContentCommunityMissionsComponentState
                         )
                         .toList(),
                   ),
-                  Flexible(
-                      child: AvatarStack(
-                    height: 24,
-                    avatars: [
-                      for (var n = 0;
-                          n <
-                              widget.resCommunitiesMissions?["data"]?["data"]
-                                  ?[widget.index]?["totalPlayers"];
-                          n++)
-                        NetworkImage(widget.resCommunitiesMissions?["data"]
-                                ?["data"]?[widget.index]?["playerSamples"]?[n]
-                            ?["profilePic"])
-                    ],
-                  ))
+                  if (widget.resCommunitiesMissions != null)
+                    Flexible(
+                        child: AvatarStack(
+                      height: 24,
+                      avatars: [
+                        for (var n = 0;
+                            n <
+                                widget.resCommunitiesMissions?["data"]?["data"]
+                                    ?[widget.index]?["totalPlayers"];
+                            n++)
+                          NetworkImage(widget.resCommunitiesMissions?["data"]
+                                  ?["data"]?[widget.index]?["playerSamples"]?[n]
+                              ?["profilePic"])
+                      ],
+                    ))
                 ]),
               ),
             ),

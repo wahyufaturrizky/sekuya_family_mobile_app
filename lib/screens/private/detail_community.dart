@@ -11,7 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
-import 'package:sekuya_family_mobile_app/components/spinner.dart';
+import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/leaderboard.dart';
 import 'package:sekuya_family_mobile_app/components/tab_community/members.dart';
@@ -296,400 +296,447 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
 
   @override
   Widget build(BuildContext mainContext) {
-    var isLoading = isLoadingCommunitiesMissions ||
+    var isLoading = isLoadingCommunitiesDetail ||
         isLoadingCommunitiesLeaderboards ||
+        isLoadingCommunitiesMissions ||
         isLoadingCommunitiesMembers;
-
-    if (isLoading) {
-      return const MyWidgetSpinnerApp();
-    } else {
-      return Scaffold(
-          backgroundColor: Colors.black,
-          body: SafeArea(
-            child: DefaultTabController(
-              length: tabs.length, // This is the number of tabs.
-              child: NestedScrollView(
-                floatHeaderSlivers: true,
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  // These are the slivers that show up in the "outer" scroll view.
-                  return <Widget>[
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                      sliver: SliverAppBar(
-                        automaticallyImplyLeading: false,
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Stack(
-                              alignment: Alignment.bottomLeft,
+    return SafeArea(
+        child: Scaffold(
+            backgroundColor: Colors.black,
+            body: Shimmer(
+                linearGradient: shimmerGradient,
+                child: DefaultTabController(
+                  length: tabs.length, // This is the number of tabs.
+                  child: NestedScrollView(
+                    physics:
+                        isLoading ? const NeverScrollableScrollPhysics() : null,
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      // These are the slivers that show up in the "outer" scroll view.
+                      return <Widget>[
+                        SliverOverlapAbsorber(
+                          handle:
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                  context),
+                          sliver: SliverAppBar(
+                            automaticallyImplyLeading: false,
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                if (widget.args?.resCommunities?["data"]
+                                Stack(
+                                  alignment: Alignment.bottomLeft,
+                                  children: [
+                                    if (widget.args?.resCommunities?["data"]
+                                                        ?["data"]?[
+                                                    widget.args
+                                                        ?.indexResCommunities]
+                                                ["coverImage"] !=
+                                            null &&
+                                        !widget
+                                            .args
+                                            ?.resCommunities?["data"]?["data"]?[
+                                                widget
+                                                    .args?.indexResCommunities]
+                                                ["coverImage"]
+                                            .contains("googleapis"))
+                                      Image.network(
+                                        widget.args?.resCommunities?["data"]
                                                     ?["data"]?[
                                                 widget
                                                     .args?.indexResCommunities]
-                                            ["coverImage"] !=
-                                        null &&
-                                    !widget
-                                        .args
-                                        ?.resCommunities?["data"]?["data"]
-                                            ?[widget.args?.indexResCommunities]
-                                            ["coverImage"]
-                                        .contains("googleapis"))
-                                  Image.network(
-                                    widget.args?.resCommunities?["data"]
-                                                ?["data"]
-                                            ?[widget.args?.indexResCommunities]
-                                        ["coverImage"],
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: 150,
-                                  ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    IconButton(
-                                      color: Colors.white,
-                                      icon: const Icon(Icons.arrow_back),
-                                      onPressed: () {
-                                        handleBack();
-                                      },
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(),
-                                    ),
-                                    const SizedBox(
-                                      height: 32,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                            ["coverImage"],
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: 150,
+                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
+                                        IconButton(
+                                          color: Colors.white,
+                                          icon: const Icon(Icons.arrow_back),
+                                          onPressed: () {
+                                            handleBack();
+                                          },
+                                          padding: EdgeInsets.zero,
+                                          constraints: const BoxConstraints(),
+                                        ),
+                                        const SizedBox(
+                                          height: 32,
+                                        ),
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            if (widget.args?.resCommunities?["data"]
-                                                                ?["data"]?[
-                                                            widget.args
-                                                                ?.indexResCommunities]
-                                                        ["image"] !=
-                                                    null &&
-                                                !widget
-                                                    .args
-                                                    ?.resCommunities?["data"]
-                                                        ?["data"]?[widget.args
-                                                            ?.indexResCommunities]
-                                                        ["image"]
-                                                    .contains("googleapis"))
-                                              Image.network(
-                                                widget.args?.resCommunities?[
-                                                            "data"]?["data"]?[
-                                                        widget.args
-                                                            ?.indexResCommunities]
-                                                    ["image"],
-                                                width: 48,
-                                                height: 48,
-                                              ),
-                                            const SizedBox(width: 12),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  widget.args?.resCommunities?[
+                                            if (isLoading)
+                                              MyWidgetShimmerApp(
+                                                  isLoading: isLoading,
+                                                  child: const Card(
+                                                    child: SizedBox(
+                                                      height: 40,
+                                                      width: 150,
+                                                    ),
+                                                  )),
+                                            if (!isLoading)
+                                              Row(
+                                                children: [
+                                                  if (widget.args?.resCommunities?["data"]
+                                                                      ?["data"]
+                                                                  ?[
+                                                                  widget.args
+                                                                      ?.indexResCommunities]
+                                                              ["image"] !=
+                                                          null &&
+                                                      !widget
+                                                          .args
+                                                          ?.resCommunities?["data"]
+                                                              ?["data"]?[widget
+                                                                  .args
+                                                                  ?.indexResCommunities]
+                                                              ["image"]
+                                                          .contains("googleapis"))
+                                                    Image.network(
+                                                      widget.args?.resCommunities?[
                                                                       "data"]
                                                                   ?["data"]
                                                               ?[
                                                               widget.args
                                                                   ?.indexResCommunities]
-                                                          ["name"] ??
-                                                      "",
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                          ["image"],
+                                                      width: 48,
+                                                      height: 48,
+                                                    ),
+                                                  const SizedBox(width: 12),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        widget.args?.resCommunities?[
+                                                                            "data"]
+                                                                        ?[
+                                                                        "data"]
+                                                                    ?[
+                                                                    widget.args
+                                                                        ?.indexResCommunities]
+                                                                ["name"] ??
+                                                            "",
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 4,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Image.asset(
+                                                            'assets/images/ic_level_detail_community.png',
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 12),
+                                                          const Text(
+                                                            'LEVEL 4',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            MyWidgetShimmerApp(
+                                              isLoading: isLoading,
+                                              child: CustomButton(
+                                                buttonText: (isLoadingJoinCommunity ||
+                                                        isLoadingCommunitiesDetail ||
+                                                        isLoadingLeaveCommunity)
+                                                    ? ''
+                                                    : isJoined
+                                                        ? 'Leave'
+                                                        : 'Join',
+                                                onPressed: () {
+                                                  if (!isLoadingJoinCommunity ||
+                                                      !isLoadingCommunitiesDetail ||
+                                                      !isLoadingLeaveCommunity) {
+                                                    if (isJoined) {
+                                                      handleLeaveCommunity(
+                                                          mainContext);
+                                                    } else {
+                                                      handleJoinCommunity(
+                                                          mainContext);
+                                                    }
+                                                  }
+                                                },
+                                                isLoading: isLoadingJoinCommunity ||
+                                                    isLoadingCommunitiesDetail ||
+                                                    isLoadingLeaveCommunity,
+                                                width: 100,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                    children: [
+                                  {
+                                    "title": "Mission",
+                                    "value": widget
+                                        .args
+                                        ?.resCommunities?["data"]?["data"]
+                                            ?[widget.args?.indexResCommunities]
+                                            ["totalMission"]
+                                        .toString(),
+                                  },
+                                  {
+                                    "title": "Members",
+                                    "value": widget
+                                        .args
+                                        ?.resCommunities?["data"]?["data"]
+                                            ?[widget.args?.indexResCommunities]
+                                            ["totalPlayers"]
+                                        .toString(),
+                                  },
+                                  {
+                                    "title": "Created",
+                                    "value": widget
+                                        .args
+                                        ?.resCommunities?["data"]?["data"]
+                                            ?[widget.args?.indexResCommunities]
+                                            ["level"]
+                                        .toString(),
+                                  },
+                                ]
+                                        .map((item) => MyWidgetShimmerApp(
+                                            isLoading: isLoading,
+                                            child: Expanded(
+                                                child: Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                  color: blackSolidPrimaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    item["value"].toString(),
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Text(
+                                                    item["title"].toString(),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            greySecondaryColor,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  )
+                                                ],
+                                              ),
+                                            ))))
+                                        .toList()),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  widget.args?.resCommunities?["data"]?["data"]
+                                              ?[
+                                              widget.args?.indexResCommunities]
+                                          ["description"] ??
+                                      "",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                const Text(
+                                  'Social Media',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                    children: (widget.args?.resCommunities?[
+                                                    "data"]?["data"]?[
+                                                widget
+                                                    .args?.indexResCommunities]
+                                            ?["social"] as Map<String, dynamic>)
+                                        .entries
+                                        .map((item) {
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return MyWidgetShimmerApp(
+                                          isLoading: isLoading,
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                _launchUrl(item.value);
+                                              },
+                                              child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    right: 8),
+                                                padding:
+                                                    const EdgeInsets.all(4),
+                                                decoration: BoxDecoration(
+                                                  color: blackSolidPrimaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
                                                 ),
-                                                const SizedBox(
-                                                  height: 4,
-                                                ),
-                                                Row(
+                                                child: Row(
                                                   children: [
                                                     Image.asset(
-                                                      'assets/images/ic_level_detail_community.png',
+                                                      item.key == "discord"
+                                                          ? 'assets/images/ic_discord_community.png'
+                                                          : item.key ==
+                                                                  "instagram"
+                                                              ? 'assets/images/ic_instagram.png'
+                                                              : item.key ==
+                                                                      "facebook"
+                                                                  ? 'assets/images/ic_facebook.png'
+                                                                  : 'assets/images/ic_twitter_social.png',
                                                     ),
-                                                    const SizedBox(width: 12),
+                                                    const SizedBox(width: 8),
                                                     const Text(
-                                                      'LEVEL 4',
+                                                      '0',
                                                       style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
+                                                          color:
+                                                              yellowPrimaryColor,
+                                                          fontSize: 10,
                                                           fontWeight:
-                                                              FontWeight.bold),
+                                                              FontWeight.w500),
                                                     ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        CustomButton(
-                                          buttonText: (isLoadingJoinCommunity ||
-                                                  isLoadingCommunitiesDetail ||
-                                                  isLoadingLeaveCommunity)
-                                              ? ''
-                                              : isJoined
-                                                  ? 'Leave'
-                                                  : 'Join',
-                                          onPressed: () {
-                                            if (!isLoadingJoinCommunity ||
-                                                !isLoadingCommunitiesDetail ||
-                                                !isLoadingLeaveCommunity) {
-                                              if (isJoined) {
-                                                handleLeaveCommunity(
-                                                    mainContext);
-                                              } else {
-                                                handleJoinCommunity(
-                                                    mainContext);
-                                              }
-                                            }
-                                          },
-                                          isLoading: isLoadingJoinCommunity ||
-                                              isLoadingCommunitiesDetail ||
-                                              isLoadingLeaveCommunity,
-                                          width: 100,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                  ],
-                                )
+                                              )));
+                                    },
+                                  );
+                                }).toList()),
                               ],
                             ),
-                            const SizedBox(
-                              height: 15,
+                            floating: true,
+                            expandedHeight: 360.0,
+                            toolbarHeight: 360,
+                            backgroundColor: Colors.black,
+                            forceElevated: innerBoxIsScrolled,
+                            bottom: TabBar(
+                              tabs: tabs
+                                  .map((String name) => Tab(text: name))
+                                  .toList(),
                             ),
-                            Row(
-                                children: [
-                              {
-                                "title": "Mission",
-                                "value": widget
-                                    .args
-                                    ?.resCommunities?["data"]?["data"]
-                                        ?[widget.args?.indexResCommunities]
-                                        ["totalMission"]
-                                    .toString(),
-                              },
-                              {
-                                "title": "Members",
-                                "value": widget
-                                    .args
-                                    ?.resCommunities?["data"]?["data"]
-                                        ?[widget.args?.indexResCommunities]
-                                        ["totalPlayers"]
-                                    .toString(),
-                              },
-                              {
-                                "title": "Created",
-                                "value": widget
-                                    .args
-                                    ?.resCommunities?["data"]?["data"]
-                                        ?[widget.args?.indexResCommunities]
-                                        ["level"]
-                                    .toString(),
-                              },
-                            ]
-                                    .map((item) => Expanded(
-                                            child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 4),
-                                          padding: const EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                              color: blackSolidPrimaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                item["value"].toString(),
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              Text(
-                                                item["title"].toString(),
-                                                style: const TextStyle(
-                                                    color: greySecondaryColor,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              )
-                                            ],
-                                          ),
-                                        )))
-                                    .toList()),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              widget.args?.resCommunities?["data"]?["data"]
-                                          ?[widget.args?.indexResCommunities]
-                                      ["description"] ??
-                                  "",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            const Text(
-                              'Social Media',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                                children: (widget.args?.resCommunities?["data"]
-                                                ?["data"]
-                                            ?[widget.args?.indexResCommunities]
-                                        ?["social"] as Map<String, dynamic>)
-                                    .entries
-                                    .map((item) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return GestureDetector(
-                                      onTap: () {
-                                        _launchUrl(item.value);
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.only(right: 8),
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          color: blackSolidPrimaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              item.key == "discord"
-                                                  ? 'assets/images/ic_discord_community.png'
-                                                  : item.key == "instagram"
-                                                      ? 'assets/images/ic_instagram.png'
-                                                      : item.key == "facebook"
-                                                          ? 'assets/images/ic_facebook.png'
-                                                          : 'assets/images/ic_twitter_social.png',
-                                            ),
-                                            const SizedBox(width: 8),
-                                            const Text(
-                                              '0',
-                                              style: TextStyle(
-                                                  color: yellowPrimaryColor,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
-                                      ));
-                                },
-                              );
-                            }).toList()),
-                          ],
-                        ),
-                        floating: true,
-                        expandedHeight: 360.0,
-                        toolbarHeight: 360,
-                        backgroundColor: Colors.black,
-                        forceElevated: innerBoxIsScrolled,
-                        bottom: TabBar(
-                          tabs: tabs
-                              .map((String name) => Tab(text: name))
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                  ];
-                },
-                body: TabBarView(
-                  children: tabs.map((String name) {
-                    var childCountCommunitiesMissions =
-                        resCommunitiesMissions?["data"]?["data"] != null
-                            ? resCommunitiesMissions?["data"]?["data"]?.length
-                            : 0;
-
-                    var childCountCommunitiesLeaderboards =
-                        resCommunitiesLeaderboards?["data"]?["data"] != null
-                            ? resCommunitiesLeaderboards?["data"]?["data"]
-                                ?.length
-                            : 0;
-
-                    var childCountCommunitiesMembers =
-                        resCommunitiesMembers?["data"]?["data"] != null
-                            ? resCommunitiesMembers?["data"]?["data"]?.length
-                            : 0;
-
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          color: Colors.black,
-                          child: CustomScrollView(
-                            key: PageStorageKey<String>(name),
-                            slivers: <Widget>[
-                              SliverOverlapInjector(
-                                handle: NestedScrollView
-                                    .sliverOverlapAbsorberHandleFor(context),
-                              ),
-                              SliverPadding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                sliver: SliverFixedExtentList(
-                                  itemExtent: name == "Mission" ? 170.0 : 80,
-                                  delegate: SliverChildBuilderDelegate(
-                                      (BuildContext context, int index) {
-                                    return name == "Mission"
-                                        ? TabContentCommunityMissionsComponentApp(
-                                            resCommunitiesMissions:
-                                                resCommunitiesMissions,
-                                            index: index)
-                                        : name == "Leaderboard"
-                                            ? TabContentCommunityLeaderBoardComponentApp(
-                                                resCommunitiesLeaderboards:
-                                                    resCommunitiesLeaderboards,
-                                                index: index)
-                                            : TabContentCommunityMembersComponentApp(
-                                                resCommunitiesMembers:
-                                                    resCommunitiesMembers,
-                                                index: index);
-                                  },
-                                      childCount: name == "Mission"
-                                          ? childCountCommunitiesMissions
-                                          : name == "Leaderboard"
-                                              ? childCountCommunitiesLeaderboards
-                                              : childCountCommunitiesMembers),
-                                ),
-                              ),
-                            ],
                           ),
+                        ),
+                      ];
+                    },
+                    body: TabBarView(
+                      children: tabs.map((String name) {
+                        var childCountCommunitiesMissions =
+                            resCommunitiesMissions?["data"]?["data"] != null
+                                ? resCommunitiesMissions?["data"]?["data"]
+                                    ?.length
+                                : 0;
+
+                        var childCountCommunitiesLeaderboards =
+                            resCommunitiesLeaderboards?["data"]?["data"] != null
+                                ? resCommunitiesLeaderboards?["data"]?["data"]
+                                    ?.length
+                                : 0;
+
+                        var childCountCommunitiesMembers =
+                            resCommunitiesMembers?["data"]?["data"] != null
+                                ? resCommunitiesMembers?["data"]?["data"]
+                                    ?.length
+                                : 0;
+
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              color: Colors.black,
+                              child: CustomScrollView(
+                                key: PageStorageKey<String>(name),
+                                slivers: <Widget>[
+                                  SliverOverlapInjector(
+                                    handle: NestedScrollView
+                                        .sliverOverlapAbsorberHandleFor(
+                                            context),
+                                  ),
+                                  SliverPadding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    sliver: SliverFixedExtentList(
+                                      itemExtent:
+                                          name == "Mission" ? 170.0 : 80,
+                                      delegate: SliverChildBuilderDelegate(
+                                          (BuildContext context, int index) {
+                                        return name == "Mission"
+                                            ? TabContentCommunityMissionsComponentApp(
+                                                resCommunitiesMissions:
+                                                    resCommunitiesMissions,
+                                                index: index)
+                                            : name == "Leaderboard"
+                                                ? TabContentCommunityLeaderBoardComponentApp(
+                                                    resCommunitiesLeaderboards:
+                                                        resCommunitiesLeaderboards,
+                                                    index: index)
+                                                : TabContentCommunityMembersComponentApp(
+                                                    resCommunitiesMembers:
+                                                        resCommunitiesMembers,
+                                                    index: index);
+                                      },
+                                          childCount: name == "Mission"
+                                              ? childCountCommunitiesMissions ==
+                                                      0
+                                                  ? 5
+                                                  : childCountCommunitiesMissions
+                                              : name == "Leaderboard"
+                                                  ? childCountCommunitiesLeaderboards
+                                                  : childCountCommunitiesMembers),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         );
-                      },
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ));
-    }
+                      }).toList(),
+                    ),
+                  ),
+                ))));
   }
 }

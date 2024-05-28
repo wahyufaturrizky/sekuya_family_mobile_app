@@ -11,8 +11,12 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
+import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
+import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/dashboard/dashboard.dart';
 
@@ -37,6 +41,22 @@ class HomeComponent extends StatefulWidget {
 class _HomeComponentState extends State<HomeComponent> {
   var resDashboard;
   bool isLoading = false;
+
+  void goToDetailMission(data, index) {
+    final arguments = MyArgumentsDataDetailMissionClass(data, index);
+
+    Application.router.navigateTo(context, "/detailMissionScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+
+  void goToDetailCommunity(data, index) {
+    final arguments = MyArgumentsDataDetailCommunityClass(data, index);
+
+    Application.router.navigateTo(context, "/communityDetailScreens",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
 
   @override
   void initState() {
@@ -163,7 +183,13 @@ class _HomeComponentState extends State<HomeComponent> {
                                     splashColor:
                                         yellowPrimaryColor.withAlpha(30),
                                     onTap: () {
-                                      debugPrint('Card tapped.');
+                                      var tempItem = {
+                                        "data": {"data": []}
+                                      };
+
+                                      tempItem["data"]!["data"]?.add(item);
+
+                                      goToDetailMission(tempItem, 0);
                                     },
                                     child: SizedBox(
                                       width: 200,
@@ -390,7 +416,13 @@ class _HomeComponentState extends State<HomeComponent> {
                                     splashColor:
                                         yellowPrimaryColor.withAlpha(30),
                                     onTap: () {
-                                      debugPrint('Card tapped.');
+                                      var tempItem = {
+                                        "data": {"data": []}
+                                      };
+
+                                      tempItem["data"]!["data"]?.add(item);
+
+                                      goToDetailCommunity(tempItem, 0);
                                     },
                                     child: Container(
                                       width: 200,

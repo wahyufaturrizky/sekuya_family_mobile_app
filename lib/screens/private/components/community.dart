@@ -291,18 +291,22 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                               splashColor: yellowPrimaryColor
                                                   .withAlpha(30),
                                               onTap: () async {
-                                                getDataCommunities(
-                                                    filterByValue:
+                                                if (resCommunitiesCategories !=
+                                                    null) {
+                                                  getDataCommunities(
+                                                      filterByValue:
+                                                          resCommunitiesCategories?[
+                                                                      "data"]
+                                                                  ?[index]
+                                                              ?["label"]);
+
+                                                  setState(() {
+                                                    filterByValueState =
                                                         resCommunitiesCategories?[
                                                                 "data"]?[index]
-                                                            ?["label"]);
-
-                                                setState(() {
-                                                  filterByValueState =
-                                                      resCommunitiesCategories?[
-                                                              "data"]?[index]
-                                                          ?["label"];
-                                                });
+                                                            ?["label"];
+                                                  });
+                                                }
                                               },
                                               child: Container(
                                                   decoration: BoxDecoration(
