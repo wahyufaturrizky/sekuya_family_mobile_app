@@ -720,10 +720,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                     index: index);
                                       },
                                           childCount: name == "Mission"
-                                              ? childCountCommunitiesMissions ==
-                                                      0
-                                                  ? 5
-                                                  : childCountCommunitiesMissions
+                                              ? childCountCommunitiesMissions
                                               : name == "Leaderboard"
                                                   ? childCountCommunitiesLeaderboards
                                                   : childCountCommunitiesMembers),

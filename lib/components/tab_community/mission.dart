@@ -61,34 +61,38 @@ class _TabContentCommunityMissionsComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (widget.resCommunitiesMissions != null)
+                      if (widget.resCommunitiesMissions?["data"]?["data"]
+                              ?[widget.index]?["name"] !=
+                          null)
                         Text(
                           widget.resCommunitiesMissions?["data"]?["data"]
-                              ?[widget.index]?["name"],
+                                  ?[widget.index]?["name"] ??
+                              "",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                               fontWeight: FontWeight.w600),
                         ),
-                      Chip(
-                          label: Text(
-                            widget.resCommunitiesMissions?["data"]?["data"]
-                                    ?[widget.index]?["status"] ??
-                                "",
-                          ),
-                          color: MaterialStateProperty.all<Color>(
-                              blueSecondaryColor),
-                          labelStyle:
-                              const TextStyle(color: blueSolidSecondaryColor),
-                          shape: const StadiumBorder(
-                              side: BorderSide(color: Colors.transparent)))
+                      if (widget.resCommunitiesMissions?["data"]?["data"]
+                              ?[widget.index]?["status"] !=
+                          null)
+                        Chip(
+                            label: Text(
+                              widget.resCommunitiesMissions?["data"]?["data"]
+                                      ?[widget.index]?["status"] ??
+                                  "",
+                            ),
+                            color: MaterialStateProperty.all<Color>(
+                                blueSecondaryColor),
+                            labelStyle:
+                                const TextStyle(color: blueSolidSecondaryColor),
+                            shape: const StadiumBorder(
+                                side: BorderSide(color: Colors.transparent)))
                     ],
                   ),
-                  Row(
-                    children: [
-                      if (widget.resCommunitiesMissions?["data"]?["data"]
-                              ?[widget.index]?["community"]?["image"] !=
-                          null)
+                  if (widget.resCommunitiesMissions != null)
+                    Row(
+                      children: [
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
@@ -96,111 +100,119 @@ class _TabContentCommunityMissionsComponentState
                               widget.resCommunitiesMissions?["data"]?["data"]
                                   ?[widget.index]?["community"]?["image"]),
                         ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        widget.resCommunitiesMissions?["data"]?["data"]
-                                ?[widget.index]?["community"]?["name"] ??
-                            "",
-                        style: const TextStyle(
-                            color: greySecondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          widget.resCommunitiesMissions?["data"]?["data"]
+                                  ?[widget.index]?["community"]?["name"] ??
+                              "",
+                          style: const TextStyle(
+                              color: greySecondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    ),
                 ],
               ),
             ),
-            Container(
-              color: blackSolidPrimaryColor,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(children: [
-                  Row(
-                    children: [
-                      {
-                        "title": "Task",
-                        "amount": widget.resCommunitiesMissions?["data"]
-                                ?["data"]?[widget.index]?["totalTasks"]
-                            .toString(),
-                        "icon": "",
-                      },
-                      {
-                        "title": "Xp",
-                        "amount": widget.resCommunitiesMissions?["data"]
-                                ?["data"]?[widget.index]?["totalExp"]
-                            .toString(),
-                        "icon": "",
-                      },
-                      {
-                        "title": widget.resCommunitiesMissions?["data"]?["data"]
-                                ?[widget.index]?["rewards"]?[0]?["name"]
-                            ?.split(" ")?[1],
-                        "amount": widget.resCommunitiesMissions?["data"]
-                                ?["data"]?[widget.index]?["rewards"]?[0]
-                                ?["name"]
-                            ?.split(" ")?[0],
-                        "icon": widget.resCommunitiesMissions?["data"]?["data"]
-                            ?[widget.index]?["rewards"]?[0]?["image"],
-                      }
-                    ]
-                        .map(
-                          (item) => Container(
-                            margin: const EdgeInsets.only(right: 10),
-                            child: Row(
-                              children: [
-                                if (item["icon"] != "")
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 4),
-                                    child: CircleAvatar(
-                                      radius: 12,
-                                      backgroundColor: Colors.transparent,
-                                      child: Image.network(item["icon"] ?? ""),
-                                    ),
+            widget.resCommunitiesMissions != null
+                ? Container(
+                    color: blackSolidPrimaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(children: [
+                        Row(
+                          children: [
+                            {
+                              "title": "Task",
+                              "amount": widget.resCommunitiesMissions?["data"]
+                                      ?["data"]?[widget.index]?["totalTasks"]
+                                  .toString(),
+                              "icon": "",
+                            },
+                            {
+                              "title": "Xp",
+                              "amount": widget.resCommunitiesMissions?["data"]
+                                      ?["data"]?[widget.index]?["totalExp"]
+                                  .toString(),
+                              "icon": "",
+                            },
+                            {
+                              "title": widget.resCommunitiesMissions?["data"]
+                                      ?["data"]?[widget.index]?["rewards"]?[0]
+                                      ?["name"]
+                                  ?.split(" ")?[1],
+                              "amount": widget.resCommunitiesMissions?["data"]
+                                      ?["data"]?[widget.index]?["rewards"]?[0]
+                                      ?["name"]
+                                  ?.split(" ")?[0],
+                              "icon": widget.resCommunitiesMissions?["data"]
+                                      ?["data"]?[widget.index]?["rewards"]?[0]
+                                  ?["image"],
+                            }
+                          ]
+                              .map(
+                                (item) => Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Row(
+                                    children: [
+                                      if (item["icon"] != "")
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 4),
+                                          child: CircleAvatar(
+                                            radius: 12,
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.network(
+                                                item["icon"] ?? ""),
+                                          ),
+                                        ),
+                                      Text(
+                                        item["amount"] ?? "",
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        item["title"] ?? "",
+                                        style: const TextStyle(
+                                            color: greySecondaryColor,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
                                   ),
-                                Text(
-                                  item["amount"] ?? "",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
                                 ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  item["title"] ?? "",
-                                  style: const TextStyle(
-                                      color: greySecondaryColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                  if (widget.resCommunitiesMissions != null)
-                    Flexible(
-                        child: AvatarStack(
-                      height: 24,
-                      avatars: [
-                        for (var n = 0;
-                            n <
-                                widget.resCommunitiesMissions?["data"]?["data"]
-                                    ?[widget.index]?["totalPlayers"];
-                            n++)
-                          NetworkImage(widget.resCommunitiesMissions?["data"]
-                                  ?["data"]?[widget.index]?["playerSamples"]?[n]
-                              ?["profilePic"])
-                      ],
-                    ))
-                ]),
-              ),
-            ),
+                              )
+                              .toList(),
+                        ),
+                        if (widget.resCommunitiesMissions != null)
+                          Flexible(
+                              child: AvatarStack(
+                            height: 24,
+                            avatars: [
+                              for (var n = 0;
+                                  n <
+                                      widget.resCommunitiesMissions?["data"]
+                                              ?["data"]?[widget.index]
+                                          ?["totalPlayers"];
+                                  n++)
+                                NetworkImage(
+                                    widget.resCommunitiesMissions?["data"]
+                                            ?["data"]?[widget.index]
+                                        ?["playerSamples"]?[n]?["profilePic"])
+                            ],
+                          ))
+                      ]),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
