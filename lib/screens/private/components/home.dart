@@ -18,6 +18,7 @@ import 'package:sekuya_family_mobile_app/components/tab_community/featured_commu
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 import 'package:sekuya_family_mobile_app/service/dashboard/dashboard.dart';
 
 class HomeComponentApp extends StatelessWidget {
@@ -94,6 +95,22 @@ class _HomeComponentState extends State<HomeComponent> {
     }
   }
 
+  void goToListMission() {
+    final arguments = MyArgumentsDataClass(false, false, false, true);
+
+    Application.router.navigateTo(context, "/privateScreens",
+        transition: TransitionType.inFromLeft,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+
+  void goToListCommunity() {
+    final arguments = MyArgumentsDataClass(false, true, false, false);
+
+    Application.router.navigateTo(context, "/privateScreens",
+        transition: TransitionType.inFromLeft,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Shimmer(
@@ -143,7 +160,7 @@ class _HomeComponentState extends State<HomeComponent> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'Featured Mission',
                         style: TextStyle(
@@ -151,12 +168,17 @@ class _HomeComponentState extends State<HomeComponent> {
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        'See All',
-                        style: TextStyle(
-                            color: yellowPrimaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
+                      GestureDetector(
+                        onTap: () {
+                          goToListMission();
+                        },
+                        child: Text(
+                          'See All',
+                          style: TextStyle(
+                              color: yellowPrimaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500),
+                        ),
                       )
                     ],
                   ),
@@ -377,7 +399,7 @@ class _HomeComponentState extends State<HomeComponent> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'Featured Communities',
                         style: TextStyle(
@@ -385,13 +407,17 @@ class _HomeComponentState extends State<HomeComponent> {
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        'See All',
-                        style: TextStyle(
-                            color: yellowPrimaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
-                      )
+                      GestureDetector(
+                          onTap: () {
+                            goToListCommunity();
+                          },
+                          child: Text(
+                            'See All',
+                            style: TextStyle(
+                                color: yellowPrimaryColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500),
+                          ))
                     ],
                   ),
                 ),
