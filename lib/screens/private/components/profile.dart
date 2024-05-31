@@ -757,15 +757,20 @@ class _ProfileComponentState extends State<ProfileComponent> {
                     backgroundColor: Colors.black,
                     forceElevated: innerBoxIsScrolled,
                     bottom: TabBar(
-                      controller: tabController,
+                      controller: isLoadingTab ? null : tabController,
                       // These are the widgets to put in each tab in the tab bar.
                       tabs: tabs.map((String name) => Tab(text: name)).toList(),
+                      physics: isLoadingTab
+                          ? const NeverScrollableScrollPhysics()
+                          : null,
                     ),
                   ),
                 ),
               ];
             },
             body: TabBarView(
+              physics:
+                  isLoadingTab ? const NeverScrollableScrollPhysics() : null,
               children: tabs.map((String name) {
                 return Builder(
                   builder: (BuildContext context) {
