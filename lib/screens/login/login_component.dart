@@ -345,7 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tag: 'signup_btn',
                             child: CustomButton(
                                 isLoading: isLoading,
-                                buttonText: 'Continue with Apple ID',
+                                buttonText: 'with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
                                   if (!isLoading) {

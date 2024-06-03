@@ -449,9 +449,11 @@ class _ProfileComponentState extends State<ProfileComponent> {
                 })
             .catchError((onError) => print(onError));
       }).catchError((onError) {
-        print('onError $onError');
+        print('Error SharedPreferences signOut = $onError');
       });
-    }).catchError((onError) => {print(onError)});
+    }).catchError((err) {
+      print('Error FirebaseAuth signOut = $err');
+    });
   }
 
   @override
@@ -459,12 +461,18 @@ class _ProfileComponentState extends State<ProfileComponent> {
     var isLoadingTab =
         isLoadingCommunities || isLoadingResMyMission || isLoadingResMyVoucher;
 
+    var isNull = resMyMission == null ||
+        resMyCommunities == null ||
+        resMyVoucher == null;
+
     return Shimmer(
         linearGradient: shimmerGradient,
         child: DefaultTabController(
           length: tabs.length, // This is the number of tabs.
           child: NestedScrollView(
-            physics: isLoadingTab ? const NeverScrollableScrollPhysics() : null,
+            physics: isLoadingTab || isNull
+                ? const NeverScrollableScrollPhysics()
+                : null,
             controller: tabIndex == 0
                 ? nestedScrollViewContollerMyMission
                 : tabIndex == 1
@@ -865,18 +873,22 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                         return bodyTab;
                                       },
                                       childCount: name == "My Mission"
-                                          ? itemPerPageMyMission == 0
+                                          ? itemPerPageMyMission == 0 &&
+                                                  isLoadingResMyMission
                                               ? 5
                                               : itemPerPageMyMission
                                           : name == "My Communities"
-                                              ? itemPerPageMyCommunities == 0
+                                              ? itemPerPageMyCommunities == 0 &&
+                                                      isLoadingCommunities
                                                   ? 5
                                                   : itemPerPageMyCommunities
                                               : name == "My Voucher"
-                                                  ? itemPerPageMyVoucher == 0
+                                                  ? itemPerPageMyVoucher == 0 &&
+                                                          isLoadingResMyVoucher
                                                       ? 5
                                                       : itemPerPageMyVoucher
-                                                  : itemPerPageMyReward == 0
+                                                  : itemPerPageMyReward == 0 &&
+                                                          isLoadingReward
                                                       ? 5
                                                       : itemPerPageMyReward,
                                     ),

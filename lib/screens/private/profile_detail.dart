@@ -10,9 +10,12 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
@@ -20,6 +23,22 @@ import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+final dio = Dio();
+
+const List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+];
+
+GoogleSignIn _googleSignIn = kIsWeb
+    ? GoogleSignIn(
+        scopes: scopes,
+        clientId:
+            "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com")
+    : GoogleSignIn(
+        scopes: scopes,
+      );
 
 class ProfileDetailApp extends StatelessWidget {
   const ProfileDetailApp({super.key});
@@ -50,6 +69,7 @@ class ProfileDetail extends StatefulWidget {
 class _ProfileDetailState extends State<ProfileDetail> {
   bool isLoadingGetProfile = false;
   bool isLoadingUpdateProfile = false;
+  bool isLoadingRecoveryEmailWithGoogle = false;
   var resProfile;
   dynamic _pickImageError;
   List<XFile>? _mediaFileList;
@@ -142,6 +162,151 @@ class _ProfileDetailState extends State<ProfileDetail> {
       return result;
     }
     return null;
+  }
+
+  Future<dynamic> signInWithGoogle() async {
+    try {
+      setState(() {
+        isLoadingRecoveryEmailWithGoogle = true;
+      });
+
+      _googleSignIn.signIn().then((result) {
+        FirebaseAuth.instance
+            .fetchSignInMethodsForEmail(result!.email)
+            .then((valSignInMethods) {
+          if (valSignInMethods.contains("google.com")) {
+            print("Email is already associated with a Google Sign-In account.");
+            return "0";
+          } else {
+            print("Email is not associated with any account.");
+            return "1";
+          }
+        });
+
+        result.authentication.then((GoogleSignInAuthentication googleKey) {
+          print("googleKey AccessToken = ${googleKey.accessToken}");
+          print("googleKey IdToken = ${googleKey.idToken}");
+
+          final AuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleKey.accessToken,
+            idToken: googleKey.idToken,
+          );
+
+          final AuthCredential credentialWeb =
+              GoogleAuthProvider.credential(idToken: googleKey.idToken);
+
+          FirebaseAuth.instance
+              .signInWithCredential(kIsWeb ? credentialWeb : credential)
+              .then((valCredential) {
+            FirebaseMessaging.instance
+                .getToken()
+                .then((valTokenMessageAndroid) {
+              print('@valTokenMessageAndroid = $valTokenMessageAndroid');
+
+              FirebaseMessaging.instance
+                  .getAPNSToken()
+                  .then((valueAPNSTokeniOS) {
+                print('@valueAPNSTokeniOS = $valueAPNSTokeniOS');
+                var dataAuthLogin = TargetPlatform.iOS == defaultTargetPlatform
+                    ? {
+                        "id_token": googleKey.idToken,
+                        "access_token": googleKey.accessToken,
+                        "provider": credential.providerId,
+                        "fcm_token": valueAPNSTokeniOS,
+                      }
+                    : {
+                        'id_token': googleKey.idToken,
+                        'access_token': googleKey.accessToken,
+                        'provider': credential.providerId,
+                        "fcm_token": valTokenMessageAndroid,
+                      };
+
+                dio
+                    .post('$baseUrl/auth/set-recovery-email',
+                        options: Options(
+                            validateStatus: (_) => true,
+                            contentType: Headers.jsonContentType,
+                            responseType: ResponseType.json),
+                        data: dataAuthLogin)
+                    .then((valResFromXellar) {
+                  // Here
+                }).catchError((onError) {
+                  print('onError auth/login = $onError');
+
+                  setState(() {
+                    isLoadingRecoveryEmailWithGoogle = false;
+                  });
+                });
+              }).catchError((onError) {
+                print("onError Token APNS $onError");
+                setState(() {
+                  isLoadingRecoveryEmailWithGoogle = false;
+                });
+              });
+            }).catchError((onError) {
+              print("onError valTokenMessageAndroid = $onError");
+              setState(() {
+                isLoadingRecoveryEmailWithGoogle = false;
+              });
+            });
+          }).catchError((err) {
+            print('Error signInWithCredential = $err');
+
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Error signInWithCredential'),
+                  content: Text(err.toString()),
+                );
+              },
+            );
+
+            setState(() {
+              isLoadingRecoveryEmailWithGoogle = false;
+            });
+          });
+        }).catchError((err) {
+          print('Error signInWithProvider = $err');
+
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Error signInWithProvider'),
+                content: Text(err.toString()),
+              );
+            },
+          );
+
+          setState(() {
+            isLoadingRecoveryEmailWithGoogle = false;
+          });
+        });
+      }).catchError((err) {
+        print('Error signIn = $err');
+
+        setState(() {
+          isLoadingRecoveryEmailWithGoogle = false;
+        });
+      });
+    } catch (error) {
+      print("Error during Google sign-in: $error");
+
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error during Google sign-in'),
+            content: Text(error.toString()),
+          );
+        },
+      );
+
+      setState(() {
+        isLoadingRecoveryEmailWithGoogle = false;
+      });
+    }
   }
 
   Widget _previewImages() {
@@ -383,6 +548,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                             )),
                       if (!isLoadingGetProfile)
                         CustomTextField(
+                          borderRadius: 4,
                           textField: TextField(
                               controller: username,
                               style: const TextStyle(
@@ -398,10 +564,15 @@ class _ProfileDetailState extends State<ProfileDetail> {
                       const SizedBox(
                         height: 16,
                       ),
-                      const Text(
-                        'Email Address',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
+                      const Row(
+                        children: [
+                          Text(
+                            'Email Address',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 8,
@@ -417,6 +588,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                             )),
                       if (!isLoadingGetProfile)
                         CustomTextField(
+                          borderRadius: 4,
                           textField: TextField(
                               enabled: false,
                               controller: email,
@@ -430,6 +602,65 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                     const TextStyle(color: greySecondaryColor),
                               )),
                         ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Row(
+                        children: [
+                          Text(
+                            'Email Recovery',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomButton(
+                            isOutlinedBackgroundColor: greyDarkColor,
+                            buttonText: 'with Gmail',
+                            isOutlined: true,
+                            onPressed: () {
+                              if (!isLoadingRecoveryEmailWithGoogle) {
+                                signInWithGoogle();
+                              }
+                            },
+                            sizeButtonIcon: 20,
+                            buttonIcon: 'ic_google.png',
+                            width: MediaQuery.of(context).size.width * 0.43,
+                            paddingButton: 0,
+                            labelSize: 14,
+                          ),
+                          CustomButton(
+                              isOutlinedBackgroundColor: greyDarkColor,
+                              buttonText: 'with Apple ID',
+                              isOutlined: true,
+                              onPressed: () {},
+                              sizeButtonIcon: 20,
+                              buttonIcon: 'ic_apple.png',
+                              width: MediaQuery.of(context).size.width * 0.43,
+                              paddingButton: 0,
+                              labelSize: 14)
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Row(
+                        children: [
+                          Text(
+                            'Linked Account',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                       Column(
                         children: resProfile?["data"]?["linkedAccount"] != null
                             ? (resProfile?["data"]?["linkedAccount"]
