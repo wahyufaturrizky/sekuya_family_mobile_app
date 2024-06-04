@@ -22,9 +22,9 @@ import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
+import 'package:sekuya_family_mobile_app/service/recovery-email/recovery_email.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-final dio = Dio();
 
 const List<String> scopes = <String>[
   'email',
@@ -147,6 +147,26 @@ class _ProfileDetailState extends State<ProfileDetail> {
     }
   }
 
+  Future handleLogout() async {
+    FirebaseAuth.instance.signOut().then((value) {
+      SharedPreferences.getInstance().then((prefs) {
+        prefs
+            .remove('access_token')
+            .then((value) => {
+                  Application.router.navigateTo(context, "/",
+                      transition: TransitionType.native)
+                })
+            .catchError((onError) {
+          print('Error SharedPreferences signOut = $onError');
+        });
+      }).catchError((onError) {
+        print('Error SharedPreferences signOut = $onError');
+      });
+    }).catchError((err) {
+      print('Error FirebaseAuth signOut = $err');
+    });
+  }
+
   void handleBack() {
     final arguments = MyArgumentsDataClass(true, false, false, false);
 
@@ -221,21 +241,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
                         "fcm_token": valTokenMessageAndroid,
                       };
 
-                dio
-                    .post('$baseUrl/auth/set-recovery-email',
-                        options: Options(
-                            validateStatus: (_) => true,
-                            contentType: Headers.jsonContentType,
-                            responseType: ResponseType.json),
-                        data: dataAuthLogin)
-                    .then((valResFromXellar) {
-                  // Here
+                setRecoveryEmail(dataAuthLogin).then((value) {
+                  isLoadingRecoveryEmailWithGoogle = false;
                 }).catchError((onError) {
-                  print('onError auth/login = $onError');
+                  print("onError setRecoveryEmail = $onError");
+                });
 
-                  setState(() {
-                    isLoadingRecoveryEmailWithGoogle = false;
-                  });
+                setState(() {
+                  isLoadingRecoveryEmailWithGoogle = false;
                 });
               }).catchError((onError) {
                 print("onError Token APNS $onError");

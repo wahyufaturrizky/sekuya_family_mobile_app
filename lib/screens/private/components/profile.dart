@@ -447,7 +447,10 @@ class _ProfileComponentState extends State<ProfileComponent> {
                   Application.router.navigateTo(context, "/",
                       transition: TransitionType.native)
                 })
-            .catchError((onError) => print(onError));
+            .catchError((onError) => {
+                  print(
+                      'Error SharedPreferences remove access_token = $onError')
+                });
       }).catchError((onError) {
         print('Error SharedPreferences signOut = $onError');
       });
