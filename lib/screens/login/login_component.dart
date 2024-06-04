@@ -61,7 +61,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isLoading = false;
+  bool isLoadingSignInWithApple = false;
+  bool isLoadingSignInWithGoogle = false;
 
   @override
   void initState() {
@@ -119,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<dynamic> signInWithGoogle() async {
     try {
       setState(() {
-        isLoading = true;
+        isLoadingSignInWithGoogle = true;
       });
 
       _googleSignIn.signIn().then((result) {
@@ -190,39 +191,39 @@ class _LoginScreenState extends State<LoginScreen> {
                           transition: TransitionType.native);
 
                       setState(() {
-                        isLoading = false;
+                        isLoadingSignInWithGoogle = false;
                       });
                     }).catchError((onError) {
                       print(onError);
 
                       setState(() {
-                        isLoading = false;
+                        isLoadingSignInWithGoogle = false;
                       });
                     });
                   }).catchError((onError) {
                     print('onError SharedPreferences = $onError');
 
                     setState(() {
-                      isLoading = false;
+                      isLoadingSignInWithGoogle = false;
                     });
                   });
                 }).catchError((onError) {
                   print('onError auth/login = $onError');
 
                   setState(() {
-                    isLoading = false;
+                    isLoadingSignInWithGoogle = false;
                   });
                 });
               }).catchError((onError) {
                 print("onError Token APNS $onError");
                 setState(() {
-                  isLoading = false;
+                  isLoadingSignInWithGoogle = false;
                 });
               });
             }).catchError((onError) {
               print("onError valTokenMessageAndroid = $onError");
               setState(() {
-                isLoading = false;
+                isLoadingSignInWithGoogle = false;
               });
             });
           }).catchError((err) {
@@ -239,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
             );
 
             setState(() {
-              isLoading = false;
+              isLoadingSignInWithGoogle = false;
             });
           });
         }).catchError((err) {
@@ -256,14 +257,14 @@ class _LoginScreenState extends State<LoginScreen> {
           );
 
           setState(() {
-            isLoading = false;
+            isLoadingSignInWithGoogle = false;
           });
         });
       }).catchError((err) {
         print('Error signIn = $err');
 
         setState(() {
-          isLoading = false;
+          isLoadingSignInWithGoogle = false;
         });
       });
     } catch (error) {
@@ -280,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       setState(() {
-        isLoading = false;
+        isLoadingSignInWithGoogle = false;
       });
     }
   }
@@ -325,10 +326,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           Hero(
                             tag: 'login_btn',
                             child: CustomButton(
-                                isLoading: isLoading,
+                                isLoading: isLoadingSignInWithGoogle,
                                 buttonText: 'Continue with Gmail',
                                 onPressed: () {
-                                  if (!isLoading) {
+                                  if (!isLoadingSignInWithGoogle ||
+                                      !isLoadingSignInWithApple) {
                                     signInWithGoogle();
                                   }
                                 },
@@ -344,11 +346,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           Hero(
                             tag: 'signup_btn',
                             child: CustomButton(
-                                isLoading: isLoading,
+                                isLoading: isLoadingSignInWithApple,
                                 buttonText: 'with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
-                                  if (!isLoading) {
+                                  if (!isLoadingSignInWithApple ||
+                                      !isLoadingSignInWithGoogle) {
                                     signInWithApple();
                                   }
                                 },

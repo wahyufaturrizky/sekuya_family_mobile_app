@@ -21,6 +21,7 @@ import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/screens/private/recovery_email_bottom_sheet.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 import 'package:sekuya_family_mobile_app/service/recovery-email/recovery_email.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,6 +71,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
   bool isLoadingGetProfile = false;
   bool isLoadingUpdateProfile = false;
   bool isLoadingRecoveryEmailWithGoogle = false;
+  bool isLoadingRecoveryEmailWithApple = false;
   var resProfile;
   dynamic _pickImageError;
   List<XFile>? _mediaFileList;
@@ -77,6 +79,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
   final username = TextEditingController();
   final email = TextEditingController();
+  final recoveryEmail = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -89,6 +92,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
   void dispose() {
     username.dispose();
     email.dispose();
+    recoveryEmail.dispose();
     super.dispose();
   }
 
@@ -113,6 +117,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
             resProfile = res;
 
             email.text = resProfile["data"]?["email"];
+            recoveryEmail.text = resProfile["data"]?["recoveryEmail"];
             username.text = resProfile["data"]?["username"];
             isLoadingGetProfile = false;
           });
@@ -241,14 +246,17 @@ class _ProfileDetailState extends State<ProfileDetail> {
                         "fcm_token": valTokenMessageAndroid,
                       };
 
+                print('@dataAuthLogin = $dataAuthLogin');
+
                 setRecoveryEmail(dataAuthLogin).then((value) {
-                  isLoadingRecoveryEmailWithGoogle = false;
+                  setState(() {
+                    isLoadingRecoveryEmailWithGoogle = false;
+                  });
                 }).catchError((onError) {
                   print("onError setRecoveryEmail = $onError");
-                });
-
-                setState(() {
-                  isLoadingRecoveryEmailWithGoogle = false;
+                  setState(() {
+                    isLoadingRecoveryEmailWithGoogle = false;
+                  });
                 });
               }).catchError((onError) {
                 print("onError Token APNS $onError");
@@ -631,36 +639,65 @@ class _ProfileDetailState extends State<ProfileDetail> {
                       const SizedBox(
                         height: 16,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomButton(
-                            isOutlinedBackgroundColor: greyDarkColor,
-                            buttonText: 'with Gmail',
-                            isOutlined: true,
-                            onPressed: () {
-                              if (!isLoadingRecoveryEmailWithGoogle) {
-                                signInWithGoogle();
-                              }
-                            },
-                            sizeButtonIcon: 20,
-                            buttonIcon: 'ic_google.png',
-                            width: MediaQuery.of(context).size.width * 0.43,
-                            paddingButton: 0,
-                            labelSize: 14,
-                          ),
-                          CustomButton(
+                      if (recoveryEmail.text.isNotEmpty)
+                        CustomTextField(
+                          borderRadius: 4,
+                          textField: TextField(
+                              enabled: false,
+                              controller: recoveryEmail,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                              decoration: kTextInputDecoration.copyWith(
+                                hintText: 'Recovery email',
+                                hintStyle:
+                                    const TextStyle(color: greySecondaryColor),
+                              )),
+                        ),
+                      if (recoveryEmail.text.isEmpty)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomButton(
                               isOutlinedBackgroundColor: greyDarkColor,
-                              buttonText: 'with Apple ID',
+                              buttonText: 'with Gmail',
                               isOutlined: true,
-                              onPressed: () {},
+                              onPressed: () {
+                                if (!isLoadingRecoveryEmailWithGoogle ||
+                                    !isLoadingRecoveryEmailWithApple) {
+                                  signInWithGoogle();
+                                }
+                              },
                               sizeButtonIcon: 20,
-                              buttonIcon: 'ic_apple.png',
+                              buttonIcon: 'ic_google.png',
                               width: MediaQuery.of(context).size.width * 0.43,
                               paddingButton: 0,
-                              labelSize: 14)
-                        ],
-                      ),
+                              labelSize: 14,
+                              isLoading: isLoadingRecoveryEmailWithGoogle,
+                            ),
+                            CustomButton(
+                                isOutlinedBackgroundColor: greyDarkColor,
+                                buttonText: 'with Apple ID',
+                                isOutlined: true,
+                                onPressed: () {
+                                  if (!isLoadingRecoveryEmailWithApple ||
+                                      !isLoadingRecoveryEmailWithGoogle) {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return RecoveryEmailBottomSheetApp();
+                                        });
+                                  }
+                                },
+                                sizeButtonIcon: 20,
+                                buttonIcon: 'ic_apple.png',
+                                width: MediaQuery.of(context).size.width * 0.43,
+                                paddingButton: 0,
+                                labelSize: 14,
+                                isLoading: isLoadingRecoveryEmailWithApple)
+                          ],
+                        ),
                       const SizedBox(
                         height: 16,
                       ),
