@@ -643,7 +643,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
                         CustomTextField(
                           borderRadius: 4,
                           textField: TextField(
-                              enabled: false,
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return RecoveryEmailBottomSheetApp();
+                                    });
+                              },
+                              readOnly: true,
                               controller: recoveryEmail,
                               style: const TextStyle(
                                 fontSize: 20,
@@ -682,13 +689,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                 isOutlined: true,
                                 onPressed: () {
                                   if (!isLoadingRecoveryEmailWithApple ||
-                                      !isLoadingRecoveryEmailWithGoogle) {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return RecoveryEmailBottomSheetApp();
-                                        });
-                                  }
+                                      !isLoadingRecoveryEmailWithGoogle) {}
                                 },
                                 sizeButtonIcon: 20,
                                 buttonIcon: 'ic_apple.png',
