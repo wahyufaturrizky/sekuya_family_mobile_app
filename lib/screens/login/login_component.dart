@@ -249,36 +249,63 @@ class _LoginScreenState extends State<LoginScreen> {
                                       onPressed: () {
                                         Navigator.pop(context, 'Yes');
 
-                                        SharedPreferences.getInstance()
-                                            .then((prefs) {
-                                          prefs
-                                              .setString(
-                                                  'access_token',
-                                                  valResFromXellar.data?["data"]
-                                                      ?["recoverToken"])
-                                              .then((value) {
-                                            Application.router.navigateTo(
-                                                context, "/privateScreens",
-                                                transition:
-                                                    TransitionType.native);
+                                        dio
+                                            .post('$baseUrl/auth/recover-email',
+                                                options: Options(
+                                                    validateStatus: (_) => true,
+                                                    contentType:
+                                                        Headers.jsonContentType,
+                                                    responseType:
+                                                        ResponseType.json,
+                                                    headers: {
+                                                      'Authorization':
+                                                          'Bearer ${valResFromXellar.data?["data"]?["recoverToken"]}'
+                                                    }),
+                                                data: dataAuthLogin)
+                                            .then((resRecoverToken) {
+                                          print(
+                                              "@resRecoverToken = $resRecoverToken");
 
-                                            setState(() {
-                                              isLoadingSignInWithGoogle = false;
+                                          SharedPreferences.getInstance()
+                                              .then((prefs) {
+                                            prefs
+                                                .setString(
+                                                    'access_token',
+                                                    resRecoverToken
+                                                            .data?["data"]
+                                                        ?["recoverToken"])
+                                                .then((value) {
+                                              Application.router.navigateTo(
+                                                  context, "/privateScreens",
+                                                  transition:
+                                                      TransitionType.native);
+
+                                              setState(() {
+                                                isLoadingSignInWithGoogle =
+                                                    false;
+                                              });
+                                            }).catchError((onError) {
+                                              print(onError);
+
+                                              setState(() {
+                                                isLoadingSignInWithGoogle =
+                                                    false;
+                                              });
                                             });
                                           }).catchError((onError) {
-                                            print(onError);
+                                            print(
+                                                'onError SharedPreferences = $onError');
 
                                             setState(() {
                                               isLoadingSignInWithGoogle = false;
                                             });
                                           });
                                         }).catchError((onError) {
-                                          print(
-                                              'onError SharedPreferences = $onError');
-
                                           setState(() {
                                             isLoadingSignInWithGoogle = false;
                                           });
+                                          print(
+                                              "onError recover-email $onError");
                                         });
                                       },
                                       labelSize: 12,
@@ -297,6 +324,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 36,
                                       onPressed: () {
                                         Navigator.pop(context, 'No');
+                                        setState(() {
+                                          isLoadingSignInWithGoogle = false;
+                                        });
                                       },
                                     ),
                                   ],
