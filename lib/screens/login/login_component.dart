@@ -210,17 +210,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: blackSolidPrimaryColor,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(12))),
-                                    child: const Column(
+                                    child: Column(
                                       children: [
-                                        Text('saldimantp',
+                                        Text(result.displayName.toString(),
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.white)),
-                                        Text('saldimantp@gmail.com',
+                                        Text(result.email.toString(),
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w500,
                                                 color: greySecondaryColor)),
@@ -264,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 data: dataAuthLogin)
                                             .then((resRecoverToken) {
                                           print(
-                                              "@resRecoverToken = $resRecoverToken");
+                                              "@resRecoverToken = ${resRecoverToken.data?["data"]?["accessToken"]}");
 
                                           SharedPreferences.getInstance()
                                               .then((prefs) {
@@ -273,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     'access_token',
                                                     resRecoverToken
                                                             .data?["data"]
-                                                        ?["recoverToken"])
+                                                        ?["accessToken"])
                                                 .then((value) {
                                               Application.router.navigateTo(
                                                   context, "/privateScreens",
@@ -285,7 +285,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     false;
                                               });
                                             }).catchError((onError) {
-                                              print(onError);
+                                              print(
+                                                  "@onError resRecoverToken = $onError");
 
                                               setState(() {
                                                 isLoadingSignInWithGoogle =
