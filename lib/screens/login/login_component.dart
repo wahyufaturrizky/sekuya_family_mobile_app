@@ -7,6 +7,8 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +16,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -174,6 +177,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         "fcm_token": valTokenMessageAndroid,
                       };
 
+                print("@dataAuthLogin = $dataAuthLogin");
+
                 dio
                     .post('$baseUrl/auth/login',
                         options: Options(
@@ -182,31 +187,150 @@ class _LoginScreenState extends State<LoginScreen> {
                             responseType: ResponseType.json),
                         data: dataAuthLogin)
                     .then((valResFromXellar) {
-                  SharedPreferences.getInstance().then((prefs) {
-                    prefs
-                        .setString('access_token',
-                            valResFromXellar.data['data']['accessToken'])
-                        .then((value) {
-                      Application.router.navigateTo(context, "/privateScreens",
-                          transition: TransitionType.native);
+                  print("@valResFromXellar = ${valResFromXellar.data}");
 
-                      setState(() {
-                        isLoadingSignInWithGoogle = false;
+                  if (valResFromXellar.data?["data"]?["recoverToken"] != null) {
+                    showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: greySmoothColor,
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/ic_google_medium.png',
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    width: 250,
+                                    decoration: const BoxDecoration(
+                                        color: blackSolidPrimaryColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(12))),
+                                    child: const Column(
+                                      children: [
+                                        Text('saldimantp',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white)),
+                                        Text('saldimantp@gmail.com',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                color: greySecondaryColor)),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  const Text(
+                                      'This email is registered as recovery email, do you want to recover your account?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: greySecondaryColor)),
+                                ],
+                              ),
+                              actions: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomButton(
+                                      buttonText: 'Yes',
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Yes');
+
+                                        SharedPreferences.getInstance()
+                                            .then((prefs) {
+                                          prefs
+                                              .setString(
+                                                  'access_token',
+                                                  valResFromXellar.data?["data"]
+                                                      ?["recoverToken"])
+                                              .then((value) {
+                                            Application.router.navigateTo(
+                                                context, "/privateScreens",
+                                                transition:
+                                                    TransitionType.native);
+
+                                            setState(() {
+                                              isLoadingSignInWithGoogle = false;
+                                            });
+                                          }).catchError((onError) {
+                                            print(onError);
+
+                                            setState(() {
+                                              isLoadingSignInWithGoogle = false;
+                                            });
+                                          });
+                                        }).catchError((onError) {
+                                          print(
+                                              'onError SharedPreferences = $onError');
+
+                                          setState(() {
+                                            isLoadingSignInWithGoogle = false;
+                                          });
+                                        });
+                                      },
+                                      labelSize: 12,
+                                      height: 36,
+                                      width: 100,
+                                    ),
+                                    CustomButton(
+                                      buttonText: 'No',
+                                      isOutlined: true,
+                                      border: 1,
+                                      isOutlinedBackgroundColor:
+                                          blackSolidPrimaryColor,
+                                      isOutlinedBorderColor: yellowPrimaryColor,
+                                      labelSize: 12,
+                                      width: 100,
+                                      height: 36,
+                                      onPressed: () {
+                                        Navigator.pop(context, 'No');
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ));
+                  } else {
+                    SharedPreferences.getInstance().then((prefs) {
+                      prefs
+                          .setString('access_token',
+                              valResFromXellar.data['data']?['accessToken'])
+                          .then((value) {
+                        Application.router.navigateTo(
+                            context, "/privateScreens",
+                            transition: TransitionType.native);
+
+                        setState(() {
+                          isLoadingSignInWithGoogle = false;
+                        });
+                      }).catchError((onError) {
+                        print(onError);
+
+                        setState(() {
+                          isLoadingSignInWithGoogle = false;
+                        });
                       });
                     }).catchError((onError) {
-                      print(onError);
+                      print('onError SharedPreferences = $onError');
 
                       setState(() {
                         isLoadingSignInWithGoogle = false;
                       });
                     });
-                  }).catchError((onError) {
-                    print('onError SharedPreferences = $onError');
-
-                    setState(() {
-                      isLoadingSignInWithGoogle = false;
-                    });
-                  });
+                  }
                 }).catchError((onError) {
                   print('onError auth/login = $onError');
 
@@ -329,8 +453,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 isLoading: isLoadingSignInWithGoogle,
                                 buttonText: 'Continue with Gmail',
                                 onPressed: () {
-                                  if (!isLoadingSignInWithGoogle ||
-                                      !isLoadingSignInWithApple) {
+                                  if (!(isLoadingSignInWithGoogle ||
+                                      isLoadingSignInWithApple)) {
                                     signInWithGoogle();
                                   }
                                 },
@@ -350,8 +474,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 buttonText: 'with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
-                                  if (!isLoadingSignInWithApple ||
-                                      !isLoadingSignInWithGoogle) {
+                                  if (!(isLoadingSignInWithApple ||
+                                      isLoadingSignInWithGoogle)) {
                                     signInWithApple();
                                   }
                                 },

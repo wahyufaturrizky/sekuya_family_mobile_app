@@ -155,20 +155,30 @@ class _ProfileDetailState extends State<ProfileDetail> {
   Future handleLogout() async {
     FirebaseAuth.instance.signOut().then((value) {
       SharedPreferences.getInstance().then((prefs) {
-        prefs
-            .remove('access_token')
-            .then((value) => {
-                  Application.router.navigateTo(context, "/",
-                      transition: TransitionType.native)
-                })
-            .catchError((onError) {
+        prefs.remove('access_token').then((value) {
+          Application.router
+              .navigateTo(context, "/", transition: TransitionType.native);
+
+          setState(() {
+            isLoadingRecoveryEmailWithGoogle = false;
+          });
+        }).catchError((onError) {
           print('Error SharedPreferences signOut = $onError');
+          setState(() {
+            isLoadingRecoveryEmailWithGoogle = false;
+          });
         });
       }).catchError((onError) {
         print('Error SharedPreferences signOut = $onError');
+        setState(() {
+          isLoadingRecoveryEmailWithGoogle = false;
+        });
       });
     }).catchError((err) {
       print('Error FirebaseAuth signOut = $err');
+      setState(() {
+        isLoadingRecoveryEmailWithGoogle = false;
+      });
     });
   }
 
@@ -249,9 +259,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                 print('@dataAuthLogin = $dataAuthLogin');
 
                 setRecoveryEmail(dataAuthLogin).then((value) {
-                  setState(() {
-                    isLoadingRecoveryEmailWithGoogle = false;
-                  });
+                  handleLogout();
                 }).catchError((onError) {
                   print("onError setRecoveryEmail = $onError");
                   setState(() {
@@ -671,8 +679,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
                               buttonText: 'with Gmail',
                               isOutlined: true,
                               onPressed: () {
-                                if (!isLoadingRecoveryEmailWithGoogle ||
-                                    !isLoadingRecoveryEmailWithApple) {
+                                if (!(isLoadingRecoveryEmailWithGoogle ||
+                                    isLoadingRecoveryEmailWithApple)) {
                                   signInWithGoogle();
                                 }
                               },
@@ -688,8 +696,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                 buttonText: 'with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
-                                  if (!isLoadingRecoveryEmailWithApple ||
-                                      !isLoadingRecoveryEmailWithGoogle) {}
+                                  if (!(isLoadingRecoveryEmailWithApple ||
+                                      isLoadingRecoveryEmailWithGoogle)) {}
                                 },
                                 sizeButtonIcon: 20,
                                 buttonIcon: 'ic_apple.png',
