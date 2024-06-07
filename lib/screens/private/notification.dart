@@ -254,11 +254,11 @@ class _NotificationState extends State<Notification> {
                             ),
                           )),
                 ),
-                if (noDataAnymore)
-                  const Center(
-                    child: Text("👋🏻 Hi your reach the end of the list",
-                        style: TextStyle(color: Colors.white, fontSize: 14)),
-                  ),
+                // if (noDataAnymore)
+                //   const Center(
+                //     child: Text("👋🏻 Hi your reach the end of the list",
+                //         style: TextStyle(color: Colors.white, fontSize: 14)),
+                //   ),
                 if (isLoadingResNotification) const MyWidgetSpinnerApp()
               ],
             ),

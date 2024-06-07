@@ -25,6 +25,7 @@ import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart'
 import 'package:sekuya_family_mobile_app/components/proof_with_photo.dart';
 import 'package:sekuya_family_mobile_app/components/proof_with_photo_and_loc.dart';
 import 'package:sekuya_family_mobile_app/components/quiz.dart';
+import 'package:sekuya_family_mobile_app/components/referral.dart';
 import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -69,6 +70,7 @@ class MissionDetail extends StatefulWidget {
 class _MissionDetailState extends State<MissionDetail> {
   late String username;
   bool isLoadingTaskMission = false;
+  bool isLoadingSubmitTaskMission = false;
   bool isLoadingMissionDetail = false;
   List<XFile>? _mediaFileList;
   dynamic _pickImageError;
@@ -273,7 +275,7 @@ class _MissionDetailState extends State<MissionDetail> {
   Future<dynamic> handlePostTaskSubmission({taskId, taskCategoryKey}) async {
     try {
       setState(() {
-        isLoadingTaskMission = true;
+        isLoadingSubmitTaskMission = true;
       });
 
       String idMission = widget.args?.resMission?["data"]?["data"]
@@ -409,6 +411,55 @@ class _MissionDetailState extends State<MissionDetail> {
           });
           break;
         case "ANSWER_NOTES":
+          if (additionalAttributeAnswerNotes.text.isEmpty) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                backgroundColor: blackSolidPrimaryColor,
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text('Warning!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('Please provide the answer notes.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: greySecondaryColor)),
+                  ],
+                ),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: <Widget>[
+                  CustomButton(
+                    buttonText: 'OK',
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoadingTaskMission = false;
+                      });
+                    },
+                    labelSize: 12,
+                    height: 36,
+                    width: 120,
+                  ),
+                ],
+              ),
+            );
+
+            break;
+          }
+        case "REFERRAL":
           if (additionalAttributeAnswerNotes.text.isEmpty) {
             showDialog<String>(
               context: context,
@@ -1272,18 +1323,38 @@ class _MissionDetailState extends State<MissionDetail> {
                                               description:
                                                   itemTask["description"],
                                               exp: itemTask["exp"],
-                                              onTapTakeCamera: () {
-                                                if (_picker.supportsImageSource(
-                                                    ImageSource.camera)) {
-                                                  _onImageButtonPressed(
-                                                      ImageSource.camera,
-                                                      context: context);
+                                              isLoadingTaskMission:
+                                                  isLoadingTaskMission,
+                                              onPressedSubmitTaskMission: () {
+                                                if (!isLoadingTaskMission) {
+                                                  handlePostTaskSubmission(
+                                                    taskId: itemTask["id"],
+                                                    taskCategoryKey: itemTask[
+                                                        "taskCategoryKey"],
+                                                  );
                                                 }
+                                              }),
+                                        if (itemTask["taskCategoryKey"] ==
+                                            "REFERRAL")
+                                          ReferralApp(
+                                              image: itemTask["image"],
+                                              name: itemTask["name"],
+                                              status: itemTask["status"],
+                                              onExpansionChanged: () {
+                                                selectedChoice = null;
+                                                _mediaFileList = null;
+                                                lat = null;
+                                                long = null;
+                                                additionalAttributeAnswerNotes
+                                                    .text = "";
+                                                additionalAttributeAnswerMultipleChoice
+                                                    .text = "";
                                               },
-                                              retrieveLostData: () async {
-                                                await retrieveLostData();
-                                              },
-                                              previewImages: _previewImages(),
+                                              additionalAttributeAnswerNotes:
+                                                  additionalAttributeAnswerNotes,
+                                              description:
+                                                  itemTask["description"],
+                                              exp: itemTask["exp"],
                                               isLoadingTaskMission:
                                                   isLoadingTaskMission,
                                               onPressedSubmitTaskMission: () {

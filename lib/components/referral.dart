@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
-class AnswerNotesApp extends StatelessWidget {
-  const AnswerNotesApp(
+class ReferralApp extends StatelessWidget {
+  const ReferralApp(
       {super.key,
       this.image,
       this.name,
@@ -36,7 +36,7 @@ class AnswerNotesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnswerNotes(
+    return Referral(
       image: image,
       name: name,
       exp: exp,
@@ -50,8 +50,8 @@ class AnswerNotesApp extends StatelessWidget {
   }
 }
 
-class AnswerNotes extends StatefulWidget {
-  const AnswerNotes(
+class Referral extends StatefulWidget {
+  const Referral(
       {super.key,
       this.image,
       this.name,
@@ -74,10 +74,10 @@ class AnswerNotes extends StatefulWidget {
   final dynamic status;
 
   @override
-  State<AnswerNotes> createState() => _AnswerNotesState();
+  State<Referral> createState() => _ReferralState();
 }
 
-class _AnswerNotesState extends State<AnswerNotes> {
+class _ReferralState extends State<Referral> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
@@ -177,7 +177,6 @@ class _AnswerNotesState extends State<AnswerNotes> {
             borderRadius: 4,
             borderWidth: 1,
             textField: TextField(
-                maxLines: 8,
                 controller: widget.additionalAttributeAnswerNotes,
                 style: const TextStyle(
                   fontSize: 12,

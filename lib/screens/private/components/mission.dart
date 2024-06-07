@@ -356,11 +356,11 @@ class _MissionComponentState extends State<MissionComponent> {
                       ],
                     ),
                   )),
-                  if (noDataAnymore)
-                    const Center(
-                      child: Text("👋🏻 Hi your reach the end of the list",
-                          style: TextStyle(color: Colors.white, fontSize: 14)),
-                    ),
+                  // if (noDataAnymore)
+                  //   const Center(
+                  //     child: Text("👋🏻 Hi your reach the end of the list",
+                  //         style: TextStyle(color: Colors.white, fontSize: 14)),
+                  //   ),
                 ],
               );
             },

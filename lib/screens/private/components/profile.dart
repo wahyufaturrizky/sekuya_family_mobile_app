@@ -901,17 +901,17 @@ class _ProfileComponentState extends State<ProfileComponent> {
                             ),
                           ),
                         ),
-                        if ((name == "My Mission" && noDataAnymoreMyMission) ||
-                            (name == "My Communities" &&
-                                noDataAnymoreMyCommunities) ||
-                            (name == "My Voucher" && noDataAnymoreMyVoucher) ||
-                            (name == "My Reward" && noDataAnymoreMyReward))
-                          const Center(
-                            child: Text(
-                                "👋🏻 Hi your reach the end of the list",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
-                          ),
+                        // if ((name == "My Mission" && noDataAnymoreMyMission) ||
+                        //     (name == "My Communities" &&
+                        //         noDataAnymoreMyCommunities) ||
+                        //     (name == "My Voucher" && noDataAnymoreMyVoucher) ||
+                        //     (name == "My Reward" && noDataAnymoreMyReward))
+                        //   const Center(
+                        //     child: Text(
+                        //         "👋🏻 Hi your reach the end of the list",
+                        //         style: TextStyle(
+                        //             color: Colors.white, fontSize: 14)),
+                        //   ),
                       ],
                     );
                   },
