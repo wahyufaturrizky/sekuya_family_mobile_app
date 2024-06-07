@@ -22,7 +22,7 @@ class QuizApp extends StatelessWidget {
       this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
@@ -38,7 +38,7 @@ class QuizApp extends StatelessWidget {
   final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
@@ -56,7 +56,7 @@ class QuizApp extends StatelessWidget {
       onTapTakeCamera: onTapTakeCamera,
       retrieveLostData: retrieveLostData,
       previewImages: previewImages,
-      isLoadingTaskMission: isLoadingTaskMission,
+      isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       additionalAttributeAnswerNotes: additionalAttributeAnswerNotes,
       onExpansionChanged: onExpansionChanged,
@@ -78,7 +78,7 @@ class Quiz extends StatefulWidget {
       this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
@@ -94,7 +94,7 @@ class Quiz extends StatefulWidget {
   final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
@@ -234,7 +234,7 @@ class _QuizState extends State<Quiz> {
           ),
           CustomButton(
             buttonText: 'Submit',
-            isLoading: widget.isLoadingTaskMission!,
+            isLoading: widget.isLoadingSubmitTaskMission!,
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },

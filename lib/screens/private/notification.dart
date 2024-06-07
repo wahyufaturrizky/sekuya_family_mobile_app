@@ -10,11 +10,13 @@
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:sekuya_family_mobile_app/components/spinner.dart';
+import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
+import 'package:sekuya_family_mobile_app/service/community/community.dart';
 import 'package:sekuya_family_mobile_app/service/notification/notification.dart';
+import 'package:sekuya_family_mobile_app/util/format_date.dart';
 
 class NotificationApp extends StatelessWidget {
   const NotificationApp({
@@ -38,16 +40,16 @@ class Notification extends StatefulWidget {
 
 class _NotificationState extends State<Notification> {
   bool isLoadingResNotification = false;
-  static const pageSize = 10;
+  bool isLoadingJoinCommunity = false;
 
+  static const pageSize = 5;
+
+  var resNotification;
   var totalPages;
   var currentPageState = 0;
   int itemPerPageState = 0;
-  var noDataAnymore = false;
 
   late ScrollController? nestedScrollViewContoller = ScrollController();
-
-  var resNotification;
 
   @override
   void initState() {
@@ -68,6 +70,52 @@ class _NotificationState extends State<Notification> {
     super.initState();
   }
 
+  void goToDetailCommunity(resCommunities, index) {
+    final arguments =
+        MyArgumentsDataDetailCommunityClass(resCommunities, index);
+
+    Application.router.navigateTo(context, "/communityDetailScreens",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
+
+    setState(() {
+      isLoadingJoinCommunity = false;
+    });
+  }
+
+  Future<dynamic> handleJoinCommunity(String id) async {
+    try {
+      setState(() {
+        isLoadingJoinCommunity = true;
+      });
+
+      var res = await handleJoinCommunities(id);
+
+      if (res != null) {
+        var resCommunityById = await handleGetDataCommunitiesDetail(id);
+
+        if (resCommunityById != null) {
+          var tempItem = {
+            "data": {"data": []}
+          };
+
+          tempItem["data"]!["data"]?.add(resCommunityById?["data"]);
+
+          var tempData = [];
+
+          tempData.add(res?["data"]);
+
+          goToDetailCommunity(tempItem, 0);
+        }
+      }
+    } catch (e) {
+      setState(() {
+        isLoadingJoinCommunity = false;
+      });
+      print(e);
+    }
+  }
+
   Future<dynamic> getDataNotification(
       {search, filter_by_value, pageKey = 1}) async {
     if (!mounted) return;
@@ -80,25 +128,16 @@ class _NotificationState extends State<Notification> {
 
       var queryParameters;
 
-      if (search != null) {
-        queryParameters = {
-          'search': search,
-        };
-      } else if (filter_by_value != null) {
-        queryParameters = {
-          'filter_by_value': filter_by_value,
-          'filter_by': 'status',
-        };
-      } else {
-        queryParameters = {
-          'page': pageKey.toString(),
-          'limit': pageSize.toString(),
-        };
-      }
+      queryParameters = {
+        'page': pageKey.toString(),
+        'limit': pageSize.toString(),
+      };
 
       var res = await handleGetDataNotification(queryParameters);
 
       if (res != null) {
+        print("@res = $res");
+
         if (mounted) {
           if (res?["data"]?["meta"]?["totalPages"] > currentPageState) {
             var response = {
@@ -118,12 +157,11 @@ class _NotificationState extends State<Notification> {
               resNotification = response;
               isLoadingResNotification = false;
               totalPages = res?["data"]?["meta"]?["totalPages"];
-              currentPageState = res?["data"]?["meta"]?["page"];
+              currentPageState = res?["data"]?["meta"]?["currentPage"];
               itemPerPageState = itemPerPageState + tempItemPerPageState;
             });
           } else {
             setState(() {
-              noDataAnymore = true;
               isLoadingResNotification = false;
             });
           }
@@ -177,89 +215,96 @@ class _NotificationState extends State<Notification> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: const Text('April 2022',
-                          style: TextStyle(
-                              color: greySoftSecondaryColor,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: List.generate(
-                      5,
-                      (index) => Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: const BoxDecoration(
-                                color: goldenSoftColor,
-                                border: Border.symmetric(
-                                    horizontal: BorderSide(
-                                        color: greySoftFourthColor, width: 1))),
-                            child: const Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Mission',
-                                      style: TextStyle(
-                                        color: goldenColor,
-                                        fontWeight: FontWeight.w400,
+                // Row(
+                //   children: [
+                //     Container(
+                //       padding: const EdgeInsets.symmetric(vertical: 8),
+                //       child: const Text('April 2022',
+                //           style: TextStyle(
+                //               color: greySoftSecondaryColor,
+                //               fontWeight: FontWeight.w500)),
+                //     ),
+                //   ],
+                // ),
+                if (resNotification != null)
+                  Column(
+                    children: (resNotification?["data"]?["data"]
+                            as List<dynamic>)
+                        .map((item) => GestureDetector(
+                            onTap: () {
+                              if (!isLoadingJoinCommunity) {
+                                handleJoinCommunity(item?["data"]
+                                    ?["typeAttributes"]?["communityId"]);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: const BoxDecoration(
+                                  color: goldenSoftColor,
+                                  border: Border.symmetric(
+                                      horizontal: BorderSide(
+                                          color: greySoftFourthColor,
+                                          width: 1))),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        item["data"]?["typeAttributes"]
+                                            ?["taskCategoryKey"],
+                                        style: const TextStyle(
+                                          color: goldenColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '15 minute ago',
-                                      style: TextStyle(
-                                        color: greySoftThirdColor,
-                                        fontWeight: FontWeight.w400,
+                                      Text(
+                                        handleFormatDate(item?["createdAt"]),
+                                        style: const TextStyle(
+                                          color: greySoftThirdColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Mission Complete',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        "Congratulations! You've successfully completed your mission. Your dedication and effort have paid off. Well done!",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          item?["title"],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
                                       ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          )),
-                ),
-                // if (noDataAnymore)
-                //   const Center(
-                //     child: Text("👋🏻 Hi your reach the end of the list",
-                //         style: TextStyle(color: Colors.white, fontSize: 14)),
-                //   ),
-                if (isLoadingResNotification) const MyWidgetSpinnerApp()
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          item?["body"],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )))
+                        .toList(),
+                  ),
               ],
             ),
             // This is the title in the app bar.

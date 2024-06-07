@@ -23,7 +23,7 @@ class ProofWithPhotoApp extends StatelessWidget {
       this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
       this.status});
@@ -35,7 +35,7 @@ class ProofWithPhotoApp extends StatelessWidget {
   final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
@@ -50,7 +50,7 @@ class ProofWithPhotoApp extends StatelessWidget {
       onTapTakeCamera: onTapTakeCamera,
       retrieveLostData: retrieveLostData,
       previewImages: previewImages,
-      isLoadingTaskMission: isLoadingTaskMission,
+      isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       onExpansionChanged: onExpansionChanged,
       status: status,
@@ -68,7 +68,7 @@ class ProofWithPhoto extends StatefulWidget {
       this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
       this.status});
@@ -80,7 +80,7 @@ class ProofWithPhoto extends StatefulWidget {
   final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
@@ -314,7 +314,7 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
           ),
           CustomButton(
             buttonText: 'Submit',
-            isLoading: widget.isLoadingTaskMission!,
+            isLoading: widget.isLoadingSubmitTaskMission!,
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },

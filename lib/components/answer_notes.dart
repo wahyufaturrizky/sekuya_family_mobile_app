@@ -18,7 +18,7 @@ class AnswerNotesApp extends StatelessWidget {
       this.name,
       this.exp,
       this.description,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
@@ -28,7 +28,7 @@ class AnswerNotesApp extends StatelessWidget {
   final dynamic name;
   final dynamic exp;
   final dynamic description;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
@@ -41,7 +41,7 @@ class AnswerNotesApp extends StatelessWidget {
       name: name,
       exp: exp,
       description: description,
-      isLoadingTaskMission: isLoadingTaskMission,
+      isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       additionalAttributeAnswerNotes: additionalAttributeAnswerNotes,
       onExpansionChanged: onExpansionChanged,
@@ -57,7 +57,7 @@ class AnswerNotes extends StatefulWidget {
       this.name,
       this.exp,
       this.description,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
@@ -67,7 +67,7 @@ class AnswerNotes extends StatefulWidget {
   final dynamic name;
   final dynamic exp;
   final dynamic description;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
@@ -193,7 +193,7 @@ class _AnswerNotesState extends State<AnswerNotes> {
           ),
           CustomButton(
             buttonText: 'Submit',
-            isLoading: widget.isLoadingTaskMission!,
+            isLoading: widget.isLoadingSubmitTaskMission!,
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },

@@ -139,12 +139,16 @@ class _MissionDetailState extends State<MissionDetail> {
     }
   }
 
-  Future<dynamic> getDataMissionDetail() async {
+  Future<dynamic> getDataMissionDetail({isFromSubmit = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingMissionDetail = true;
+          if (isFromSubmit) {
+            isLoadingSubmitTaskMission = true;
+          } else {
+            isLoadingMissionDetail = true;
+          }
         });
       }
 
@@ -158,6 +162,7 @@ class _MissionDetailState extends State<MissionDetail> {
           setState(() {
             resMissionDetail = res;
             isLoadingMissionDetail = false;
+            isLoadingSubmitTaskMission = false;
           });
         }
       }
@@ -165,6 +170,7 @@ class _MissionDetailState extends State<MissionDetail> {
       if (mounted) {
         setState(() {
           isLoadingMissionDetail = false;
+          isLoadingSubmitTaskMission = false;
         });
       }
 
@@ -324,7 +330,7 @@ class _MissionDetailState extends State<MissionDetail> {
                     onPressed: () {
                       Navigator.pop(context, 'OK');
                       setState(() {
-                        isLoadingTaskMission = false;
+                        isLoadingSubmitTaskMission = false;
                       });
                     },
                     labelSize: 12,
@@ -385,7 +391,7 @@ class _MissionDetailState extends State<MissionDetail> {
                     onPressed: () {
                       Navigator.pop(context, 'OK');
                       setState(() {
-                        isLoadingTaskMission = false;
+                        isLoadingSubmitTaskMission = false;
                       });
                     },
                     labelSize: 12,
@@ -446,7 +452,7 @@ class _MissionDetailState extends State<MissionDetail> {
                     onPressed: () {
                       Navigator.pop(context, 'OK');
                       setState(() {
-                        isLoadingTaskMission = false;
+                        isLoadingSubmitTaskMission = false;
                       });
                     },
                     labelSize: 12,
@@ -459,6 +465,14 @@ class _MissionDetailState extends State<MissionDetail> {
 
             break;
           }
+
+          formData = FormData.fromMap({
+            'taskId': taskId,
+            'taskCategoryKey': taskCategoryKey,
+            'additionalAttribute': additionalAttributeAnswerNotes.text,
+          });
+
+          break;
         case "REFERRAL":
           if (additionalAttributeAnswerNotes.text.isEmpty) {
             showDialog<String>(
@@ -495,7 +509,7 @@ class _MissionDetailState extends State<MissionDetail> {
                     onPressed: () {
                       Navigator.pop(context, 'OK');
                       setState(() {
-                        isLoadingTaskMission = false;
+                        isLoadingSubmitTaskMission = false;
                       });
                     },
                     labelSize: 12,
@@ -512,11 +526,10 @@ class _MissionDetailState extends State<MissionDetail> {
           formData = FormData.fromMap({
             'taskId': taskId,
             'taskCategoryKey': taskCategoryKey,
-            'additionalAttribute': selectedChoice,
+            'additionalAttribute': additionalAttributeAnswerNotes.text,
           });
           break;
         default:
-          print(selectedChoice);
           if (selectedChoice == null) {
             showDialog<String>(
               context: context,
@@ -552,7 +565,7 @@ class _MissionDetailState extends State<MissionDetail> {
                     onPressed: () {
                       Navigator.pop(context, 'OK');
                       setState(() {
-                        isLoadingTaskMission = false;
+                        isLoadingSubmitTaskMission = false;
                       });
                     },
                     labelSize: 12,
@@ -569,7 +582,7 @@ class _MissionDetailState extends State<MissionDetail> {
           formData = FormData.fromMap({
             'taskId': taskId,
             'taskCategoryKey': taskCategoryKey,
-            'additionalAttribute': additionalAttributeAnswerMultipleChoice.text,
+            'additionalAttribute': selectedChoice,
           });
           break;
       }
@@ -612,9 +625,9 @@ class _MissionDetailState extends State<MissionDetail> {
                   onPressed: () {
                     Navigator.pop(context, 'OK');
                     setState(() {
-                      isLoadingTaskMission = false;
+                      isLoadingSubmitTaskMission = false;
                     });
-                    getDataMissionDetail();
+                    getDataMissionDetail(isFromSubmit: true);
                   },
                   labelSize: 12,
                   height: 36,
@@ -623,9 +636,9 @@ class _MissionDetailState extends State<MissionDetail> {
               ],
             ),
           ).then((value) {
-            getDataMissionDetail();
+            getDataMissionDetail(isFromSubmit: true);
             setState(() {
-              isLoadingTaskMission = false;
+              isLoadingSubmitTaskMission = false;
               selectedChoice = '';
               additionalAttributeAnswerMultipleChoice.text = '';
               additionalAttributeAnswerNotes.text = '';
@@ -636,11 +649,11 @@ class _MissionDetailState extends State<MissionDetail> {
           });
         }
       }
-    } catch (e) {
+    } catch (err) {
       setState(() {
-        isLoadingTaskMission = false;
+        isLoadingSubmitTaskMission = false;
       });
-      print(e);
+      print('@handleTaskSubmission: $err');
     }
   }
 
@@ -1249,10 +1262,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                               isLoadingNameLocation:
                                                   isLoadingNameLocation,
                                               nameLocation: nameLocation,
-                                              isLoadingTaskMission:
-                                                  isLoadingTaskMission,
+                                              isLoadingSubmitTaskMission:
+                                                  isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingTaskMission) {
+                                                if (!isLoadingSubmitTaskMission) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1291,10 +1304,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                                 await retrieveLostData();
                                               },
                                               previewImages: _previewImages(),
-                                              isLoadingTaskMission:
-                                                  isLoadingTaskMission,
+                                              isLoadingSubmitTaskMission:
+                                                  isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingTaskMission) {
+                                                if (!isLoadingSubmitTaskMission) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1323,10 +1336,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                               description:
                                                   itemTask["description"],
                                               exp: itemTask["exp"],
-                                              isLoadingTaskMission:
-                                                  isLoadingTaskMission,
+                                              isLoadingSubmitTaskMission:
+                                                  isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingTaskMission) {
+                                                if (!isLoadingSubmitTaskMission) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1355,10 +1368,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                               description:
                                                   itemTask["description"],
                                               exp: itemTask["exp"],
-                                              isLoadingTaskMission:
-                                                  isLoadingTaskMission,
+                                              isLoadingSubmitTaskMission:
+                                                  isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingTaskMission) {
+                                                if (!isLoadingSubmitTaskMission) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1405,10 +1418,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                                 await retrieveLostData();
                                               },
                                               previewImages: _previewImages(),
-                                              isLoadingTaskMission:
-                                                  isLoadingTaskMission,
+                                              isLoadingSubmitTaskMission:
+                                                  isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingTaskMission) {
+                                                if (!isLoadingSubmitTaskMission) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[

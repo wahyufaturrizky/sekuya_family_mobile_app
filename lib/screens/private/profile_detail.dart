@@ -32,7 +32,7 @@ const List<String> scopes = <String>[
   'https://www.googleapis.com/auth/contacts.readonly',
 ];
 
-GoogleSignIn _googleSignIn = kIsWeb
+GoogleSignIn googleSignIn = kIsWeb
     ? GoogleSignIn(
         scopes: scopes,
         clientId:
@@ -199,13 +199,13 @@ class _ProfileDetailState extends State<ProfileDetail> {
     return null;
   }
 
-  Future<dynamic> signInWithGoogle() async {
-    try {
-      setState(() {
-        isLoadingRecoveryEmailWithGoogle = true;
-      });
+  signInWithGoogle() {
+    setState(() {
+      isLoadingRecoveryEmailWithGoogle = true;
+    });
 
-      _googleSignIn.signIn().then((result) {
+    googleSignIn.disconnect().then((value) {
+      googleSignIn.signIn().then((result) {
         FirebaseAuth.instance
             .fetchSignInMethodsForEmail(result!.email)
             .then((valSignInMethods) {
@@ -319,23 +319,9 @@ class _ProfileDetailState extends State<ProfileDetail> {
           isLoadingRecoveryEmailWithGoogle = false;
         });
       });
-    } catch (error) {
-      print("Error during Google sign-in: $error");
-
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error during Google sign-in'),
-            content: Text(error.toString()),
-          );
-        },
-      );
-
-      setState(() {
-        isLoadingRecoveryEmailWithGoogle = false;
-      });
-    }
+    }).catchError((onError) {
+      print("Error googleSignIn disconnect = $onError");
+    });
   }
 
   Widget _previewImages() {

@@ -26,7 +26,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       this.onTapGetCurrentPosition,
       this.isLoadingNameLocation,
       this.nameLocation,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
       this.status});
@@ -41,7 +41,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
   final dynamic onTapGetCurrentPosition;
   final bool? isLoadingNameLocation;
   final String? nameLocation;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
@@ -59,7 +59,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       onTapGetCurrentPosition: onTapGetCurrentPosition,
       isLoadingNameLocation: isLoadingNameLocation,
       nameLocation: nameLocation,
-      isLoadingTaskMission: isLoadingTaskMission,
+      isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       onExpansionChanged: onExpansionChanged,
       status: status,
@@ -80,7 +80,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
       this.onTapGetCurrentPosition,
       this.isLoadingNameLocation,
       this.nameLocation,
-      this.isLoadingTaskMission,
+      this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
       this.status});
@@ -95,7 +95,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
   final dynamic onTapGetCurrentPosition;
   final bool? isLoadingNameLocation;
   final String? nameLocation;
-  final bool? isLoadingTaskMission;
+  final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
@@ -360,7 +360,7 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
           ),
           CustomButton(
             buttonText: 'Submit',
-            isLoading: widget.isLoadingTaskMission!,
+            isLoading: widget.isLoadingSubmitTaskMission!,
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },

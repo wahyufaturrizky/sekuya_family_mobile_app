@@ -10,7 +10,9 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/empty_list.dart';
 import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
@@ -22,6 +24,20 @@ import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+const List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+];
+
+GoogleSignIn googleSignIn = kIsWeb
+    ? GoogleSignIn(
+        scopes: scopes,
+        clientId:
+            "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com")
+    : GoogleSignIn(
+        scopes: scopes,
+      );
 
 class ProfileComponentApp extends StatelessWidget {
   const ProfileComponentApp({super.key});
@@ -439,23 +455,27 @@ class _ProfileComponentState extends State<ProfileComponent> {
   }
 
   Future handleLogout() async {
-    FirebaseAuth.instance.signOut().then((value) {
-      SharedPreferences.getInstance().then((prefs) {
-        prefs
-            .remove('access_token')
-            .then((value) => {
-                  Application.router.navigateTo(context, "/",
-                      transition: TransitionType.native)
-                })
-            .catchError((onError) => {
-                  print(
-                      'Error SharedPreferences remove access_token = $onError')
-                });
-      }).catchError((onError) {
-        print('Error SharedPreferences signOut = $onError');
+    googleSignIn.disconnect().then((value) {
+      FirebaseAuth.instance.signOut().then((value) {
+        SharedPreferences.getInstance().then((prefs) {
+          prefs
+              .remove('access_token')
+              .then((value) => {
+                    Application.router.navigateTo(context, "/",
+                        transition: TransitionType.native)
+                  })
+              .catchError((onError) => {
+                    print(
+                        'Error SharedPreferences remove access_token = $onError')
+                  });
+        }).catchError((onError) {
+          print('Error SharedPreferences signOut = $onError');
+        });
+      }).catchError((err) {
+        print('Error FirebaseAuth signOut = $err');
       });
-    }).catchError((err) {
-      print('Error FirebaseAuth signOut = $err');
+    }).catchError((onError) {
+      print('Error GoogleSignIn disconnect = $onError');
     });
   }
 
