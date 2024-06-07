@@ -197,6 +197,7 @@ class _HomeComponentState extends State<HomeComponent> {
                             .map((item) {
                             return Builder(
                               builder: (BuildContext context) {
+                                var rewards = item?["rewards"];
                                 return Card(
                                   color: blackPrimaryColor,
                                   clipBehavior: Clip.hardEdge,
@@ -297,17 +298,24 @@ class _HomeComponentState extends State<HomeComponent> {
                                                                   .toString(),
                                                         },
                                                         {
-                                                          "title": item?[
-                                                                      "rewards"]
-                                                                  ?[0]?["name"]
-                                                              ?.split(" ")?[1],
-                                                          "value": item?[
-                                                                      "rewards"]
-                                                                  ?[0]?["name"]
-                                                              ?.split(" ")?[0],
-                                                          "image":
-                                                              item?["rewards"]
-                                                                      ?[0]
+                                                          "title": rewards
+                                                                  .isEmpty
+                                                              ? null
+                                                              : rewards?[0]
+                                                                      ?["name"]
+                                                                  ?.split(
+                                                                      " ")?[1],
+                                                          "value": rewards
+                                                                  .isEmpty
+                                                              ? null
+                                                              : rewards?[0]
+                                                                      ?["name"]
+                                                                  ?.split(
+                                                                      " ")?[0],
+                                                          "image": rewards
+                                                                  .isEmpty
+                                                              ? null
+                                                              : rewards?[0]
                                                                   ?["image"],
                                                         },
                                                       ]

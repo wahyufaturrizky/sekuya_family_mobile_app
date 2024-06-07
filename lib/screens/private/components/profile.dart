@@ -61,6 +61,12 @@ class _ProfileComponentState extends State<ProfileComponent> {
   bool isLoadingResMyMission = false;
   bool isLoadingCommunities = false;
   bool isLoadingReward = false;
+
+  bool refetchResMyVoucher = false;
+  bool refetchResMyMission = false;
+  bool refetchCommunities = false;
+  bool refetchReward = false;
+
   final List<String> tabs = <String>[
     'My Mission',
     'My Communities',
@@ -129,7 +135,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataMyMissions(pageKey: currentPageMyMission + 1);
+          getDataMyMissions(pageKey: currentPageMyMission + 1, refetch: true);
         }
       }
     });
@@ -142,7 +148,8 @@ class _ProfileComponentState extends State<ProfileComponent> {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataMyCommunities(pageKey: currentPageMyCommunities + 1);
+          getDataMyCommunities(
+              pageKey: currentPageMyCommunities + 1, refetch: true);
         }
       }
     });
@@ -154,7 +161,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataMyVoucher(pageKey: currentPageMyVoucher + 1);
+          getDataMyVoucher(pageKey: currentPageMyVoucher + 1, refetch: true);
         }
       }
     });
@@ -166,7 +173,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataMyReward(pageKey: currentPageMyReward + 1);
+          getDataMyReward(pageKey: currentPageMyReward + 1, refetch: true);
         }
       }
     });
@@ -176,12 +183,17 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   Future<dynamic> getDataMyVoucher({
     int pageKey = 1,
+    refetch = false,
   }) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingResMyVoucher = true;
+          if (refetch) {
+            refetchResMyVoucher = true;
+          } else {
+            isLoadingResMyVoucher = true;
+          }
         });
       }
 
@@ -214,6 +226,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               resMyVoucher = response;
               isLoadingResMyVoucher = false;
+              refetchResMyVoucher = false;
               totalPagesMyVoucher = res?["data"]?["meta"]?["totalPages"];
               currentPageMyVoucher = res?["data"]?["meta"]?["page"];
               itemPerPageMyVoucher =
@@ -223,6 +236,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               noDataAnymoreMyVoucher = true;
               isLoadingResMyVoucher = false;
+              refetchResMyVoucher = false;
             });
           }
         }
@@ -240,12 +254,17 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   Future<dynamic> getDataMyReward({
     int pageKey = 1,
+    refetch = false,
   }) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingReward = true;
+          if (refetch) {
+            refetchReward = true;
+          } else {
+            isLoadingReward = true;
+          }
         });
       }
 
@@ -277,6 +296,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               resMyReward = response;
               isLoadingReward = false;
+              refetchReward = false;
               totalPagesMyReward = res?["data"]?["meta"]?["totalPages"];
               currentPageMyReward = res?["data"]?["meta"]?["page"];
               itemPerPageMyReward = itemPerPageMyReward + tempItemPerPageState;
@@ -285,6 +305,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               noDataAnymoreMyReward = true;
               isLoadingReward = false;
+              refetchReward = false;
             });
           }
         }
@@ -330,12 +351,16 @@ class _ProfileComponentState extends State<ProfileComponent> {
     }
   }
 
-  Future<dynamic> getDataMyMissions({pageKey = 1}) async {
+  Future<dynamic> getDataMyMissions({pageKey = 1, refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingResMyMission = true;
+          if (refetch) {
+            refetchResMyMission = true;
+          } else {
+            isLoadingResMyMission = true;
+          }
         });
       }
 
@@ -367,6 +392,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               resMyMission = response;
               isLoadingResMyMission = false;
+              refetchResMyMission = false;
               totalPagesMyMission = res?["data"]?["meta"]?["totalPages"];
               currentPageMyMission = res?["data"]?["meta"]?["page"];
               itemPerPageMyMission =
@@ -376,6 +402,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               noDataAnymoreMyMission = true;
               isLoadingResMyMission = false;
+              refetchResMyMission = false;
             });
           }
         }
@@ -384,6 +411,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
       if (mounted) {
         setState(() {
           isLoadingResMyMission = false;
+          refetchResMyMission = false;
         });
       }
 
@@ -393,12 +421,17 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
   Future<dynamic> getDataMyCommunities({
     pageKey = 1,
+    refetch = false,
   }) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingCommunities = true;
+          if (refetch) {
+            refetchCommunities = true;
+          } else {
+            isLoadingCommunities = true;
+          }
         });
       }
 
@@ -430,6 +463,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               resMyCommunities = response;
               isLoadingCommunities = false;
+              refetchCommunities = false;
               totalPagesMyCommunities = res?["data"]?["meta"]?["totalPages"];
               currentPageMyCommunities = res?["data"]?["meta"]?["page"];
               itemPerPageMyCommunities =
@@ -439,6 +473,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             setState(() {
               noDataAnymoreMyCommunities = true;
               isLoadingCommunities = false;
+              refetchCommunities = false;
             });
           }
         }
@@ -447,6 +482,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
       if (mounted) {
         setState(() {
           isLoadingCommunities = false;
+          refetchCommunities = false;
         });
       }
 

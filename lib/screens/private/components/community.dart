@@ -52,6 +52,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
   late ScrollController? nestedScrollViewContoller = ScrollController();
 
   bool isLoadingResCommunities = false;
+  bool refetchResCommunities = false;
   bool isLoadingResCommunitiesCategories = false;
 
   var resCommunities;
@@ -73,7 +74,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataCommunities(pageKey: currentPageState + 1);
+          getDataCommunities(pageKey: currentPageState + 1, refetch: true);
         }
       }
     });
@@ -92,6 +93,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
     _debounce = Timer(_debouceDuration, () async {
       await getDataCommunities(
         search: search,
+        refetch: true,
       );
     });
   }
@@ -104,12 +106,16 @@ class _CommunityComponentState extends State<CommunityComponent> {
   }
 
   Future<dynamic> getDataCommunities(
-      {pageKey = 1, search, filterByValue}) async {
+      {pageKey = 1, search, filterByValue, refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingResCommunities = true;
+          if (refetch) {
+            refetchResCommunities = true;
+          } else {
+            isLoadingResCommunities = true;
+          }
         });
       }
 
@@ -151,6 +157,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
             setState(() {
               resCommunities = response;
               isLoadingResCommunities = false;
+              refetchResCommunities = false;
               totalPages = res?["data"]?["meta"]?["totalPages"];
               currentPageState = res?["data"]?["meta"]?["page"];
               itemPerPageState = itemPerPageState + tempItemPerPageState;
@@ -159,6 +166,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
             setState(() {
               noDataAnymore = true;
               isLoadingResCommunities = false;
+              refetchResCommunities = false;
             });
           }
         }
@@ -298,7 +306,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                           resCommunitiesCategories?[
                                                                       "data"]
                                                                   ?[index]
-                                                              ?["label"]);
+                                                              ?["label"],
+                                                      refetch: true);
 
                                                   setState(() {
                                                     filterByValueState =

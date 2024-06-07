@@ -38,6 +38,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
   String? filterStatus;
   String? filterReward;
   bool isLoadingResVoucher = false;
+  bool refetchResVoucher = false;
   bool isLoadingClaimVoucher = false;
   static const pageSize = 5;
 
@@ -54,15 +55,19 @@ class _VoucherComponentState extends State<VoucherComponent> {
 
   handleSearchByCode() {
     final code = codeController.text;
-    getDataVoucher(code: code);
+    getDataVoucher(code: code, refetch: true);
   }
 
-  Future<dynamic> getDataVoucher({pageKey = 1, code}) async {
+  Future<dynamic> getDataVoucher({pageKey = 1, code, refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingResVoucher = true;
+          if (refetch) {
+            refetchResVoucher = true;
+          } else {
+            isLoadingResVoucher = true;
+          }
         });
       }
 
@@ -86,6 +91,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
           setState(() {
             resVoucher = res;
             isLoadingResVoucher = false;
+            refetchResVoucher = false;
           });
         }
       }
@@ -93,6 +99,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
       if (mounted) {
         setState(() {
           isLoadingResVoucher = false;
+          refetchResVoucher = false;
         });
       }
 

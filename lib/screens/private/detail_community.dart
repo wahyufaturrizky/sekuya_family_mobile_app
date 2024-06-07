@@ -46,12 +46,18 @@ class CommunityComponentDetail extends StatefulWidget {
 class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
   bool isLoadingJoinCommunity = false;
   bool isLoadingLeaveCommunity = false;
-  bool isLoadingCommunitiesDetail = false;
   bool isJoinCommunity = false;
   bool isJoined = false;
+
   bool isLoadingCommunitiesMissions = false;
   bool isLoadingCommunitiesMembers = false;
   bool isLoadingCommunitiesLeaderboards = false;
+  bool isLoadingCommunitiesDetail = false;
+
+  bool refetchCommunitiesMissions = false;
+  bool refetchCommunitiesMembers = false;
+  bool refetchCommunitiesLeaderboards = false;
+  bool refetchCommunitiesDetail = false;
 
   var resCommunitiesDetail;
   var resCommunitiesMissions;
@@ -69,12 +75,16 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
     getDataCommunitiesLeaderboards();
   }
 
-  Future<dynamic> getDataCommunitiesDetail() async {
+  Future<dynamic> getDataCommunitiesDetail({refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingCommunitiesDetail = true;
+          if (refetch) {
+            refetchCommunitiesDetail = true;
+          } else {
+            isLoadingCommunitiesDetail = true;
+          }
         });
       }
 
@@ -89,6 +99,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
             resCommunitiesDetail = res;
             isJoined = res?["data"]?["isJoined"];
             isLoadingCommunitiesDetail = false;
+            refetchCommunitiesDetail = false;
           });
         }
       }
@@ -96,6 +107,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
       if (mounted) {
         setState(() {
           isLoadingCommunitiesDetail = false;
+          refetchCommunitiesDetail = false;
         });
       }
 
@@ -232,7 +244,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
       var res = await handleJoinCommunities(id);
 
       if (res != null) {
-        getDataCommunitiesDetail();
+        getDataCommunitiesDetail(refetch: true);
 
         const snackBar = SnackBar(
             backgroundColor: yellowPrimaryColor,
@@ -269,7 +281,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
       var res = await handleLeaveCommunities(id);
 
       if (res != null) {
-        getDataCommunitiesDetail();
+        getDataCommunitiesDetail(refetch: true);
 
         const snackBar = SnackBar(
             backgroundColor: yellowPrimaryColor,

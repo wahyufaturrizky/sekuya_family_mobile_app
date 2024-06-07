@@ -39,6 +39,7 @@ class _MissionComponentState extends State<MissionComponent> {
   String? filterStatus;
   String? filterReward;
   bool isLoadingResMission = false;
+  bool refetchMission = false;
   Timer? _debounce;
   static const pageSize = 5;
 
@@ -67,7 +68,7 @@ class _MissionComponentState extends State<MissionComponent> {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataMission(pageKey: currentPageState + 1);
+          getDataMission(pageKey: currentPageState + 1, refetch: true);
         }
       }
     });
@@ -80,18 +81,21 @@ class _MissionComponentState extends State<MissionComponent> {
 
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(_debouceDuration, () async {
-      await getDataMission(
-        search: search,
-      );
+      await getDataMission(search: search, refetch: true);
     });
   }
 
-  Future<dynamic> getDataMission({search, filter_by_value, pageKey = 1}) async {
+  Future<dynamic> getDataMission(
+      {search, filter_by_value, pageKey = 1, refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingResMission = true;
+          if (refetch) {
+            refetchMission = true;
+          } else {
+            isLoadingResMission = true;
+          }
         });
       }
 
@@ -134,6 +138,7 @@ class _MissionComponentState extends State<MissionComponent> {
             setState(() {
               resMission = response;
               isLoadingResMission = false;
+              refetchMission = false;
               totalPages = res?["data"]?["meta"]?["totalPages"];
               currentPageState = res?["data"]?["meta"]?["page"];
               itemPerPageState = itemPerPageState + tempItemPerPageState;
@@ -142,6 +147,7 @@ class _MissionComponentState extends State<MissionComponent> {
             setState(() {
               noDataAnymore = true;
               isLoadingResMission = false;
+              refetchMission = false;
             });
           }
         }
@@ -254,7 +260,8 @@ class _MissionComponentState extends State<MissionComponent> {
                                     filterStatus = value!;
                                   });
 
-                                  getDataMission(filter_by_value: value);
+                                  getDataMission(
+                                      filter_by_value: value, refetch: true);
                                 },
                                 items: list.map<DropdownMenuItem<String>>(
                                     (String value) {
@@ -296,7 +303,8 @@ class _MissionComponentState extends State<MissionComponent> {
                                   setState(() {
                                     filterReward = value!;
                                   });
-                                  getDataMission(filter_by_value: value);
+                                  getDataMission(
+                                      filter_by_value: value, refetch: true);
                                 },
                                 items: list.map<DropdownMenuItem<String>>(
                                     (String value) {

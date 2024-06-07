@@ -49,6 +49,9 @@ class _TabContentMissionComponentState
 
   @override
   Widget build(BuildContext context) {
+    var rewards =
+        widget.resMission?["data"]?["data"]?[widget.index]?["rewards"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -147,14 +150,15 @@ class _TabContentMissionComponentState
                         "icon": "",
                       },
                       {
-                        "title": widget.resMission?["data"]?["data"]
-                                ?[widget.index]?["rewards"]?[0]?["name"]
-                            ?.split(" ")?[1],
-                        "amount": widget.resMission?["data"]?["data"]
-                                ?[widget.index]?["rewards"]?[0]?["name"]
-                            ?.split(" ")?[0],
-                        "icon": widget.resMission?["data"]?["data"]
-                            ?[widget.index]?["rewards"]?[0]?["image"],
+                        "title": rewards != null && rewards.isNotEmpty
+                            ? rewards?[0]?["name"]?.split(" ")[1]
+                            : null,
+                        "amount": rewards != null && rewards.isNotEmpty
+                            ? rewards?[0]?["name"]?.split(" ")[0]
+                            : null,
+                        "icon": rewards != null && rewards.isNotEmpty
+                            ? rewards?[0]?["image"]
+                            : null,
                       }
                     ]
                         .map(
