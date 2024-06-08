@@ -54,6 +54,7 @@ class _TabContentCommunityMembersComponentState
           debugPrint('Card tapped.');
 
           showModalBottomSheet(
+              backgroundColor: Colors.black,
               context: context,
               builder: (BuildContext context) {
                 return ProfileDetailBottomSheetApp(

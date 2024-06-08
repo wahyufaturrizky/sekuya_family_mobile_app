@@ -20,17 +20,7 @@ class ProfileDetailBottomSheetApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ProfileDetailBottomSheet(detailProfile: detailProfile),
-      theme: ThemeData(
-        canvasColor: Colors.black,
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: yellowPrimaryColor.withOpacity(0.2),
-          cursorColor: yellowPrimaryColor,
-          selectionHandleColor: yellowPrimaryColor,
-        ),
-      ),
-    );
+    return ProfileDetailBottomSheet(detailProfile: detailProfile);
   }
 }
 

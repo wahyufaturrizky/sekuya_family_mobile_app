@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/empty_list.dart';
@@ -562,6 +563,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
+                    automaticallyImplyLeading: false,
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -688,6 +690,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                               .map((item) => GestureDetector(
                                   onTap: () {
                                     // showModalBottomSheet(
+                                    // backgroundColor: Colors.black,
                                     //     context: mainContext,
                                     //     builder: (BuildContext context) {
                                     //       return BadgeListBottomSheetApp(
@@ -824,6 +827,12 @@ class _ProfileComponentState extends State<ProfileComponent> {
                     backgroundColor: Colors.black,
                     forceElevated: innerBoxIsScrolled,
                     bottom: TabBar(
+                      labelColor: yellowPrimaryColor,
+                      unselectedLabelColor: greySecondaryColor,
+                      dividerColor: greySecondaryColor,
+                      overlayColor:
+                          MaterialStateProperty.all<Color>(yellowPrimaryColor),
+                      indicator: const BoxDecoration(color: Colors.transparent),
                       controller: isLoadingTab ? null : tabController,
                       // These are the widgets to put in each tab in the tab bar.
                       tabs: tabs.map((String name) => Tab(text: name)).toList(),

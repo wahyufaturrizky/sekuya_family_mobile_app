@@ -16,17 +16,7 @@ class RecoveryEmailBottomSheetApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: RecoveryEmailBottomSheet(),
-      theme: ThemeData(
-        canvasColor: Colors.black,
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: yellowPrimaryColor.withOpacity(0.2),
-          cursorColor: yellowPrimaryColor,
-          selectionHandleColor: yellowPrimaryColor,
-        ),
-      ),
-    );
+    return const RecoveryEmailBottomSheet();
   }
 }
 

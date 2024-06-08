@@ -8,13 +8,8 @@ class DraggableScrollableSheetExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade100),
-      ),
-      home: const Scaffold(
-        body: DraggableScrollableSheetExample(),
-      ),
+    return const Scaffold(
+      body: DraggableScrollableSheetExample(),
     );
   }
 }

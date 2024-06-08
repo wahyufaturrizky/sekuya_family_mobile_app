@@ -33,7 +33,9 @@ var privateHandler =
   final MyArgumentsDataClass? args =
       context!.settings!.arguments as MyArgumentsDataClass?;
 
-  return PrivateScreenApp(args: args);
+  return PrivateScreenApp(
+    args: args,
+  );
 });
 
 var profileDetailHandler = Handler(

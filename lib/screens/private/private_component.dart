@@ -23,27 +23,7 @@ class PrivateScreenApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-        canPop: false,
-        child: MaterialApp(
-          home: PrivateScreen(args: args),
-          theme: ThemeData(
-              bottomSheetTheme:
-                  const BottomSheetThemeData(backgroundColor: Colors.black),
-              canvasColor: Colors.black,
-              textSelectionTheme: TextSelectionThemeData(
-                selectionColor: yellowPrimaryColor.withOpacity(0.2),
-                cursorColor: yellowPrimaryColor,
-                selectionHandleColor: yellowPrimaryColor,
-              ),
-              tabBarTheme: TabBarTheme(
-                  labelColor: yellowPrimaryColor,
-                  indicatorColor: Colors.transparent,
-                  unselectedLabelColor: greySecondaryColor,
-                  dividerColor: greySecondaryColor,
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(yellowPrimaryColor))),
-        ));
+    return PopScope(canPop: false, child: PrivateScreen(args: args));
   }
 }
 

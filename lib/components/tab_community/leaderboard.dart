@@ -99,6 +99,7 @@ class _TabContentCommunityLeaderBoardComponentState
           debugPrint('Card tapped.');
           showModalBottomSheet(
               context: context,
+              backgroundColor: Colors.black,
               builder: (BuildContext context) {
                 return ProfileDetailBottomSheetApp(
                     detailProfile: widget.resCommunitiesLeaderboards?["data"]

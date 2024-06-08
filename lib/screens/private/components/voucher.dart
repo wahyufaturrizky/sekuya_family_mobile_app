@@ -158,6 +158,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
+                automaticallyImplyLeading: false,
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

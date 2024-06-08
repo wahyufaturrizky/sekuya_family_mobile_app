@@ -668,6 +668,13 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                             backgroundColor: Colors.black,
                             forceElevated: innerBoxIsScrolled,
                             bottom: TabBar(
+                              labelColor: yellowPrimaryColor,
+                              unselectedLabelColor: greySecondaryColor,
+                              dividerColor: greySecondaryColor,
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                  yellowPrimaryColor),
+                              indicator: const BoxDecoration(
+                                  color: Colors.transparent),
                               tabs: tabs
                                   .map((String name) => Tab(text: name))
                                   .toList(),

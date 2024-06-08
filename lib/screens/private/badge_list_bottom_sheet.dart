@@ -17,17 +17,7 @@ class BadgeListBottomSheetApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BadgeListBottomSheet(detailProfile: detailProfile),
-      theme: ThemeData(
-        canvasColor: Colors.black,
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: yellowPrimaryColor.withOpacity(0.2),
-          cursorColor: yellowPrimaryColor,
-          selectionHandleColor: yellowPrimaryColor,
-        ),
-      ),
-    );
+    return BadgeListBottomSheet(detailProfile: detailProfile);
   }
 }
 

@@ -46,17 +46,7 @@ class ProfileDetailApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const ProfileDetail(),
-      theme: ThemeData(
-        canvasColor: Colors.black,
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: yellowPrimaryColor.withOpacity(0.2),
-          cursorColor: yellowPrimaryColor,
-          selectionHandleColor: yellowPrimaryColor,
-        ),
-      ),
-    );
+    return const ProfileDetail();
   }
 }
 
@@ -639,6 +629,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           textField: TextField(
                               onTap: () {
                                 showModalBottomSheet(
+                                    backgroundColor: Colors.black,
                                     context: context,
                                     builder: (BuildContext context) {
                                       return RecoveryEmailBottomSheetApp();

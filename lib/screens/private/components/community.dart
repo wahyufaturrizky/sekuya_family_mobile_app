@@ -231,6 +231,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
+                    automaticallyImplyLeading: false,
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [

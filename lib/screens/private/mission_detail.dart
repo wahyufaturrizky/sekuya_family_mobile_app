@@ -30,7 +30,7 @@ import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
-import 'package:sekuya_family_mobile_app/screens/private/lucky_winner_bottom_sheet%20copy.dart';
+import 'package:sekuya_family_mobile_app/screens/private/lucky_winner_bottom_sheet.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 import 'package:sekuya_family_mobile_app/service/mission/mission.dart';
 import 'package:sekuya_family_mobile_app/util/format_date.dart';
@@ -44,17 +44,7 @@ class MissionDetailApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MissionDetail(args: args),
-      theme: ThemeData(
-        canvasColor: Colors.black,
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: yellowPrimaryColor.withOpacity(0.2),
-          cursorColor: yellowPrimaryColor,
-          selectionHandleColor: yellowPrimaryColor,
-        ),
-      ),
-    );
+    return MissionDetail(args: args);
   }
 }
 
@@ -1149,6 +1139,7 @@ class _MissionDetailState extends State<MissionDetail> {
                             GestureDetector(
                                 onTap: () {
                                   showModalBottomSheet(
+                                      backgroundColor: Colors.black,
                                       context: context,
                                       builder: (BuildContext context) {
                                         return const LuckyWinnerBottomSheetApp();
