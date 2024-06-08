@@ -21,6 +21,15 @@ final dio = Dio()
   ..options.baseUrl = baseUrl
   ..interceptors.addAll(
     [
+      InterceptorsWrapper(
+        onError: (error, handler) {
+          print("@ Error InterceptorsWrapper $error");
+          // Do stuff here
+          handler.reject(
+              error); // Added this line to let error propagate outside the interceptor
+        },
+      ),
+
       /// Handles CSRF token
       QueuedInterceptorsWrapper(
         /// Adds CSRF token to headers, if it exists
@@ -44,6 +53,7 @@ final dio = Dio()
 
         /// Update CSRF token from [response] headers, if it exists
         onResponse: (response, handler) {
+          print('@onResponse $response');
           final token = response.headers.value(headerKey);
 
           if (token != null) {
@@ -53,6 +63,7 @@ final dio = Dio()
         },
 
         onError: (error, handler) async {
+          print("@ Error QueuedInterceptorsWrapper $error");
           if (error.response == null) return handler.next(error);
 
           /// When request fails with 401 status code, request new CSRF token
@@ -93,6 +104,10 @@ Future<dynamic> clientDio(
       // Something happened in setting up or sending the request that triggered an Error
       print(e.requestOptions);
       print(e.message);
+    }
+
+    if (e.response?.data) {
+      return e.response?.data;
     }
   }
 }

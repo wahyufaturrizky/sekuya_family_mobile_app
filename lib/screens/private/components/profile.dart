@@ -72,7 +72,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
     'My Mission',
     'My Communities',
     'My Voucher',
-    // 'My Reward',
+    'My Reward',
   ];
 
   static const pageSizeMyMission = 5;

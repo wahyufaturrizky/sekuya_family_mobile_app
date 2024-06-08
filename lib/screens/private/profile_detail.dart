@@ -249,7 +249,49 @@ class _ProfileDetailState extends State<ProfileDetail> {
                 print('@dataAuthLogin = $dataAuthLogin');
 
                 setRecoveryEmail(dataAuthLogin).then((value) {
-                  handleLogout();
+                  print('@value = ${value["message"]}');
+
+                  if (value["message"] ==
+                      "Error: This email is already used as primary email") {
+                    showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: greySmoothColor,
+                              content: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                      'This email is registered as recovery email, do you want to recover your account?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white)),
+                                ],
+                              ),
+                              actions: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomButton(
+                                      buttonText: 'OK',
+                                      onPressed: () {
+                                        Navigator.pop(context, 'OK');
+                                      },
+                                      labelSize: 12,
+                                      height: 36,
+                                      width: 100,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ));
+                  } else {
+                    handleLogout();
+                  }
+                  setState(() {
+                    isLoadingRecoveryEmailWithGoogle = false;
+                  });
                 }).catchError((onError) {
                   print("onError setRecoveryEmail = $onError");
                   setState(() {
@@ -652,7 +694,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomButton(
-                              isOutlinedBackgroundColor: greyDarkColor,
+                              isOutlinedBackgroundColor: blackPrimaryColor,
                               buttonText: 'with Gmail',
                               isOutlined: true,
                               onPressed: () {
@@ -669,7 +711,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                               isLoading: isLoadingRecoveryEmailWithGoogle,
                             ),
                             CustomButton(
-                                isOutlinedBackgroundColor: greyDarkColor,
+                                isOutlinedBackgroundColor: blackPrimaryColor,
                                 buttonText: 'with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
@@ -709,7 +751,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                         ),
                                         CustomButton(
                                             isOutlinedBackgroundColor:
-                                                greyDarkColor,
+                                                blackPrimaryColor,
                                             buttonText:
                                                 'Connect to ${item.key}',
                                             isOutlined: true,

@@ -51,10 +51,11 @@ void main() async {
         return handler.next(response);
       },
       onError: (DioException error, ErrorInterceptorHandler handler) {
+        print('@ERROR => : $error');
         print(
             'ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');
 
-        return handler.next(error);
+        return handler.reject(error);
       },
     ),
   );
