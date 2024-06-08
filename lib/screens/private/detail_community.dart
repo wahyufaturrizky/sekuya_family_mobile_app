@@ -542,8 +542,11 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                 ]
                                         .map((item) => MyWidgetShimmerApp(
                                             isLoading: isLoading,
-                                            child: Expanded(
-                                                child: Container(
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.27,
                                               margin:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 4),
@@ -578,7 +581,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                   )
                                                 ],
                                               ),
-                                            ))))
+                                            )))
                                         .toList()),
                                 const SizedBox(
                                   height: 15,

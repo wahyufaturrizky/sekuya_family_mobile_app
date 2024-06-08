@@ -244,7 +244,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.w700),
                           ),
                         ),
                         const Center(
@@ -328,7 +328,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                                           index]
                                                                       ?["label"]
                                                               ? yellowPrimaryColor
-                                                              : greySecondaryColor,
+                                                              : blackPrimaryColor,
                                                           width: 1),
                                                       borderRadius:
                                                           const BorderRadius.all(
@@ -368,7 +368,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                           style: const TextStyle(
                                                               color:
                                                                   Colors.white,
-                                                              fontSize: 12,
+                                                              fontSize: 10,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500),
@@ -391,6 +391,21 @@ class _CommunityComponentState extends State<CommunityComponent> {
               builder: (BuildContext context) {
                 return Column(
                   children: [
+                    const Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Featured Communities',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+
                     Expanded(
                         child: Container(
                       color: Colors.black,

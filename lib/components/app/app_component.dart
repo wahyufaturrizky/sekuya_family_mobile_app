@@ -34,9 +34,7 @@ class AppComponentState extends State<AppComponent> {
     final app = MaterialApp(
       title: 'Fluro',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
       onGenerateRoute: Application.router.generator,
     );
     return app;
