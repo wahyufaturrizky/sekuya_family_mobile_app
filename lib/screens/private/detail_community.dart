@@ -312,6 +312,18 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
         isLoadingCommunitiesLeaderboards ||
         isLoadingCommunitiesMissions ||
         isLoadingCommunitiesMembers;
+
+    var dataCommunitiesDetail = resCommunitiesDetail?["data"];
+
+    var coverImage = dataCommunitiesDetail?["coverImage"];
+    var image = dataCommunitiesDetail?["image"];
+    var name = dataCommunitiesDetail?["name"];
+    var level = dataCommunitiesDetail?["level"];
+    var totalMission = dataCommunitiesDetail?["totalMission"];
+    var totalPlayers = dataCommunitiesDetail?["totalPlayers"];
+    var description = dataCommunitiesDetail?["description"];
+    var social = dataCommunitiesDetail?["social"];
+
     return SafeArea(
         child: Scaffold(
             backgroundColor: Colors.black,
@@ -339,25 +351,10 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                 Stack(
                                   alignment: Alignment.bottomLeft,
                                   children: [
-                                    if (widget.args?.resCommunities?["data"]
-                                                        ?["data"]?[
-                                                    widget.args
-                                                        ?.indexResCommunities]
-                                                ["coverImage"] !=
-                                            null &&
-                                        !widget
-                                            .args
-                                            ?.resCommunities?["data"]?["data"]?[
-                                                widget
-                                                    .args?.indexResCommunities]
-                                                ["coverImage"]
-                                            .contains("googleapis"))
+                                    if (coverImage != null &&
+                                        coverImage.contains("googleapis"))
                                       Image.network(
-                                        widget.args?.resCommunities?["data"]
-                                                    ?["data"]?[
-                                                widget
-                                                    .args?.indexResCommunities]
-                                            ["coverImage"],
+                                        coverImage,
                                         fit: BoxFit.cover,
                                         width: double.infinity,
                                         height: 150,
@@ -394,29 +391,11 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                             if (!isLoading)
                                               Row(
                                                 children: [
-                                                  if (widget.args?.resCommunities?["data"]
-                                                                      ?["data"]
-                                                                  ?[
-                                                                  widget.args
-                                                                      ?.indexResCommunities]
-                                                              ["image"] !=
-                                                          null &&
-                                                      !widget
-                                                          .args
-                                                          ?.resCommunities?["data"]
-                                                              ?["data"]?[widget
-                                                                  .args
-                                                                  ?.indexResCommunities]
-                                                              ["image"]
-                                                          .contains("googleapis"))
+                                                  if (image != null &&
+                                                      !image.contains(
+                                                          "googleapis"))
                                                     Image.network(
-                                                      widget.args?.resCommunities?[
-                                                                      "data"]
-                                                                  ?["data"]
-                                                              ?[
-                                                              widget.args
-                                                                  ?.indexResCommunities]
-                                                          ["image"],
+                                                      image,
                                                       width: 48,
                                                       height: 48,
                                                     ),
@@ -427,15 +406,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        widget.args?.resCommunities?[
-                                                                            "data"]
-                                                                        ?[
-                                                                        "data"]
-                                                                    ?[
-                                                                    widget.args
-                                                                        ?.indexResCommunities]
-                                                                ["name"] ??
-                                                            "",
+                                                        name ?? "",
                                                         style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 16,
@@ -453,9 +424,9 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                           ),
                                                           const SizedBox(
                                                               width: 12),
-                                                          const Text(
-                                                            'LEVEL 4',
-                                                            style: TextStyle(
+                                                          Text(
+                                                            'LEVEL $level',
+                                                            style: const TextStyle(
                                                                 color: Colors
                                                                     .white,
                                                                 fontSize: 12,
@@ -514,30 +485,15 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                     children: [
                                   {
                                     "title": "Mission",
-                                    "value": widget
-                                        .args
-                                        ?.resCommunities?["data"]?["data"]
-                                            ?[widget.args?.indexResCommunities]
-                                            ["totalMission"]
-                                        .toString(),
+                                    "value": totalMission.toString(),
                                   },
                                   {
                                     "title": "Members",
-                                    "value": widget
-                                        .args
-                                        ?.resCommunities?["data"]?["data"]
-                                            ?[widget.args?.indexResCommunities]
-                                            ["totalPlayers"]
-                                        .toString(),
+                                    "value": totalPlayers.toString(),
                                   },
                                   {
                                     "title": "Created",
-                                    "value": widget
-                                        .args
-                                        ?.resCommunities?["data"]?["data"]
-                                            ?[widget.args?.indexResCommunities]
-                                            ["level"]
-                                        .toString(),
+                                    "value": '1',
                                   },
                                 ]
                                         .map((item) => MyWidgetShimmerApp(
@@ -587,11 +543,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                   height: 15,
                                 ),
                                 Text(
-                                  widget.args?.resCommunities?["data"]?["data"]
-                                              ?[
-                                              widget.args?.indexResCommunities]
-                                          ["description"] ??
-                                      "",
+                                  description ?? "",
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -608,61 +560,61 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                       fontWeight: FontWeight.w500),
                                 ),
                                 const SizedBox(height: 8),
-                                Row(
-                                    children: (widget.args?.resCommunities?[
-                                                    "data"]?["data"]?[
-                                                widget
-                                                    .args?.indexResCommunities]
-                                            ?["social"] as Map<String, dynamic>)
-                                        .entries
-                                        .map((item) {
-                                  return Builder(
-                                    builder: (BuildContext context) {
-                                      return MyWidgetShimmerApp(
-                                          isLoading: isLoading,
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                _launchUrl(item.value);
-                                              },
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                    right: 8),
-                                                padding:
-                                                    const EdgeInsets.all(4),
-                                                decoration: BoxDecoration(
-                                                  color: blackSolidPrimaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Image.asset(
-                                                      item.key == "discord"
-                                                          ? 'assets/images/ic_discord_community.png'
-                                                          : item.key ==
-                                                                  "instagram"
-                                                              ? 'assets/images/ic_instagram.png'
-                                                              : item.key ==
-                                                                      "facebook"
-                                                                  ? 'assets/images/ic_facebook.png'
-                                                                  : 'assets/images/ic_twitter_social.png',
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                    const Text(
-                                                      '0',
-                                                      style: TextStyle(
-                                                          color:
-                                                              yellowPrimaryColor,
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )));
-                                    },
-                                  );
-                                }).toList()),
+                                if (social != null)
+                                  Row(
+                                      children: (social as Map<String, dynamic>)
+                                          .entries
+                                          .map((item) {
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        return MyWidgetShimmerApp(
+                                            isLoading: isLoading,
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  _launchUrl(item.value);
+                                                },
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 8),
+                                                  padding:
+                                                      const EdgeInsets.all(4),
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        blackSolidPrimaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Image.asset(
+                                                        item.key == "discord"
+                                                            ? 'assets/images/ic_discord_community.png'
+                                                            : item.key ==
+                                                                    "instagram"
+                                                                ? 'assets/images/ic_instagram.png'
+                                                                : item.key ==
+                                                                        "facebook"
+                                                                    ? 'assets/images/ic_facebook.png'
+                                                                    : 'assets/images/ic_twitter_social.png',
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      const Text(
+                                                        '0',
+                                                        style: TextStyle(
+                                                            color:
+                                                                yellowPrimaryColor,
+                                                            fontSize: 10,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )));
+                                      },
+                                    );
+                                  }).toList()),
                               ],
                             ),
                             floating: true,
