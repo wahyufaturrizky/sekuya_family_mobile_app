@@ -20,6 +20,7 @@ import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 import 'package:sekuya_family_mobile_app/service/community/community.dart';
+import 'package:sekuya_family_mobile_app/util/format_date.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommunityComponentDetailApp extends StatelessWidget {
@@ -323,6 +324,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
     var totalPlayers = dataCommunitiesDetail?["totalPlayers"];
     var description = dataCommunitiesDetail?["description"];
     var social = dataCommunitiesDetail?["social"];
+    var createdAt = dataCommunitiesDetail?["createdAt"];
 
     return SafeArea(
         child: Scaffold(
@@ -406,7 +408,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        name ?? "",
+                                                        name.toString(),
                                                         style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 16,
@@ -424,16 +426,17 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                           ),
                                                           const SizedBox(
                                                               width: 12),
-                                                          Text(
-                                                            'LEVEL $level',
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
+                                                          if (level != null)
+                                                            Text(
+                                                              'LEVEL $level',
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
                                                         ],
                                                       ),
                                                     ],
@@ -493,7 +496,8 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                   },
                                   {
                                     "title": "Created",
-                                    "value": '1',
+                                    "value":
+                                        handleFormatDate(createdAt.toString()),
                                   },
                                 ]
                                         .map((item) => MyWidgetShimmerApp(
@@ -519,7 +523,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                     item["value"].toString(),
                                                     style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 14,
+                                                        fontSize: 11,
                                                         fontWeight:
                                                             FontWeight.w500),
                                                   ),
@@ -543,7 +547,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                   height: 15,
                                 ),
                                 Text(
-                                  description ?? "",
+                                  description.toString(),
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -560,7 +564,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                       fontWeight: FontWeight.w500),
                                 ),
                                 const SizedBox(height: 8),
-                                if (social != null)
+                                if (social != null && social.isNotEmpty)
                                   Row(
                                       children: (social as Map<String, dynamic>)
                                           .entries

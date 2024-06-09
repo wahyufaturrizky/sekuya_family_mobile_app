@@ -49,6 +49,12 @@ class _TabContentCommunityLeaderBoardComponentState
             : indexingRank == 3
                 ? '${indexingRank}rd'
                 : '${indexingRank}th';
+
+    var dataCommunitiesLeaderboards =
+        widget.resCommunitiesLeaderboards?["data"]?["data"]?[widget.index];
+
+    var username = dataCommunitiesLeaderboards?["username"];
+    var email = dataCommunitiesLeaderboards?["email"];
     return Container(
       decoration: BoxDecoration(
           color: Colors.black,
@@ -150,9 +156,7 @@ class _TabContentCommunityLeaderBoardComponentState
                         width: 8,
                       ),
                       Text(
-                        widget.resCommunitiesLeaderboards?["data"]?["data"]
-                                ?[widget.index]?["username"] ??
-                            "",
+                        username == '' ? email.substring(0, 18) : username,
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,

@@ -41,6 +41,11 @@ class _TabContentCommunityMembersComponentState
     extends State<TabContentCommunityMembersComponent> {
   @override
   Widget build(BuildContext context) {
+    var dataCommunitiesMembers =
+        widget.resCommunitiesMembers?["data"]?["data"]?[widget.index];
+
+    var username = dataCommunitiesMembers?["username"];
+    var email = dataCommunitiesMembers?["email"];
     return Container(
       decoration: BoxDecoration(
         color: Colors.black,
@@ -86,9 +91,7 @@ class _TabContentCommunityMembersComponentState
                         width: 8,
                       ),
                       Text(
-                        widget.resCommunitiesMembers?["data"]?["data"]
-                                ?[widget.index]?["username"] ??
-                            "",
+                        username == '' ? email.substring(0, 18) : username,
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
