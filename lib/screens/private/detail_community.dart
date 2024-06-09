@@ -564,7 +564,9 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                       fontWeight: FontWeight.w500),
                                 ),
                                 const SizedBox(height: 8),
-                                if (social != null && social.isNotEmpty)
+                                if (social != null &&
+                                    social.isNotEmpty &&
+                                    !isLoading)
                                   Row(
                                       children: (social as Map<String, dynamic>)
                                           .entries
