@@ -122,260 +122,287 @@ class _LoginScreenState extends State<LoginScreen> {
       isLoadingSignInWithGoogle = true;
     });
 
-    googleSignIn.signIn().then((result) {
-      FirebaseAuth.instance
-          .fetchSignInMethodsForEmail(result!.email)
-          .then((valSignInMethods) {
-        if (valSignInMethods.contains("google.com")) {
-          print("Email is already associated with a Google Sign-In account.");
-          return "0";
-        } else {
-          print("Email is not associated with any account.");
-          return "1";
-        }
-      });
-
-      result.authentication.then((GoogleSignInAuthentication googleKey) {
-        print("googleKey AccessToken = ${googleKey.accessToken}");
-        print("googleKey IdToken = ${googleKey.idToken}");
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleKey.accessToken,
-          idToken: googleKey.idToken,
-        );
-
-        final AuthCredential credentialWeb =
-            GoogleAuthProvider.credential(idToken: googleKey.idToken);
-
+    googleSignIn.disconnect().then((value) {
+      googleSignIn.signIn().then((result) {
         FirebaseAuth.instance
-            .signInWithCredential(kIsWeb ? credentialWeb : credential)
-            .then((valCredential) {
-          FirebaseMessaging.instance.getToken().then((valTokenMessageAndroid) {
-            print('@valTokenMessageAndroid = $valTokenMessageAndroid');
+            .fetchSignInMethodsForEmail(result!.email)
+            .then((valSignInMethods) {
+          if (valSignInMethods.contains("google.com")) {
+            print("Email is already associated with a Google Sign-In account.");
+            return "0";
+          } else {
+            print("Email is not associated with any account.");
+            return "1";
+          }
+        });
 
-            FirebaseMessaging.instance.getAPNSToken().then((valueAPNSTokeniOS) {
-              print('@valueAPNSTokeniOS = $valueAPNSTokeniOS');
-              var dataAuthLogin = TargetPlatform.iOS == defaultTargetPlatform
-                  ? {
-                      "id_token": googleKey.idToken,
-                      "access_token": googleKey.accessToken,
-                      "provider": credential.providerId,
-                      "fcm_token": valueAPNSTokeniOS,
-                    }
-                  : {
-                      'id_token': googleKey.idToken,
-                      'access_token': googleKey.accessToken,
-                      'provider': credential.providerId,
-                      "fcm_token": valTokenMessageAndroid,
-                    };
+        result.authentication.then((GoogleSignInAuthentication googleKey) {
+          print("googleKey AccessToken = ${googleKey.accessToken}");
+          print("googleKey IdToken = ${googleKey.idToken}");
 
-              print("@dataAuthLogin = $dataAuthLogin");
+          final AuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleKey.accessToken,
+            idToken: googleKey.idToken,
+          );
 
-              dio
-                  .post('$baseUrl/auth/login',
-                      options: Options(
-                          validateStatus: (_) => true,
-                          contentType: Headers.jsonContentType,
-                          responseType: ResponseType.json),
-                      data: dataAuthLogin)
-                  .then((valResFromXellar) {
-                print("@valResFromXellar = ${valResFromXellar.data}");
+          final AuthCredential credentialWeb =
+              GoogleAuthProvider.credential(idToken: googleKey.idToken);
 
-                if (valResFromXellar.data?["data"]?["recoverToken"] != null) {
-                  showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                            backgroundColor: greySmoothColor,
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.asset(
-                                  'assets/images/ic_google_medium.png',
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  width: 250,
-                                  decoration: const BoxDecoration(
-                                      color: blackSolidPrimaryColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(12))),
-                                  child: Column(
-                                    children: [
-                                      Text(result.displayName.toString(),
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white)),
-                                      Text(result.email.toString(),
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                              color: greySecondaryColor)),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                const Text(
-                                    'This email is registered as recovery email, do you want to recover your account?',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: greySecondaryColor)),
-                              ],
-                            ),
-                            actions: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+          FirebaseAuth.instance
+              .signInWithCredential(kIsWeb ? credentialWeb : credential)
+              .then((valCredential) {
+            FirebaseMessaging.instance
+                .getToken()
+                .then((valTokenMessageAndroid) {
+              print('@valTokenMessageAndroid = $valTokenMessageAndroid');
+
+              FirebaseMessaging.instance
+                  .getAPNSToken()
+                  .then((valueAPNSTokeniOS) {
+                print('@valueAPNSTokeniOS = $valueAPNSTokeniOS');
+                var dataAuthLogin = TargetPlatform.iOS == defaultTargetPlatform
+                    ? {
+                        "id_token": googleKey.idToken,
+                        "access_token": googleKey.accessToken,
+                        "provider": credential.providerId,
+                        "fcm_token": valueAPNSTokeniOS,
+                      }
+                    : {
+                        'id_token': googleKey.idToken,
+                        'access_token': googleKey.accessToken,
+                        'provider': credential.providerId,
+                        "fcm_token": valTokenMessageAndroid,
+                      };
+
+                print("@dataAuthLogin = $dataAuthLogin");
+
+                dio
+                    .post('$baseUrl/auth/login',
+                        options: Options(
+                            validateStatus: (_) => true,
+                            contentType: Headers.jsonContentType,
+                            responseType: ResponseType.json),
+                        data: dataAuthLogin)
+                    .then((valResFromXellar) {
+                  print("@valResFromXellar = ${valResFromXellar.data}");
+
+                  if (valResFromXellar.data?["data"]?["recoverToken"] != null) {
+                    showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: greySmoothColor,
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CustomButton(
-                                    buttonText: 'Yes',
-                                    onPressed: () {
-                                      Navigator.pop(context, 'Yes');
+                                  Image.asset(
+                                    'assets/images/ic_google_medium.png',
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    width: 250,
+                                    decoration: const BoxDecoration(
+                                        color: blackSolidPrimaryColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(12))),
+                                    child: Column(
+                                      children: [
+                                        Text(result.displayName.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white)),
+                                        Text(result.email.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                color: greySecondaryColor)),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  const Text(
+                                      'This email is registered as recovery email, do you want to recover your account?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: greySecondaryColor)),
+                                ],
+                              ),
+                              actions: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomButton(
+                                      buttonText: 'Yes',
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Yes');
 
-                                      dio
-                                          .post('$baseUrl/auth/recover-email',
-                                              options: Options(
-                                                  validateStatus: (_) => true,
-                                                  contentType:
-                                                      Headers.jsonContentType,
-                                                  responseType:
-                                                      ResponseType.json,
-                                                  headers: {
-                                                    'Authorization':
-                                                        'Bearer ${valResFromXellar.data?["data"]?["recoverToken"]}'
-                                                  }),
-                                              data: dataAuthLogin)
-                                          .then((resRecoverToken) {
-                                        print(
-                                            "@resRecoverToken = ${resRecoverToken.data?["data"]?["accessToken"]}");
+                                        dio
+                                            .post('$baseUrl/auth/recover-email',
+                                                options: Options(
+                                                    validateStatus: (_) => true,
+                                                    contentType:
+                                                        Headers.jsonContentType,
+                                                    responseType:
+                                                        ResponseType.json,
+                                                    headers: {
+                                                      'Authorization':
+                                                          'Bearer ${valResFromXellar.data?["data"]?["recoverToken"]}'
+                                                    }),
+                                                data: dataAuthLogin)
+                                            .then((resRecoverToken) {
+                                          print(
+                                              "@resRecoverToken = ${resRecoverToken.data?["data"]?["accessToken"]}");
 
-                                        SharedPreferences.getInstance()
-                                            .then((prefs) {
-                                          prefs
-                                              .setString(
-                                                  'access_token',
-                                                  resRecoverToken.data?["data"]
-                                                      ?["accessToken"])
-                                              .then((value) {
-                                            Application.router.navigateTo(
-                                                context, "/privateScreens",
-                                                transition:
-                                                    TransitionType.native);
+                                          SharedPreferences.getInstance()
+                                              .then((prefs) {
+                                            prefs
+                                                .setString(
+                                                    'access_token',
+                                                    resRecoverToken
+                                                            .data?["data"]
+                                                        ?["accessToken"])
+                                                .then((value) {
+                                              Application.router.navigateTo(
+                                                  context, "/privateScreens",
+                                                  transition:
+                                                      TransitionType.native);
 
-                                            setState(() {
-                                              isLoadingSignInWithGoogle = false;
+                                              setState(() {
+                                                isLoadingSignInWithGoogle =
+                                                    false;
+                                              });
+                                            }).catchError((onError) {
+                                              print(
+                                                  "@onError resRecoverToken = $onError");
+
+                                              setState(() {
+                                                isLoadingSignInWithGoogle =
+                                                    false;
+                                              });
                                             });
                                           }).catchError((onError) {
                                             print(
-                                                "@onError resRecoverToken = $onError");
+                                                'onError SharedPreferences = $onError');
 
                                             setState(() {
                                               isLoadingSignInWithGoogle = false;
                                             });
                                           });
                                         }).catchError((onError) {
-                                          print(
-                                              'onError SharedPreferences = $onError');
-
                                           setState(() {
                                             isLoadingSignInWithGoogle = false;
                                           });
+                                          print(
+                                              "onError recover-email $onError");
                                         });
-                                      }).catchError((onError) {
+                                      },
+                                      labelSize: 12,
+                                      height: 36,
+                                      width: 100,
+                                    ),
+                                    CustomButton(
+                                      buttonText: 'No',
+                                      isOutlined: true,
+                                      border: 1,
+                                      isOutlinedBackgroundColor:
+                                          blackSolidPrimaryColor,
+                                      isOutlinedBorderColor: yellowPrimaryColor,
+                                      labelSize: 12,
+                                      width: 100,
+                                      height: 36,
+                                      onPressed: () {
+                                        Navigator.pop(context, 'No');
                                         setState(() {
                                           isLoadingSignInWithGoogle = false;
                                         });
-                                        print("onError recover-email $onError");
-                                      });
-                                    },
-                                    labelSize: 12,
-                                    height: 36,
-                                    width: 100,
-                                  ),
-                                  CustomButton(
-                                    buttonText: 'No',
-                                    isOutlined: true,
-                                    border: 1,
-                                    isOutlinedBackgroundColor:
-                                        blackSolidPrimaryColor,
-                                    isOutlinedBorderColor: yellowPrimaryColor,
-                                    labelSize: 12,
-                                    width: 100,
-                                    height: 36,
-                                    onPressed: () {
-                                      Navigator.pop(context, 'No');
-                                      setState(() {
-                                        isLoadingSignInWithGoogle = false;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              )
-                            ],
-                          ));
-                } else {
-                  SharedPreferences.getInstance().then((prefs) {
-                    prefs
-                        .setString('access_token',
-                            valResFromXellar.data['data']?['accessToken'])
-                        .then((value) {
-                      Application.router.navigateTo(context, "/privateScreens",
-                          transition: TransitionType.native);
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ));
+                  } else {
+                    SharedPreferences.getInstance().then((prefs) {
+                      prefs
+                          .setString('access_token',
+                              valResFromXellar.data['data']?['accessToken'])
+                          .then((value) {
+                        Application.router.navigateTo(
+                            context, "/privateScreens",
+                            transition: TransitionType.native);
 
-                      setState(() {
-                        isLoadingSignInWithGoogle = false;
+                        setState(() {
+                          isLoadingSignInWithGoogle = false;
+                        });
+                      }).catchError((onError) {
+                        print(onError);
+
+                        setState(() {
+                          isLoadingSignInWithGoogle = false;
+                        });
                       });
                     }).catchError((onError) {
-                      print(onError);
+                      print('onError SharedPreferences = $onError');
 
                       setState(() {
                         isLoadingSignInWithGoogle = false;
                       });
                     });
-                  }).catchError((onError) {
-                    print('onError SharedPreferences = $onError');
+                  }
+                }).catchError((onError) {
+                  print('onError auth/login = $onError');
 
-                    setState(() {
-                      isLoadingSignInWithGoogle = false;
-                    });
+                  setState(() {
+                    isLoadingSignInWithGoogle = false;
                   });
-                }
+                });
               }).catchError((onError) {
-                print('onError auth/login = $onError');
-
+                print("onError Token APNS $onError");
                 setState(() {
                   isLoadingSignInWithGoogle = false;
                 });
               });
             }).catchError((onError) {
-              print("onError Token APNS $onError");
+              print("onError valTokenMessageAndroid = $onError");
               setState(() {
                 isLoadingSignInWithGoogle = false;
               });
             });
-          }).catchError((onError) {
-            print("onError valTokenMessageAndroid = $onError");
+          }).catchError((err) {
+            print('Error signInWithCredential = $err');
+
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Error signInWithCredential'),
+                  content: Text(err.toString()),
+                );
+              },
+            );
+
             setState(() {
               isLoadingSignInWithGoogle = false;
             });
           });
         }).catchError((err) {
-          print('Error signInWithCredential = $err');
+          print('Error signInWithProvider = $err');
 
           showDialog<void>(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('Error signInWithCredential'),
+                title: const Text('Error signInWithProvider'),
                 content: Text(err.toString()),
               );
             },
@@ -386,25 +413,14 @@ class _LoginScreenState extends State<LoginScreen> {
           });
         });
       }).catchError((err) {
-        print('Error signInWithProvider = $err');
-
-        showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Error signInWithProvider'),
-              content: Text(err.toString()),
-            );
-          },
-        );
+        print('Error signIn = $err');
 
         setState(() {
           isLoadingSignInWithGoogle = false;
         });
       });
-    }).catchError((err) {
-      print('Error signIn = $err');
-
+    }).catchError((onError) {
+      print("@onError disconnect = $onError");
       setState(() {
         isLoadingSignInWithGoogle = false;
       });
@@ -451,6 +467,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Hero(
                             tag: 'login_btn',
                             child: CustomButton(
+                                isOutlinedBackgroundColor: blackPrimaryColor,
                                 isLoading: isLoadingSignInWithGoogle,
                                 buttonText: 'Continue with Gmail',
                                 onPressed: () {
@@ -471,8 +488,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           Hero(
                             tag: 'signup_btn',
                             child: CustomButton(
+                                isOutlinedBackgroundColor: blackPrimaryColor,
                                 isLoading: isLoadingSignInWithApple,
-                                buttonText: 'with Apple ID',
+                                buttonText: 'Continue with Apple ID',
                                 isOutlined: true,
                                 onPressed: () {
                                   if (!(isLoadingSignInWithApple ||

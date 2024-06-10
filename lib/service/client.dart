@@ -106,7 +106,7 @@ Future<dynamic> clientDio(
       print(e.message);
     }
 
-    if (e.response?.data) {
+    if (e.response?.data != null) {
       return e.response?.data;
     }
   }

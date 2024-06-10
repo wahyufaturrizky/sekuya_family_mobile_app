@@ -251,8 +251,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                 setRecoveryEmail(dataAuthLogin).then((value) {
                   print('@value = ${value["message"]}');
 
-                  if (value["message"] ==
-                      "Error: This email is already used as primary email") {
+                  if (value["statusCode"] == 400) {
                     showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
