@@ -41,7 +41,9 @@ class _TabContentCommunityLeaderBoardComponentState
     extends State<TabContentCommunityLeaderBoardComponent> {
   @override
   Widget build(BuildContext context) {
-    var indexingRank = widget.index! + 1;
+    var index = widget.index;
+
+    var indexingRank = index! + 1;
     var rank = indexingRank == 1
         ? '${indexingRank}st'
         : indexingRank == 2
@@ -51,7 +53,7 @@ class _TabContentCommunityLeaderBoardComponentState
                 : '${indexingRank}th';
 
     var dataCommunitiesLeaderboards =
-        widget.resCommunitiesLeaderboards?["data"]?["data"]?[widget.index];
+        widget.resCommunitiesLeaderboards?["data"]?["data"]?[index];
 
     var username = dataCommunitiesLeaderboards?["username"];
     var email = dataCommunitiesLeaderboards?["email"];
@@ -59,36 +61,36 @@ class _TabContentCommunityLeaderBoardComponentState
       decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(4),
-          border: widget.index == 0 || widget.index == 1 || widget.index == 2
+          border: index == 0 || index == 1 || index == 2
               ? Border(
                   top: BorderSide(
-                    color: widget.index == 0
+                    color: index == 0
                         ? yellowPrimaryColor
-                        : widget.index == 1
+                        : index == 1
                             ? greySecondWinnerColor
                             : redThirdWinnerColor,
                     width: 1,
                   ),
                   bottom: BorderSide(
-                    color: widget.index == 0
+                    color: index == 0
                         ? yellowPrimaryColor
-                        : widget.index == 1
+                        : index == 1
                             ? greySecondWinnerColor
                             : redThirdWinnerColor,
                     width: 1,
                   ),
                   right: BorderSide(
-                    color: widget.index == 0
+                    color: index == 0
                         ? yellowPrimaryColor
-                        : widget.index == 1
+                        : index == 1
                             ? greySecondWinnerColor
                             : redThirdWinnerColor,
                     width: 1,
                   ),
                   left: BorderSide(
-                    color: widget.index == 0
+                    color: index == 0
                         ? yellowPrimaryColor
-                        : widget.index == 1
+                        : index == 1
                             ? greySecondWinnerColor
                             : redThirdWinnerColor,
                     width: 8,
@@ -109,7 +111,7 @@ class _TabContentCommunityLeaderBoardComponentState
               builder: (BuildContext context) {
                 return ProfileDetailBottomSheetApp(
                     detailProfile: widget.resCommunitiesLeaderboards?["data"]
-                        ?["data"]?[widget.index]);
+                        ?["data"]?[index]);
               });
         },
         child: Padding(
@@ -122,16 +124,14 @@ class _TabContentCommunityLeaderBoardComponentState
                 children: [
                   Row(
                     children: [
-                      if (widget.index == 0 ||
-                          widget.index == 1 ||
-                          widget.index == 2)
+                      if (index == 0 || index == 1 || index == 2)
                         Container(
                             margin: const EdgeInsets.only(right: 4),
                             child: CircleAvatar(
                               radius: 12,
                               backgroundColor: Colors.transparent,
-                              backgroundImage: AssetImage(
-                                  'assets/images/ic_${widget.index}.png'),
+                              backgroundImage:
+                                  AssetImage('assets/images/ic_${index}.png'),
                             )),
                       Text(
                         rank,
@@ -144,13 +144,13 @@ class _TabContentCommunityLeaderBoardComponentState
                         width: 8,
                       ),
                       if (widget.resCommunitiesLeaderboards?["data"]?["data"]
-                              ?[widget.index]?["profilePic"] !=
+                              ?[index]?["profilePic"] !=
                           null)
                         CircleAvatar(
                           radius: 12,
                           backgroundImage: NetworkImage(
                               widget.resCommunitiesLeaderboards?["data"]
-                                  ?["data"]?[widget.index]?["profilePic"]),
+                                  ?["data"]?[index]?["profilePic"]),
                         ),
                       const SizedBox(
                         width: 8,
@@ -165,7 +165,7 @@ class _TabContentCommunityLeaderBoardComponentState
                     ],
                   ),
                   Text(
-                    '${widget.resCommunitiesLeaderboards?["data"]?["data"]?[widget.index]?["exp"].toString() ?? ""} xp',
+                    '${widget.resCommunitiesLeaderboards?["data"]?["data"]?[index]?["exp"].toString() ?? ""} xp',
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,

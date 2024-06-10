@@ -832,7 +832,12 @@ class _ProfileComponentState extends State<ProfileComponent> {
                       dividerColor: greySecondaryColor,
                       overlayColor:
                           MaterialStateProperty.all<Color>(yellowPrimaryColor),
-                      indicator: const BoxDecoration(color: Colors.transparent),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicator: const BoxDecoration(
+                          color: yellowPrimaryTransparentColor,
+                          borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(4),
+                              right: Radius.circular(4))),
                       controller: isLoadingTab ? null : tabController,
                       // These are the widgets to put in each tab in the tab bar.
                       tabs: tabs.map((String name) => Tab(text: name)).toList(),

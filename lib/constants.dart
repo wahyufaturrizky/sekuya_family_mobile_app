@@ -24,6 +24,7 @@ const Color blueSolidSecondaryColor = Color.fromRGBO(42, 182, 242, 1);
 const Color blackSolidPrimaryColor = Color.fromRGBO(26, 26, 28, 1);
 const Color redSolidPrimaryColor = Color.fromRGBO(242, 42, 42, 1);
 const Color yellowPrimaryColor = Color.fromRGBO(252, 193, 63, 1);
+const Color yellowPrimaryTransparentColor = Color.fromRGBO(252, 193, 63, 0.16);
 const Color greySoftColor = Color.fromRGBO(71, 71, 71, 1);
 const Color greySoftSecondaryColor = Color.fromRGBO(129, 133, 139, 1);
 const Color greySoftThirdColor = Color.fromRGBO(110, 106, 102, 1);

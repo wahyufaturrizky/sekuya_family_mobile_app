@@ -173,22 +173,22 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: greySoftColor),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.black,
-                    radius: 16,
-                    child: Text(
-                      '1',
-                      style: TextStyle(color: yellowPrimaryColor),
-                    ),
-                  )),
-              const SizedBox(
-                width: 16,
-              ),
+              // Container(
+              //     decoration: BoxDecoration(
+              //         border: Border.all(color: greySoftColor),
+              //         borderRadius:
+              //             const BorderRadius.all(Radius.circular(20))),
+              //     child: const CircleAvatar(
+              //       backgroundColor: Colors.black,
+              //       radius: 16,
+              //       child: Text(
+              //         '1',
+              //         style: TextStyle(color: yellowPrimaryColor),
+              //       ),
+              //     )),
+              // const SizedBox(
+              //   width: 16,
+              // ),
               Flexible(
                 child: Text(
                   widget.description ?? "",
@@ -203,53 +203,53 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
           const SizedBox(
             height: 16,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: greySoftColor),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.black,
-                    radius: 16,
-                    child: Text(
-                      '2',
-                      style: TextStyle(color: yellowPrimaryColor),
-                    ),
-                  )),
-              const SizedBox(
-                width: 16,
-              ),
-              const Flexible(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Proof",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    "dictum cursus mauris varius tristique aliquet. Morbi cursus urna in nibh diam dolor lacus sit.",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ))
-            ],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
+          // Row(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     Container(
+          //         decoration: BoxDecoration(
+          //             border: Border.all(color: greySoftColor),
+          //             borderRadius:
+          //                 const BorderRadius.all(Radius.circular(20))),
+          //         child: const CircleAvatar(
+          //           backgroundColor: Colors.black,
+          //           radius: 16,
+          //           child: Text(
+          //             '2',
+          //             style: TextStyle(color: yellowPrimaryColor),
+          //           ),
+          //         )),
+          //     const SizedBox(
+          //       width: 16,
+          //     ),
+          //     const Flexible(
+          //         child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Text(
+          //           "Proof",
+          //           style: TextStyle(
+          //               color: Colors.white,
+          //               fontSize: 14,
+          //               fontWeight: FontWeight.w500),
+          //         ),
+          //         SizedBox(
+          //           height: 8,
+          //         ),
+          //         Text(
+          //           "dictum cursus mauris varius tristique aliquet. Morbi cursus urna in nibh diam dolor lacus sit.",
+          //           style: TextStyle(
+          //               color: Colors.white,
+          //               fontSize: 12,
+          //               fontWeight: FontWeight.w400),
+          //         ),
+          //       ],
+          //     ))
+          //   ],
+          // ),
+          // const SizedBox(
+          //   height: 16,
+          // ),
           GestureDetector(
             onTap: () {
               widget.onTapTakeCamera!();

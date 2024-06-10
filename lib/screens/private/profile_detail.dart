@@ -143,14 +143,21 @@ class _ProfileDetailState extends State<ProfileDetail> {
   }
 
   Future handleLogout() async {
-    FirebaseAuth.instance.signOut().then((value) {
-      SharedPreferences.getInstance().then((prefs) {
-        prefs.remove('access_token').then((value) {
-          Application.router
-              .navigateTo(context, "/", transition: TransitionType.native);
+    googleSignIn.disconnect().then((value) {
+      FirebaseAuth.instance.signOut().then((value) {
+        SharedPreferences.getInstance().then((prefs) {
+          prefs.remove('access_token').then((value) {
+            Application.router
+                .navigateTo(context, "/", transition: TransitionType.native);
 
-          setState(() {
-            isLoadingRecoveryEmailWithGoogle = false;
+            setState(() {
+              isLoadingRecoveryEmailWithGoogle = false;
+            });
+          }).catchError((onError) {
+            print('Error SharedPreferences signOut = $onError');
+            setState(() {
+              isLoadingRecoveryEmailWithGoogle = false;
+            });
           });
         }).catchError((onError) {
           print('Error SharedPreferences signOut = $onError');
@@ -158,14 +165,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
             isLoadingRecoveryEmailWithGoogle = false;
           });
         });
-      }).catchError((onError) {
-        print('Error SharedPreferences signOut = $onError');
+      }).catchError((err) {
+        print('Error FirebaseAuth signOut = $err');
         setState(() {
           isLoadingRecoveryEmailWithGoogle = false;
         });
       });
-    }).catchError((err) {
-      print('Error FirebaseAuth signOut = $err');
+    }).catchError((onError) {
+      print("On Error disconnect = $onError");
       setState(() {
         isLoadingRecoveryEmailWithGoogle = false;
       });
@@ -256,13 +263,12 @@ class _ProfileDetailState extends State<ProfileDetail> {
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                               backgroundColor: greySmoothColor,
-                              content: const Column(
+                              content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                      'This email is registered as recovery email, do you want to recover your account?',
+                                  Text(value["message"].toString(),
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400,
                                           color: Colors.white)),

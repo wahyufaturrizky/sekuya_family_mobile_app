@@ -143,22 +143,22 @@ class _ReferralState extends State<Referral> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: greySoftColor),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.black,
-                    radius: 16,
-                    child: Text(
-                      '1',
-                      style: TextStyle(color: yellowPrimaryColor),
-                    ),
-                  )),
-              const SizedBox(
-                width: 16,
-              ),
+              // Container(
+              //     decoration: BoxDecoration(
+              //         border: Border.all(color: greySoftColor),
+              //         borderRadius:
+              //             const BorderRadius.all(Radius.circular(20))),
+              //     child: const CircleAvatar(
+              //       backgroundColor: Colors.black,
+              //       radius: 16,
+              //       child: Text(
+              //         '1',
+              //         style: TextStyle(color: yellowPrimaryColor),
+              //       ),
+              //     )),
+              // const SizedBox(
+              //   width: 16,
+              // ),
               Flexible(
                 child: Text(
                   widget.description ?? "",

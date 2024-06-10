@@ -25,6 +25,7 @@ class CustomButton extends StatelessWidget {
     this.sizeButtonIcon = 20,
     this.labelSize = 18,
     this.paddingButton = 0,
+    this.marginRight = 0,
     this.isLoading = false,
   });
 
@@ -39,6 +40,7 @@ class CustomButton extends StatelessWidget {
   final double height;
   final double paddingButton;
   final double sizeButtonIcon;
+  final double marginRight;
   final double labelSize;
   final String buttonIcon;
 
@@ -50,10 +52,12 @@ class CustomButton extends StatelessWidget {
       },
       child: Material(
         borderRadius: BorderRadius.circular(30),
-        elevation: 4,
+        elevation: isOutlinedBackgroundColor == Colors.transparent ? 0 : 4,
+        color: isOutlined ? isOutlinedBackgroundColor : yellowPrimaryColor,
         child: Container(
           width: width,
           height: height,
+          margin: EdgeInsets.only(right: marginRight),
           padding: EdgeInsets.all(paddingButton),
           decoration: BoxDecoration(
             color: isOutlined ? isOutlinedBackgroundColor : yellowPrimaryColor,

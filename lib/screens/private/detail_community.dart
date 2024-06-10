@@ -353,8 +353,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                 Stack(
                                   alignment: Alignment.bottomLeft,
                                   children: [
-                                    if (coverImage != null &&
-                                        coverImage.contains("googleapis"))
+                                    if (coverImage != null)
                                       Image.network(
                                         coverImage,
                                         fit: BoxFit.cover,
@@ -375,7 +374,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                           constraints: const BoxConstraints(),
                                         ),
                                         const SizedBox(
-                                          height: 32,
+                                          height: 56,
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -393,9 +392,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                             if (!isLoading)
                                               Row(
                                                 children: [
-                                                  if (image != null &&
-                                                      !image.contains(
-                                                          "googleapis"))
+                                                  if (image != null)
                                                     Image.network(
                                                       image,
                                                       width: 48,
@@ -443,33 +440,46 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                   ),
                                                 ],
                                               ),
-                                            MyWidgetShimmerApp(
-                                              isLoading: isLoading,
-                                              child: CustomButton(
-                                                buttonText: (isLoadingJoinCommunity ||
-                                                        isLoadingCommunitiesDetail ||
-                                                        isLoadingLeaveCommunity)
-                                                    ? ''
-                                                    : isJoined
-                                                        ? 'Leave'
-                                                        : 'Join',
-                                                onPressed: () {
-                                                  if (!isLoadingJoinCommunity ||
-                                                      !isLoadingCommunitiesDetail ||
-                                                      !isLoadingLeaveCommunity) {
-                                                    if (isJoined) {
-                                                      handleLeaveCommunity(
-                                                          mainContext);
-                                                    } else {
-                                                      handleJoinCommunity(
-                                                          mainContext);
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 12),
+                                              child: MyWidgetShimmerApp(
+                                                isLoading: isLoading,
+                                                child: CustomButton(
+                                                  isOutlined: isJoined,
+                                                  isOutlinedBackgroundColor:
+                                                      isJoined
+                                                          ? Colors.transparent
+                                                          : blackSolidPrimaryColor,
+                                                  isOutlinedBorderColor:
+                                                      yellowPrimaryColor,
+                                                  buttonText: (isLoadingJoinCommunity ||
+                                                          isLoadingCommunitiesDetail ||
+                                                          isLoadingLeaveCommunity)
+                                                      ? ''
+                                                      : isJoined
+                                                          ? 'Leave'
+                                                          : 'Join',
+                                                  onPressed: () {
+                                                    if (!isLoadingJoinCommunity ||
+                                                        !isLoadingCommunitiesDetail ||
+                                                        !isLoadingLeaveCommunity) {
+                                                      if (isJoined) {
+                                                        handleLeaveCommunity(
+                                                            mainContext);
+                                                      } else {
+                                                        handleJoinCommunity(
+                                                            mainContext);
+                                                      }
                                                     }
-                                                  }
-                                                },
-                                                isLoading: isLoadingJoinCommunity ||
-                                                    isLoadingCommunitiesDetail ||
-                                                    isLoadingLeaveCommunity,
-                                                width: 100,
+                                                  },
+                                                  isLoading: isLoadingJoinCommunity ||
+                                                      isLoadingCommunitiesDetail ||
+                                                      isLoadingLeaveCommunity,
+                                                  width: 80,
+                                                  labelSize: 12,
+                                                  height: 32,
+                                                ),
                                               ),
                                             )
                                           ],
@@ -634,8 +644,12 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                               dividerColor: greySecondaryColor,
                               overlayColor: MaterialStateProperty.all<Color>(
                                   yellowPrimaryColor),
+                              indicatorSize: TabBarIndicatorSize.tab,
                               indicator: const BoxDecoration(
-                                  color: Colors.transparent),
+                                  color: yellowPrimaryTransparentColor,
+                                  borderRadius: BorderRadius.horizontal(
+                                      left: Radius.circular(4),
+                                      right: Radius.circular(4))),
                               tabs: tabs
                                   .map((String name) => Tab(text: name))
                                   .toList(),

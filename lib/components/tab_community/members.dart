@@ -48,11 +48,10 @@ class _TabContentCommunityMembersComponentState
     var email = dataCommunitiesMembers?["email"];
     return Container(
       decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: blackPrimaryColor, width: 1),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 12),
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(4),
+          border: const Border(
+              bottom: BorderSide(color: blackPrimaryColor, width: 1))),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {

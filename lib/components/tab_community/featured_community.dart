@@ -71,11 +71,8 @@ class _TabContentCommunityFeaturedComponentState
               Row(
                 children: [
                   if (widget.resCommunities?["data"]?["data"]?[widget.index]
-                              ?["image"] !=
-                          null &&
-                      !widget.resCommunities?["data"]?["data"]?[widget.index]
-                              ?["image"]
-                          .contains("googleapis"))
+                          ?["image"] !=
+                      null)
                     Image.network(
                       widget.resCommunities?["data"]?["data"]?[widget.index]
                               ?["image"] ??
