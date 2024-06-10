@@ -317,7 +317,7 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },
-            isOutlined: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
             width: 500,
           ),
           const SizedBox(

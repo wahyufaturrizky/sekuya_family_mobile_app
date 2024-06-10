@@ -8,7 +8,10 @@
  */
 
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class TabContentCommunityMissionsComponentApp extends StatelessWidget {
@@ -39,8 +42,29 @@ class TabContentCommunityMissionsComponent extends StatefulWidget {
 
 class _TabContentCommunityMissionsComponentState
     extends State<TabContentCommunityMissionsComponent> {
+  void goToDetailMission() {
+    final arguments = MyArgumentsDataDetailMissionClass(
+        widget.resCommunitiesMissions, widget.index);
+
+    Application.router.navigateTo(context, "/detailMissionScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+
   @override
   Widget build(BuildContext context) {
+    var dataCommunitiesMissions =
+        widget.resCommunitiesMissions?["data"]?["data"]?[widget.index];
+    var name = dataCommunitiesMissions?["name"];
+    var status = dataCommunitiesMissions?["status"];
+    var community = dataCommunitiesMissions?["community"];
+    var totalTasks = dataCommunitiesMissions?["totalTasks"];
+    var totalExp = dataCommunitiesMissions?["totalExp"];
+    var rewards = dataCommunitiesMissions?["rewards"];
+    var totalPlayers = dataCommunitiesMissions?["totalPlayers"];
+    var playerSamples = dataCommunitiesMissions?["playerSamples"];
+    var _id = dataCommunitiesMissions?["_id"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -48,7 +72,9 @@ class _TabContentCommunityMissionsComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          debugPrint('Card tapped.');
+          if (_id != null) {
+            goToDetailMission();
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,26 +87,18 @@ class _TabContentCommunityMissionsComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (widget.resCommunitiesMissions?["data"]?["data"]
-                              ?[widget.index]?["name"] !=
-                          null)
+                      if (name != null)
                         Text(
-                          widget.resCommunitiesMissions?["data"]?["data"]
-                                  ?[widget.index]?["name"] ??
-                              "",
+                          name ?? "",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,
                               fontWeight: FontWeight.w600),
                         ),
-                      if (widget.resCommunitiesMissions?["data"]?["data"]
-                              ?[widget.index]?["status"] !=
-                          null)
+                      if (status != null)
                         Chip(
                             label: Text(
-                              widget.resCommunitiesMissions?["data"]?["data"]
-                                      ?[widget.index]?["status"] ??
-                                  "",
+                              status ?? "",
                             ),
                             color: MaterialStateProperty.all<Color>(
                                 blueSecondaryColor),
@@ -96,17 +114,15 @@ class _TabContentCommunityMissionsComponentState
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: Image.network(
-                              widget.resCommunitiesMissions?["data"]?["data"]
-                                  ?[widget.index]?["community"]?["image"]),
+                          child: community?["image"] != null
+                              ? Image.network(community?["image"])
+                              : null,
                         ),
                         const SizedBox(
                           width: 8,
                         ),
                         Text(
-                          widget.resCommunitiesMissions?["data"]?["data"]
-                                  ?[widget.index]?["community"]?["name"] ??
-                              "",
+                          community?["name"] ?? "",
                           style: const TextStyle(
                               color: greySecondaryColor,
                               fontSize: 14,
@@ -127,30 +143,24 @@ class _TabContentCommunityMissionsComponentState
                           children: [
                             {
                               "title": "Task",
-                              "amount": widget.resCommunitiesMissions?["data"]
-                                      ?["data"]?[widget.index]?["totalTasks"]
-                                  .toString(),
+                              "amount": totalTasks.toString(),
                               "icon": "",
                             },
                             {
                               "title": "Xp",
-                              "amount": widget.resCommunitiesMissions?["data"]
-                                      ?["data"]?[widget.index]?["totalExp"]
-                                  .toString(),
+                              "amount": totalExp.toString(),
                               "icon": "",
                             },
                             {
-                              "title": widget.resCommunitiesMissions?["data"]
-                                      ?["data"]?[widget.index]?["rewards"]?[0]
-                                      ?["name"]
-                                  ?.split(" ")?[1],
-                              "amount": widget.resCommunitiesMissions?["data"]
-                                      ?["data"]?[widget.index]?["rewards"]?[0]
-                                      ?["name"]
-                                  ?.split(" ")?[0],
-                              "icon": widget.resCommunitiesMissions?["data"]
-                                      ?["data"]?[widget.index]?["rewards"]?[0]
-                                  ?["image"],
+                              "title": rewards != null && rewards.isNotEmpty
+                                  ? rewards?[0]?["name"]?.split(" ")[1]
+                                  : null,
+                              "amount": rewards != null && rewards.isNotEmpty
+                                  ? rewards?[0]?["name"]?.split(" ")[0]
+                                  : null,
+                              "icon": rewards != null && rewards.isNotEmpty
+                                  ? rewards?[0]?["image"]
+                                  : null,
                             }
                           ]
                               .map(
@@ -165,8 +175,9 @@ class _TabContentCommunityMissionsComponentState
                                           child: CircleAvatar(
                                             radius: 12,
                                             backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                item["icon"] ?? ""),
+                                            child: item["icon"] != null
+                                                ? Image.network(item["icon"])
+                                                : null,
                                           ),
                                         ),
                                       Text(
@@ -192,21 +203,15 @@ class _TabContentCommunityMissionsComponentState
                               )
                               .toList(),
                         ),
-                        if (widget.resCommunitiesMissions != null)
+                        if (playerSamples != null &&
+                            playerSamples.isNotEmpty &&
+                            totalPlayers > 1)
                           Flexible(
                               child: AvatarStack(
                             height: 24,
                             avatars: [
-                              for (var n = 0;
-                                  n <
-                                      widget.resCommunitiesMissions?["data"]
-                                              ?["data"]?[widget.index]
-                                          ?["totalPlayers"];
-                                  n++)
-                                NetworkImage(
-                                    widget.resCommunitiesMissions?["data"]
-                                            ?["data"]?[widget.index]
-                                        ?["playerSamples"]?[n]?["profilePic"])
+                              for (var n = 0; n < totalPlayers; n++)
+                                NetworkImage(playerSamples?[n]?["profilePic"])
                             ],
                           ))
                       ]),

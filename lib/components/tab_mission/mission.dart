@@ -49,8 +49,9 @@ class _TabContentMissionComponentState
 
   @override
   Widget build(BuildContext context) {
-    var rewards =
-        widget.resMission?["data"]?["data"]?[widget.index]?["rewards"];
+    var dataMission = widget.resMission?["data"]?["data"]?[widget.index];
+
+    var rewards = dataMission?["rewards"];
 
     return Card(
       color: blackPrimaryColor,

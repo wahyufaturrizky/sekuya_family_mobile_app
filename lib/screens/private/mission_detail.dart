@@ -799,6 +799,17 @@ class _MissionDetailState extends State<MissionDetail> {
 
   @override
   Widget build(BuildContext context) {
+    var dataMissionDetail = resMissionDetail?["data"]?["data"];
+    var name = dataMissionDetail?["name"];
+    var community = dataMissionDetail?["community"];
+    var description = dataMissionDetail?["description"];
+    var status = dataMissionDetail?["status"];
+    var startDate = dataMissionDetail?["startDate"];
+    var endDate = dataMissionDetail?["endDate"];
+    var rewards = dataMissionDetail?["rewards"];
+    var tasks = dataMissionDetail?["tasks"];
+    var playerSamples = dataMissionDetail?["playerSamples"];
+
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
@@ -842,7 +853,7 @@ class _MissionDetailState extends State<MissionDetail> {
                               )),
                         if (!isLoadingMissionDetail)
                           Text(
-                            resMissionDetail?["data"]?["data"]?["name"] ?? "",
+                            name ?? "",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
@@ -862,12 +873,9 @@ class _MissionDetailState extends State<MissionDetail> {
                         if (!isLoadingMissionDetail)
                           Row(
                             children: [
-                              if (resMissionDetail?["data"]?["data"]
-                                      ?["community"]?["image"] !=
-                                  null)
+                              if (community?["image"] != null)
                                 Image.network(
-                                  resMissionDetail?["data"]?["data"]
-                                      ?["community"]?["image"],
+                                  community?["image"],
                                   width: 32,
                                   height: 32,
                                 ),
@@ -875,9 +883,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                 width: 8,
                               ),
                               Text(
-                                resMissionDetail?["data"]?["data"]?["community"]
-                                        ?["name"] ??
-                                    "-",
+                                community?["name"] ?? "-",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16,
@@ -898,9 +904,7 @@ class _MissionDetailState extends State<MissionDetail> {
                               )),
                         if (!isLoadingMissionDetail)
                           Text(
-                            resMissionDetail?["data"]?["data"]
-                                    ?["description"] ??
-                                "-",
+                            description ?? "-",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
@@ -924,9 +928,7 @@ class _MissionDetailState extends State<MissionDetail> {
                             if (!isLoadingMissionDetail)
                               Chip(
                                   label: Text(
-                                    resMissionDetail?["data"]?["data"]
-                                            ?["status"] ??
-                                        "",
+                                    status ?? "",
                                   ),
                                   color: MaterialStateProperty.all<Color>(
                                       blueSecondaryColor),
@@ -951,15 +953,14 @@ class _MissionDetailState extends State<MissionDetail> {
                               Row(
                                 children: [
                                   Text(
-                                    '${handleFormatDate(resMissionDetail?["data"]?["data"]?["startDate"])} - ',
+                                    '${handleFormatDate(startDate)} - ',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 12,
                                         color: Colors.white),
                                   ),
                                   Text(
-                                    handleFormatDate(resMissionDetail?["data"]
-                                        ?["data"]?["endDate"]),
+                                    handleFormatDate(endDate),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 12,
@@ -1002,13 +1003,9 @@ class _MissionDetailState extends State<MissionDetail> {
                                   const SizedBox(
                                     height: 8,
                                   ),
-                                  if (resMissionDetail?["data"]?["data"]
-                                          ?["endDate"] !=
-                                      null)
+                                  if (endDate != null)
                                     CountDownText(
-                                      due: DateTime.parse(
-                                          resMissionDetail?["data"]?["data"]
-                                              ?["endDate"]),
+                                      due: DateTime.parse(endDate),
                                       finishedText: "Mission End",
                                       showLabel: true,
                                       longDateName: true,
@@ -1038,11 +1035,9 @@ class _MissionDetailState extends State<MissionDetail> {
                                   height: 200,
                                 ),
                               )),
-                        if (resMissionDetail?["data"]?["data"]?["rewards"] !=
-                            null)
+                        if (rewards != null)
                           Column(
-                            children: (resMissionDetail?["data"]?["data"]
-                                    ?["rewards"] as List<dynamic>)
+                            children: (rewards as List<dynamic>)
                                 .map((itemReward) => Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: const BoxDecoration(
@@ -1208,11 +1203,9 @@ class _MissionDetailState extends State<MissionDetail> {
                         const SizedBox(
                           height: 16,
                         ),
-                        if (resMissionDetail?["data"]?["data"]?["tasks"] !=
-                            null)
+                        if (tasks != null)
                           Column(
-                            children: (resMissionDetail?["data"]?["data"]
-                                    ?["tasks"] as List<dynamic>)
+                            children: (tasks as List<dynamic>)
                                 .map((itemTask) => Column(
                                       children: [
                                         if (itemTask["taskCategoryKey"] ==
@@ -1477,7 +1470,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                         mainAxisSpacing: 16,
                                         mainAxisExtent: 60,
                                         crossAxisSpacing: 16),
-                                itemCount: 2,
+                                itemCount: playerSamples?.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Card(
                                       color: blackPrimaryColor,
@@ -1498,27 +1491,49 @@ class _MissionDetailState extends State<MissionDetail> {
                                                   borderRadius:
                                                       const BorderRadius.all(
                                                           Radius.circular(8))),
-                                              child: const Row(
+                                              child: Row(
                                                 children: [
                                                   Center(
                                                       child: CircleAvatar(
                                                     radius: 12,
                                                     backgroundColor:
                                                         Colors.transparent,
-                                                    backgroundImage: NetworkImage(
-                                                        'https://i.pravatar.cc/150?img=1'),
+                                                    backgroundImage: playerSamples?[
+                                                                    index]?[
+                                                                "profilePic"] !=
+                                                            null
+                                                        ? NetworkImage(
+                                                            playerSamples?[
+                                                                    index]
+                                                                ?["profilePic"])
+                                                        : null,
                                                   )),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 8,
                                                   ),
-                                                  Text(
-                                                    'full name',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
+                                                  if (playerSamples?[index]
+                                                              ?["username"] !=
+                                                          null ||
+                                                      playerSamples?[index]
+                                                              ?["email"] !=
+                                                          null)
+                                                    Text(
+                                                      playerSamples?[index]?[
+                                                                  "username"] ==
+                                                              ''
+                                                          ? playerSamples?[
+                                                                      index]
+                                                                  ?["email"]
+                                                              .substring(0, 10)
+                                                          : playerSamples?[
+                                                                  index]
+                                                              ?["username"],
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
                                                 ],
                                               ))));
                                 })),

@@ -8,8 +8,11 @@
  */
 
 import 'package:dio/dio.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/spinner.dart';
+import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/service/profile/profile.dart';
 
@@ -42,6 +45,14 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
   void initState() {
     super.initState();
     getDataDetailProfile();
+  }
+
+  void goToDetailCommunity(data, index) {
+    final arguments = MyArgumentsDataDetailCommunityClass(data, index);
+
+    Application.router.navigateTo(context, "/communityDetailScreens",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
   }
 
   Future<dynamic> getDataDetailProfile() async {
@@ -79,6 +90,16 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
   @override
   Widget build(BuildContext context) {
     var isLoading = isLoadingGetDetailProfile;
+
+    var dataDetailProfile = resDetailProfile?["data"];
+    var profilePic = dataDetailProfile?["profilePic"];
+    var username = dataDetailProfile?["username"];
+    var email = dataDetailProfile?["email"];
+    var level = dataDetailProfile?["level"];
+    var exp = dataDetailProfile?["exp"];
+    var nextExp = dataDetailProfile?["nextExp"];
+    var communities = dataDetailProfile?["communities"];
+
     if (isLoading) {
       return const MyWidgetSpinnerApp();
     } else {
@@ -101,26 +122,25 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                   ),
                   Column(
                     children: [
-                      if (resDetailProfile?["data"]?["profilePic"] != null)
+                      if (profilePic != null)
                         CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              resDetailProfile?["data"]?["profilePic"]),
+                          backgroundImage: NetworkImage(profilePic),
                           radius: 40,
                         ),
                       const SizedBox(
                         height: 12,
                       ),
-                      if (resDetailProfile != null)
+                      if (username != null)
                         Text(
-                          resDetailProfile?["data"]?["username"] ?? "",
+                          username ?? "",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
-                      if (resDetailProfile != null)
+                      if (email != null)
                         Text(
-                          resDetailProfile?["data"]?["email"],
+                          email.substring(0, 14),
                           style: const TextStyle(
                               color: greySecondaryColor,
                               fontSize: 14,
@@ -162,14 +182,14 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Level ${resDetailProfile?["data"]?["level"]}',
+                            'Level ${level}',
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            '${resDetailProfile?["data"]?["exp"]} xp',
+                            '${exp} xp',
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -181,7 +201,7 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                         height: 8,
                       ),
                       LinearProgressIndicator(
-                        value: resDetailProfile?["data"]?["nextExp"] * 0.01,
+                        value: nextExp * 0.01,
                         color: yellowPrimaryColor,
                         backgroundColor: greyThirdColor,
                       )
@@ -207,10 +227,8 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                 child: ListView(
                   // This next line does the trick.
                   scrollDirection: Axis.horizontal,
-                  children: resDetailProfile?["data"]?["communities"] != null
-                      ? (resDetailProfile?["data"]?["communities"]
-                              as List<dynamic>)
-                          .map((item) {
+                  children: communities != null
+                      ? (communities as List<dynamic>).map((item) {
                           return Builder(
                             builder: (BuildContext context) {
                               return Card(
@@ -220,7 +238,13 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                                 child: InkWell(
                                   splashColor: yellowPrimaryColor.withAlpha(30),
                                   onTap: () {
-                                    debugPrint('Card tapped.');
+                                    var tempItem = {
+                                      "data": {"data": []}
+                                    };
+
+                                    tempItem["data"]!["data"]?.add(item);
+
+                                    goToDetailCommunity(tempItem, 0);
                                   },
                                   child: Container(
                                     width: 200,

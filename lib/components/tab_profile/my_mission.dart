@@ -8,7 +8,10 @@
  */
 
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class TabContentProfileMyMissionComponentApp extends StatelessWidget {
@@ -39,6 +42,15 @@ class TabContentProfileMyMissionComponent extends StatefulWidget {
 
 class _TabContentProfileMyMissionComponentState
     extends State<TabContentProfileMyMissionComponent> {
+  void goToDetailMission() {
+    final arguments =
+        MyArgumentsDataDetailMissionClass(widget.resMyMission, widget.index);
+
+    Application.router.navigateTo(context, "/detailMissionScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -48,7 +60,10 @@ class _TabContentProfileMyMissionComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          debugPrint('Card tapped.');
+          if (widget.resMyMission?["data"]?["data"]?[widget.index]?["_id"] !=
+              null) {
+            goToDetailMission();
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -7,7 +7,10 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:sekuya_family_mobile_app/components/tab_community/featured_community.dart';
+import 'package:sekuya_family_mobile_app/config/application.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class TabContentProfileMyCommunityComponentApp extends StatelessWidget {
@@ -38,6 +41,15 @@ class TabContentProfileMyCommunityComponent extends StatefulWidget {
 
 class _TabContentProfileMyCommunityComponentState
     extends State<TabContentProfileMyCommunityComponent> {
+  void goToDetailCommunity() {
+    final arguments = MyArgumentsDataDetailCommunityClass(
+        widget.resMyCommunities, widget.index);
+
+    Application.router.navigateTo(context, "/communityDetailScreens",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -47,7 +59,9 @@ class _TabContentProfileMyCommunityComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          debugPrint('Card tapped.');
+          if (widget.resMyCommunities != null) {
+            goToDetailCommunity();
+          }
         },
         child: Padding(
           padding: const EdgeInsets.all(12),

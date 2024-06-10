@@ -12,7 +12,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/empty_list.dart';
@@ -600,10 +599,12 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                     MyWidgetShimmerApp(
                                       isLoading: isLoadingResProfile,
                                       child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            resProfile?["data"]
-                                                    ?["profilePic"] ??
-                                                ""),
+                                        backgroundImage: resProfile?["data"]
+                                                    ?["profilePic"] !=
+                                                null
+                                            ? NetworkImage(resProfile?["data"]
+                                                ?["profilePic"])
+                                            : null,
                                         radius: 40,
                                       ),
                                     ),
