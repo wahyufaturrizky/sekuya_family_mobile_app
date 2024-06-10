@@ -27,7 +27,8 @@ class QuizApp extends StatelessWidget {
       this.onExpansionChanged,
       this.selectedChoice,
       this.onChangedQuizChoice,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -43,6 +44,7 @@ class QuizApp extends StatelessWidget {
   dynamic selectedChoice;
   dynamic onChangedQuizChoice;
   dynamic status;
+  dynamic reason;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,7 @@ class QuizApp extends StatelessWidget {
       selectedChoice: selectedChoice,
       onChangedQuizChoice: onChangedQuizChoice,
       status: status,
+      reason: reason,
     );
   }
 }
@@ -81,7 +84,8 @@ class Quiz extends StatefulWidget {
       this.additionalAttribute,
       this.selectedChoice,
       this.onChangedQuizChoice,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -97,6 +101,7 @@ class Quiz extends StatefulWidget {
   dynamic onChangedQuizChoice;
   dynamic selectedChoice;
   dynamic status;
+  dynamic reason;
 
   @override
   State<Quiz> createState() => _QuizState();
@@ -183,6 +188,16 @@ class _QuizState extends State<Quiz> {
               // const SizedBox(
               //   width: 16,
               // ),
+              if (widget.reason != null)
+                Flexible(
+                  child: Text(
+                    "Reason reject: ${widget.reason}",
+                    style: const TextStyle(
+                        color: redSolidPrimaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
               Flexible(
                 child: Text(
                   widget.description ?? "",

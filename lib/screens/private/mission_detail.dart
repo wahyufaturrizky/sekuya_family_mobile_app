@@ -1212,7 +1212,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                             "PROOF_WITH_PHOTO_AND_LOCATION")
                                           ProofWithPhotoAndLocApp(
                                               image: itemTask["image"],
-                                              status: itemTask["status"],
+                                              reason: itemTask["reason"],
                                               onExpansionChanged: () {
                                                 selectedChoice = null;
                                                 _mediaFileList = null;
@@ -1274,6 +1274,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                           ProofWithPhotoApp(
                                               image: itemTask["image"],
                                               status: itemTask["status"],
+                                              reason: itemTask["reason"],
                                               onExpansionChanged: () {
                                                 selectedChoice = null;
                                                 _mediaFileList = null;
@@ -1328,6 +1329,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                           AnswerNotesApp(
                                               image: itemTask["image"],
                                               name: itemTask["name"],
+                                              reason: itemTask["reason"],
                                               status: itemTask["status"],
                                               onExpansionChanged: () {
                                                 selectedChoice = null;
@@ -1365,6 +1367,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                           ReferralApp(
                                               image: itemTask["image"],
                                               name: itemTask["name"],
+                                              reason: itemTask["reason"],
                                               status: itemTask["status"],
                                               onExpansionChanged: () {
                                                 selectedChoice = null;
@@ -1402,6 +1405,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                           QuizApp(
                                               image: itemTask["image"],
                                               name: itemTask["name"],
+                                              reason: itemTask["reason"],
                                               status: itemTask["status"],
                                               selectedChoice: selectedChoice,
                                               onChangedQuizChoice: (value) {

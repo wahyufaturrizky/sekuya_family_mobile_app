@@ -22,7 +22,8 @@ class ReferralApp extends StatelessWidget {
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -33,6 +34,7 @@ class ReferralApp extends StatelessWidget {
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
   final dynamic status;
+  final dynamic reason;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class ReferralApp extends StatelessWidget {
       additionalAttributeAnswerNotes: additionalAttributeAnswerNotes,
       onExpansionChanged: onExpansionChanged,
       status: status,
+      reason: reason,
     );
   }
 }
@@ -61,7 +64,8 @@ class Referral extends StatefulWidget {
       this.onPressedSubmitTaskMission,
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -72,6 +76,7 @@ class Referral extends StatefulWidget {
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
   final dynamic status;
+  final dynamic reason;
 
   @override
   State<Referral> createState() => _ReferralState();
@@ -158,6 +163,16 @@ class _ReferralState extends State<Referral> {
               // const SizedBox(
               //   width: 16,
               // ),
+              if (widget.reason != null)
+                Flexible(
+                  child: Text(
+                    "Reason reject: ${widget.reason}",
+                    style: const TextStyle(
+                        color: redSolidPrimaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
               Flexible(
                 child: Text(
                   widget.description ?? "",

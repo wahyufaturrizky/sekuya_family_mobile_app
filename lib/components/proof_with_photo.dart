@@ -26,7 +26,8 @@ class ProofWithPhotoApp extends StatelessWidget {
       this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -39,6 +40,7 @@ class ProofWithPhotoApp extends StatelessWidget {
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
+  final dynamic reason;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,7 @@ class ProofWithPhotoApp extends StatelessWidget {
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       onExpansionChanged: onExpansionChanged,
       status: status,
+      reason: reason,
     );
   }
 }
@@ -71,7 +74,8 @@ class ProofWithPhoto extends StatefulWidget {
       this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -84,6 +88,7 @@ class ProofWithPhoto extends StatefulWidget {
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
+  final dynamic reason;
 
   @override
   State<ProofWithPhoto> createState() => _ProofWithPhotoState();
@@ -173,6 +178,16 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
               // const SizedBox(
               //   width: 16,
               // ),
+              if (widget.reason != null)
+                Flexible(
+                  child: Text(
+                    "Reason reject: ${widget.reason}",
+                    style: const TextStyle(
+                        color: redSolidPrimaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
               Flexible(
                 child: Text(
                   widget.description ?? "",

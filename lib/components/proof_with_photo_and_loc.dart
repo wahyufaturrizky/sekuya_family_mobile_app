@@ -29,7 +29,8 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -45,6 +46,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
+  final dynamic reason;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       onExpansionChanged: onExpansionChanged,
       status: status,
+      reason: reason,
     );
   }
 }
@@ -83,7 +86,8 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
       this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
-      this.status});
+      this.status,
+      this.reason});
 
   final dynamic image;
   final dynamic name;
@@ -99,6 +103,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
+  final dynamic reason;
 
   @override
   State<ProofWithPhotoAndLoc> createState() => _ProofWithPhotoAndLocState();
@@ -188,6 +193,16 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
               // const SizedBox(
               //   width: 16,
               // ),
+              if (widget.reason != null)
+                Flexible(
+                  child: Text(
+                    "Reason reject: ${widget.reason}",
+                    style: const TextStyle(
+                        color: redSolidPrimaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
               Flexible(
                 child: Text(
                   widget.description ?? "",
