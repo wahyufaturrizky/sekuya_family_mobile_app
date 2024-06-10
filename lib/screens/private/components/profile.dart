@@ -731,32 +731,37 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                                     color: greySecondaryColor)),
                                           ],
                                         ),
-                                        actionsAlignment:
-                                            MainAxisAlignment.spaceBetween,
                                         actions: <Widget>[
-                                          CustomButton(
-                                            buttonText: 'See Later',
-                                            isOutlined: true,
-                                            border: 1,
-                                            isOutlinedBackgroundColor:
-                                                blackSolidPrimaryColor,
-                                            isOutlinedBorderColor:
-                                                yellowPrimaryColor,
-                                            labelSize: 12,
-                                            width: 120,
-                                            height: 36,
-                                            onPressed: () {
-                                              Navigator.pop(context, 'Cancel');
-                                            },
-                                          ),
-                                          CustomButton(
-                                            buttonText: 'See My Badge',
-                                            onPressed: () {
-                                              Navigator.pop(context, 'OK');
-                                            },
-                                            labelSize: 12,
-                                            height: 36,
-                                            width: 120,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              CustomButton(
+                                                buttonText: 'See Later',
+                                                isOutlined: true,
+                                                border: 1,
+                                                isOutlinedBackgroundColor:
+                                                    blackSolidPrimaryColor,
+                                                isOutlinedBorderColor:
+                                                    yellowPrimaryColor,
+                                                labelSize: 12,
+                                                width: 100,
+                                                height: 36,
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      context, 'Cancel');
+                                                },
+                                              ),
+                                              CustomButton(
+                                                buttonText: 'See My Badge',
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'OK');
+                                                },
+                                                labelSize: 12,
+                                                height: 36,
+                                                width: 100,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
