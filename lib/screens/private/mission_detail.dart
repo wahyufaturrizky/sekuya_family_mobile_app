@@ -581,28 +581,42 @@ class _MissionDetailState extends State<MissionDetail> {
         var res = await handleTaskSubmission(formData, idMission);
 
         if (res != null) {
+          getDataMissionDetail(isFromSubmit: true);
+
+          setState(() {
+            selectedChoice = '';
+            additionalAttributeAnswerMultipleChoice.text = '';
+            additionalAttributeAnswerNotes.text = '';
+            _mediaFileList = null;
+            lat = null;
+            long = null;
+          });
+
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               backgroundColor: blackSolidPrimaryColor,
-              content: const Column(
+              content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
-                  Text('Message!',
+                  const Text('Message!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Colors.white)),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
-                  Text('👋🏻 Success submit Task',
+                  Text(
+                      res["statusCode"] == 400
+                          ? res['message']
+                          : '👋🏻 Success submit Task',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: greySecondaryColor)),
@@ -614,10 +628,6 @@ class _MissionDetailState extends State<MissionDetail> {
                   buttonText: 'OK',
                   onPressed: () {
                     Navigator.pop(context, 'OK');
-                    setState(() {
-                      isLoadingSubmitTaskMission = false;
-                    });
-                    getDataMissionDetail(isFromSubmit: true);
                   },
                   labelSize: 12,
                   height: 36,
@@ -625,18 +635,7 @@ class _MissionDetailState extends State<MissionDetail> {
                 ),
               ],
             ),
-          ).then((value) {
-            getDataMissionDetail(isFromSubmit: true);
-            setState(() {
-              isLoadingSubmitTaskMission = false;
-              selectedChoice = '';
-              additionalAttributeAnswerMultipleChoice.text = '';
-              additionalAttributeAnswerNotes.text = '';
-              _mediaFileList = null;
-              lat = null;
-              long = null;
-            });
-          });
+          ).then((value) {});
         }
       }
     } catch (err) {
@@ -748,7 +747,7 @@ class _MissionDetailState extends State<MissionDetail> {
     return null;
   }
 
-  Widget _previewImages() {
+  Widget _previewImages({imageProof = ''}) {
     final Text? retrieveError = _getRetrieveErrorWidget();
     if (retrieveError != null) {
       return retrieveError;
@@ -775,7 +774,7 @@ class _MissionDetailState extends State<MissionDetail> {
         textAlign: TextAlign.center,
       );
     } else {
-      return const PlaceholderImageTaskApp();
+      return PlaceholderImageTaskApp(imageProof: imageProof);
       // You have not yet picked an image.
     }
   }
@@ -1237,7 +1236,12 @@ class _MissionDetailState extends State<MissionDetail> {
                                               exp: itemTask["exp"],
                                               onTapTakeCamera: () {
                                                 if (_picker.supportsImageSource(
-                                                    ImageSource.camera)) {
+                                                        ImageSource.camera) &&
+                                                    [
+                                                      "NOT_SUBMITTED",
+                                                      "REJECTED"
+                                                    ].contains(
+                                                        itemTask["status"])) {
                                                   _onImageButtonPressed(
                                                       ImageSource.camera,
                                                       context: context);
@@ -1246,7 +1250,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                               retrieveLostData: () async {
                                                 await retrieveLostData();
                                               },
-                                              previewImages: _previewImages(),
+                                              previewImages: _previewImages(
+                                                imageProof:
+                                                    itemTask["imageProof"],
+                                              ),
                                               onTapGetCurrentPosition: () {
                                                 _getCurrentPosition();
                                               },
@@ -1256,7 +1263,12 @@ class _MissionDetailState extends State<MissionDetail> {
                                               isLoadingSubmitTaskMission:
                                                   isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission) {
+                                                if (!isLoadingSubmitTaskMission &&
+                                                    ([
+                                                      "NOT_SUBMITTED",
+                                                      "REJECTED"
+                                                    ].contains(
+                                                        itemTask["status"]))) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1285,7 +1297,12 @@ class _MissionDetailState extends State<MissionDetail> {
                                               exp: itemTask["exp"],
                                               onTapTakeCamera: () {
                                                 if (_picker.supportsImageSource(
-                                                    ImageSource.camera)) {
+                                                        ImageSource.camera) &&
+                                                    [
+                                                      "NOT_SUBMITTED",
+                                                      "REJECTED"
+                                                    ].contains(
+                                                        itemTask["status"])) {
                                                   _onImageButtonPressed(
                                                       ImageSource.camera,
                                                       context: context);
@@ -1294,11 +1311,18 @@ class _MissionDetailState extends State<MissionDetail> {
                                               retrieveLostData: () async {
                                                 await retrieveLostData();
                                               },
-                                              previewImages: _previewImages(),
+                                              previewImages: _previewImages(
+                                                  imageProof:
+                                                      itemTask["imageProof"]),
                                               isLoadingSubmitTaskMission:
                                                   isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission) {
+                                                if (!isLoadingSubmitTaskMission &&
+                                                    ([
+                                                      "NOT_SUBMITTED",
+                                                      "REJECTED"
+                                                    ].contains(
+                                                        itemTask["status"]))) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1330,7 +1354,12 @@ class _MissionDetailState extends State<MissionDetail> {
                                               isLoadingSubmitTaskMission:
                                                   isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission) {
+                                                if (!isLoadingSubmitTaskMission &&
+                                                    ([
+                                                      "NOT_SUBMITTED",
+                                                      "REJECTED"
+                                                    ].contains(
+                                                        itemTask["status"]))) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1362,7 +1391,12 @@ class _MissionDetailState extends State<MissionDetail> {
                                               isLoadingSubmitTaskMission:
                                                   isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission) {
+                                                if (!isLoadingSubmitTaskMission &&
+                                                    ([
+                                                      "NOT_SUBMITTED",
+                                                      "REJECTED"
+                                                    ].contains(
+                                                        itemTask["status"]))) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[
@@ -1397,14 +1431,6 @@ class _MissionDetailState extends State<MissionDetail> {
                                                 additionalAttributeAnswerMultipleChoice
                                                     .text = "";
                                               },
-                                              onTapTakeCamera: () {
-                                                if (_picker.supportsImageSource(
-                                                    ImageSource.camera)) {
-                                                  _onImageButtonPressed(
-                                                      ImageSource.camera,
-                                                      context: context);
-                                                }
-                                              },
                                               retrieveLostData: () async {
                                                 await retrieveLostData();
                                               },
@@ -1412,7 +1438,12 @@ class _MissionDetailState extends State<MissionDetail> {
                                               isLoadingSubmitTaskMission:
                                                   isLoadingSubmitTaskMission,
                                               onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission) {
+                                                if (!isLoadingSubmitTaskMission &&
+                                                    ([
+                                                      "NOT_SUBMITTED",
+                                                      "REJECTED"
+                                                    ].contains(
+                                                        itemTask["status"]))) {
                                                   handlePostTaskSubmission(
                                                     taskId: itemTask["id"],
                                                     taskCategoryKey: itemTask[

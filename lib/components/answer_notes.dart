@@ -82,7 +82,6 @@ class _AnswerNotesState extends State<AnswerNotes> {
   Widget build(BuildContext context) {
     return ExpansionTile(
         iconColor: Colors.white,
-        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -178,6 +177,8 @@ class _AnswerNotesState extends State<AnswerNotes> {
             borderWidth: 1,
             textField: TextField(
                 maxLines: 8,
+                readOnly:
+                    !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
                 controller: widget.additionalAttributeAnswerNotes,
                 style: const TextStyle(
                   fontSize: 12,
@@ -198,6 +199,7 @@ class _AnswerNotesState extends State<AnswerNotes> {
               widget.onPressedSubmitTaskMission!();
             },
             width: 500,
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
           ),
           const SizedBox(
             height: 16,

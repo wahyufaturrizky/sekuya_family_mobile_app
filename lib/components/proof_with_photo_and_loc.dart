@@ -109,7 +109,6 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
   Widget build(BuildContext context) {
     return ExpansionTile(
         iconColor: Colors.white,
-        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -365,6 +364,7 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
               widget.onPressedSubmitTaskMission!();
             },
             width: 500,
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
           ),
           const SizedBox(
             height: 16,

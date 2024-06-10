@@ -19,7 +19,6 @@ class QuizApp extends StatelessWidget {
       this.exp,
       this.description,
       this.additionalAttribute,
-      this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
       this.isLoadingSubmitTaskMission,
@@ -35,7 +34,6 @@ class QuizApp extends StatelessWidget {
   final dynamic exp;
   final dynamic description;
   final dynamic additionalAttribute;
-  final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
   final bool? isLoadingSubmitTaskMission;
@@ -53,7 +51,6 @@ class QuizApp extends StatelessWidget {
       name: name,
       exp: exp,
       description: description,
-      onTapTakeCamera: onTapTakeCamera,
       retrieveLostData: retrieveLostData,
       previewImages: previewImages,
       isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
@@ -75,7 +72,6 @@ class Quiz extends StatefulWidget {
       this.name,
       this.exp,
       this.description,
-      this.onTapTakeCamera,
       this.retrieveLostData,
       this.previewImages,
       this.isLoadingSubmitTaskMission,
@@ -91,7 +87,6 @@ class Quiz extends StatefulWidget {
   final dynamic name;
   final dynamic exp;
   final dynamic description;
-  final VoidCallback? onTapTakeCamera;
   final dynamic retrieveLostData;
   final dynamic previewImages;
   final bool? isLoadingSubmitTaskMission;
@@ -112,7 +107,6 @@ class _QuizState extends State<Quiz> {
   Widget build(BuildContext context) {
     return ExpansionTile(
         iconColor: Colors.white,
-        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -225,7 +219,10 @@ class _QuizState extends State<Quiz> {
                               value: itemQuestion ?? "",
                               groupValue: widget.selectedChoice,
                               onChanged: (value) {
-                                widget.onChangedQuizChoice(value);
+                                if (["NOT_SUBMITTED", "REJECTED"]
+                                    .contains(widget.status)) {
+                                  widget.onChangedQuizChoice(value);
+                                }
                               },
                             )))
                         .toList()),
@@ -233,6 +230,7 @@ class _QuizState extends State<Quiz> {
             height: 16,
           ),
           CustomButton(
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
             buttonText: 'Submit',
             isLoading: widget.isLoadingSubmitTaskMission!,
             onPressed: () {

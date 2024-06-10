@@ -93,7 +93,6 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -318,6 +317,7 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },
+            isOutlined: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
             width: 500,
           ),
           const SizedBox(

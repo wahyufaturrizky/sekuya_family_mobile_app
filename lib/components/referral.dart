@@ -82,7 +82,6 @@ class _ReferralState extends State<Referral> {
   Widget build(BuildContext context) {
     return ExpansionTile(
         iconColor: Colors.white,
-        enabled: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
         onExpansionChanged: (bool value) {
           if (value) {
             widget.onExpansionChanged();
@@ -177,6 +176,8 @@ class _ReferralState extends State<Referral> {
             borderRadius: 4,
             borderWidth: 1,
             textField: TextField(
+                readOnly:
+                    !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
                 controller: widget.additionalAttributeAnswerNotes,
                 style: const TextStyle(
                   fontSize: 12,
@@ -191,6 +192,7 @@ class _ReferralState extends State<Referral> {
             height: 16,
           ),
           CustomButton(
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
             buttonText: 'Submit',
             isLoading: widget.isLoadingSubmitTaskMission!,
             onPressed: () {
