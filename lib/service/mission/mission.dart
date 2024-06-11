@@ -20,6 +20,20 @@ Future<dynamic> handleGetDataMissionDetail(id) {
   return clientDio(serviceUrlParam: "/missions/$id", methodParam: "GET");
 }
 
+Future<dynamic> handleGetDataLuckyWinnersByMissionDetail(id, queryParameters) {
+  return clientDio(
+      serviceUrlParam: "/missions/$id/lucky-winners",
+      methodParam: "GET",
+      queryParameters: queryParameters);
+}
+
+Future<dynamic> handleGetDataPlayersByMissionDetail(id, queryParameters) {
+  return clientDio(
+      serviceUrlParam: "/missions/$id/players",
+      methodParam: "GET",
+      queryParameters: queryParameters);
+}
+
 Future<dynamic> handleTaskSubmission(data, idMission) {
   return clientDio(
     serviceUrlParam: '/missions/$idMission/task-submission',

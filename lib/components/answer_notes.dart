@@ -23,7 +23,8 @@ class AnswerNotesApp extends StatelessWidget {
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
       this.status,
-      this.reason});
+      this.reason,
+      this.submittedAdditionalAttribute});
 
   final dynamic image;
   final dynamic name;
@@ -35,6 +36,7 @@ class AnswerNotesApp extends StatelessWidget {
   final dynamic onExpansionChanged;
   final dynamic status;
   final dynamic reason;
+  final dynamic submittedAdditionalAttribute;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class AnswerNotesApp extends StatelessWidget {
       onExpansionChanged: onExpansionChanged,
       status: status,
       reason: reason,
+      submittedAdditionalAttribute: submittedAdditionalAttribute,
     );
   }
 }
@@ -65,7 +68,8 @@ class AnswerNotes extends StatefulWidget {
       this.additionalAttributeAnswerNotes,
       this.onExpansionChanged,
       this.status,
-      this.reason});
+      this.reason,
+      this.submittedAdditionalAttribute});
 
   final dynamic image;
   final dynamic name;
@@ -77,6 +81,7 @@ class AnswerNotes extends StatefulWidget {
   final dynamic onExpansionChanged;
   final dynamic status;
   final dynamic reason;
+  final dynamic submittedAdditionalAttribute;
 
   @override
   State<AnswerNotes> createState() => _AnswerNotesState();
@@ -163,8 +168,9 @@ class _AnswerNotesState extends State<AnswerNotes> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != null)
-                Flexible(
+              if (widget.reason != '')
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     "Reason reject: ${widget.reason}",
                     style: const TextStyle(
@@ -200,7 +206,8 @@ class _AnswerNotesState extends State<AnswerNotes> {
                   color: Colors.white,
                 ),
                 decoration: kTextInputDecoration.copyWith(
-                  hintText: 'Your answer',
+                  hintText:
+                      widget.submittedAdditionalAttribute ?? 'Your answer',
                   hintStyle: const TextStyle(color: greySecondaryColor),
                 )),
           ),

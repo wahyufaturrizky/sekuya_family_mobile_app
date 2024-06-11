@@ -7,11 +7,17 @@
  * See LICENSE for distribution and usage details.
  */
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sekuya_family_mobile_app/api_key.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+
+final dio = Dio();
 
 class ProofWithPhotoAndLocApp extends StatelessWidget {
   const ProofWithPhotoAndLocApp(
@@ -24,13 +30,15 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       this.retrieveLostData,
       this.previewImages,
       this.onTapGetCurrentPosition,
-      this.isLoadingNameLocation,
+      this.isLoadingNameLocation = false,
       this.nameLocation,
       this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
       this.status,
-      this.reason});
+      this.reason,
+      this.submittedAdditionalAttribute,
+      this.isLoadingMissionDetail = false});
 
   final dynamic image;
   final dynamic name;
@@ -40,13 +48,15 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
   final dynamic retrieveLostData;
   final dynamic previewImages;
   final dynamic onTapGetCurrentPosition;
-  final bool? isLoadingNameLocation;
+  final bool isLoadingNameLocation;
   final String? nameLocation;
   final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
   final dynamic reason;
+  final dynamic submittedAdditionalAttribute;
+  final bool isLoadingMissionDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +76,8 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
       onExpansionChanged: onExpansionChanged,
       status: status,
       reason: reason,
+      submittedAdditionalAttribute: submittedAdditionalAttribute,
+      isLoadingMissionDetail: isLoadingMissionDetail,
     );
   }
 }
@@ -81,13 +93,15 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
       this.retrieveLostData,
       this.previewImages,
       this.onTapGetCurrentPosition,
-      this.isLoadingNameLocation,
+      this.isLoadingNameLocation = false,
       this.nameLocation,
       this.isLoadingSubmitTaskMission,
       this.onPressedSubmitTaskMission,
       this.onExpansionChanged,
       this.status,
-      this.reason});
+      this.reason,
+      this.submittedAdditionalAttribute,
+      this.isLoadingMissionDetail = false});
 
   final dynamic image;
   final dynamic name;
@@ -97,21 +111,50 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
   final dynamic retrieveLostData;
   final dynamic previewImages;
   final dynamic onTapGetCurrentPosition;
-  final bool? isLoadingNameLocation;
+  final bool isLoadingNameLocation;
   final String? nameLocation;
   final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
   final dynamic status;
   final dynamic reason;
+  final dynamic submittedAdditionalAttribute;
+  final bool isLoadingMissionDetail;
 
   @override
   State<ProofWithPhotoAndLoc> createState() => _ProofWithPhotoAndLocState();
 }
 
 class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
+  var submittedLocation;
+
+  @override
+  void initState() {
+    getHttp();
+
+    super.initState();
+  }
+
+  void getHttp() async {
+    if (widget.submittedAdditionalAttribute != "") {
+      var lat = widget.submittedAdditionalAttribute?["lat"];
+      var long = widget.submittedAdditionalAttribute?["long"];
+
+      final response = await dio.get(
+          '$baseUrlMapGoogleApi/geocode/json?latlng=$lat,$long&key=$apiKeyGoogleApi');
+
+      final res = jsonDecode(response.toString());
+      print(res['results'][0]['formatted_address']);
+      setState(() {
+        submittedLocation = res['results'][0]['formatted_address'];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("@submittedLocation $submittedLocation");
+
     return ExpansionTile(
         iconColor: Colors.white,
         onExpansionChanged: (bool value) {
@@ -152,6 +195,7 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 ],
               ),
             ),
+            Text(widget.status.toString()),
             Icon(
               widget.status == "APPROVED"
                   ? Icons.check_circle
@@ -193,8 +237,9 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != null)
-                Flexible(
+              if (widget.reason != '')
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     "Reason reject: ${widget.reason}",
                     style: const TextStyle(
@@ -344,7 +389,9 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
           // ),
           GestureDetector(
             onTap: () {
-              widget.onTapGetCurrentPosition!();
+              if (["NOT_SUBMITTED", "REJECTED"].contains(widget.status)) {
+                widget.onTapGetCurrentPosition!();
+              }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -355,9 +402,10 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 ),
                 Flexible(
                     child: Text(
-                  widget.isLoadingNameLocation!
-                      ? "Loading..."
-                      : widget.nameLocation ?? "Get Current Location",
+                  submittedLocation ??
+                      (widget.isLoadingNameLocation
+                          ? "Loading..."
+                          : "Get Current Location"),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,

@@ -62,6 +62,13 @@ class _MissionDetailState extends State<MissionDetail> {
   bool isLoadingTaskMission = false;
   bool isLoadingSubmitTaskMission = false;
   bool isLoadingMissionDetail = false;
+
+  bool isLoadingPlayers = false;
+  bool isLoadingLuckyWinners = false;
+
+  bool refetchPlayers = false;
+  bool refetchLuckyWinners = false;
+
   List<XFile>? _mediaFileList;
   dynamic _pickImageError;
   String? _retrieveDataError;
@@ -69,8 +76,22 @@ class _MissionDetailState extends State<MissionDetail> {
   var long;
   var nameLocation;
   var resMissionDetail;
+  var resPlayers;
+  var resLuckyWinners;
+
   var isLoadingNameLocation = false;
   var selectedChoice;
+
+  static const pageSizePlayers = 5;
+  static const pageSizeLuckyWinners = 5;
+
+  var totalPagesPlayers;
+  var currentPagePlayers = 0;
+  int itemPerPagePlayers = 0;
+
+  var totalPagesLuckyWinners;
+  var currentPageLuckyWinners = 0;
+  int itemPerPageLuckyWinners = 0;
 
   final additionalAttributeAnswerNotes = TextEditingController();
   final additionalAttributeAnswerMultipleChoice = TextEditingController();
@@ -92,6 +113,9 @@ class _MissionDetailState extends State<MissionDetail> {
   void initState() {
     _toggleServiceStatusStream();
     getDataMissionDetail();
+
+    getDataLuckyWinnersByMissionDetail();
+    getDataPlayersByMissionDetail();
 
     super.initState();
   }
@@ -126,6 +150,148 @@ class _MissionDetailState extends State<MissionDetail> {
           'Location service has been $serviceStatusValue',
         );
       });
+    }
+  }
+
+  Future<dynamic> getDataLuckyWinnersByMissionDetail(
+      {pageKey = 1, refetch = false}) async {
+    if (!mounted) return;
+    try {
+      if (mounted) {
+        setState(() {
+          if (refetch) {
+            refetchLuckyWinners = true;
+          } else {
+            isLoadingLuckyWinners = true;
+          }
+        });
+      }
+
+      var queryParameters;
+
+      queryParameters = {
+        'page': pageKey.toString(),
+        'limit': pageSizeLuckyWinners.toString(),
+      };
+
+      String id = widget.args?.resMission?["data"]?["data"]
+          ?[widget.args?.indexResMission]?["_id"];
+
+      var res =
+          await handleGetDataLuckyWinnersByMissionDetail(id, queryParameters);
+
+      if (res != null) {
+        if (mounted) {
+          if (res?["data"]?["meta"]?["totalPages"] > currentPageLuckyWinners) {
+            var response = {
+              ...res,
+              "data": {
+                ...res["data"],
+                "data": [
+                  ...resLuckyWinners?["data"]?["data"] ?? [],
+                  ...res?["data"]?["data"],
+                ]
+              }
+            };
+
+            int tempItemPerPageState = res?["data"]?["data"]?.length;
+
+            setState(() {
+              resLuckyWinners = response;
+              isLoadingLuckyWinners = false;
+              refetchLuckyWinners = false;
+              totalPagesLuckyWinners = res?["data"]?["meta"]?["totalPages"];
+              currentPageLuckyWinners = res?["data"]?["meta"]?["page"];
+              itemPerPageLuckyWinners =
+                  itemPerPageLuckyWinners + tempItemPerPageState;
+            });
+          } else {
+            setState(() {
+              isLoadingLuckyWinners = false;
+              refetchLuckyWinners = false;
+            });
+          }
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoadingLuckyWinners = false;
+          refetchLuckyWinners = false;
+        });
+      }
+
+      print('Error getDataLuckyWinnersByMissionDetail = $e');
+    }
+  }
+
+  Future<dynamic> getDataPlayersByMissionDetail(
+      {pageKey = 1, refetch = false}) async {
+    if (!mounted) return;
+    try {
+      if (mounted) {
+        setState(() {
+          if (refetch) {
+            refetchPlayers = true;
+          } else {
+            isLoadingPlayers = true;
+          }
+        });
+      }
+
+      var queryParameters;
+
+      queryParameters = {
+        'page': pageKey.toString(),
+        'limit': pageSizePlayers.toString(),
+      };
+
+      String id = widget.args?.resMission?["data"]?["data"]
+          ?[widget.args?.indexResMission]?["_id"];
+
+      var res = await handleGetDataPlayersByMissionDetail(id, queryParameters);
+
+      if (res != null) {
+        if (mounted) {
+          if (res?["data"]?["meta"]?["totalPages"] > currentPagePlayers) {
+            var response = {
+              ...res,
+              "data": {
+                ...res["data"],
+                "data": [
+                  ...resPlayers?["data"]?["data"] ?? [],
+                  ...res?["data"]?["data"],
+                ]
+              }
+            };
+
+            int tempItemPerPageState = res?["data"]?["data"]?.length;
+
+            setState(() {
+              resPlayers = response;
+              isLoadingPlayers = false;
+              refetchPlayers = false;
+              totalPagesPlayers = res?["data"]?["meta"]?["totalPages"];
+              currentPagePlayers = res?["data"]?["meta"]?["page"];
+              itemPerPagePlayers = itemPerPagePlayers + tempItemPerPageState;
+            });
+          } else {
+            setState(() {
+              isLoadingPlayers = false;
+              refetchPlayers = false;
+            });
+          }
+        }
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoadingPlayers = false;
+          refetchPlayers = false;
+        });
+      }
+
+      print('Error getDataLuckyWinnersByMissionDetail = $e');
     }
   }
 
@@ -808,7 +974,8 @@ class _MissionDetailState extends State<MissionDetail> {
     var endDate = dataMissionDetail?["endDate"];
     var rewards = dataMissionDetail?["rewards"];
     var tasks = dataMissionDetail?["tasks"];
-    var playerSamples = dataMissionDetail?["playerSamples"];
+    var dataPlayers = resPlayers?["data"]?["data"];
+    var dataLuckyWinners = resLuckyWinners?["data"]?["data"];
 
     return SafeArea(
         child: Scaffold(
@@ -984,6 +1151,7 @@ class _MissionDetailState extends State<MissionDetail> {
                               )),
                         if (!isLoadingMissionDetail)
                           Container(
+                              margin: const EdgeInsets.only(bottom: 16),
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                   color: yellowPrimaryColor.withOpacity(0.2),
@@ -1014,19 +1182,17 @@ class _MissionDetailState extends State<MissionDetail> {
                                     ),
                                 ],
                               )),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Rewards',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
+                        if (rewards != null && rewards.isNotEmpty)
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 16),
+                            child: Text(
+                              'Rewards',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.white),
+                            ),
+                          ),
                         if (isLoadingMissionDetail)
                           MyWidgetShimmerApp(
                               isLoading: isLoadingMissionDetail,
@@ -1035,164 +1201,172 @@ class _MissionDetailState extends State<MissionDetail> {
                                   height: 200,
                                 ),
                               )),
-                        if (rewards != null)
-                          Column(
-                            children: (rewards as List<dynamic>)
-                                .map((itemReward) => Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: const BoxDecoration(
-                                          color: blackPrimaryColor,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8))),
-                                      child: Row(
-                                        children: [
-                                          if (itemReward["image"] != null)
-                                            Image.network(
-                                              itemReward["image"],
-                                              width: 40,
-                                              height: 40,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          const SizedBox(
-                                            width: 16,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${itemReward["value"].toString()} Xp',
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                                LinearProgressIndicator(
-                                                  value: itemReward["value"] *
-                                                      0.01,
-                                                  color: yellowPrimaryColor,
-                                                  backgroundColor:
-                                                      greyThirdColor,
-                                                ),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                                Text(
-                                                  itemReward["description"],
-                                                  style: const TextStyle(
-                                                      color: greySecondaryColor,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 16,
-                                          ),
-                                          Chip(
-                                              label: Text(
-                                                '${itemReward["maxQty"] / itemReward["value"]}%',
+                        if (rewards != null && rewards.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Column(
+                              children: (rewards as List<dynamic>)
+                                  .map((itemReward) => Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: const BoxDecoration(
+                                            color: blackPrimaryColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8))),
+                                        child: Row(
+                                          children: [
+                                            if (itemReward["image"] != null)
+                                              Image.network(
+                                                itemReward["image"],
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
                                               ),
-                                              color: MaterialStateProperty.all<
-                                                      Color>(
-                                                  blackSolidPrimaryColor),
-                                              labelStyle: const TextStyle(
-                                                  color: yellowPrimaryColor,
-                                                  fontWeight: FontWeight.w600),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  side: const BorderSide(
-                                                      color:
-                                                          Colors.transparent))),
-                                        ],
-                                      ),
-                                    ))
-                                .toList(),
+                                            const SizedBox(
+                                              width: 16,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${itemReward["value"].toString()} Xp',
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  LinearProgressIndicator(
+                                                    value: itemReward["value"] *
+                                                        0.01,
+                                                    color: yellowPrimaryColor,
+                                                    backgroundColor:
+                                                        greyThirdColor,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Text(
+                                                    itemReward["description"],
+                                                    style: const TextStyle(
+                                                        color:
+                                                            greySecondaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 16,
+                                            ),
+                                            Chip(
+                                                label: Text(
+                                                  '${itemReward["maxQty"] / itemReward["value"]}%',
+                                                ),
+                                                color: MaterialStateProperty
+                                                    .all<Color>(
+                                                        blackSolidPrimaryColor),
+                                                labelStyle: const TextStyle(
+                                                    color: yellowPrimaryColor,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    side: const BorderSide(
+                                                        color: Colors
+                                                            .transparent))),
+                                          ],
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
                           ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Lucky Winner',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      backgroundColor: Colors.black,
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return const LuckyWinnerBottomSheetApp();
-                                      });
-                                },
-                                child: const Text(
-                                  'See All',
-                                  style: TextStyle(
-                                      color: yellowPrimaryColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                ))
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: blackPrimaryColor),
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.black),
-                          child: Row(children: [
-                            const Flexible(
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 12,
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage: NetworkImage(
-                                        'https://i.pravatar.cc/150?img=1'),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    'full name',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
+                        if (resLuckyWinners != null)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Lucky Winner',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            Flexible(
-                                child: AvatarStack(
-                              height: 24,
-                              avatars: [
-                                for (var n = 0; n < 3; n++)
-                                  NetworkImage(getAvatarUrl(n))
-                              ],
-                            ))
-                          ]),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
+                              GestureDetector(
+                                  onTap: () {
+                                    String idMission = widget
+                                            .args?.resMission?["data"]?["data"]
+                                        ?[widget.args?.indexResMission]?["_id"];
+
+                                    showModalBottomSheet(
+                                        backgroundColor: Colors.black,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return LuckyWinnerBottomSheetApp(
+                                              idMission: idMission);
+                                        });
+                                  },
+                                  child: const Text(
+                                    'See All',
+                                    style: TextStyle(
+                                        color: yellowPrimaryColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ))
+                            ],
+                          ),
+                        if (resLuckyWinners != null)
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: blackPrimaryColor),
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.black),
+                            child: Row(children: [
+                              Flexible(
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 12,
+                                      backgroundColor: Colors.transparent,
+                                      backgroundImage: NetworkImage(
+                                          resLuckyWinners[0]?["player"]
+                                              ?["profilePic"]),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      resLuckyWinners[0]?["player"]?["username"]
+                                          .substring(0, 6),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                  child: AvatarStack(
+                                height: 24,
+                                avatars: [
+                                  for (var n = 0; n < 5; n++)
+                                    NetworkImage(resLuckyWinners[n]?["player"]
+                                        ?["profilePic"])
+                                ],
+                              ))
+                            ]),
+                          ),
                         const Text(
                           'Tasks',
                           style: TextStyle(
@@ -1213,6 +1387,12 @@ class _MissionDetailState extends State<MissionDetail> {
                                           ProofWithPhotoAndLocApp(
                                               image: itemTask["image"],
                                               reason: itemTask["reason"],
+                                              isLoadingMissionDetail:
+                                                  isLoadingMissionDetail,
+                                              submittedAdditionalAttribute:
+                                                  itemTask[
+                                                      "submittedAdditionalAttribute"],
+                                              status: itemTask["status"],
                                               onExpansionChanged: () {
                                                 selectedChoice = null;
                                                 _mediaFileList = null;
@@ -1328,6 +1508,9 @@ class _MissionDetailState extends State<MissionDetail> {
                                             "ANSWER_NOTES")
                                           AnswerNotesApp(
                                               image: itemTask["image"],
+                                              submittedAdditionalAttribute:
+                                                  itemTask[
+                                                      "submittedAdditionalAttribute"],
                                               name: itemTask["name"],
                                               reason: itemTask["reason"],
                                               status: itemTask["status"],
@@ -1367,6 +1550,9 @@ class _MissionDetailState extends State<MissionDetail> {
                                           ReferralApp(
                                               image: itemTask["image"],
                                               name: itemTask["name"],
+                                              submittedAdditionalAttribute:
+                                                  itemTask[
+                                                      "submittedAdditionalAttribute"],
                                               reason: itemTask["reason"],
                                               status: itemTask["status"],
                                               onExpansionChanged: () {
@@ -1405,6 +1591,9 @@ class _MissionDetailState extends State<MissionDetail> {
                                           QuizApp(
                                               image: itemTask["image"],
                                               name: itemTask["name"],
+                                              submittedAdditionalAttribute:
+                                                  itemTask[
+                                                      "submittedAdditionalAttribute"],
                                               reason: itemTask["reason"],
                                               status: itemTask["status"],
                                               selectedChoice: selectedChoice,
@@ -1474,7 +1663,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                         mainAxisSpacing: 16,
                                         mainAxisExtent: 60,
                                         crossAxisSpacing: 16),
-                                itemCount: playerSamples?.length,
+                                itemCount: dataPlayers?.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Card(
                                       color: blackPrimaryColor,
@@ -1502,35 +1691,32 @@ class _MissionDetailState extends State<MissionDetail> {
                                                     radius: 12,
                                                     backgroundColor:
                                                         Colors.transparent,
-                                                    backgroundImage: playerSamples?[
+                                                    backgroundImage: dataPlayers?[
                                                                     index]?[
                                                                 "profilePic"] !=
                                                             null
                                                         ? NetworkImage(
-                                                            playerSamples?[
-                                                                    index]
+                                                            dataPlayers?[index]
                                                                 ?["profilePic"])
                                                         : null,
                                                   )),
                                                   const SizedBox(
                                                     width: 8,
                                                   ),
-                                                  if (playerSamples?[index]
+                                                  if (dataPlayers?[index]
                                                               ?["username"] !=
                                                           null ||
-                                                      playerSamples?[index]
+                                                      dataPlayers?[index]
                                                               ?["email"] !=
                                                           null)
                                                     Text(
-                                                      playerSamples?[index]?[
+                                                      dataPlayers?[index]?[
                                                                   "username"] ==
                                                               ''
-                                                          ? playerSamples?[
-                                                                      index]
+                                                          ? dataPlayers?[index]
                                                                   ?["email"]
                                                               .substring(0, 10)
-                                                          : playerSamples?[
-                                                                  index]
+                                                          : dataPlayers?[index]
                                                               ?["username"],
                                                       style: const TextStyle(
                                                           color: Colors.white,

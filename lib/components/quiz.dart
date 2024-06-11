@@ -28,7 +28,8 @@ class QuizApp extends StatelessWidget {
       this.selectedChoice,
       this.onChangedQuizChoice,
       this.status,
-      this.reason});
+      this.reason,
+      this.submittedAdditionalAttribute});
 
   final dynamic image;
   final dynamic name;
@@ -45,6 +46,7 @@ class QuizApp extends StatelessWidget {
   dynamic onChangedQuizChoice;
   dynamic status;
   dynamic reason;
+  dynamic submittedAdditionalAttribute;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,7 @@ class QuizApp extends StatelessWidget {
       onChangedQuizChoice: onChangedQuizChoice,
       status: status,
       reason: reason,
+      submittedAdditionalAttribute: submittedAdditionalAttribute,
     );
   }
 }
@@ -85,7 +88,8 @@ class Quiz extends StatefulWidget {
       this.selectedChoice,
       this.onChangedQuizChoice,
       this.status,
-      this.reason});
+      this.reason,
+      this.submittedAdditionalAttribute});
 
   final dynamic image;
   final dynamic name;
@@ -102,6 +106,7 @@ class Quiz extends StatefulWidget {
   dynamic selectedChoice;
   dynamic status;
   dynamic reason;
+  dynamic submittedAdditionalAttribute;
 
   @override
   State<Quiz> createState() => _QuizState();
@@ -188,8 +193,9 @@ class _QuizState extends State<Quiz> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != null)
-                Flexible(
+              if (widget.reason != '')
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     "Reason reject: ${widget.reason}",
                     style: const TextStyle(
@@ -232,7 +238,8 @@ class _QuizState extends State<Quiz> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               value: itemQuestion ?? "",
-                              groupValue: widget.selectedChoice,
+                              groupValue: widget.selectedChoice ??
+                                  widget.submittedAdditionalAttribute,
                               onChanged: (value) {
                                 if (["NOT_SUBMITTED", "REJECTED"]
                                     .contains(widget.status)) {

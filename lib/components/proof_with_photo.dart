@@ -178,8 +178,9 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != null)
-                Flexible(
+              if (widget.reason != '')
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Text(
                     "Reason reject: ${widget.reason}",
                     style: const TextStyle(
