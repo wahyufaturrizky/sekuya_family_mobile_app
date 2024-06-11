@@ -12,24 +12,25 @@ import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class QuizApp extends StatelessWidget {
-  QuizApp(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.additionalAttribute,
-      this.retrieveLostData,
-      this.previewImages,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.additionalAttributeAnswerNotes,
-      this.onExpansionChanged,
-      this.selectedChoice,
-      this.onChangedQuizChoice,
-      this.status,
-      this.reason,
-      this.submittedAdditionalAttribute});
+  QuizApp({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.additionalAttribute,
+    this.retrieveLostData,
+    this.previewImages,
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.additionalAttributeAnswerNotes,
+    this.onExpansionChanged,
+    this.selectedChoice,
+    this.onChangedQuizChoice,
+    this.status,
+    this.reason,
+    this.submittedAdditionalAttribute,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -72,24 +73,25 @@ class QuizApp extends StatelessWidget {
 }
 
 class Quiz extends StatefulWidget {
-  Quiz(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.retrieveLostData,
-      this.previewImages,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.additionalAttributeAnswerNotes,
-      this.onExpansionChanged,
-      this.additionalAttribute,
-      this.selectedChoice,
-      this.onChangedQuizChoice,
-      this.status,
-      this.reason,
-      this.submittedAdditionalAttribute});
+  Quiz({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.retrieveLostData,
+    this.previewImages,
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.additionalAttributeAnswerNotes,
+    this.onExpansionChanged,
+    this.additionalAttribute,
+    this.selectedChoice,
+    this.onChangedQuizChoice,
+    this.status,
+    this.reason,
+    this.submittedAdditionalAttribute,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -115,6 +117,8 @@ class Quiz extends StatefulWidget {
 class _QuizState extends State<Quiz> {
   @override
   Widget build(BuildContext context) {
+    double c_width = MediaQuery.of(context).size.width * 0.8;
+
     return ExpansionTile(
         iconColor: Colors.white,
         onExpansionChanged: (bool value) {
@@ -193,26 +197,28 @@ class _QuizState extends State<Quiz> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != '')
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    "Reason reject: ${widget.reason}",
-                    style: const TextStyle(
-                        color: redSolidPrimaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                width: c_width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (widget.reason != '')
+                      Text("Reason reject: ${widget.reason}",
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                              color: redSolidPrimaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                    Text(widget.description ?? "",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500)),
+                  ],
                 ),
-              Flexible(
-                child: Text(
-                  widget.description ?? "",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                ),
-              )
+              ),
             ],
           ),
           const SizedBox(
@@ -238,8 +244,10 @@ class _QuizState extends State<Quiz> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               value: itemQuestion ?? "",
-                              groupValue: widget.selectedChoice ??
-                                  widget.submittedAdditionalAttribute,
+                              groupValue: ["NOT_SUBMITTED", "REJECTED"]
+                                      .contains(widget.status)
+                                  ? widget.selectedChoice
+                                  : widget.submittedAdditionalAttribute,
                               onChanged: (value) {
                                 if (["NOT_SUBMITTED", "REJECTED"]
                                     .contains(widget.status)) {

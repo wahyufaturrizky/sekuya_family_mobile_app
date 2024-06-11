@@ -20,25 +20,26 @@ import 'package:sekuya_family_mobile_app/constants.dart';
 final dio = Dio();
 
 class ProofWithPhotoAndLocApp extends StatelessWidget {
-  const ProofWithPhotoAndLocApp(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.onTapTakeCamera,
-      this.retrieveLostData,
-      this.previewImages,
-      this.onTapGetCurrentPosition,
-      this.isLoadingNameLocation = false,
-      this.nameLocation,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.onExpansionChanged,
-      this.status,
-      this.reason,
-      this.submittedAdditionalAttribute,
-      this.isLoadingMissionDetail = false});
+  const ProofWithPhotoAndLocApp({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.onTapTakeCamera,
+    this.retrieveLostData,
+    this.previewImages,
+    this.onTapGetCurrentPosition,
+    this.isLoadingNameLocation = false,
+    this.nameLocation = '',
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.onExpansionChanged,
+    this.status,
+    this.reason,
+    this.submittedAdditionalAttribute,
+    this.isLoadingMissionDetail = false,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -49,7 +50,7 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
   final dynamic previewImages;
   final dynamic onTapGetCurrentPosition;
   final bool isLoadingNameLocation;
-  final String? nameLocation;
+  final String nameLocation;
   final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
@@ -83,25 +84,26 @@ class ProofWithPhotoAndLocApp extends StatelessWidget {
 }
 
 class ProofWithPhotoAndLoc extends StatefulWidget {
-  const ProofWithPhotoAndLoc(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.onTapTakeCamera,
-      this.retrieveLostData,
-      this.previewImages,
-      this.onTapGetCurrentPosition,
-      this.isLoadingNameLocation = false,
-      this.nameLocation,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.onExpansionChanged,
-      this.status,
-      this.reason,
-      this.submittedAdditionalAttribute,
-      this.isLoadingMissionDetail = false});
+  const ProofWithPhotoAndLoc({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.onTapTakeCamera,
+    this.retrieveLostData,
+    this.previewImages,
+    this.onTapGetCurrentPosition,
+    this.isLoadingNameLocation = false,
+    this.nameLocation = '',
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.onExpansionChanged,
+    this.status,
+    this.reason,
+    this.submittedAdditionalAttribute,
+    this.isLoadingMissionDetail = false,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -112,7 +114,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
   final dynamic previewImages;
   final dynamic onTapGetCurrentPosition;
   final bool isLoadingNameLocation;
-  final String? nameLocation;
+  final String nameLocation;
   final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic onExpansionChanged;
@@ -126,7 +128,7 @@ class ProofWithPhotoAndLoc extends StatefulWidget {
 }
 
 class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
-  var submittedLocation;
+  var submittedLocation = '';
 
   @override
   void initState() {
@@ -153,7 +155,7 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
 
   @override
   Widget build(BuildContext context) {
-    print("@submittedLocation $submittedLocation");
+    double c_width = MediaQuery.of(context).size.width * 0.8;
 
     return ExpansionTile(
         iconColor: Colors.white,
@@ -237,26 +239,29 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != '')
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    "Reason reject: ${widget.reason}",
-                    style: const TextStyle(
-                        color: redSolidPrimaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
+
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                width: c_width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (widget.reason != '')
+                      Text("Reason reject: ${widget.reason}",
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                              color: redSolidPrimaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                    Text(widget.description ?? "",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500)),
+                  ],
                 ),
-              Flexible(
-                child: Text(
-                  widget.description ?? "",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                ),
-              )
+              ),
             ],
           ),
           const SizedBox(
@@ -402,10 +407,13 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 ),
                 Flexible(
                     child: Text(
-                  submittedLocation ??
-                      (widget.isLoadingNameLocation
-                          ? "Loading..."
-                          : "Get Current Location"),
+                  (widget.isLoadingNameLocation
+                      ? "Loading..."
+                      : ["NOT_SUBMITTED", "REJECTED"].contains(widget.status)
+                          ? (widget.nameLocation != ''
+                              ? widget.nameLocation
+                              : "Get Current Location")
+                          : submittedLocation),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,

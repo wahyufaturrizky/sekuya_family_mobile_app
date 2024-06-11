@@ -12,19 +12,20 @@ import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class AnswerNotesApp extends StatelessWidget {
-  const AnswerNotesApp(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.additionalAttributeAnswerNotes,
-      this.onExpansionChanged,
-      this.status,
-      this.reason,
-      this.submittedAdditionalAttribute});
+  const AnswerNotesApp({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.additionalAttributeAnswerNotes,
+    this.onExpansionChanged,
+    this.status,
+    this.reason,
+    this.submittedAdditionalAttribute,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -57,19 +58,20 @@ class AnswerNotesApp extends StatelessWidget {
 }
 
 class AnswerNotes extends StatefulWidget {
-  const AnswerNotes(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.additionalAttributeAnswerNotes,
-      this.onExpansionChanged,
-      this.status,
-      this.reason,
-      this.submittedAdditionalAttribute});
+  const AnswerNotes({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.additionalAttributeAnswerNotes,
+    this.onExpansionChanged,
+    this.status,
+    this.reason,
+    this.submittedAdditionalAttribute,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -90,6 +92,8 @@ class AnswerNotes extends StatefulWidget {
 class _AnswerNotesState extends State<AnswerNotes> {
   @override
   Widget build(BuildContext context) {
+    double c_width = MediaQuery.of(context).size.width * 0.8;
+
     return ExpansionTile(
         iconColor: Colors.white,
         onExpansionChanged: (bool value) {
@@ -168,26 +172,28 @@ class _AnswerNotesState extends State<AnswerNotes> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != '')
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    "Reason reject: ${widget.reason}",
-                    style: const TextStyle(
-                        color: redSolidPrimaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                width: c_width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (widget.reason != '')
+                      Text("Reason reject: ${widget.reason}",
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                              color: redSolidPrimaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                    Text(widget.description ?? "",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500)),
+                  ],
                 ),
-              Flexible(
-                child: Text(
-                  widget.description ?? "",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                ),
-              )
+              ),
             ],
           ),
           const SizedBox(
@@ -207,7 +213,9 @@ class _AnswerNotesState extends State<AnswerNotes> {
                 ),
                 decoration: kTextInputDecoration.copyWith(
                   hintText:
-                      widget.submittedAdditionalAttribute ?? 'Your answer',
+                      ["NOT_SUBMITTED", "REJECTED"].contains(widget.status)
+                          ? 'Your answer'
+                          : widget.submittedAdditionalAttribute,
                   hintStyle: const TextStyle(color: greySecondaryColor),
                 )),
           ),

@@ -14,20 +14,21 @@ import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart'
 import 'package:sekuya_family_mobile_app/constants.dart';
 
 class ProofWithPhotoApp extends StatelessWidget {
-  const ProofWithPhotoApp(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.onTapTakeCamera,
-      this.retrieveLostData,
-      this.previewImages,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.onExpansionChanged,
-      this.status,
-      this.reason});
+  const ProofWithPhotoApp({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.onTapTakeCamera,
+    this.retrieveLostData,
+    this.previewImages,
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.onExpansionChanged,
+    this.status,
+    this.reason,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -62,20 +63,21 @@ class ProofWithPhotoApp extends StatelessWidget {
 }
 
 class ProofWithPhoto extends StatefulWidget {
-  const ProofWithPhoto(
-      {super.key,
-      this.image,
-      this.name,
-      this.exp,
-      this.description,
-      this.onTapTakeCamera,
-      this.retrieveLostData,
-      this.previewImages,
-      this.isLoadingSubmitTaskMission,
-      this.onPressedSubmitTaskMission,
-      this.onExpansionChanged,
-      this.status,
-      this.reason});
+  const ProofWithPhoto({
+    super.key,
+    this.image,
+    this.name,
+    this.exp,
+    this.description,
+    this.onTapTakeCamera,
+    this.retrieveLostData,
+    this.previewImages,
+    this.isLoadingSubmitTaskMission,
+    this.onPressedSubmitTaskMission,
+    this.onExpansionChanged,
+    this.status,
+    this.reason,
+  });
 
   final dynamic image;
   final dynamic name;
@@ -97,6 +99,8 @@ class ProofWithPhoto extends StatefulWidget {
 class _ProofWithPhotoState extends State<ProofWithPhoto> {
   @override
   Widget build(BuildContext context) {
+    double c_width = MediaQuery.of(context).size.width * 0.8;
+
     return ExpansionTile(
         onExpansionChanged: (bool value) {
           if (value) {
@@ -178,26 +182,28 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
               // const SizedBox(
               //   width: 16,
               // ),
-              if (widget.reason != '')
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    "Reason reject: ${widget.reason}",
-                    style: const TextStyle(
-                        color: redSolidPrimaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                width: c_width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (widget.reason != '')
+                      Text("Reason reject: ${widget.reason}",
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                              color: redSolidPrimaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                    Text(widget.description ?? "",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500)),
+                  ],
                 ),
-              Flexible(
-                child: Text(
-                  widget.description ?? "",
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                ),
-              )
+              ),
             ],
           ),
           // Container(

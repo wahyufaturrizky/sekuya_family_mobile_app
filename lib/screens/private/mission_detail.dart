@@ -74,7 +74,7 @@ class _MissionDetailState extends State<MissionDetail> {
   String? _retrieveDataError;
   var lat;
   var long;
-  var nameLocation;
+  var nameLocation = '';
   var resMissionDetail;
   var resPlayers;
   var resLuckyWinners;
@@ -1379,267 +1379,267 @@ class _MissionDetailState extends State<MissionDetail> {
                         ),
                         if (tasks != null)
                           Column(
-                            children: (tasks as List<dynamic>)
-                                .map((itemTask) => Column(
-                                      children: [
-                                        if (itemTask["taskCategoryKey"] ==
-                                            "PROOF_WITH_PHOTO_AND_LOCATION")
-                                          ProofWithPhotoAndLocApp(
-                                              image: itemTask["image"],
-                                              reason: itemTask["reason"],
-                                              isLoadingMissionDetail:
-                                                  isLoadingMissionDetail,
-                                              submittedAdditionalAttribute:
-                                                  itemTask[
-                                                      "submittedAdditionalAttribute"],
-                                              status: itemTask["status"],
-                                              onExpansionChanged: () {
-                                                selectedChoice = null;
-                                                _mediaFileList = null;
-                                                lat = null;
-                                                long = null;
-                                                additionalAttributeAnswerNotes
-                                                    .text = "";
-                                                additionalAttributeAnswerMultipleChoice
-                                                    .text = "";
-                                              },
-                                              name: itemTask["name"],
-                                              description:
-                                                  itemTask["description"],
-                                              exp: itemTask["exp"],
-                                              onTapTakeCamera: () {
-                                                if (_picker.supportsImageSource(
-                                                        ImageSource.camera) &&
-                                                    [
-                                                      "NOT_SUBMITTED",
-                                                      "REJECTED"
-                                                    ].contains(
-                                                        itemTask["status"])) {
-                                                  _onImageButtonPressed(
-                                                      ImageSource.camera,
-                                                      context: context);
-                                                }
-                                              },
-                                              retrieveLostData: () async {
-                                                await retrieveLostData();
-                                              },
-                                              previewImages: _previewImages(
-                                                imageProof:
-                                                    itemTask["imageProof"],
-                                              ),
-                                              onTapGetCurrentPosition: () {
-                                                _getCurrentPosition();
-                                              },
-                                              isLoadingNameLocation:
-                                                  isLoadingNameLocation,
-                                              nameLocation: nameLocation,
-                                              isLoadingSubmitTaskMission:
-                                                  isLoadingSubmitTaskMission,
-                                              onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission &&
-                                                    ([
-                                                      "NOT_SUBMITTED",
-                                                      "REJECTED"
-                                                    ].contains(
-                                                        itemTask["status"]))) {
-                                                  handlePostTaskSubmission(
-                                                    taskId: itemTask["id"],
-                                                    taskCategoryKey: itemTask[
-                                                        "taskCategoryKey"],
-                                                  );
-                                                }
-                                              }),
-                                        if (itemTask["taskCategoryKey"] ==
-                                            "PROOF_WITH_PHOTO")
-                                          ProofWithPhotoApp(
-                                              image: itemTask["image"],
-                                              status: itemTask["status"],
-                                              reason: itemTask["reason"],
-                                              onExpansionChanged: () {
-                                                selectedChoice = null;
-                                                _mediaFileList = null;
-                                                lat = null;
-                                                long = null;
-                                                additionalAttributeAnswerNotes
-                                                    .text = "";
-                                                additionalAttributeAnswerMultipleChoice
-                                                    .text = "";
-                                              },
-                                              name: itemTask["name"],
-                                              description:
-                                                  itemTask["description"],
-                                              exp: itemTask["exp"],
-                                              onTapTakeCamera: () {
-                                                if (_picker.supportsImageSource(
-                                                        ImageSource.camera) &&
-                                                    [
-                                                      "NOT_SUBMITTED",
-                                                      "REJECTED"
-                                                    ].contains(
-                                                        itemTask["status"])) {
-                                                  _onImageButtonPressed(
-                                                      ImageSource.camera,
-                                                      context: context);
-                                                }
-                                              },
-                                              retrieveLostData: () async {
-                                                await retrieveLostData();
-                                              },
-                                              previewImages: _previewImages(
-                                                  imageProof:
-                                                      itemTask["imageProof"]),
-                                              isLoadingSubmitTaskMission:
-                                                  isLoadingSubmitTaskMission,
-                                              onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission &&
-                                                    ([
-                                                      "NOT_SUBMITTED",
-                                                      "REJECTED"
-                                                    ].contains(
-                                                        itemTask["status"]))) {
-                                                  handlePostTaskSubmission(
-                                                    taskId: itemTask["id"],
-                                                    taskCategoryKey: itemTask[
-                                                        "taskCategoryKey"],
-                                                  );
-                                                }
-                                              }),
-                                        if (itemTask["taskCategoryKey"] ==
-                                            "ANSWER_NOTES")
-                                          AnswerNotesApp(
-                                              image: itemTask["image"],
-                                              submittedAdditionalAttribute:
-                                                  itemTask[
-                                                      "submittedAdditionalAttribute"],
-                                              name: itemTask["name"],
-                                              reason: itemTask["reason"],
-                                              status: itemTask["status"],
-                                              onExpansionChanged: () {
-                                                selectedChoice = null;
-                                                _mediaFileList = null;
-                                                lat = null;
-                                                long = null;
-                                                additionalAttributeAnswerNotes
-                                                    .text = "";
-                                                additionalAttributeAnswerMultipleChoice
-                                                    .text = "";
-                                              },
-                                              additionalAttributeAnswerNotes:
-                                                  additionalAttributeAnswerNotes,
-                                              description:
-                                                  itemTask["description"],
-                                              exp: itemTask["exp"],
-                                              isLoadingSubmitTaskMission:
-                                                  isLoadingSubmitTaskMission,
-                                              onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission &&
-                                                    ([
-                                                      "NOT_SUBMITTED",
-                                                      "REJECTED"
-                                                    ].contains(
-                                                        itemTask["status"]))) {
-                                                  handlePostTaskSubmission(
-                                                    taskId: itemTask["id"],
-                                                    taskCategoryKey: itemTask[
-                                                        "taskCategoryKey"],
-                                                  );
-                                                }
-                                              }),
-                                        if (itemTask["taskCategoryKey"] ==
-                                            "REFERRAL")
-                                          ReferralApp(
-                                              image: itemTask["image"],
-                                              name: itemTask["name"],
-                                              submittedAdditionalAttribute:
-                                                  itemTask[
-                                                      "submittedAdditionalAttribute"],
-                                              reason: itemTask["reason"],
-                                              status: itemTask["status"],
-                                              onExpansionChanged: () {
-                                                selectedChoice = null;
-                                                _mediaFileList = null;
-                                                lat = null;
-                                                long = null;
-                                                additionalAttributeAnswerNotes
-                                                    .text = "";
-                                                additionalAttributeAnswerMultipleChoice
-                                                    .text = "";
-                                              },
-                                              additionalAttributeAnswerNotes:
-                                                  additionalAttributeAnswerNotes,
-                                              description:
-                                                  itemTask["description"],
-                                              exp: itemTask["exp"],
-                                              isLoadingSubmitTaskMission:
-                                                  isLoadingSubmitTaskMission,
-                                              onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission &&
-                                                    ([
-                                                      "NOT_SUBMITTED",
-                                                      "REJECTED"
-                                                    ].contains(
-                                                        itemTask["status"]))) {
-                                                  handlePostTaskSubmission(
-                                                    taskId: itemTask["id"],
-                                                    taskCategoryKey: itemTask[
-                                                        "taskCategoryKey"],
-                                                  );
-                                                }
-                                              }),
-                                        if (itemTask["taskCategoryKey"] ==
-                                            "QUIZ")
-                                          QuizApp(
-                                              image: itemTask["image"],
-                                              name: itemTask["name"],
-                                              submittedAdditionalAttribute:
-                                                  itemTask[
-                                                      "submittedAdditionalAttribute"],
-                                              reason: itemTask["reason"],
-                                              status: itemTask["status"],
-                                              selectedChoice: selectedChoice,
-                                              onChangedQuizChoice: (value) {
-                                                setState(() {
-                                                  selectedChoice = value;
-                                                });
-                                              },
-                                              description:
-                                                  itemTask["description"],
-                                              additionalAttribute: itemTask[
-                                                  "additionalAttribute"],
-                                              exp: itemTask["exp"],
-                                              onExpansionChanged: () {
-                                                selectedChoice = null;
-                                                _mediaFileList = null;
-                                                lat = null;
-                                                long = null;
-                                                additionalAttributeAnswerNotes
-                                                    .text = "";
-                                                additionalAttributeAnswerMultipleChoice
-                                                    .text = "";
-                                              },
-                                              retrieveLostData: () async {
-                                                await retrieveLostData();
-                                              },
-                                              previewImages: _previewImages(),
-                                              isLoadingSubmitTaskMission:
-                                                  isLoadingSubmitTaskMission,
-                                              onPressedSubmitTaskMission: () {
-                                                if (!isLoadingSubmitTaskMission &&
-                                                    ([
-                                                      "NOT_SUBMITTED",
-                                                      "REJECTED"
-                                                    ].contains(
-                                                        itemTask["status"]))) {
-                                                  handlePostTaskSubmission(
-                                                    taskId: itemTask["id"],
-                                                    taskCategoryKey: itemTask[
-                                                        "taskCategoryKey"],
-                                                  );
-                                                }
-                                              }),
-                                      ],
-                                    ))
-                                .toList(),
+                            children: (tasks as List<dynamic>).map((itemTask) {
+                              return Column(
+                                children: [
+                                  if (itemTask["taskCategoryKey"] ==
+                                      "PROOF_WITH_PHOTO_AND_LOCATION")
+                                    ProofWithPhotoAndLocApp(
+                                        image: itemTask["image"],
+                                        reason: itemTask["reason"],
+                                        isLoadingMissionDetail:
+                                            isLoadingMissionDetail,
+                                        submittedAdditionalAttribute: itemTask[
+                                            "submittedAdditionalAttribute"],
+                                        status: itemTask["status"],
+                                        onExpansionChanged: () {
+                                          setState(() {
+                                            selectedChoice = null;
+                                            _mediaFileList = null;
+                                            lat = null;
+                                            long = null;
+                                            additionalAttributeAnswerNotes
+                                                .text = "";
+                                            additionalAttributeAnswerMultipleChoice
+                                                .text = "";
+                                          });
+                                        },
+                                        name: itemTask["name"],
+                                        description: itemTask["description"],
+                                        exp: itemTask["exp"],
+                                        onTapTakeCamera: () {
+                                          if (_picker.supportsImageSource(
+                                                  ImageSource.camera) &&
+                                              [
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"])) {
+                                            _onImageButtonPressed(
+                                                ImageSource.camera,
+                                                context: context);
+                                          }
+                                        },
+                                        retrieveLostData: () async {
+                                          await retrieveLostData();
+                                        },
+                                        previewImages: _previewImages(
+                                          imageProof: [
+                                            "NOT_SUBMITTED",
+                                            "REJECTED"
+                                          ].contains(itemTask["status"])
+                                              ? ''
+                                              : itemTask["imageProof"],
+                                        ),
+                                        onTapGetCurrentPosition: () {
+                                          _getCurrentPosition();
+                                        },
+                                        isLoadingNameLocation:
+                                            isLoadingNameLocation,
+                                        nameLocation: nameLocation,
+                                        isLoadingSubmitTaskMission:
+                                            isLoadingSubmitTaskMission,
+                                        onPressedSubmitTaskMission: () {
+                                          if (!isLoadingSubmitTaskMission &&
+                                              ([
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"]))) {
+                                            handlePostTaskSubmission(
+                                              taskId: itemTask["id"],
+                                              taskCategoryKey:
+                                                  itemTask["taskCategoryKey"],
+                                            );
+                                          }
+                                        }),
+                                  if (itemTask["taskCategoryKey"] ==
+                                      "PROOF_WITH_PHOTO")
+                                    ProofWithPhotoApp(
+                                        image: itemTask["image"],
+                                        status: itemTask["status"],
+                                        reason: itemTask["reason"],
+                                        onExpansionChanged: () {
+                                          setState(() {
+                                            selectedChoice = null;
+                                            _mediaFileList = null;
+                                            lat = null;
+                                            long = null;
+                                            additionalAttributeAnswerNotes
+                                                .text = "";
+                                            additionalAttributeAnswerMultipleChoice
+                                                .text = "";
+                                          });
+                                        },
+                                        name: itemTask["name"],
+                                        description: itemTask["description"],
+                                        exp: itemTask["exp"],
+                                        onTapTakeCamera: () {
+                                          if (_picker.supportsImageSource(
+                                                  ImageSource.camera) &&
+                                              [
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"])) {
+                                            _onImageButtonPressed(
+                                                ImageSource.camera,
+                                                context: context);
+                                          }
+                                        },
+                                        retrieveLostData: () async {
+                                          await retrieveLostData();
+                                        },
+                                        previewImages: _previewImages(
+                                            imageProof: [
+                                          "NOT_SUBMITTED",
+                                          "REJECTED"
+                                        ].contains(itemTask["status"])
+                                                ? ''
+                                                : itemTask["imageProof"]),
+                                        isLoadingSubmitTaskMission:
+                                            isLoadingSubmitTaskMission,
+                                        onPressedSubmitTaskMission: () {
+                                          if (!isLoadingSubmitTaskMission &&
+                                              ([
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"]))) {
+                                            handlePostTaskSubmission(
+                                              taskId: itemTask["id"],
+                                              taskCategoryKey:
+                                                  itemTask["taskCategoryKey"],
+                                            );
+                                          }
+                                        }),
+                                  if (itemTask["taskCategoryKey"] ==
+                                      "ANSWER_NOTES")
+                                    AnswerNotesApp(
+                                        image: itemTask["image"],
+                                        submittedAdditionalAttribute: itemTask[
+                                            "submittedAdditionalAttribute"],
+                                        name: itemTask["name"],
+                                        reason: itemTask["reason"],
+                                        status: itemTask["status"],
+                                        onExpansionChanged: () {
+                                          setState(() {
+                                            selectedChoice = null;
+                                            _mediaFileList = null;
+                                            lat = null;
+                                            long = null;
+                                            additionalAttributeAnswerNotes
+                                                .text = "";
+                                            additionalAttributeAnswerMultipleChoice
+                                                .text = "";
+                                          });
+                                        },
+                                        additionalAttributeAnswerNotes:
+                                            additionalAttributeAnswerNotes,
+                                        description: itemTask["description"],
+                                        exp: itemTask["exp"],
+                                        isLoadingSubmitTaskMission:
+                                            isLoadingSubmitTaskMission,
+                                        onPressedSubmitTaskMission: () {
+                                          if (!isLoadingSubmitTaskMission &&
+                                              ([
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"]))) {
+                                            handlePostTaskSubmission(
+                                              taskId: itemTask["id"],
+                                              taskCategoryKey:
+                                                  itemTask["taskCategoryKey"],
+                                            );
+                                          }
+                                        }),
+                                  if (itemTask["taskCategoryKey"] == "REFERRAL")
+                                    ReferralApp(
+                                        image: itemTask["image"],
+                                        name: itemTask["name"],
+                                        submittedAdditionalAttribute: itemTask[
+                                            "submittedAdditionalAttribute"],
+                                        reason: itemTask["reason"],
+                                        status: itemTask["status"],
+                                        onExpansionChanged: () {
+                                          setState(() {
+                                            selectedChoice = null;
+                                            _mediaFileList = null;
+                                            lat = null;
+                                            long = null;
+                                            additionalAttributeAnswerNotes
+                                                .text = "";
+                                            additionalAttributeAnswerMultipleChoice
+                                                .text = "";
+                                          });
+                                        },
+                                        additionalAttributeAnswerNotes:
+                                            additionalAttributeAnswerNotes,
+                                        description: itemTask["description"],
+                                        exp: itemTask["exp"],
+                                        isLoadingSubmitTaskMission:
+                                            isLoadingSubmitTaskMission,
+                                        onPressedSubmitTaskMission: () {
+                                          if (!isLoadingSubmitTaskMission &&
+                                              ([
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"]))) {
+                                            handlePostTaskSubmission(
+                                              taskId: itemTask["id"],
+                                              taskCategoryKey:
+                                                  itemTask["taskCategoryKey"],
+                                            );
+                                          }
+                                        }),
+                                  if (itemTask["taskCategoryKey"] == "QUIZ")
+                                    QuizApp(
+                                        image: itemTask["image"],
+                                        name: itemTask["name"],
+                                        submittedAdditionalAttribute: itemTask[
+                                            "submittedAdditionalAttribute"],
+                                        reason: itemTask["reason"],
+                                        status: itemTask["status"],
+                                        selectedChoice: selectedChoice,
+                                        onChangedQuizChoice: (value) {
+                                          setState(() {
+                                            selectedChoice = value;
+                                          });
+                                        },
+                                        description: itemTask["description"],
+                                        additionalAttribute:
+                                            itemTask["additionalAttribute"],
+                                        exp: itemTask["exp"],
+                                        onExpansionChanged: () {
+                                          setState(() {
+                                            selectedChoice = null;
+                                            _mediaFileList = null;
+                                            lat = null;
+                                            long = null;
+                                            additionalAttributeAnswerNotes
+                                                .text = "";
+                                            additionalAttributeAnswerMultipleChoice
+                                                .text = "";
+                                          });
+                                        },
+                                        retrieveLostData: () async {
+                                          await retrieveLostData();
+                                        },
+                                        previewImages: _previewImages(),
+                                        isLoadingSubmitTaskMission:
+                                            isLoadingSubmitTaskMission,
+                                        onPressedSubmitTaskMission: () {
+                                          if (!isLoadingSubmitTaskMission &&
+                                              ([
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"]))) {
+                                            handlePostTaskSubmission(
+                                              taskId: itemTask["id"],
+                                              taskCategoryKey:
+                                                  itemTask["taskCategoryKey"],
+                                            );
+                                          }
+                                        }),
+                                ],
+                              );
+                            }).toList(),
                           ),
                         const SizedBox(
                           height: 16,
