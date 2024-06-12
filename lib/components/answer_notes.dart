@@ -92,7 +92,7 @@ class AnswerNotes extends StatefulWidget {
 class _AnswerNotesState extends State<AnswerNotes> {
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.8;
+    double contextWidth = MediaQuery.of(context).size.width * 0.8;
 
     return ExpansionTile(
         iconColor: Colors.white,
@@ -174,7 +174,7 @@ class _AnswerNotesState extends State<AnswerNotes> {
               // ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                width: c_width,
+                width: contextWidth,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

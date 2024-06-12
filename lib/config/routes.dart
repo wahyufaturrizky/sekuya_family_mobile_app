@@ -20,9 +20,6 @@ class Routes {
   static String communityDetailAppScreens = "/communityDetailScreens";
   static String detailVoucherScreen = "/detailVoucherScreen";
   static String detailMissionScreen = "/detailMissionScreen";
-  static String demoSimpleFixedTrans = "/demo/fixedtrans";
-  static String demoFunc = "/demo/func";
-  static String deepLink = "/message";
 
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = Handler(
@@ -31,16 +28,11 @@ class Routes {
       return;
     });
     router.define(root, handler: rootHandler);
-    router.define(demoSimple, handler: demoRouteHandler);
     router.define(privateScreens, handler: privateHandler);
     router.define(profileDetailScreens, handler: profileDetailHandler);
     router.define(notificationScreen, handler: notificationlHandler);
     router.define(detailVoucherScreen, handler: voucherDetailHandler);
     router.define(detailMissionScreen, handler: missionDetailHandler);
     router.define(communityDetailAppScreens, handler: communityDetailHandler);
-    router.define(demoSimpleFixedTrans,
-        handler: demoRouteHandler, transitionType: TransitionType.inFromLeft);
-    router.define(demoFunc, handler: demoFunctionHandler);
-    router.define(deepLink, handler: deepLinkHandler);
   }
 }

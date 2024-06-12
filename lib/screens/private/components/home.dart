@@ -198,6 +198,11 @@ class _HomeComponentState extends State<HomeComponent> {
                             return Builder(
                               builder: (BuildContext context) {
                                 var rewards = item?["rewards"];
+                                var name = item?["name"];
+                                var description = item?["description"];
+                                var community = item?["community"];
+                                var totalTasks = item?["totalTasks"];
+                                var totalExp = item?["totalExp"];
                                 return Card(
                                   color: blackPrimaryColor,
                                   clipBehavior: Clip.hardEdge,
@@ -227,7 +232,9 @@ class _HomeComponentState extends State<HomeComponent> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  item["name"],
+                                                  name.length > 17
+                                                      ? '${name.substring(0, 17)}...'
+                                                      : name,
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 14,
@@ -239,26 +246,23 @@ class _HomeComponentState extends State<HomeComponent> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    if (item?["community"]
-                                                            ?["image"] !=
+                                                    if (community?["image"] !=
                                                         null)
                                                       CircleAvatar(
                                                         radius: 12,
                                                         backgroundColor:
                                                             Colors.transparent,
                                                         child: Image.network(
-                                                            item?["community"]
-                                                                ?["image"]),
+                                                            community?[
+                                                                "image"]),
                                                       ),
                                                     const SizedBox(
                                                       width: 8,
                                                     ),
                                                     Text(
-                                                      item["description"]
-                                                                  .length >
-                                                              12
-                                                          ? '${item["description"].substring(0, 12)}...'
-                                                          : item["description"],
+                                                      description.length > 12
+                                                          ? '${description.substring(0, 12)}...'
+                                                          : description,
                                                       style: const TextStyle(
                                                           color:
                                                               greySecondaryColor,
@@ -287,15 +291,13 @@ class _HomeComponentState extends State<HomeComponent> {
                                                       children: [
                                                         {
                                                           "title": "Task",
-                                                          "value":
-                                                              item["totalTasks"]
-                                                                  .toString(),
+                                                          "value": totalTasks
+                                                              .toString(),
                                                         },
                                                         {
                                                           "title": "Xp",
-                                                          "value":
-                                                              item["totalExp"]
-                                                                  .toString(),
+                                                          "value": totalExp
+                                                              .toString(),
                                                         },
                                                         {
                                                           "title":
@@ -436,6 +438,11 @@ class _HomeComponentState extends State<HomeComponent> {
                         ? (resDashboard?["data"]?["featuredCommunities"]
                                 as List<dynamic>)
                             .map((item) {
+                            var coverImage = item?["coverImage"];
+                            var name = item?["name"];
+                            var totalMission = item?["totalMission"];
+                            var totalPlayers = item?["totalPlayers"];
+                            var level = item?["level"];
                             return Builder(
                               builder: (BuildContext context) {
                                 return Card(
@@ -458,11 +465,11 @@ class _HomeComponentState extends State<HomeComponent> {
                                       width: 200,
                                       height: 150,
                                       decoration: BoxDecoration(
-                                          image: (item?["coverImage"] != null)
+                                          image: (coverImage != null)
                                               ? DecorationImage(
                                                   fit: BoxFit.cover,
                                                   image: NetworkImage(
-                                                    item?["coverImage"],
+                                                    coverImage,
                                                   ))
                                               : null),
                                       child: Column(
@@ -479,11 +486,11 @@ class _HomeComponentState extends State<HomeComponent> {
                                             ]),
                                             child: Column(
                                               children: [
-                                                if (item?["name"] != null)
+                                                if (name != null)
                                                   Text(
-                                                    item?["name"].length > 18
-                                                        ? '${item?["name"]?.substring(0, 18)}...'
-                                                        : item?["name"],
+                                                    name.length > 18
+                                                        ? '${name?.substring(0, 18)}...'
+                                                        : name,
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                         color: Colors.white,
@@ -501,56 +508,54 @@ class _HomeComponentState extends State<HomeComponent> {
                                                             .center,
                                                     children: [
                                                       {
-                                                        "value":
-                                                            item?["totalMission"]
-                                                                    .toString() ??
-                                                                "",
+                                                        "value": totalMission
+                                                            .toString(),
                                                         "title": "total task"
                                                       },
                                                       {
-                                                        "value":
-                                                            item?["totalPlayers"]
-                                                                    .toString() ??
-                                                                "",
+                                                        "value": totalPlayers
+                                                            .toString(),
                                                         "title": "total players"
                                                       },
                                                       {
                                                         "value":
-                                                            'Lv${item["level"].toString()}',
+                                                            'Lv${level.toString()}',
                                                         "title": "reward exp"
                                                       }
-                                                    ]
-                                                        .map((item) => Row(
-                                                              children: [
-                                                                Image.asset(item[
-                                                                            "title"] ==
-                                                                        "total task"
-                                                                    ? 'assets/images/ic_doc.png'
-                                                                    : item["title"] ==
-                                                                            "total players"
-                                                                        ? 'assets/images/ic_players.png'
-                                                                        : 'assets/images/ic_level.png'),
-                                                                const SizedBox(
-                                                                  width: 8,
-                                                                ),
-                                                                Text(
-                                                                  item["value"]
-                                                                      .toString(),
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 12,
-                                                                ),
-                                                              ],
-                                                            ))
-                                                        .toList(),
+                                                    ].map((itemTask) {
+                                                      var title =
+                                                          itemTask["title"];
+                                                      var value =
+                                                          itemTask["value"];
+
+                                                      return Row(
+                                                        children: [
+                                                          Image.asset(title ==
+                                                                  "total task"
+                                                              ? 'assets/images/ic_doc.png'
+                                                              : title ==
+                                                                      "total players"
+                                                                  ? 'assets/images/ic_players.png'
+                                                                  : 'assets/images/ic_level.png'),
+                                                          const SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Text(
+                                                            value.toString(),
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 12,
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }).toList(),
                                                   ),
                                                 const SizedBox(
                                                   height: 8,
