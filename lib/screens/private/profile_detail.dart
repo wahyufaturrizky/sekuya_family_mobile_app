@@ -471,7 +471,49 @@ class _ProfileDetailState extends State<ProfileDetail> {
   }
 
   Future<void> _launchUrl(val) async {
-    if (val != "") {
+    if (val == "" || val == null || val.isEmpty || !val.contains("http")) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          backgroundColor: blackSolidPrimaryColor,
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 16,
+              ),
+              Text('Warning!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white)),
+              SizedBox(
+                height: 8,
+              ),
+              Text('Social account link is not valid',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: greySecondaryColor)),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            CustomButton(
+              buttonText: 'OK',
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+              },
+              labelSize: 12,
+              height: 36,
+              width: 120,
+            ),
+          ],
+        ),
+      );
+    } else {
       final Uri url = Uri.parse(val);
 
       if (!await launchUrl(url)) {
