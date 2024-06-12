@@ -51,6 +51,14 @@ class _TabContentCommunityFeaturedComponentState
 
   @override
   Widget build(BuildContext context) {
+    var dataCommunity = widget.resCommunities?["data"]?["data"]?[widget.index];
+    var image = dataCommunity?["image"];
+    var name = dataCommunity?["name"];
+    var description = dataCommunity?["description"];
+    var totalMission = dataCommunity?["totalMission"];
+    var totalPlayers = dataCommunity?["totalPlayers"];
+    var level = dataCommunity?["level"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -70,13 +78,9 @@ class _TabContentCommunityFeaturedComponentState
             children: [
               Row(
                 children: [
-                  if (widget.resCommunities?["data"]?["data"]?[widget.index]
-                          ?["image"] !=
-                      null)
+                  if (image != null)
                     Image.network(
-                      widget.resCommunities?["data"]?["data"]?[widget.index]
-                              ?["image"] ??
-                          "",
+                      image ?? "",
                       width: 32,
                       height: 32,
                     ),
@@ -84,9 +88,7 @@ class _TabContentCommunityFeaturedComponentState
                     width: 12,
                   ),
                   Text(
-                    widget.resCommunities?["data"]?["data"]?[widget.index]
-                            ?["name"] ??
-                        "",
+                    name ?? "",
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -98,9 +100,7 @@ class _TabContentCommunityFeaturedComponentState
                 height: 12,
               ),
               Text(
-                widget.resCommunities?["data"]?["data"]?[widget.index]
-                        ?["description"] ??
-                    "",
+                description ?? "",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -113,21 +113,15 @@ class _TabContentCommunityFeaturedComponentState
                 children: [
                   {
                     "title": "total mission",
-                    "value": widget.resCommunities?["data"]?["data"]
-                            ?[widget.index]?["totalMission"]
-                        .toString(),
+                    "value": totalMission.toString(),
                   },
                   {
                     "title": "total players",
-                    "value": widget.resCommunities?["data"]?["data"]
-                            ?[widget.index]?["totalPlayers"]
-                        .toString(),
+                    "value": totalPlayers.toString(),
                   },
                   {
                     "title": "level",
-                    "value": widget.resCommunities?["data"]?["data"]
-                            ?[widget.index]?["level"]
-                        .toString(),
+                    "value": level.toString(),
                   },
                 ]
                     .map((item) => Row(
