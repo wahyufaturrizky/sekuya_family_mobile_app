@@ -214,6 +214,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
 
   @override
   Widget build(BuildContext context) {
+    var dataCommunitiesCategories = resCommunitiesCategories?["data"];
+
     return Shimmer(
         linearGradient: shimmerGradient,
         child: NestedScrollView(
@@ -288,8 +290,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                         mainAxisSpacing: 16,
                                         crossAxisSpacing: 16),
                                 itemCount:
-                                    resCommunitiesCategories?["data"]?.length ??
-                                        6,
+                                    dataCommunitiesCategories?.length ?? 6,
                                 itemBuilder: (BuildContext context, int index) {
                                   return MyWidgetShimmerApp(
                                       isLoading:
@@ -304,17 +305,14 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                     null) {
                                                   getDataCommunities(
                                                       filterByValue:
-                                                          resCommunitiesCategories?[
-                                                                      "data"]
-                                                                  ?[index]
-                                                              ?["label"],
+                                                          dataCommunitiesCategories?[
+                                                              index]?["label"],
                                                       refetch: true);
 
                                                   setState(() {
                                                     filterByValueState =
-                                                        resCommunitiesCategories?[
-                                                                "data"]?[index]
-                                                            ?["label"];
+                                                        dataCommunitiesCategories?[
+                                                            index]?["label"];
                                                   });
                                                 }
                                               },
@@ -322,16 +320,15 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                   decoration: BoxDecoration(
                                                       border: Border.all(
                                                           color: filterByValueState ==
-                                                                  resCommunitiesCategories?[
-                                                                              "data"]
-                                                                          ?[
+                                                                  dataCommunitiesCategories?[
                                                                           index]
                                                                       ?["label"]
                                                               ? yellowPrimaryColor
                                                               : blackPrimaryColor,
                                                           width: 1),
                                                       borderRadius:
-                                                          const BorderRadius.all(
+                                                          const BorderRadius
+                                                              .all(
                                                               Radius.circular(
                                                                   16))),
                                                   child: Column(
@@ -339,16 +336,14 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                         MainAxisAlignment
                                                             .center,
                                                     children: [
-                                                      if (resCommunitiesCategories?[
-                                                                      "data"]
-                                                                  ?[index]
+                                                      if (dataCommunitiesCategories?[
+                                                                  index]
                                                               ?["image"] !=
                                                           null)
                                                         Center(
                                                           child: Image.network(
-                                                            resCommunitiesCategories?[
-                                                                        "data"]
-                                                                    ?[index]
+                                                            dataCommunitiesCategories?[
+                                                                    index]
                                                                 ?["image"],
                                                             height: 40,
                                                             width: 40,
@@ -361,10 +356,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                                           null)
                                                         Center(
                                                             child: Text(
-                                                          resCommunitiesCategories?[
-                                                                      "data"]
-                                                                  ?[index]
-                                                              ?["label"],
+                                                          dataCommunitiesCategories?[
+                                                              index]?["label"],
                                                           style: const TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -392,7 +385,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                 return Column(
                   children: [
                     const Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
                           Text(

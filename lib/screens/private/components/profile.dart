@@ -13,7 +13,6 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/empty_list.dart';
 import 'package:sekuya_family_mobile_app/components/shimmer_loading.dart';
 import 'package:sekuya_family_mobile_app/components/tab_profile/my_community.dart';
