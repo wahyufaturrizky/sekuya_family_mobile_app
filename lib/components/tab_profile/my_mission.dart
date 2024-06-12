@@ -139,29 +139,49 @@ class _TabContentProfileMyMissionComponentState
                       {
                         "title": "Task",
                         "amount": widget.resMyMission?["data"]?["data"]
-                                    ?[widget.index]?["total_task"]
+                                    ?[widget.index]?["totalTasks"]
                                 .toString() ??
                             "",
-                        "icon": "false",
+                        "icon": null,
                       },
                       {
                         "title": "Xp",
                         "amount": widget.resMyMission?["data"]?["data"]
-                                    ?[widget.index]?["reward_exp"]
+                                    ?[widget.index]?["totalExp"]
                                 .toString() ??
                             "",
-                        "icon": "false",
+                        "icon": null,
                       },
                       {
-                        "title": "USDT",
-                        "amount": RegExp(r'(\d+)')
-                                .firstMatch(widget.resMyMission?["data"]
-                                            ?["data"]?[widget.index]?["reward"]
-                                        ?["name"] ??
-                                    "")
-                                ?.group(0) ??
-                            "",
-                        "icon": "true",
+                        "title": widget.resMyMission?["data"]?["data"]
+                                        ?[widget.index]?["rewards"] !=
+                                    null &&
+                                widget
+                                    .resMyMission?["data"]?["data"]
+                                        ?[widget.index]?["rewards"]
+                                    .isNotEmpty
+                            ? "${widget.resMyMission?["data"]?["data"]?[widget.index]?["rewards"]?[0]?["name"].substring(0, 3)}"
+                            : null,
+                        "amount": widget.resMyMission?["data"]?["data"]
+                                        ?[widget.index]?["rewards"] !=
+                                    null &&
+                                widget
+                                    .resMyMission?["data"]?["data"]
+                                        ?[widget.index]?["rewards"]
+                                    .isNotEmpty
+                            ? widget.resMyMission?["data"]?["data"]
+                                ?[widget.index]?["rewards"]?[0]?["maxQty"]
+                            : null,
+                        "icon": widget.resMyMission?["data"]?["data"]
+                                        ?[widget.index]?["rewards"] !=
+                                    null &&
+                                widget
+                                    .resMyMission?["data"]?["data"]
+                                        ?[widget.index]?["rewards"]
+                                    .isNotEmpty
+                            ? widget.resMyMission?["data"]?["data"]
+                                ?[widget.index]?["rewards"]?[0]?["image"]
+                            : null,
                       }
                     ]
                         .map(
@@ -169,27 +189,21 @@ class _TabContentProfileMyMissionComponentState
                             margin: const EdgeInsets.only(right: 10),
                             child: Row(
                               children: [
-                                if (item["icon"] == "true")
+                                if (item["icon"] != null)
                                   Row(
                                     children: [
-                                      if (widget.resMyMission?["data"]?["data"]
-                                                  ?[widget.index]?["reward"]
-                                              ?["image"] !=
-                                          null)
-                                        CircleAvatar(
-                                            radius: 12,
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                              widget.resMyMission?["data"]
-                                                      ?["data"]?[widget.index]
-                                                  ?["reward"]?["image"],
-                                              width: 14,
-                                              height: 14,
-                                            )),
+                                      CircleAvatar(
+                                          radius: 12,
+                                          backgroundColor: Colors.transparent,
+                                          child: Image.network(
+                                            item["icon"],
+                                            width: 14,
+                                            height: 14,
+                                          )),
                                     ],
                                   ),
                                 Text(
-                                  item["amount"] ?? "",
+                                  item["amount"].toString(),
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,

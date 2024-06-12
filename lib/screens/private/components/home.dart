@@ -256,8 +256,8 @@ class _HomeComponentState extends State<HomeComponent> {
                                                     Text(
                                                       item["description"]
                                                                   .length >
-                                                              15
-                                                          ? '${item["description"].substring(0, 15)}...'
+                                                              12
+                                                          ? '${item["description"].substring(0, 12)}...'
                                                           : item["description"],
                                                       style: const TextStyle(
                                                           color:
@@ -298,20 +298,16 @@ class _HomeComponentState extends State<HomeComponent> {
                                                                   .toString(),
                                                         },
                                                         {
-                                                          "title": rewards
-                                                                  .isEmpty
-                                                              ? null
-                                                              : rewards?[0]
-                                                                      ?["name"]
-                                                                  ?.split(
-                                                                      " ")?[1],
+                                                          "title":
+                                                              rewards.isEmpty
+                                                                  ? null
+                                                                  : rewards?[0]
+                                                                      ?["name"],
                                                           "value": rewards
                                                                   .isEmpty
                                                               ? null
                                                               : rewards?[0]
-                                                                      ?["name"]
-                                                                  ?.split(
-                                                                      " ")?[0],
+                                                                  ?["maxQty"],
                                                           "image": rewards
                                                                   .isEmpty
                                                               ? null

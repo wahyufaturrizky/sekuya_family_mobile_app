@@ -1230,7 +1230,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    '${itemReward["value"].toString()} Xp',
+                                                    '${itemReward["maxQty"].toString()} Xp',
                                                     style: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 14,
@@ -1241,8 +1241,9 @@ class _MissionDetailState extends State<MissionDetail> {
                                                     height: 8,
                                                   ),
                                                   LinearProgressIndicator(
-                                                    value: itemReward["value"] *
-                                                        0.01,
+                                                    value:
+                                                        itemReward["maxQty"] *
+                                                            0.01,
                                                     color: yellowPrimaryColor,
                                                     backgroundColor:
                                                         greyThirdColor,
@@ -1266,7 +1267,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                             ),
                                             Chip(
                                                 label: Text(
-                                                  '${itemReward["maxQty"] / itemReward["value"]}%',
+                                                  '${itemReward["maxQty"] / itemReward["maxQty"]}%',
                                                 ),
                                                 color: MaterialStateProperty
                                                     .all<Color>(
@@ -1288,7 +1289,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                   .toList(),
                             ),
                           ),
-                        if (resLuckyWinners != null)
+                        if (dataLuckyWinners != null)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -1323,7 +1324,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                   ))
                             ],
                           ),
-                        if (resLuckyWinners != null)
+                        if (dataLuckyWinners != null)
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 16),
                             padding: const EdgeInsets.all(12),
@@ -1339,15 +1340,14 @@ class _MissionDetailState extends State<MissionDetail> {
                                       radius: 12,
                                       backgroundColor: Colors.transparent,
                                       backgroundImage: NetworkImage(
-                                          resLuckyWinners[0]?["player"]
+                                          dataLuckyWinners[0]?["player"]
                                               ?["profilePic"]),
                                     ),
                                     const SizedBox(
                                       width: 8,
                                     ),
                                     Text(
-                                      resLuckyWinners[0]?["player"]?["username"]
-                                          .substring(0, 6),
+                                      "${dataLuckyWinners[0]?["player"]?["email"].substring(0, 6)}",
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,
@@ -1360,8 +1360,10 @@ class _MissionDetailState extends State<MissionDetail> {
                                   child: AvatarStack(
                                 height: 24,
                                 avatars: [
-                                  for (var n = 0; n < 5; n++)
-                                    NetworkImage(resLuckyWinners[n]?["player"]
+                                  for (var n = 0;
+                                      n < dataLuckyWinners.length;
+                                      n++)
+                                    NetworkImage(dataLuckyWinners[n]?["player"]
                                         ?["profilePic"])
                                 ],
                               ))
@@ -1641,92 +1643,99 @@ class _MissionDetailState extends State<MissionDetail> {
                               );
                             }).toList(),
                           ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Players',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        SizedBox(
-                            height: 260,
-                            child: GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 16,
-                                        mainAxisExtent: 60,
-                                        crossAxisSpacing: 16),
-                                itemCount: dataPlayers?.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Card(
-                                      color: blackPrimaryColor,
-                                      child: InkWell(
-                                          splashColor:
-                                              yellowPrimaryColor.withAlpha(30),
-                                          onTap: () {
-                                            debugPrint('Card tapped.');
-                                          },
-                                          child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: greySecondaryColor,
-                                                      width: 1),
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(8))),
-                                              child: Row(
-                                                children: [
-                                                  Center(
-                                                      child: CircleAvatar(
-                                                    radius: 12,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    backgroundImage: dataPlayers?[
-                                                                    index]?[
-                                                                "profilePic"] !=
-                                                            null
-                                                        ? NetworkImage(
-                                                            dataPlayers?[index]
-                                                                ?["profilePic"])
-                                                        : null,
-                                                  )),
-                                                  const SizedBox(
-                                                    width: 8,
-                                                  ),
-                                                  if (dataPlayers?[index]
-                                                              ?["username"] !=
-                                                          null ||
-                                                      dataPlayers?[index]
-                                                              ?["email"] !=
-                                                          null)
-                                                    Text(
-                                                      dataPlayers?[index]?[
-                                                                  "username"] ==
-                                                              ''
-                                                          ? dataPlayers?[index]
-                                                                  ?["email"]
-                                                              .substring(0, 10)
-                                                          : dataPlayers?[index]
-                                                              ?["username"],
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w500),
+                        if (dataPlayers != null)
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 16),
+                            child: const Text(
+                              'Players',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        if (dataPlayers != null)
+                          SizedBox(
+                              height: 260,
+                              child: GridView.builder(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: 16,
+                                          mainAxisExtent: 60,
+                                          crossAxisSpacing: 16),
+                                  itemCount: dataPlayers?.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Card(
+                                        color: blackPrimaryColor,
+                                        child: InkWell(
+                                            splashColor: yellowPrimaryColor
+                                                .withAlpha(30),
+                                            onTap: () {
+                                              debugPrint('Card tapped.');
+                                            },
+                                            child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12),
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color:
+                                                            greySecondaryColor,
+                                                        width: 1),
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                8))),
+                                                child: Row(
+                                                  children: [
+                                                    Center(
+                                                        child: CircleAvatar(
+                                                      radius: 12,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      backgroundImage: dataPlayers?[
+                                                                      index]?[
+                                                                  "profilePic"] !=
+                                                              null
+                                                          ? NetworkImage(
+                                                              dataPlayers?[
+                                                                      index]?[
+                                                                  "profilePic"])
+                                                          : null,
+                                                    )),
+                                                    const SizedBox(
+                                                      width: 8,
                                                     ),
-                                                ],
-                                              ))));
-                                })),
+                                                    if (dataPlayers?[index]
+                                                                ?["username"] !=
+                                                            null ||
+                                                        dataPlayers?[index]
+                                                                ?["email"] !=
+                                                            null)
+                                                      Text(
+                                                        dataPlayers?[index]?[
+                                                                    "username"] ==
+                                                                ''
+                                                            ? dataPlayers?[
+                                                                        index]
+                                                                    ?["email"]
+                                                                .substring(
+                                                                    0, 10)
+                                                            : dataPlayers?[
+                                                                    index]
+                                                                ?["username"],
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                  ],
+                                                ))));
+                                  })),
                       ],
                     ),
                     // This is the title in the app bar.

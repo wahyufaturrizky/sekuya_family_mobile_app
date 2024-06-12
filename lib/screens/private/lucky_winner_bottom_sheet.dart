@@ -146,87 +146,93 @@ class _LuckyWinnerBottomSheetState extends State<LuckyWinnerBottomSheet> {
               const SizedBox(
                 height: 16,
               ),
-              dataLuckyWinners.map((item) {
-                var profilePic = item?["player"]?["profilePic"];
-                var username = item?["player"]?["username"];
-                var rewards = item?["player"]?["rewards"];
+              if (dataLuckyWinners != null && dataLuckyWinners.isNotEmpty)
+                Column(
+                    children: (dataLuckyWinners as List<dynamic>).map((item) {
+                  var profilePic = item?["player"]?["profilePic"];
+                  var email = item?["player"]?["email"];
+                  var rewards = item?["rewards"];
 
-                return ExpansionTile(
-                    iconColor: Colors.white,
-                    collapsedBackgroundColor: blackPrimaryColor,
-                    backgroundColor: blackPrimaryColor,
-                    title: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: NetworkImage(profilePic),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                username,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                    color: Colors.white),
-                              ),
-                            ],
+                  return ExpansionTile(
+                      iconColor: Colors.white,
+                      collapsedBackgroundColor: blackPrimaryColor,
+                      backgroundColor: blackPrimaryColor,
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 12,
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: NetworkImage(profilePic),
                           ),
-                        ),
-                        const Icon(
-                          Icons.check_circle,
-                          color: greenColor,
-                        )
-                      ],
-                    ),
-                    children: rewards.map((item) {
-                      var name = item["name"];
-                      var image = item["image"];
-                      var maxQty = item["maxQty"];
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  email.substring(0, 10),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(
+                            Icons.check_circle,
+                            color: greenColor,
+                          )
+                        ],
+                      ),
+                      children: rewards != null && rewards.isNotEmpty
+                          ? (rewards as List<dynamic>).map((item) {
+                              var name = item["name"];
+                              var image = item["image"];
+                              var maxQty = item["maxQty"];
 
-                      return Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration:
-                            const BoxDecoration(color: blackSolidPrimaryColor),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 12,
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage: NetworkImage(image),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    name,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                '$maxQty BTC',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ]),
-                      );
-                    }));
-              })
+                              return Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: const BoxDecoration(
+                                    color: blackSolidPrimaryColor),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 12,
+                                            backgroundColor: Colors.transparent,
+                                            backgroundImage:
+                                                NetworkImage(image),
+                                          ),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text(
+                                            name,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        maxQty.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ]),
+                              );
+                            }).toList()
+                          : []);
+                }).toList())
             ],
           ),
           // This is the title in the app bar.

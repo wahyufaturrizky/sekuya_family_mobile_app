@@ -153,10 +153,10 @@ class _TabContentCommunityMissionsComponentState
                             },
                             {
                               "title": rewards != null && rewards.isNotEmpty
-                                  ? rewards?[0]?["name"]?.split(" ")[1]
+                                  ? rewards?[0]?["name"]
                                   : null,
                               "amount": rewards != null && rewards.isNotEmpty
-                                  ? rewards?[0]?["name"]?.split(" ")[0]
+                                  ? rewards?[0]?["maxQty"]
                                   : null,
                               "icon": rewards != null && rewards.isNotEmpty
                                   ? rewards?[0]?["image"]
@@ -181,7 +181,7 @@ class _TabContentCommunityMissionsComponentState
                                           ),
                                         ),
                                       Text(
-                                        item["amount"] ?? "",
+                                        item["amount"].toString(),
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
