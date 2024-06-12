@@ -715,20 +715,20 @@ class _ProfileDetailState extends State<ProfileDetail> {
                               labelSize: 14,
                               isLoading: isLoadingRecoveryEmailWithGoogle,
                             ),
-                            CustomButton(
-                                isOutlinedBackgroundColor: blackPrimaryColor,
-                                buttonText: 'with Apple ID',
-                                isOutlined: true,
-                                onPressed: () {
-                                  if (!(isLoadingRecoveryEmailWithApple ||
-                                      isLoadingRecoveryEmailWithGoogle)) {}
-                                },
-                                sizeButtonIcon: 20,
-                                buttonIcon: 'ic_apple.png',
-                                width: MediaQuery.of(context).size.width * 0.43,
-                                paddingButton: 0,
-                                labelSize: 14,
-                                isLoading: isLoadingRecoveryEmailWithApple)
+                            // CustomButton(
+                            //     isOutlinedBackgroundColor: blackPrimaryColor,
+                            //     buttonText: 'with Apple ID',
+                            //     isOutlined: true,
+                            //     onPressed: () {
+                            //       if (!(isLoadingRecoveryEmailWithApple ||
+                            //           isLoadingRecoveryEmailWithGoogle)) {}
+                            //     },
+                            //     sizeButtonIcon: 20,
+                            //     buttonIcon: 'ic_apple.png',
+                            //     width: MediaQuery.of(context).size.width * 0.43,
+                            //     paddingButton: 0,
+                            //     labelSize: 14,
+                            //     isLoading: isLoadingRecoveryEmailWithApple)
                           ],
                         ),
                       const SizedBox(

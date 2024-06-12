@@ -466,27 +466,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: 500,
                                 paddingButton: 0),
                           ),
-                          const SizedBox(
-                            height: 24,
-                          ),
-                          Hero(
-                            tag: 'signup_btn',
-                            child: CustomButton(
-                                isOutlinedBackgroundColor: blackPrimaryColor,
-                                isLoading: isLoadingSignInWithApple,
-                                buttonText: 'Continue with Apple ID',
-                                isOutlined: true,
-                                onPressed: () {
-                                  if (!(isLoadingSignInWithApple ||
-                                      isLoadingSignInWithGoogle)) {
-                                    // signInWithApple();
-                                  }
-                                },
-                                buttonIcon: "ic_apple.png",
-                                sizeButtonIcon: 20,
-                                width: 500,
-                                paddingButton: 0),
-                          ),
+                          // const SizedBox(
+                          //   height: 24,
+                          // ),
+                          // Hero(
+                          //   tag: 'signup_btn',
+                          //   child: CustomButton(
+                          //       isOutlinedBackgroundColor: blackPrimaryColor,
+                          //       isLoading: isLoadingSignInWithApple,
+                          //       buttonText: 'Continue with Apple ID',
+                          //       isOutlined: true,
+                          //       onPressed: () {
+                          //         if (!(isLoadingSignInWithApple ||
+                          //             isLoadingSignInWithGoogle)) {
+                          //           // signInWithApple();
+                          //         }
+                          //       },
+                          //       buttonIcon: "ic_apple.png",
+                          //       sizeButtonIcon: 20,
+                          //       width: 500,
+                          //       paddingButton: 0),
+                          // ),
                         ],
                       ),
                     ],
