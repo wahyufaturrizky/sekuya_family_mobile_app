@@ -52,6 +52,14 @@ class _TabContentMissionComponentState
     var dataMission = widget.resMission?["data"]?["data"]?[widget.index];
 
     var rewards = dataMission?["rewards"];
+    var id = dataMission?["_id"];
+    var name = dataMission?["name"];
+    var status = dataMission?["status"];
+    var community = dataMission?["community"];
+    var totalTasks = dataMission?["totalTasks"];
+    var totalExp = dataMission?["totalExp"];
+    var totalPlayers = dataMission?["totalPlayers"];
+    var playerSamples = dataMission?["playerSamples"];
 
     return Card(
       color: blackPrimaryColor,
@@ -60,8 +68,7 @@ class _TabContentMissionComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          if (widget.resMission?["data"]?["data"]?[widget.index]?["_id"] !=
-              null) {
+          if (id != null) {
             goToDetailMission();
           }
         },
@@ -76,22 +83,11 @@ class _TabContentMissionComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (widget.resMission?["data"]?["data"]?[widget.index]
-                              ?["name"] !=
-                          null)
+                      if (name != null)
                         Text(
-                          widget
-                                      .resMission?["data"]?["data"]
-                                          ?[widget.index]?["name"]
-                                      ?.length >
-                                  20
-                              ? widget.resMission?["data"]?["data"]
-                                          ?[widget.index]?["name"]
-                                      .substring(0, 20) +
-                                  "..."
-                              : widget.resMission?["data"]?["data"]
-                                      ?[widget.index]?["name"] ??
-                                  "",
+                          name?.length > 20
+                              ? name.substring(0, 20) + "..."
+                              : name ?? "",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -99,9 +95,7 @@ class _TabContentMissionComponentState
                         ),
                       Chip(
                           label: Text(
-                            widget.resMission?["data"]?["data"]?[widget.index]
-                                    ?["status"] ??
-                                "",
+                            status ?? "",
                           ),
                           color: MaterialStateProperty.all<Color>(
                               blueSecondaryColor),
@@ -113,34 +107,20 @@ class _TabContentMissionComponentState
                   ),
                   Row(
                     children: [
-                      if (widget.resMission?["data"]?["data"]?[widget.index]
-                              ?["community"]?["image"] !=
-                          null)
+                      if (community?["image"] != null)
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: Image.network(widget.resMission?["data"]
-                              ?["data"]?[widget.index]?["community"]?["image"]),
+                          child: Image.network(community?["image"]),
                         ),
                       const SizedBox(
                         width: 8,
                       ),
-                      if (widget.resMission?["data"]?["data"]?[widget.index]
-                              ?["community"]?["name"] !=
-                          null)
+                      if (community?["name"] != null)
                         Text(
-                          widget
-                                      .resMission?["data"]?["data"]
-                                          ?[widget.index]?["community"]?["name"]
-                                      ?.length >
-                                  15
-                              ? widget.resMission?["data"]["data"]
-                                          ?[widget.index]?["community"]?["name"]
-                                      .substring(0, 15) +
-                                  "..."
-                              : widget.resMission?["data"]["data"]
-                                      ?[widget.index]?["community"]?["name"] ??
-                                  "",
+                          community?["name"]?.length > 15
+                              ? community["name"].substring(0, 15) + "..."
+                              : community?["name"] ?? "",
                           style: const TextStyle(
                               color: greySecondaryColor,
                               fontSize: 14,
@@ -160,18 +140,12 @@ class _TabContentMissionComponentState
                     children: [
                       {
                         "title": "Task",
-                        "amount": widget.resMission?["data"]?["data"]
-                                    ?[widget.index]?["totalTasks"]
-                                .toString() ??
-                            "",
+                        "amount": totalTasks.toString(),
                         "icon": "",
                       },
                       {
                         "title": "Xp",
-                        "amount": widget.resMission?["data"]?["data"]
-                                    ?[widget.index]?["totalExp"]
-                                .toString() ??
-                            "",
+                        "amount": totalExp.toString(),
                         "icon": "",
                       },
                       {
@@ -223,21 +197,13 @@ class _TabContentMissionComponentState
                         )
                         .toList(),
                   ),
-                  if (widget.resMission?["data"]?["data"]?[widget.index]
-                          ?["totalPlayers"] !=
-                      null)
+                  if (totalPlayers != null)
                     Flexible(
                         child: AvatarStack(
                       height: 24,
                       avatars: [
-                        for (var n = 0;
-                            n <
-                                widget.resMission?["data"]?["data"]
-                                    ?[widget.index]?["totalPlayers"];
-                            n++)
-                          NetworkImage(widget.resMission?["data"]?["data"]
-                                  ?[widget.index]?["playerSamples"]?[n]
-                              ?["profilePic"])
+                        for (var n = 0; n < totalPlayers; n++)
+                          NetworkImage(playerSamples?[n]?["profilePic"])
                       ],
                     ))
                 ]),
