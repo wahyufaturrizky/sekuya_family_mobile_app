@@ -10,6 +10,7 @@
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/util/status.dart';
 
 class QuizApp extends StatelessWidget {
   QuizApp({
@@ -117,7 +118,14 @@ class Quiz extends StatefulWidget {
 class _QuizState extends State<Quiz> {
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.8;
+    double contextWidth = MediaQuery.of(context).size.width * 0.8;
+
+    var image = widget.image;
+    var name = widget.name;
+    var exp = widget.exp;
+    var status = widget.status;
+    var reason = widget.reason;
+    var isLoadingSubmitTaskMission = widget.isLoadingSubmitTaskMission;
 
     return ExpansionTile(
         iconColor: Colors.white,
@@ -128,9 +136,9 @@ class _QuizState extends State<Quiz> {
         },
         title: Row(
           children: [
-            if (widget.image != null)
+            if (image != null)
               Image.network(
-                widget.image,
+                image,
                 width: 24,
                 height: 24,
                 fit: BoxFit.cover,
@@ -143,14 +151,14 @@ class _QuizState extends State<Quiz> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name ?? "",
+                    name ?? "",
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
                         color: Colors.white),
                   ),
                   Text(
-                    '${widget.exp ?? ""}xp',
+                    '${exp ?? ""}xp',
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -160,20 +168,8 @@ class _QuizState extends State<Quiz> {
               ),
             ),
             Icon(
-              widget.status == "APPROVED"
-                  ? Icons.check_circle
-                  : widget.status == "PENDING"
-                      ? Icons.pending_actions
-                      : widget.status == "REJECTED"
-                          ? Icons.warning
-                          : Icons.fiber_new,
-              color: widget.status == "APPROVED"
-                  ? greenColor
-                  : widget.status == "PENDING"
-                      ? bluePrimaryColor
-                      : widget.status == "REJECTED"
-                          ? redSolidPrimaryColor
-                          : yellowPrimaryColor,
+              handleStatusIcon(status),
+              color: handleStatusColorIcon(status),
             )
           ],
         ),
@@ -199,12 +195,12 @@ class _QuizState extends State<Quiz> {
               // ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                width: c_width,
+                width: contextWidth,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    if (widget.reason != '')
-                      Text("Reason reject: ${widget.reason}",
+                    if (reason != '')
+                      Text("Reason reject: ${reason}",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               color: redSolidPrimaryColor,
@@ -244,13 +240,13 @@ class _QuizState extends State<Quiz> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               value: itemQuestion ?? "",
-                              groupValue: ["NOT_SUBMITTED", "REJECTED"]
-                                      .contains(widget.status)
-                                  ? widget.selectedChoice
-                                  : widget.submittedAdditionalAttribute,
+                              groupValue:
+                                  ["NOT_SUBMITTED", "REJECTED"].contains(status)
+                                      ? widget.selectedChoice
+                                      : widget.submittedAdditionalAttribute,
                               onChanged: (value) {
                                 if (["NOT_SUBMITTED", "REJECTED"]
-                                    .contains(widget.status)) {
+                                    .contains(status)) {
                                   widget.onChangedQuizChoice(value);
                                 }
                               },
@@ -260,9 +256,9 @@ class _QuizState extends State<Quiz> {
             height: 16,
           ),
           CustomButton(
-            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(status),
             buttonText: 'Submit',
-            isLoading: widget.isLoadingSubmitTaskMission!,
+            isLoading: isLoadingSubmitTaskMission!,
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },

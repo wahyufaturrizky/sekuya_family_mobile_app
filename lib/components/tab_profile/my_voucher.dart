@@ -53,6 +53,12 @@ class _TabContentProfileMyVoucherComponentState
 
   @override
   Widget build(BuildContext context) {
+    var dataVoucher = widget.resVoucher?["data"]?["data"]?[widget.index];
+    var image = dataVoucher?["image"];
+    var name = dataVoucher?["name"];
+    var description = dataVoucher?["description"];
+    var expiredAt = dataVoucher?["expired_at"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -65,22 +71,21 @@ class _TabContentProfileMyVoucherComponentState
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.5), BlendMode.dstATop),
-              image: NetworkImage(widget.resVoucher?["data"]?["data"]
-                      ?[widget.index]?["image"] ??
-                  ""),
-            ),
+            image: image != null
+                ? DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                    image: NetworkImage(image),
+                  )
+                : null,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.resVoucher?["data"]?["data"]?[widget.index]?["name"] ??
-                    "",
+                name ?? "",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -91,9 +96,7 @@ class _TabContentProfileMyVoucherComponentState
                 height: 12,
               ),
               Text(
-                widget.resVoucher?["data"]?["data"]?[widget.index]
-                        ?["description"] ??
-                    "",
+                description ?? "",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -109,7 +112,7 @@ class _TabContentProfileMyVoucherComponentState
                     width: 8,
                   ),
                   Text(
-                    'Berlaku hingga ${handleFormatDate(widget.resVoucher?["data"]?["data"]?[widget.index]?["expired_at"] ?? "")}',
+                    'Berlaku hingga ${handleFormatDate(expiredAt ?? "")}',
                     style: const TextStyle(
                         color: yellowPrimaryColor,
                         fontSize: 12,

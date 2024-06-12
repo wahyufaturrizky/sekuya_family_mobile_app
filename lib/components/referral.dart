@@ -10,6 +10,7 @@
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/util/status.dart';
 
 class ReferralApp extends StatelessWidget {
   const ReferralApp({
@@ -92,7 +93,14 @@ class Referral extends StatefulWidget {
 class _ReferralState extends State<Referral> {
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.8;
+    double contextWidth = MediaQuery.of(context).size.width * 0.8;
+
+    var image = widget.image;
+    var name = widget.name;
+    var exp = widget.exp;
+    var status = widget.status;
+    var reason = widget.reason;
+    var isLoadingSubmitTaskMission = widget.isLoadingSubmitTaskMission;
 
     return ExpansionTile(
         iconColor: Colors.white,
@@ -103,9 +111,9 @@ class _ReferralState extends State<Referral> {
         },
         title: Row(
           children: [
-            if (widget.image != null)
+            if (image != null)
               Image.network(
-                widget.image,
+                image,
                 width: 24,
                 height: 24,
                 fit: BoxFit.cover,
@@ -118,14 +126,14 @@ class _ReferralState extends State<Referral> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name ?? "",
+                    name ?? "",
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
                         color: Colors.white),
                   ),
                   Text(
-                    '${widget.exp ?? ""}xp',
+                    '${exp ?? ""}xp',
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -135,20 +143,8 @@ class _ReferralState extends State<Referral> {
               ),
             ),
             Icon(
-              widget.status == "APPROVED"
-                  ? Icons.check_circle
-                  : widget.status == "PENDING"
-                      ? Icons.pending_actions
-                      : widget.status == "REJECTED"
-                          ? Icons.warning
-                          : Icons.fiber_new,
-              color: widget.status == "APPROVED"
-                  ? greenColor
-                  : widget.status == "PENDING"
-                      ? bluePrimaryColor
-                      : widget.status == "REJECTED"
-                          ? redSolidPrimaryColor
-                          : yellowPrimaryColor,
+              handleStatusIcon(status),
+              color: handleStatusColorIcon(status),
             )
           ],
         ),
@@ -174,12 +170,12 @@ class _ReferralState extends State<Referral> {
               // ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                width: c_width,
+                width: contextWidth,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    if (widget.reason != '')
-                      Text("Reason reject: ${widget.reason}",
+                    if (reason != '')
+                      Text("Reason reject: ${reason}",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               color: redSolidPrimaryColor,
@@ -211,10 +207,9 @@ class _ReferralState extends State<Referral> {
                   color: Colors.white,
                 ),
                 decoration: kTextInputDecoration.copyWith(
-                  hintText:
-                      ["NOT_SUBMITTED", "REJECTED"].contains(widget.status)
-                          ? 'Your answer'
-                          : widget.submittedAdditionalAttribute,
+                  hintText: ["NOT_SUBMITTED", "REJECTED"].contains(status)
+                      ? 'Your answer'
+                      : widget.submittedAdditionalAttribute,
                   hintStyle: const TextStyle(color: greySecondaryColor),
                 )),
           ),
@@ -222,9 +217,9 @@ class _ReferralState extends State<Referral> {
             height: 16,
           ),
           CustomButton(
-            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(status),
             buttonText: 'Submit',
-            isLoading: widget.isLoadingSubmitTaskMission!,
+            isLoading: isLoadingSubmitTaskMission!,
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },

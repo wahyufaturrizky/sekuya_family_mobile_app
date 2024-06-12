@@ -48,6 +48,11 @@ class _TabContentVoucherComponentState
 
   @override
   Widget build(BuildContext context) {
+    var dataVoucher = widget.resVoucher?["data"]?[widget.index];
+    var coverImage = dataVoucher?["coverImage"];
+    var name = dataVoucher?["name"];
+    var description = dataVoucher?["description"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -60,23 +65,21 @@ class _TabContentVoucherComponentState
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            image:
-                widget.resVoucher?["data"]?[widget.index]?["coverImage"] != null
-                    ? DecorationImage(
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                        image: NetworkImage(widget.resVoucher?["data"]
-                            ?[widget.index]?["coverImage"]),
-                      )
-                    : null,
+            image: coverImage != null
+                ? DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                    image: NetworkImage(coverImage),
+                  )
+                : null,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.resVoucher?["data"]?[widget.index]?["name"] ?? "",
+                name ?? "",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -87,7 +90,7 @@ class _TabContentVoucherComponentState
                 height: 12,
               ),
               Text(
-                widget.resVoucher?["data"]?[widget.index]?["description"] ?? "",
+                description ?? "",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,

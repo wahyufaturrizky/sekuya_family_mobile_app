@@ -40,6 +40,12 @@ class _TabContentProfileMyRewardComponentState
     extends State<TabContentProfileMyRewardComponent> {
   @override
   Widget build(BuildContext context) {
+    var dataMyReward = widget.resMyReward?["data"]?["data"]?[widget.index];
+    var image = dataMyReward["image"];
+    var name = dataMyReward["name"];
+    var status = dataMyReward["status"];
+    var description = dataMyReward["description"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -60,23 +66,17 @@ class _TabContentProfileMyRewardComponentState
                 children: [
                   Row(
                     children: [
-                      if (widget.resMyReward?["data"]?["data"]?[widget.index]
-                              ?["image"] !=
-                          null)
+                      if (image != null)
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: Image.network(widget.resMyReward?["data"]
-                                  ?["data"]?[widget.index]?["image"] ??
-                              ""),
+                          child: Image.network(image),
                         ),
                       const SizedBox(
                         width: 8,
                       ),
                       Text(
-                        widget.resMyReward?["data"]?["data"]?[widget.index]
-                                ?["name"] ??
-                            "",
+                        name ?? "",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -87,9 +87,7 @@ class _TabContentProfileMyRewardComponentState
                   Row(
                     children: [
                       Text(
-                        widget.resMyReward?["data"]?["data"]?[widget.index]
-                                ?["status"] ??
-                            "",
+                        status ?? "",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -110,7 +108,7 @@ class _TabContentProfileMyRewardComponentState
                 child: Row(children: [
                   Expanded(
                       child: Text(
-                    "${widget.resMyReward?["data"]?["data"]?[widget.index]?["description"].length > 18 ? widget.resMyReward?["data"]?["data"]?[widget.index]?["description"].substring(0, 18) : widget.resMyReward?["data"]?["data"]?[widget.index]?["description"]}",
+                    "${description.length > 18 ? description.substring(0, 18) : description}",
                     style: const TextStyle(
                         color: greySecondaryColor,
                         fontSize: 14,
@@ -123,16 +121,5 @@ class _TabContentProfileMyRewardComponentState
         ),
       ),
     );
-  }
-}
-
-String getAvatarUrl({indexMyMissions, indexDisplayPlayers, resMyReward}) {
-  final url = resMyReward?["data"]?["data"]?[indexMyMissions]
-      ?["display_players"]?[indexDisplayPlayers]?["image"];
-
-  if (url != null) {
-    return url;
-  } else {
-    return "";
   }
 }

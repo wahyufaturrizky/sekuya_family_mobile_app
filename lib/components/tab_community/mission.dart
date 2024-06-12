@@ -63,7 +63,7 @@ class _TabContentCommunityMissionsComponentState
     var rewards = dataCommunitiesMissions?["rewards"];
     var totalPlayers = dataCommunitiesMissions?["totalPlayers"];
     var playerSamples = dataCommunitiesMissions?["playerSamples"];
-    var _id = dataCommunitiesMissions?["_id"];
+    var id = dataCommunitiesMissions?["_id"];
 
     return Card(
       color: blackPrimaryColor,
@@ -72,7 +72,7 @@ class _TabContentCommunityMissionsComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          if (_id != null) {
+          if (id != null) {
             goToDetailMission();
           }
         },

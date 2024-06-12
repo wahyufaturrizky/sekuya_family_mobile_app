@@ -57,6 +57,8 @@ class _TabContentCommunityLeaderBoardComponentState
 
     var username = dataCommunitiesLeaderboards?["username"];
     var email = dataCommunitiesLeaderboards?["email"];
+    var profilePic = dataCommunitiesLeaderboards?["profilePic"];
+    var exp = dataCommunitiesLeaderboards?["exp"];
     return Container(
       decoration: BoxDecoration(
           color: Colors.black,
@@ -110,8 +112,7 @@ class _TabContentCommunityLeaderBoardComponentState
               backgroundColor: Colors.black,
               builder: (BuildContext context) {
                 return ProfileDetailBottomSheetApp(
-                    detailProfile: widget.resCommunitiesLeaderboards?["data"]
-                        ?["data"]?[index]);
+                    detailProfile: dataCommunitiesLeaderboards);
               });
         },
         child: Padding(
@@ -131,7 +132,7 @@ class _TabContentCommunityLeaderBoardComponentState
                               radius: 12,
                               backgroundColor: Colors.transparent,
                               backgroundImage:
-                                  AssetImage('assets/images/ic_${index}.png'),
+                                  AssetImage('assets/images/ic_$index.png'),
                             )),
                       Text(
                         rank,
@@ -143,14 +144,10 @@ class _TabContentCommunityLeaderBoardComponentState
                       const SizedBox(
                         width: 8,
                       ),
-                      if (widget.resCommunitiesLeaderboards?["data"]?["data"]
-                              ?[index]?["profilePic"] !=
-                          null)
+                      if (profilePic != null)
                         CircleAvatar(
                           radius: 12,
-                          backgroundImage: NetworkImage(
-                              widget.resCommunitiesLeaderboards?["data"]
-                                  ?["data"]?[index]?["profilePic"]),
+                          backgroundImage: NetworkImage(profilePic),
                         ),
                       const SizedBox(
                         width: 8,
@@ -165,7 +162,7 @@ class _TabContentCommunityLeaderBoardComponentState
                     ],
                   ),
                   Text(
-                    '${widget.resCommunitiesLeaderboards?["data"]?["data"]?[index]?["exp"].toString() ?? ""} xp',
+                    '${exp.toString()} xp',
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,

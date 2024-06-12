@@ -52,6 +52,16 @@ class _TabContentProfileMyCommunityComponentState
 
   @override
   Widget build(BuildContext context) {
+    var dataCommunity =
+        widget.resMyCommunities?["data"]?["data"]?[widget.index];
+
+    var image = dataCommunity?["image"];
+    var name = dataCommunity?["name"];
+    var description = dataCommunity?["description"];
+    var totalMission = dataCommunity?["totalMission"];
+    var totalPlayers = dataCommunity?["totalPlayers"];
+    var level = dataCommunity?["level"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -71,20 +81,17 @@ class _TabContentProfileMyCommunityComponentState
             children: [
               Row(
                 children: [
-                  Image.network(
-                    widget.resMyCommunities?["data"]?["data"]?[widget.index]
-                            ?["image"] ??
-                        "",
-                    width: 32,
-                    height: 32,
-                  ),
+                  if (image != null)
+                    Image.network(
+                      image,
+                      width: 32,
+                      height: 32,
+                    ),
                   const SizedBox(
                     width: 12,
                   ),
                   Text(
-                    widget.resMyCommunities?["data"]?["data"]?[widget.index]
-                            ?["name"] ??
-                        "",
+                    name ?? "",
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -96,9 +103,7 @@ class _TabContentProfileMyCommunityComponentState
                 height: 12,
               ),
               Text(
-                widget.resMyCommunities?["data"]?["data"]?[widget.index]
-                        ?["description"] ??
-                    "",
+                description ?? "",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -111,21 +116,15 @@ class _TabContentProfileMyCommunityComponentState
                 children: [
                   {
                     "title": "total mission",
-                    "value": widget.resMyCommunities?["data"]?["data"]
-                            ?[widget.index]?["totalMission"]
-                        .toString(),
+                    "value": totalMission.toString(),
                   },
                   {
                     "title": "total players",
-                    "value": widget.resMyCommunities?["data"]?["data"]
-                            ?[widget.index]?["totalPlayers"]
-                        .toString(),
+                    "value": totalPlayers.toString(),
                   },
                   {
                     "title": "level",
-                    "value": widget.resMyCommunities?["data"]?["data"]
-                            ?[widget.index]?["level"]
-                        .toString(),
+                    "value": level.toString(),
                   },
                 ]
                     .map((item) => Row(

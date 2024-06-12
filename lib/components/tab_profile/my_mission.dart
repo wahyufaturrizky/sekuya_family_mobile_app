@@ -53,6 +53,17 @@ class _TabContentProfileMyMissionComponentState
 
   @override
   Widget build(BuildContext context) {
+    var dataMyMission = widget.resMyMission?["data"]?["data"]?[widget.index];
+
+    var id = dataMyMission?["_id"];
+    var name = dataMyMission?["name"];
+    var status = dataMyMission?["status"];
+    var rewards = dataMyMission?["rewards"];
+    var community = dataMyMission?["community"];
+    var totalTasks = dataMyMission?["totalTasks"];
+    var totalExp = dataMyMission?["totalExp"];
+    var playerSamples = dataMyMission?["playerSamples"];
+
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
@@ -60,8 +71,7 @@ class _TabContentProfileMyMissionComponentState
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
-          if (widget.resMyMission?["data"]?["data"]?[widget.index]?["_id"] !=
-              null) {
+          if (id != null) {
             goToDetailMission();
           }
         },
@@ -77,9 +87,7 @@ class _TabContentProfileMyMissionComponentState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.resMyMission?["data"]?["data"]?[widget.index]
-                                ?["name"] ??
-                            "",
+                        name ?? "",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -87,9 +95,7 @@ class _TabContentProfileMyMissionComponentState
                       ),
                       Chip(
                           label: Text(
-                            widget.resMyMission?["data"]?["data"]?[widget.index]
-                                    ?["status"] ??
-                                "",
+                            status ?? "",
                           ),
                           color: MaterialStateProperty.all<Color>(
                               blueSecondaryColor),
@@ -101,24 +107,17 @@ class _TabContentProfileMyMissionComponentState
                   ),
                   Row(
                     children: [
-                      if (widget.resMyMission?["data"]?["data"]?[widget.index]
-                              ?["reward"]?["image"] !=
-                          null)
+                      if (rewards != null && rewards.isNotEmpty)
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: Image.network(widget.resMyMission?["data"]
-                                      ?["data"]?[widget.index]?["reward"]
-                                  ?["image"] ??
-                              ""),
+                          child: Image.network(rewards[0]?["image"]),
                         ),
                       const SizedBox(
                         width: 8,
                       ),
                       Text(
-                        widget.resMyMission?["data"]?["data"]?[widget.index]
-                                ?["community_name"] ??
-                            "",
+                        community?["name"] ?? "",
                         style: const TextStyle(
                             color: greySecondaryColor,
                             fontSize: 14,
@@ -138,49 +137,23 @@ class _TabContentProfileMyMissionComponentState
                     children: [
                       {
                         "title": "Task",
-                        "amount": widget.resMyMission?["data"]?["data"]
-                                    ?[widget.index]?["totalTasks"]
-                                .toString() ??
-                            "",
+                        "amount": totalTasks.toString(),
                         "icon": null,
                       },
                       {
                         "title": "Xp",
-                        "amount": widget.resMyMission?["data"]?["data"]
-                                    ?[widget.index]?["totalExp"]
-                                .toString() ??
-                            "",
+                        "amount": totalExp.toString(),
                         "icon": null,
                       },
                       {
-                        "title": widget.resMyMission?["data"]?["data"]
-                                        ?[widget.index]?["rewards"] !=
-                                    null &&
-                                widget
-                                    .resMyMission?["data"]?["data"]
-                                        ?[widget.index]?["rewards"]
-                                    .isNotEmpty
-                            ? "${widget.resMyMission?["data"]?["data"]?[widget.index]?["rewards"]?[0]?["name"].substring(0, 3)}"
+                        "title": rewards != null && rewards.isNotEmpty
+                            ? "${rewards?[0]?["name"].substring(0, 3)}"
                             : null,
-                        "amount": widget.resMyMission?["data"]?["data"]
-                                        ?[widget.index]?["rewards"] !=
-                                    null &&
-                                widget
-                                    .resMyMission?["data"]?["data"]
-                                        ?[widget.index]?["rewards"]
-                                    .isNotEmpty
-                            ? widget.resMyMission?["data"]?["data"]
-                                ?[widget.index]?["rewards"]?[0]?["maxQty"]
+                        "amount": rewards != null && rewards.isNotEmpty
+                            ? rewards?[0]?["maxQty"]
                             : null,
-                        "icon": widget.resMyMission?["data"]?["data"]
-                                        ?[widget.index]?["rewards"] !=
-                                    null &&
-                                widget
-                                    .resMyMission?["data"]?["data"]
-                                        ?[widget.index]?["rewards"]
-                                    .isNotEmpty
-                            ? widget.resMyMission?["data"]?["data"]
-                                ?[widget.index]?["rewards"]?[0]?["image"]
+                        "icon": rewards != null && rewards.isNotEmpty
+                            ? rewards?[0]?["image"]
                             : null,
                       }
                     ]
@@ -229,21 +202,9 @@ class _TabContentProfileMyMissionComponentState
                       child: AvatarStack(
                     height: 24,
                     avatars: [
-                      if (widget.resMyMission?["data"]?["data"]?[widget.index]
-                              ?["display_players"] !=
-                          null)
-                        for (var n = 0;
-                            n <
-                                (widget
-                                        .resMyMission?["data"]?["data"]
-                                            ?[widget.index]?["display_players"]
-                                        ?.length ??
-                                    2);
-                            n++)
-                          NetworkImage(getAvatarUrl(
-                              indexMyMissions: widget.index,
-                              indexDisplayPlayers: n,
-                              resMyMission: widget.resMyMission))
+                      if (playerSamples != null && playerSamples.isNotEmpty)
+                        for (var n = 0; n < (playerSamples?.length); n++)
+                          NetworkImage(playerSamples[n]?["profilePic"])
                     ],
                   ))
                 ]),

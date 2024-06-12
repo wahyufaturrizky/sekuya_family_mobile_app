@@ -16,6 +16,7 @@ import 'package:sekuya_family_mobile_app/api_key.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/util/status.dart';
 
 final dio = Dio();
 
@@ -157,6 +158,16 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.8;
 
+    var image = widget.image;
+    var name = widget.name;
+    var exp = widget.exp;
+    var status = widget.status;
+    var reason = widget.reason;
+    var description = widget.description;
+    var nameLocation = widget.nameLocation;
+    var isLoadingNameLocation = widget.isLoadingNameLocation;
+    var isLoadingSubmitTaskMission = widget.isLoadingSubmitTaskMission;
+
     return ExpansionTile(
         iconColor: Colors.white,
         onExpansionChanged: (bool value) {
@@ -166,9 +177,9 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
         },
         title: Row(
           children: [
-            if (widget.image != null)
+            if (image != null)
               Image.network(
-                widget.image,
+                image,
                 width: 24,
                 height: 24,
                 fit: BoxFit.cover,
@@ -181,14 +192,14 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name ?? "",
+                    name ?? "",
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
                         color: Colors.white),
                   ),
                   Text(
-                    '${widget.exp ?? ""}xp',
+                    '${exp ?? ""}xp',
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -199,20 +210,8 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
             ),
             Text(widget.status.toString()),
             Icon(
-              widget.status == "APPROVED"
-                  ? Icons.check_circle
-                  : widget.status == "PENDING"
-                      ? Icons.pending_actions
-                      : widget.status == "REJECTED"
-                          ? Icons.warning
-                          : Icons.fiber_new,
-              color: widget.status == "APPROVED"
-                  ? greenColor
-                  : widget.status == "PENDING"
-                      ? bluePrimaryColor
-                      : widget.status == "REJECTED"
-                          ? redSolidPrimaryColor
-                          : yellowPrimaryColor,
+              handleStatusIcon(status),
+              color: handleStatusColorIcon(status),
             )
           ],
         ),
@@ -246,14 +245,14 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    if (widget.reason != '')
-                      Text("Reason reject: ${widget.reason}",
+                    if (reason != '')
+                      Text("Reason reject: ${reason}",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               color: redSolidPrimaryColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500)),
-                    Text(widget.description ?? "",
+                    Text(description ?? "",
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                             color: Colors.white,
@@ -407,11 +406,11 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
                 ),
                 Flexible(
                     child: Text(
-                  (widget.isLoadingNameLocation
+                  (isLoadingNameLocation
                       ? "Loading..."
-                      : ["NOT_SUBMITTED", "REJECTED"].contains(widget.status)
-                          ? (widget.nameLocation != ''
-                              ? widget.nameLocation
+                      : ["NOT_SUBMITTED", "REJECTED"].contains(status)
+                          ? (nameLocation != ''
+                              ? nameLocation
                               : "Get Current Location")
                           : submittedLocation),
                   textAlign: TextAlign.center,
@@ -430,12 +429,12 @@ class _ProofWithPhotoAndLocState extends State<ProofWithPhotoAndLoc> {
           ),
           CustomButton(
             buttonText: 'Submit',
-            isLoading: widget.isLoadingSubmitTaskMission!,
+            isLoading: isLoadingSubmitTaskMission!,
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },
             width: 500,
-            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(status),
           ),
           const SizedBox(
             height: 16,

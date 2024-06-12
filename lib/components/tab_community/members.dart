@@ -46,6 +46,9 @@ class _TabContentCommunityMembersComponentState
 
     var username = dataCommunitiesMembers?["username"];
     var email = dataCommunitiesMembers?["email"];
+    var profilePic = dataCommunitiesMembers?["profilePic"];
+    var exp = dataCommunitiesMembers?["exp"];
+
     return Container(
       decoration: BoxDecoration(
           color: Colors.black,
@@ -62,8 +65,7 @@ class _TabContentCommunityMembersComponentState
               context: context,
               builder: (BuildContext context) {
                 return ProfileDetailBottomSheetApp(
-                    detailProfile: widget.resCommunitiesMembers?["data"]
-                        ?["data"]?[widget.index]);
+                    detailProfile: dataCommunitiesMembers);
               });
         },
         child: Padding(
@@ -76,15 +78,10 @@ class _TabContentCommunityMembersComponentState
                 children: [
                   Row(
                     children: [
-                      if (widget.resCommunitiesMembers?["data"]?["data"]
-                              ?[widget.index]?["profilePic"] !=
-                          null)
+                      if (profilePic != null)
                         CircleAvatar(
                           radius: 12,
-                          backgroundImage: NetworkImage(
-                              widget.resCommunitiesMembers?["data"]?["data"]
-                                      ?[widget.index]?["profilePic"] ??
-                                  ""),
+                          backgroundImage: NetworkImage(profilePic ?? ""),
                         ),
                       const SizedBox(
                         width: 8,
@@ -99,7 +96,7 @@ class _TabContentCommunityMembersComponentState
                     ],
                   ),
                   Text(
-                    '${widget.resCommunitiesMembers?["data"]?["data"]?[widget.index]?["exp"] ?? ""} xp',
+                    '${exp ?? ""} xp',
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,

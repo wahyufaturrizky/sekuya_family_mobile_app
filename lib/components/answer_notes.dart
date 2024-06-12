@@ -10,6 +10,7 @@
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
+import 'package:sekuya_family_mobile_app/util/status.dart';
 
 class AnswerNotesApp extends StatelessWidget {
   const AnswerNotesApp({
@@ -94,6 +95,11 @@ class _AnswerNotesState extends State<AnswerNotes> {
   Widget build(BuildContext context) {
     double contextWidth = MediaQuery.of(context).size.width * 0.8;
 
+    var image = widget.image;
+    var name = widget.name;
+    var exp = widget.exp;
+    var status = widget.status;
+
     return ExpansionTile(
         iconColor: Colors.white,
         onExpansionChanged: (bool value) {
@@ -103,9 +109,9 @@ class _AnswerNotesState extends State<AnswerNotes> {
         },
         title: Row(
           children: [
-            if (widget.image != null)
+            if (image != null)
               Image.network(
-                widget.image,
+                image,
                 width: 24,
                 height: 24,
                 fit: BoxFit.cover,
@@ -118,14 +124,14 @@ class _AnswerNotesState extends State<AnswerNotes> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name ?? "",
+                    name ?? "",
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
                         color: Colors.white),
                   ),
                   Text(
-                    '${widget.exp ?? ""}xp',
+                    '${exp ?? ""}xp',
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -135,20 +141,8 @@ class _AnswerNotesState extends State<AnswerNotes> {
               ),
             ),
             Icon(
-              widget.status == "APPROVED"
-                  ? Icons.check_circle
-                  : widget.status == "PENDING"
-                      ? Icons.pending_actions
-                      : widget.status == "REJECTED"
-                          ? Icons.warning
-                          : Icons.fiber_new,
-              color: widget.status == "APPROVED"
-                  ? greenColor
-                  : widget.status == "PENDING"
-                      ? bluePrimaryColor
-                      : widget.status == "REJECTED"
-                          ? redSolidPrimaryColor
-                          : yellowPrimaryColor,
+              handleStatusIcon(status),
+              color: handleStatusColorIcon(status),
             )
           ],
         ),
