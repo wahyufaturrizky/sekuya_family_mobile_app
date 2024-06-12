@@ -166,7 +166,7 @@ class _HomeComponentState extends State<HomeComponent> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w700),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -231,16 +231,17 @@ class _HomeComponentState extends State<HomeComponent> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  name.length > 17
-                                                      ? '${name.substring(0, 17)}...'
-                                                      : name,
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
+                                                if (name != null)
+                                                  Text(
+                                                    name?.length > 42
+                                                        ? '${name.substring(0, 42)}...'
+                                                        : name,
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
                                                 const SizedBox(
                                                   height: 8,
                                                 ),
@@ -259,17 +260,19 @@ class _HomeComponentState extends State<HomeComponent> {
                                                     const SizedBox(
                                                       width: 8,
                                                     ),
-                                                    Text(
-                                                      description.length > 12
-                                                          ? '${description.substring(0, 12)}...'
-                                                          : description,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              greySecondaryColor,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    )
+                                                    if (description != null)
+                                                      Text(
+                                                        description?.length > 12
+                                                            ? '${description.substring(0, 12)}...'
+                                                            : description,
+                                                        style: const TextStyle(
+                                                            color:
+                                                                greySecondaryColor,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      )
                                                   ],
                                                 ),
                                               ],
@@ -300,16 +303,23 @@ class _HomeComponentState extends State<HomeComponent> {
                                                               .toString(),
                                                         },
                                                         {
-                                                          "title":
-                                                              rewards.isEmpty
-                                                                  ? null
-                                                                  : rewards?[0]
-                                                                      ?["name"],
+                                                          "title": rewards
+                                                                  .isEmpty
+                                                              ? ""
+                                                              : rewards?[0]?[
+                                                                          "name"]
+                                                                      .substring(
+                                                                          0,
+                                                                          4) +
+                                                                  "...",
                                                           "value": rewards
                                                                   .isEmpty
-                                                              ? null
-                                                              : rewards?[0]
-                                                                  ?["maxQty"],
+                                                              ? ""
+                                                              : rewards?[0]?[
+                                                                      "maxQty"]
+                                                                  .toString()
+                                                                  .substring(
+                                                                      0, 3),
                                                           "image": rewards
                                                                   .isEmpty
                                                               ? null
@@ -320,6 +330,9 @@ class _HomeComponentState extends State<HomeComponent> {
                                                           .map(
                                                             (itemMission) =>
                                                                 Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
                                                                 Row(
                                                                   children: [
@@ -488,7 +501,7 @@ class _HomeComponentState extends State<HomeComponent> {
                                               children: [
                                                 if (name != null)
                                                   Text(
-                                                    name.length > 18
+                                                    name?.length > 18
                                                         ? '${name?.substring(0, 18)}...'
                                                         : name,
                                                     textAlign: TextAlign.center,

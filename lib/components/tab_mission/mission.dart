@@ -76,15 +76,27 @@ class _TabContentMissionComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.resMission?["data"]?["data"]?[widget.index]
-                                ?["name"] ??
-                            "",
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
-                      ),
+                      if (widget.resMission?["data"]?["data"]?[widget.index]
+                              ?["name"] !=
+                          null)
+                        Text(
+                          widget
+                                      .resMission?["data"]?["data"]
+                                          ?[widget.index]?["name"]
+                                      ?.length >
+                                  20
+                              ? widget.resMission?["data"]?["data"]
+                                          ?[widget.index]?["name"]
+                                      .substring(0, 20) +
+                                  "..."
+                              : widget.resMission?["data"]?["data"]
+                                      ?[widget.index]?["name"] ??
+                                  "",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
                       Chip(
                           label: Text(
                             widget.resMission?["data"]?["data"]?[widget.index]
@@ -113,15 +125,27 @@ class _TabContentMissionComponentState
                       const SizedBox(
                         width: 8,
                       ),
-                      Text(
-                        widget.resMission?["data"]?["data"]?[widget.index]
-                                ?["community"]?["name"] ??
-                            "",
-                        style: const TextStyle(
-                            color: greySecondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
-                      )
+                      if (widget.resMission?["data"]?["data"]?[widget.index]
+                              ?["community"]?["name"] !=
+                          null)
+                        Text(
+                          widget
+                                      .resMission?["data"]?["data"]
+                                          ?[widget.index]?["community"]?["name"]
+                                      ?.length >
+                                  15
+                              ? widget.resMission?["data"]["data"]
+                                          ?[widget.index]?["community"]?["name"]
+                                      .substring(0, 15) +
+                                  "..."
+                              : widget.resMission?["data"]["data"]
+                                      ?[widget.index]?["community"]?["name"] ??
+                                  "",
+                          style: const TextStyle(
+                              color: greySecondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        )
                     ],
                   ),
                 ],
@@ -153,13 +177,13 @@ class _TabContentMissionComponentState
                       {
                         "title": rewards != null && rewards.isNotEmpty
                             ? rewards?[0]?["name"]
-                            : null,
+                            : "",
                         "amount": rewards != null && rewards.isNotEmpty
                             ? rewards?[0]?["maxQty"]
-                            : null,
+                            : "",
                         "icon": rewards != null && rewards.isNotEmpty
                             ? rewards?[0]?["image"]
-                            : null,
+                            : "",
                       }
                     ]
                         .map(

@@ -1020,7 +1020,9 @@ class _MissionDetailState extends State<MissionDetail> {
                               )),
                         if (!isLoadingMissionDetail)
                           Text(
-                            name ?? "",
+                            name.length > 20
+                                ? name.substring(0, 20) + "..."
+                                : name ?? "",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
@@ -1049,13 +1051,17 @@ class _MissionDetailState extends State<MissionDetail> {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                community?["name"] ?? "-",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    color: Colors.white),
-                              ),
+                              if (community?["name"] != null)
+                                Text(
+                                  community?["name"].length > 10
+                                      ? community["name"].substring(0, 10) +
+                                          "..."
+                                      : community?["name"] ?? "",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      color: Colors.white),
+                                ),
                             ],
                           ),
                         const SizedBox(
