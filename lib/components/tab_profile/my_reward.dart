@@ -7,7 +7,6 @@
  * See LICENSE for distribution and usage details.
  */
 
-import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
@@ -54,58 +53,53 @@ class _TabContentProfileMyRewardComponentState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 12, top: 12, right: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.only(
+                  left: 12, top: 12, right: 12, bottom: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          if (widget.resMyReward?["data"]?["data"]
-                                  ?[widget.index]?["reward"]?["image"] !=
-                              null)
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: Colors.transparent,
-                              child: Image.network(widget.resMyReward?["data"]
-                                          ?["data"]?[widget.index]?["reward"]
-                                      ?["image"] ??
-                                  ""),
-                            ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            widget.resMyReward?["data"]?["data"]?[widget.index]
-                                    ?["name"] ??
-                                "",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
+                      if (widget.resMyReward?["data"]?["data"]?[widget.index]
+                              ?["image"] !=
+                          null)
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.transparent,
+                          child: Image.network(widget.resMyReward?["data"]
+                                  ?["data"]?[widget.index]?["image"] ??
+                              ""),
+                        ),
+                      const SizedBox(
+                        width: 8,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            widget.resMyReward?["data"]?["data"]?[widget.index]
-                                    ?["name"] ??
-                                "",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          GestureDetector(
-                              onTap: () {},
-                              child: Image.asset("assets/images/ic_copy.png"))
-                        ],
-                      )
+                      Text(
+                        widget.resMyReward?["data"]?["data"]?[widget.index]
+                                ?["name"] ??
+                            "",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
                     ],
                   ),
+                  Row(
+                    children: [
+                      Text(
+                        widget.resMyReward?["data"]?["data"]?[widget.index]
+                                ?["status"] ??
+                            "",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      // GestureDetector(
+                      //     onTap: () {},
+                      //     child: Image.asset("assets/images/ic_copy.png"))
+                    ],
+                  )
                 ],
               ),
             ),
@@ -116,9 +110,7 @@ class _TabContentProfileMyRewardComponentState
                 child: Row(children: [
                   Expanded(
                       child: Text(
-                    widget.resMyReward?["data"]?["data"]?[widget.index]
-                            ?["description"] ??
-                        "",
+                    "${widget.resMyReward?["data"]?["data"]?[widget.index]?["description"].length > 18 ? widget.resMyReward?["data"]?["data"]?[widget.index]?["description"].substring(0, 18) : widget.resMyReward?["data"]?["data"]?[widget.index]?["description"]}",
                     style: const TextStyle(
                         color: greySecondaryColor,
                         fontSize: 14,

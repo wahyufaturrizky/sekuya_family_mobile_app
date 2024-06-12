@@ -898,7 +898,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                         : name == "My Communities"
                                             ? 150.0
                                             : name == "My Reward"
-                                                ? 170.0
+                                                ? 130.0
                                                 : 140,
                                     delegate: SliverChildBuilderDelegate(
                                       (BuildContext context, int index) {
