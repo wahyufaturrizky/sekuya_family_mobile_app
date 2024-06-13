@@ -184,8 +184,8 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    if (reason != '')
-                      Text("Reason reject: ${reason}",
+                    if (reason != '' && ["REJECTED"].contains(widget.status))
+                      Text("Reason rejected: ${reason}",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               color: redSolidPrimaryColor,

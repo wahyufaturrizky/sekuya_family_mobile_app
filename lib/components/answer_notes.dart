@@ -172,8 +172,9 @@ class _AnswerNotesState extends State<AnswerNotes> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    if (widget.reason != '')
-                      Text("Reason reject: ${widget.reason}",
+                    if (widget.reason != '' &&
+                        ["REJECTED"].contains(widget.status))
+                      Text("Reason rejected: ${widget.reason}",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               color: redSolidPrimaryColor,
