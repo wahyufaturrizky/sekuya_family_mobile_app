@@ -94,7 +94,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
+            icon: Icon(Icons.home_filled),
             label: 'Home',
             backgroundColor: Colors.black,
           ),
@@ -109,7 +109,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.confirmation_number_outlined),
+            icon: Icon(Icons.confirmation_number),
             label: 'Voucher',
             backgroundColor: Colors.black,
           ),
@@ -122,6 +122,11 @@ class _PrivateScreenState extends State<PrivateScreen> {
         currentIndex: _selectedIndex,
         selectedItemColor: yellowPrimaryColor,
         unselectedItemColor: greySecondaryColor,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.black,
+        selectedFontSize: 10,
+        unselectedFontSize: 10,
         onTap: _onItemTapped,
       ),
     ));

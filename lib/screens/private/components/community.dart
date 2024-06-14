@@ -249,9 +249,14 @@ class _CommunityComponentState extends State<CommunityComponent> {
                                 fontWeight: FontWeight.w700),
                           ),
                         ),
+                        const SizedBox(
+                          height: 24,
+                        ),
                         const Center(
+                            child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipis',
+                            'Discover a supportive and inspiring community! Join in \nand be part of an incredible journey together.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: greySecondaryColor,
@@ -259,6 +264,9 @@ class _CommunityComponentState extends State<CommunityComponent> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+                        )),
+                        const SizedBox(
+                          height: 24,
                         ),
                         const SizedBox(
                           height: 16,
@@ -267,9 +275,10 @@ class _CommunityComponentState extends State<CommunityComponent> {
                           textField: TextField(
                               controller: searchController,
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 14,
                                 color: Colors.white,
                               ),
+                              textAlignVertical: TextAlignVertical.center,
                               decoration: kTextInputDecoration.copyWith(
                                 hintText: 'Search',
                                 prefixIcon: const Icon(Icons.search),

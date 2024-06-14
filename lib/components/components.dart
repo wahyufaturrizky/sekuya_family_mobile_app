@@ -152,7 +152,7 @@ class CustomTextField extends StatelessWidget {
       {super.key,
       required this.textField,
       this.borderRadius = 40.0,
-      this.borderWidth = 2.5});
+      this.borderWidth = 1});
   final TextField textField;
   final double borderRadius;
   final double borderWidth;

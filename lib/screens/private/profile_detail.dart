@@ -623,6 +623,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           Text(
                             'Username',
                             style: TextStyle(
+                                fontSize: 12,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -646,7 +647,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           textField: TextField(
                               controller: username,
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 12,
                                 color: Colors.white,
                               ),
                               decoration: kTextInputDecoration.copyWith(
@@ -663,6 +664,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           Text(
                             'Email Address',
                             style: TextStyle(
+                                fontSize: 12,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -687,7 +689,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                               enabled: false,
                               controller: email,
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 12,
                                 color: Colors.white,
                               ),
                               decoration: kTextInputDecoration.copyWith(
@@ -704,6 +706,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           Text(
                             'Email Recovery',
                             style: TextStyle(
+                                fontSize: 12,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -754,7 +757,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                               buttonIcon: 'ic_google.png',
                               width: MediaQuery.of(context).size.width * 0.43,
                               paddingButton: 0,
-                              labelSize: 14,
+                              labelSize: 12,
                               isLoading: isLoadingRecoveryEmailWithGoogle,
                             ),
                             // CustomButton(
@@ -781,8 +784,9 @@ class _ProfileDetailState extends State<ProfileDetail> {
                           Text(
                             'Linked Account',
                             style: TextStyle(
+                                fontSize: 16,
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500),
+                                fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
@@ -805,6 +809,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                             onPressed: () {
                                               _launchUrl(item.value);
                                             },
+                                            labelSize: 12,
                                             sizeButtonIcon: 20,
                                             buttonIcon: 'ic_${item.key}.png',
                                             width: 500,
@@ -840,7 +845,9 @@ class _ProfileDetailState extends State<ProfileDetail> {
                       }
                     },
                     sizeButtonIcon: 20,
+                    labelSize: 14,
                     width: 500,
+                    height: 44,
                     paddingButton: 0)),
           )),
     ));
