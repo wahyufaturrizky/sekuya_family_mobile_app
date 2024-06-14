@@ -284,7 +284,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
       String id = widget.args?.resCommunities?["data"]?["data"]
           ?[widget.args?.indexResCommunities]["_id"];
 
-      var res = await handleJoinCommunities(id);
+      var res = await handleJoinCommunities(id: id);
 
       if (res != null) {
         getDataCommunitiesDetail(refetch: true);

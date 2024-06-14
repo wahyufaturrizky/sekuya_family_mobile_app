@@ -243,6 +243,7 @@ class _MissionComponentState extends State<MissionComponent> {
                               ),
                               child: DropdownButton<String>(
                                 value: filterStatus,
+                                dropdownColor: Colors.black,
                                 hint: const Text(
                                   'All Status',
                                   style: TextStyle(color: Colors.white),
@@ -286,6 +287,7 @@ class _MissionComponentState extends State<MissionComponent> {
                                     width: 0.80),
                               ),
                               child: DropdownButton<String>(
+                                dropdownColor: Colors.black,
                                 value: filterReward,
                                 hint: const Text(
                                   'All Reward',

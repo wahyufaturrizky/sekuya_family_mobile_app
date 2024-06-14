@@ -15,3 +15,10 @@ Future<dynamic> handleGetDataNotification(queryParameters) {
       methodParam: "GET",
       queryParameters: queryParameters);
 }
+
+Future<dynamic> handleGetDetailNotif(id) {
+  return clientDio(
+    serviceUrlParam: "/notifications/$id",
+    methodParam: "GET",
+  );
+}

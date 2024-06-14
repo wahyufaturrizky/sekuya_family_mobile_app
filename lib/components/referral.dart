@@ -126,7 +126,9 @@ class _ReferralState extends State<Referral> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name ?? "",
+                    name.length > 12
+                        ? name.substring(0, 12) + "..."
+                        : name ?? "",
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
@@ -181,7 +183,10 @@ class _ReferralState extends State<Referral> {
                               color: redSolidPrimaryColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500)),
-                    Text(widget.description ?? "",
+                    Text(
+                        widget.description.length > 12
+                            ? widget.description.substring(0, 12) + "..."
+                            : widget.description ?? "",
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                             color: Colors.white,

@@ -40,11 +40,11 @@ Future<dynamic> handleGetDataCommunitiesCategories() {
       serviceUrlParam: "/communities/categories", methodParam: "GET");
 }
 
-Future<dynamic> handleJoinCommunities(id) {
+Future<dynamic> handleJoinCommunities({id, referral}) {
   return clientDio(
-    serviceUrlParam: '/communities/$id/join',
-    methodParam: "POST",
-  );
+      serviceUrlParam: '/communities/$id/join',
+      methodParam: "POST",
+      data: referral);
 }
 
 Future<dynamic> handleLeaveCommunities(id) {

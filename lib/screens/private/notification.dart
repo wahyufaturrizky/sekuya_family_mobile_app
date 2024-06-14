@@ -83,29 +83,39 @@ class _NotificationState extends State<Notification> {
     });
   }
 
-  Future<dynamic> handleJoinCommunity(String id) async {
+  Future<dynamic> handleGetDetailNotification(item) async {
+    var communityId = item?["data"]?["communityId"]?["id"];
+    var idNotif = item?["data"]?["_id"];
+    var referral = item?["data"]?["referral"];
+
     try {
       setState(() {
         isLoadingJoinCommunity = true;
       });
 
-      var res = await handleJoinCommunities(id);
+      var resNotif = await handleGetDetailNotif(idNotif);
 
-      if (res != null) {
-        var resCommunityById = await handleGetDataCommunitiesDetail(id);
+      if (resNotif != null) {
+        var res = await handleJoinCommunities(
+            id: communityId, referral: {referral: referral});
 
-        if (resCommunityById != null) {
-          var tempItem = {
-            "data": {"data": []}
-          };
+        if (res != null) {
+          var resCommunityById =
+              await handleGetDataCommunitiesDetail(communityId);
 
-          tempItem["data"]!["data"]?.add(resCommunityById?["data"]);
+          if (resCommunityById != null) {
+            var tempItem = {
+              "data": {"data": []}
+            };
 
-          var tempData = [];
+            tempItem["data"]!["data"]?.add(resCommunityById?["data"]);
 
-          tempData.add(res?["data"]);
+            var tempData = [];
 
-          goToDetailCommunity(tempItem, 0);
+            tempData.add(res?["data"]);
+
+            goToDetailCommunity(tempItem, 0);
+          }
         }
       }
     } catch (e) {
@@ -233,8 +243,7 @@ class _NotificationState extends State<Notification> {
                         .map((item) => GestureDetector(
                             onTap: () {
                               if (!isLoadingJoinCommunity) {
-                                handleJoinCommunity(item?["data"]
-                                    ?["typeAttributes"]?["communityId"]);
+                                handleGetDetailNotification(item);
                               }
                             },
                             child: Container(
@@ -252,8 +261,7 @@ class _NotificationState extends State<Notification> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        item["data"]?["typeAttributes"]
-                                            ?["taskCategoryKey"],
+                                        item["data"]?["taskCategoryKey"],
                                         style: const TextStyle(
                                           color: goldenColor,
                                           fontWeight: FontWeight.w400,
