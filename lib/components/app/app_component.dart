@@ -32,7 +32,7 @@ class AppComponentState extends State<AppComponent> {
   @override
   Widget build(BuildContext context) {
     final app = MaterialApp(
-      title: 'Fluro',
+      title: 'Sekuya+',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
       onGenerateRoute: Application.router.generator,

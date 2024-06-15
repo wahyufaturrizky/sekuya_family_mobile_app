@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>aps-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.authentication-services.autofill-credential-provider</key>
+	<true/>
+	<key>com.apple.developer.devicecheck.appattest-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.networking.slicing.appcategory</key>
+	<array>
+		<string>communication-9000</string>
+		<string>games-6014</string>
+	</array>
+	<key>com.apple.developer.networking.slicing.trafficcategory</key>
+	<array>
+		<string>avstreaming-7</string>
+		<string>background-3</string>
+		<string>callsignaling-5</string>
+		<string>defaultslice-1</string>
+		<string>responsiveav-8</string>
+		<string>responsivedata-6</string>
+		<string>video-2</string>
+		<string>voice-4</string>
+	</array>
+	<key>com.apple.developer.networking.wifi-info</key>
+	<true/>
+	<key>com.apple.developer.usernotifications.communication</key>
+	<true/>
+	<key>com.apple.developer.usernotifications.time-sensitive</key>
+	<true/>
+</dict>
+</plist>

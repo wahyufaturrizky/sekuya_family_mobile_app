@@ -160,13 +160,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       "id_token": googleKey.idToken,
                       "access_token": googleKey.accessToken,
                       "provider": credential.providerId,
-                      "fcm_token": valueAPNSTokeniOS,
+                      "fcm_token": valueAPNSTokeniOS ?? "-",
                     }
                   : {
                       'id_token': googleKey.idToken,
                       'access_token': googleKey.accessToken,
                       'provider': credential.providerId,
-                      "fcm_token": valTokenMessageAndroid,
+                      "fcm_token": valTokenMessageAndroid ?? "-",
                     };
 
               print("@dataAuthLogin = $dataAuthLogin");
