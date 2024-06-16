@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/tab_voucher/my_voucher.dart';
@@ -63,7 +54,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
         : MyArgumentsDataClass(true, false, false, false);
 
     Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromLeft,
+        transition: TransitionType.inFromRight,
         routeSettings: RouteSettings(arguments: arguments));
 
     setState(() {

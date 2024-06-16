@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +183,7 @@ class _NotificationState extends State<Notification> {
     final arguments = MyArgumentsDataClass(true, false, false, false);
 
     Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromLeft,
+        transition: TransitionType.inFromRight,
         routeSettings: RouteSettings(arguments: arguments));
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sekuya_family_mobile_app/constants.dart';
 
 class _SlidingGradientTransform extends GradientTransform {
   const _SlidingGradientTransform({

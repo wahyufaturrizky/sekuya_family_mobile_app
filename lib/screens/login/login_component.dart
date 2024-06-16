@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -99,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Application.router.navigateTo(
           context,
           "/privateScreens",
-          transition: TransitionType.inFromLeft,
+          transition: TransitionType.inFromRight,
         );
       }
     } catch (e) {
