@@ -359,6 +359,21 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
     var social = dataCommunitiesDetail?["social"];
     var createdAt = dataCommunitiesDetail?["createdAt"];
 
+    List<Map<String, String>> headerCards = [
+      {
+        "title": "Mission",
+        "value": totalMission.toString(),
+      },
+      {
+        "title": "Members",
+        "value": totalPlayers.toString(),
+      },
+      {
+        "title": "Created",
+        "value": handleFormatDate(createdAt.toString()),
+      },
+    ];
+
     return SafeArea(
         child: Scaffold(
             backgroundColor: Colors.black,
@@ -387,24 +402,36 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                   alignment: Alignment.bottomLeft,
                                   children: [
                                     if (coverImage != null)
-                                      Image.network(
-                                        coverImage,
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                        height: 150,
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: blackSolidPrimaryColor,
+                                                  spreadRadius: 15,
+                                                  blurRadius: 15)
+                                            ]),
+                                        child: Image.network(
+                                          coverImage,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: 150,
+                                        ),
                                       ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        IconButton(
-                                          color: Colors.white,
-                                          icon: const Icon(Icons.arrow_back),
-                                          onPressed: () {
-                                            handleBack();
-                                          },
-                                          padding: EdgeInsets.zero,
-                                          constraints: const BoxConstraints(),
+                                        Container(
+                                          color: backNavigationColor,
+                                          child: IconButton(
+                                            color: Colors.white,
+                                            icon: const Icon(Icons.arrow_back),
+                                            onPressed: () {
+                                              handleBack();
+                                            },
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                          ),
                                         ),
                                         const SizedBox(
                                           height: 56,
@@ -462,10 +489,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                               style: const TextStyle(
                                                                   color: Colors
                                                                       .white,
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  fontSize: 12),
                                                             ),
                                                         ],
                                                       ),
@@ -509,7 +533,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                   isLoading: isLoadingJoinCommunity ||
                                                       isLoadingCommunitiesDetail ||
                                                       isLoadingLeaveCommunity,
-                                                  width: 80,
+                                                  width: 60,
                                                   labelSize: 12,
                                                   height: 32,
                                                 ),
@@ -528,68 +552,58 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                   height: 15,
                                 ),
                                 Row(
-                                    children: [
-                                  {
-                                    "title": "Mission",
-                                    "value": totalMission.toString(),
-                                  },
-                                  {
-                                    "title": "Members",
-                                    "value": totalPlayers.toString(),
-                                  },
-                                  {
-                                    "title": "Created",
-                                    "value":
-                                        handleFormatDate(createdAt.toString()),
-                                  },
-                                ]
-                                        .map((item) => MyWidgetShimmerApp(
-                                            isLoading: isLoading,
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.27,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4),
-                                              padding: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                  color: blackSolidPrimaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(4)),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    item["value"].toString(),
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 11,
-                                                        fontWeight:
-                                                            FontWeight.w500),
+                                  children:
+                                      headerCards.asMap().entries.map((entry) {
+                                    int index = entry.key;
+                                    Map<String, String> item = entry.value;
+                                    return Expanded(
+                                        flex: 1,
+                                        child: MyWidgetShimmerApp(
+                                          isLoading: isLoading,
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                              left: index == 0 ? 0 : 8,
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              color: blackSolidPrimaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  item["value"]!,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 12),
+                                                ),
+                                                SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Text(
+                                                  item["title"]!,
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: greySecondaryColor,
                                                   ),
-                                                  const SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Text(
-                                                    item["title"].toString(),
-                                                    style: const TextStyle(
-                                                        color:
-                                                            greySecondaryColor,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  )
-                                                ],
-                                              ),
-                                            )))
-                                        .toList()),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ));
+                                  }).toList(),
+                                ),
                                 const SizedBox(
                                   height: 15,
                                 ),
                                 Text(
+                                  maxLines: 3,
                                   description.toString(),
                                   style: const TextStyle(
                                       color: Colors.white,
@@ -664,6 +678,15 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                       },
                                     );
                                   }).toList()),
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  height: 5,
+                                  width: double.infinity,
+                                  color: blackSolidPrimaryColor,
+                                ),
+                                SizedBox(
+                                  height: 25,
+                                )
                               ],
                             ),
                             floating: true,
@@ -672,17 +695,19 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                             backgroundColor: Colors.black,
                             forceElevated: innerBoxIsScrolled,
                             bottom: TabBar(
+                              labelStyle: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w500),
                               labelColor: yellowPrimaryColor,
                               unselectedLabelColor: greySecondaryColor,
-                              dividerColor: greySecondaryColor,
+                              dividerColor: blackPrimaryColor,
                               overlayColor: MaterialStateProperty.all<Color>(
                                   yellowPrimaryColor),
                               indicatorSize: TabBarIndicatorSize.tab,
                               indicator: const BoxDecoration(
                                   color: yellowPrimaryTransparentColor,
-                                  borderRadius: BorderRadius.horizontal(
-                                      left: Radius.circular(4),
-                                      right: Radius.circular(4))),
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(4),
+                                      bottom: Radius.circular(0))),
                               tabs: tabs
                                   .map((String name) => Tab(text: name))
                                   .toList(),

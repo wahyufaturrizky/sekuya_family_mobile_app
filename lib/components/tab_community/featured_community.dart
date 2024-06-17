@@ -92,6 +92,7 @@ class _TabContentCommunityFeaturedComponentState
               ),
               Text(
                 description ?? "",
+                maxLines: 2,
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
