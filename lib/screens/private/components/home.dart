@@ -128,7 +128,7 @@ class _HomeComponentState extends State<HomeComponent> {
                           child: resDashboard != null
                               ? Image.network(
                                   resDashboard?["data"]?["coverImage"],
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.fill,
                                   width: double.infinity,
                                 )
                               : MyWidgetShimmerApp(

@@ -154,7 +154,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      height: 220,
+                      height: 320,
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -166,14 +166,15 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                 child: Image.asset(
                                   'assets/images/bg_voucher_redeem.png',
                                   fit: BoxFit.cover,
-                                  alignment: Alignment.topCenter,
+                                  // alignment: Alignment.topCenter,
                                 ),
                               )),
                           Positioned(
                               top: 80,
-                              width: MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               child: Container(
-                                  padding: const EdgeInsets.all(16),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 24.0, horizontal: 16.0),
                                   decoration: const BoxDecoration(
                                       color: blackPrimaryColor,
                                       borderRadius: BorderRadius.all(
@@ -189,9 +190,12 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
                                       const Center(
                                         child: Text(
-                                          'Lorem ipsum dolor sit amet, consectetur adipis',
+                                          'Lorem ipsum dolor sit amet, consectetur adipis\nadipiscing elit, sed do eiusmod tempor',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: greySecondaryColor,
@@ -201,7 +205,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        height: 16,
+                                        height: 24,
                                       ),
                                       Row(
                                         children: [
@@ -213,6 +217,8 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                                     fontSize: 20,
                                                     color: Colors.white,
                                                   ),
+                                                  textAlignVertical:
+                                                      TextAlignVertical.center,
                                                   decoration:
                                                       kTextInputDecoration
                                                           .copyWith(
@@ -235,12 +241,12 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                               onPressed: () {
                                                 handleSearchByCode();
                                               },
-                                              width: 100,
-                                              labelSize: 14,
+                                              width: 60,
+                                              labelSize: 12,
                                               height: 40,
                                               paddingButton: 0)
                                         ],
-                                      )
+                                      ),
                                     ],
                                   )))
                         ],
@@ -249,9 +255,9 @@ class _VoucherComponentState extends State<VoucherComponent> {
                   ],
                 ),
                 floating: true,
-                expandedHeight: 220.0,
+                expandedHeight: 250.0,
                 toolbarHeight: 220,
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.transparent,
                 forceElevated: innerBoxIsScrolled,
               ),
             ),

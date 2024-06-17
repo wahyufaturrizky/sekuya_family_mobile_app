@@ -172,7 +172,7 @@ class _MissionComponentState extends State<MissionComponent> {
                 sliver: SliverAppBar(
                   automaticallyImplyLeading: false,
                   title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(
                         height: 24,
@@ -186,11 +186,15 @@ class _MissionComponentState extends State<MissionComponent> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
+                      const SizedBox(
+                        height: 8,
+                      ),
                       const Center(
                         child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipis',
+                          'Explore the innovative digital world \nand seize the opportunity to win exciting prizes! ',
                           textAlign: TextAlign.center,
                           style: TextStyle(
+                            height: 20 / 12,
                             color: greySecondaryColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -204,9 +208,10 @@ class _MissionComponentState extends State<MissionComponent> {
                         textField: TextField(
                             controller: searchController,
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 14,
                               color: Colors.white,
                             ),
+                            textAlignVertical: TextAlignVertical.center,
                             decoration: kTextInputDecoration.copyWith(
                               hintText: 'Search',
                               prefixIcon: const Icon(Icons.search),
@@ -221,102 +226,114 @@ class _MissionComponentState extends State<MissionComponent> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                              padding:
-                                  const EdgeInsets.only(left: 16, right: 16),
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40.0),
-                                border: Border.all(
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                  border: Border.all(
+                                      color:
+                                          const Color.fromRGBO(80, 80, 82, 1),
+                                      style: BorderStyle.solid,
+                                      width: 0.80),
+                                ),
+                                child: DropdownButton<String>(
+                                  value: filterStatus,
+                                  dropdownColor: Colors.black,
+                                  hint: const Text(
+                                    'All Status',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  icon: const Icon(Icons.expand_more),
+                                  iconEnabledColor: Colors.white,
+                                  elevation: 16,
+                                  style: const TextStyle(
                                     color: Colors.white,
-                                    style: BorderStyle.solid,
-                                    width: 0.80),
-                              ),
-                              child: DropdownButton<String>(
-                                value: filterStatus,
-                                dropdownColor: Colors.black,
-                                hint: const Text(
-                                  'All Status',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                icon: const Icon(Icons.expand_more),
-                                iconEnabledColor: Colors.white,
-                                elevation: 16,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                                underline: Container(height: 0),
-                                isExpanded: true,
-                                onChanged: (String? value) {
-                                  // This is called when the user selects an item.
-                                  setState(() {
-                                    filterStatus = value!;
-                                  });
+                                  ),
+                                  underline: Container(height: 0),
+                                  isExpanded: true,
+                                  onChanged: (String? value) {
+                                    // This is called when the user selects an item.
+                                    setState(() {
+                                      filterStatus = value!;
+                                    });
 
-                                  getDataMission(
-                                      filter_by_value: value, refetch: true);
-                                },
-                                items: list.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                    ),
-                                  );
-                                }).toList(),
-                              )),
-                          Container(
-                              padding:
-                                  const EdgeInsets.only(left: 16, right: 16),
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40.0),
-                                border: Border.all(
+                                    getDataMission(
+                                        filter_by_value: value, refetch: true);
+                                  },
+                                  items: list.map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                      ),
+                                    );
+                                  }).toList(),
+                                )),
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                height: 36,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                  border: Border.all(
+                                      color:
+                                          const Color.fromRGBO(80, 80, 82, 1),
+                                      style: BorderStyle.solid,
+                                      width: 0.80),
+                                ),
+                                child: DropdownButton<String>(
+                                  dropdownColor: Colors.black,
+                                  value: filterReward,
+                                  hint: const Text(
+                                    'All Reward',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  icon: const Icon(Icons.expand_more),
+                                  iconEnabledColor: Colors.white,
+                                  elevation: 16,
+                                  style: const TextStyle(
                                     color: Colors.white,
-                                    style: BorderStyle.solid,
-                                    width: 0.80),
-                              ),
-                              child: DropdownButton<String>(
-                                dropdownColor: Colors.black,
-                                value: filterReward,
-                                hint: const Text(
-                                  'All Reward',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                icon: const Icon(Icons.expand_more),
-                                iconEnabledColor: Colors.white,
-                                elevation: 16,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                                underline: Container(height: 0),
-                                isExpanded: true,
-                                onChanged: (String? value) {
-                                  // This is called when the user selects an item.
-                                  setState(() {
-                                    filterReward = value!;
-                                  });
-                                  getDataMission(
-                                      filter_by_value: value, refetch: true);
-                                },
-                                items: list.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                    ),
-                                  );
-                                }).toList(),
-                              )),
+                                  ),
+                                  underline: Container(height: 0),
+                                  isExpanded: true,
+                                  onChanged: (String? value) {
+                                    // This is called when the user selects an item.
+                                    setState(() {
+                                      filterReward = value!;
+                                    });
+                                    getDataMission(
+                                        filter_by_value: value, refetch: true);
+                                  },
+                                  items: list.map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                      ),
+                                    );
+                                  }).toList(),
+                                )),
+                          )
                         ],
                       )
                     ],
                   ),
                   floating: true,
-                  expandedHeight: 220.0,
-                  toolbarHeight: 220,
+                  expandedHeight: 240.0,
+                  toolbarHeight: 250,
                   backgroundColor: Colors.black,
                   forceElevated: innerBoxIsScrolled,
                 ),
