@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';

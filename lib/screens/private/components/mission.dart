@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'dart:async';
 
 import 'package:dio/dio.dart';
@@ -243,6 +234,7 @@ class _MissionComponentState extends State<MissionComponent> {
                               ),
                               child: DropdownButton<String>(
                                 value: filterStatus,
+                                dropdownColor: Colors.black,
                                 hint: const Text(
                                   'All Status',
                                   style: TextStyle(color: Colors.white),
@@ -286,6 +278,7 @@ class _MissionComponentState extends State<MissionComponent> {
                                     width: 0.80),
                               ),
                               child: DropdownButton<String>(
+                                dropdownColor: Colors.black,
                                 value: filterReward,
                                 hint: const Text(
                                   'All Reward',

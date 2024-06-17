@@ -3,85 +3,105 @@ import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 import 'package:sekuya_family_mobile_app/util/status.dart';
 
-class ReferralApp extends StatelessWidget {
-  const ReferralApp({
+class ButtonClickApp extends StatelessWidget {
+  ButtonClickApp({
     super.key,
     this.image,
     this.name,
     this.exp,
     this.description,
+    this.additionalAttribute,
+    this.retrieveLostData,
+    this.previewImages,
     this.isLoadingSubmitTaskMission,
     this.onPressedSubmitTaskMission,
     this.additionalAttributeAnswerNotes,
     this.onExpansionChanged,
+    this.selectedChoice,
+    this.onChangedQuizChoice,
     this.status,
     this.reason,
-    this.submittedAdditionalAttribute,
   });
 
   final dynamic image;
   final dynamic name;
   final dynamic exp;
   final dynamic description;
+  final dynamic additionalAttribute;
+  final dynamic retrieveLostData;
+  final dynamic previewImages;
   final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
-  final dynamic status;
-  final dynamic reason;
-  final dynamic submittedAdditionalAttribute;
+  dynamic selectedChoice;
+  dynamic onChangedQuizChoice;
+  dynamic status;
+  dynamic reason;
 
   @override
   Widget build(BuildContext context) {
-    return Referral(
+    return ButtonClick(
       image: image,
       name: name,
       exp: exp,
       description: description,
+      retrieveLostData: retrieveLostData,
+      previewImages: previewImages,
       isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
       onPressedSubmitTaskMission: onPressedSubmitTaskMission,
       additionalAttributeAnswerNotes: additionalAttributeAnswerNotes,
       onExpansionChanged: onExpansionChanged,
+      additionalAttribute: additionalAttribute,
+      selectedChoice: selectedChoice,
+      onChangedQuizChoice: onChangedQuizChoice,
       status: status,
       reason: reason,
-      submittedAdditionalAttribute: submittedAdditionalAttribute,
     );
   }
 }
 
-class Referral extends StatefulWidget {
-  const Referral({
+class ButtonClick extends StatefulWidget {
+  ButtonClick({
     super.key,
     this.image,
     this.name,
     this.exp,
     this.description,
+    this.retrieveLostData,
+    this.previewImages,
     this.isLoadingSubmitTaskMission,
     this.onPressedSubmitTaskMission,
     this.additionalAttributeAnswerNotes,
     this.onExpansionChanged,
+    this.additionalAttribute,
+    this.selectedChoice,
+    this.onChangedQuizChoice,
     this.status,
     this.reason,
-    this.submittedAdditionalAttribute,
   });
 
   final dynamic image;
   final dynamic name;
   final dynamic exp;
   final dynamic description;
+  final dynamic retrieveLostData;
+  final dynamic previewImages;
   final bool? isLoadingSubmitTaskMission;
   final dynamic onPressedSubmitTaskMission;
   final dynamic additionalAttributeAnswerNotes;
   final dynamic onExpansionChanged;
-  final dynamic status;
-  final dynamic reason;
-  final dynamic submittedAdditionalAttribute;
+  final dynamic additionalAttribute;
+  dynamic onChangedQuizChoice;
+  dynamic selectedChoice;
+  dynamic status;
+  dynamic reason;
 
   @override
-  State<Referral> createState() => _ReferralState();
+  State<ButtonClick> createState() => _ButtonClickState();
 }
 
-class _ReferralState extends State<Referral> {
+class _ButtonClickState extends State<ButtonClick> {
   @override
   Widget build(BuildContext context) {
     double contextWidth = MediaQuery.of(context).size.width * 0.8;
@@ -117,9 +137,7 @@ class _ReferralState extends State<Referral> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name.length > 12
-                        ? name.substring(0, 12) + "..."
-                        : name ?? "",
+                    name ?? "",
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
@@ -174,10 +192,7 @@ class _ReferralState extends State<Referral> {
                               color: redSolidPrimaryColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500)),
-                    Text(
-                        widget.description.length > 12
-                            ? widget.description.substring(0, 12) + "..."
-                            : widget.description ?? "",
+                    Text(widget.description ?? "",
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                             color: Colors.white,
@@ -187,27 +202,6 @@ class _ReferralState extends State<Referral> {
                 ),
               ),
             ],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          CustomTextField(
-            borderRadius: 4,
-            borderWidth: 1,
-            textField: TextField(
-                readOnly:
-                    !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
-                controller: widget.additionalAttributeAnswerNotes,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                ),
-                decoration: kTextInputDecoration.copyWith(
-                  hintText: ["NOT_SUBMITTED", "REJECTED"].contains(status)
-                      ? 'Your answer'
-                      : widget.submittedAdditionalAttribute,
-                  hintStyle: const TextStyle(color: greySecondaryColor),
-                )),
           ),
           const SizedBox(
             height: 16,

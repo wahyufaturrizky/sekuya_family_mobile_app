@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +23,7 @@ class AppComponentState extends State<AppComponent> {
   @override
   Widget build(BuildContext context) {
     final app = MaterialApp(
-      title: 'Fluro',
+      title: 'Sekuya+',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Montserrat'),
       onGenerateRoute: Application.router.generator,

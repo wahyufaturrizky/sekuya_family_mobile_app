@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -20,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sekuya_family_mobile_app/api_key.dart';
 import 'package:sekuya_family_mobile_app/components/answer_notes.dart';
+import 'package:sekuya_family_mobile_app/components/button_click.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/components/placeholder_image_task.dart';
 import 'package:sekuya_family_mobile_app/components/proof_with_photo.dart';
@@ -34,6 +26,7 @@ import 'package:sekuya_family_mobile_app/screens/private/lucky_winner_bottom_she
 import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 import 'package:sekuya_family_mobile_app/service/mission/mission.dart';
 import 'package:sekuya_family_mobile_app/util/format_date.dart';
+import 'package:sekuya_family_mobile_app/util/launch_url.dart';
 
 final dio = Dio();
 
@@ -430,7 +423,7 @@ class _MissionDetailState extends State<MissionDetail> {
     final arguments = MyArgumentsDataClass(false, false, false, true);
 
     Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromLeft,
+        transition: TransitionType.inFromRight,
         routeSettings: RouteSettings(arguments: arguments));
   }
 
@@ -683,6 +676,12 @@ class _MissionDetailState extends State<MissionDetail> {
             'taskId': taskId,
             'taskCategoryKey': taskCategoryKey,
             'additionalAttribute': additionalAttributeAnswerNotes.text,
+          });
+          break;
+        case "BUTTON_CLICK":
+          formData = FormData.fromMap({
+            'taskId': taskId,
+            'taskCategoryKey': taskCategoryKey,
           });
           break;
         default:
@@ -1638,6 +1637,60 @@ class _MissionDetailState extends State<MissionDetail> {
                                                 "NOT_SUBMITTED",
                                                 "REJECTED"
                                               ].contains(itemTask["status"]))) {
+                                            handlePostTaskSubmission(
+                                              taskId: itemTask["id"],
+                                              taskCategoryKey:
+                                                  itemTask["taskCategoryKey"],
+                                            );
+                                          }
+                                        }),
+                                  if (itemTask["taskCategoryKey"] ==
+                                      "BUTTON_CLICK")
+                                    ButtonClickApp(
+                                        image: itemTask["image"],
+                                        name: itemTask["name"],
+                                        reason: itemTask["reason"],
+                                        status: itemTask["status"],
+                                        selectedChoice: selectedChoice,
+                                        onChangedQuizChoice: (value) {
+                                          setState(() {
+                                            selectedChoice = value;
+                                          });
+                                        },
+                                        description: itemTask["description"],
+                                        additionalAttribute:
+                                            itemTask["additionalAttribute"],
+                                        exp: itemTask["exp"],
+                                        onExpansionChanged: () {
+                                          setState(() {
+                                            selectedChoice = null;
+                                            _mediaFileList = null;
+                                            lat = null;
+                                            long = null;
+                                            additionalAttributeAnswerNotes
+                                                .text = "";
+                                            additionalAttributeAnswerMultipleChoice
+                                                .text = "";
+                                          });
+                                        },
+                                        retrieveLostData: () async {
+                                          await retrieveLostData();
+                                        },
+                                        previewImages: _previewImages(),
+                                        isLoadingSubmitTaskMission:
+                                            isLoadingSubmitTaskMission,
+                                        onPressedSubmitTaskMission: () {
+                                          if (!isLoadingSubmitTaskMission &&
+                                              ([
+                                                "NOT_SUBMITTED",
+                                                "REJECTED"
+                                              ].contains(itemTask["status"]))) {
+                                            handleLaunchUrl(
+                                                context: context,
+                                                val: itemTask?[
+                                                        "additionalAttribute"]
+                                                    ?["link"]);
+
                                             handlePostTaskSubmission(
                                               taskId: itemTask["id"],
                                               taskCategoryKey:

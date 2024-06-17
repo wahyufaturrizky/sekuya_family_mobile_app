@@ -1,14 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
@@ -99,7 +90,7 @@ class _HomeComponentState extends State<HomeComponent> {
     final arguments = MyArgumentsDataClass(false, false, false, true);
 
     Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromLeft,
+        transition: TransitionType.inFromRight,
         routeSettings: RouteSettings(arguments: arguments));
   }
 
@@ -107,7 +98,7 @@ class _HomeComponentState extends State<HomeComponent> {
     final arguments = MyArgumentsDataClass(false, true, false, false);
 
     Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromLeft,
+        transition: TransitionType.inFromRight,
         routeSettings: RouteSettings(arguments: arguments));
   }
 

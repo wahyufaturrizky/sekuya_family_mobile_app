@@ -1,12 +1,3 @@
-/*
- * Sekuya Family Mobile App
- * Created by Wahyu Fatur Rizki
- * https://www.linkedin.com/in/wahyu-fatur-rizky/
- * 
- * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
- * See LICENSE for distribution and usage details.
- */
-
 import 'package:flutter/material.dart';
 
 const Color kBackgroundColor = Color(0xFFD4DEF7);
@@ -44,9 +35,9 @@ const InputDecoration kTextInputDecoration = InputDecoration(
 
 const shimmerGradient = LinearGradient(
   colors: [
-    Color(0xFFEBEBF4),
-    Color(0xFFF4F4F4),
-    Color(0xFFEBEBF4),
+    Color.fromRGBO(32, 32, 32, 1),
+    Color.fromRGBO(68, 68, 68, 1),
+    Color.fromRGBO(32, 32, 32, 1),
   ],
   stops: [
     0.1,
