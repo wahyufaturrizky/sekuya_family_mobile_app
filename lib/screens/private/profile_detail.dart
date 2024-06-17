@@ -134,21 +134,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
   }
 
   Future handleLogout() async {
-    googleSignIn.disconnect().then((value) {
-      FirebaseAuth.instance.signOut().then((value) {
-        SharedPreferences.getInstance().then((prefs) {
-          prefs.remove('access_token').then((value) {
-            Application.router
-                .navigateTo(context, "/", transition: TransitionType.native);
+    FirebaseAuth.instance.signOut().then((value) {
+      SharedPreferences.getInstance().then((prefs) {
+        prefs.remove('access_token').then((value) {
+          Application.router
+              .navigateTo(context, "/", transition: TransitionType.native);
 
-            setState(() {
-              isLoadingRecoveryEmailWithGoogle = false;
-            });
-          }).catchError((onError) {
-            print('Error SharedPreferences signOut = $onError');
-            setState(() {
-              isLoadingRecoveryEmailWithGoogle = false;
-            });
+          setState(() {
+            isLoadingRecoveryEmailWithGoogle = false;
           });
         }).catchError((onError) {
           print('Error SharedPreferences signOut = $onError');
@@ -156,14 +149,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
             isLoadingRecoveryEmailWithGoogle = false;
           });
         });
-      }).catchError((err) {
-        print('Error FirebaseAuth signOut = $err');
+      }).catchError((onError) {
+        print('Error SharedPreferences signOut = $onError');
         setState(() {
           isLoadingRecoveryEmailWithGoogle = false;
         });
       });
-    }).catchError((onError) {
-      print("On Error disconnect = $onError");
+    }).catchError((err) {
+      print('Error FirebaseAuth signOut = $err');
       setState(() {
         isLoadingRecoveryEmailWithGoogle = false;
       });
