@@ -20,14 +20,9 @@ const List<String> scopes = <String>[
   'https://www.googleapis.com/auth/contacts.readonly',
 ];
 
-GoogleSignIn googleSignIn = kIsWeb
-    ? GoogleSignIn(
-        scopes: scopes,
-        clientId:
-            "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com")
-    : GoogleSignIn(
-        scopes: scopes,
-      );
+GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: scopes,
+);
 // #enddocregion Initialize
 
 class LoginScreenApp extends StatelessWidget {
@@ -98,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<dynamic> signInWithApple() async {
+  signInWithApple() async {
     try {
       final appleProvider = AppleAuthProvider();
       await FirebaseAuth.instance.signInWithProvider(appleProvider);
