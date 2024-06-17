@@ -165,7 +165,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                               child: Container(
                                 child: Image.asset(
                                   'assets/images/bg_voucher_redeem.png',
-                                  // fit: BoxFit.cover,
+                                  fit: BoxFit.cover,
                                   // alignment: Alignment.topCenter,
                                 ),
                               )),
@@ -257,7 +257,7 @@ class _VoucherComponentState extends State<VoucherComponent> {
                 floating: true,
                 expandedHeight: 250.0,
                 toolbarHeight: 220,
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.transparent,
                 forceElevated: innerBoxIsScrolled,
               ),
             ),

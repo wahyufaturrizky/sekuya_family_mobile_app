@@ -546,13 +546,15 @@ class _ProfileDetailState extends State<ProfileDetail> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/bg_profile.png',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 170,
-                    alignment: Alignment.topCenter,
-                  ),
+                  Opacity(
+                      opacity: 0.7,
+                      child: Image.asset(
+                        'assets/images/bg_profile.png',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 170,
+                        alignment: Alignment.topCenter,
+                      )),
                   Column(
                     children: [
                       GestureDetector(
@@ -675,6 +677,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                             )),
                       if (!isLoadingGetProfile)
                         CustomTextField(
+                          isDisabled: true,
                           borderRadius: 4,
                           textField: TextField(
                               enabled: false,

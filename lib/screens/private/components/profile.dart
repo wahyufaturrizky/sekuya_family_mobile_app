@@ -620,8 +620,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                                       leading: Icon(
                                                         item == "Logout"
                                                             ? Icons
-                                                                .login_outlined
-                                                            : Icons.edit,
+                                                                .logout_outlined
+                                                            : Icons
+                                                                .edit_outlined,
                                                         color: item == "Logout"
                                                             ? redSolidPrimaryColor
                                                             : Colors.white,
@@ -631,6 +632,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
                                                             ? 'Logout'
                                                             : 'Edit Profile',
                                                         style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
                                                             color: item ==
                                                                     "Logout"
                                                                 ? redSolidPrimaryColor

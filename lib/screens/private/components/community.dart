@@ -226,7 +226,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                   sliver: SliverAppBar(
                     automaticallyImplyLeading: false,
                     title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
                           height: 24,
@@ -237,30 +237,25 @@ class _CommunityComponentState extends State<CommunityComponent> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
-                                fontWeight: FontWeight.w700),
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                         const SizedBox(
-                          height: 24,
+                          height: 8,
                         ),
                         const Center(
-                            child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          child: Text(
-                            'Discover a supportive and inspiring community! Join in \nand be part of an incredible journey together.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: greySecondaryColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            child: Text(
+                          'Discover a supportive and inspiring community! Join in \nand be part of an incredible journey together.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: greySecondaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            height: 20 / 12,
                           ),
                         )),
                         const SizedBox(
                           height: 24,
-                        ),
-                        const SizedBox(
-                          height: 16,
                         ),
                         CustomTextField(
                           textField: TextField(
@@ -279,7 +274,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                               )),
                         ),
                         const SizedBox(
-                          height: 16,
+                          height: 24,
                         ),
                         SizedBox(
                             height: 260,
@@ -385,7 +380,8 @@ class _CommunityComponentState extends State<CommunityComponent> {
                 return Column(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                       child: Row(
                         children: [
                           Text(

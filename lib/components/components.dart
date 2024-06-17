@@ -146,8 +146,11 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField(
       {super.key,
       required this.textField,
+      this.isDisabled = false,
       this.borderRadius = 40.0,
       this.borderWidth = 1});
+
+  final bool isDisabled;
   final TextField textField;
   final double borderRadius;
   final double borderWidth;
@@ -159,6 +162,9 @@ class CustomTextField extends StatelessWidget {
         horizontal: 20,
       ),
       decoration: BoxDecoration(
+        color: isDisabled
+            ? const Color.fromRGBO(36, 36, 39, 1)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
           width: borderWidth,
