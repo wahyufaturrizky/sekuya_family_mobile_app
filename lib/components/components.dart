@@ -8,7 +8,7 @@ class CustomButton extends StatelessWidget {
     this.isOutlined = false,
     required this.onPressed,
     this.width = 280,
-    this.height = 60,
+    this.height = 56, //44 + 12
     this.border = 2.5,
     this.buttonIcon = "",
     this.isOutlinedBackgroundColor = greyColor,
@@ -83,7 +83,11 @@ class CustomButton extends StatelessWidget {
                   CircleAvatar(
                     radius: sizeButtonIcon,
                     backgroundColor: Colors.transparent,
-                    child: Image.asset('assets/images/$buttonIcon'),
+                    child: SizedBox(
+                      width:
+                          sizeButtonIcon, // Set the desired width for the logo
+                      child: Image.asset('assets/images/$buttonIcon'),
+                    ),
                   ),
                 Text(
                   buttonText,
@@ -110,13 +114,13 @@ class TopScreenImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.contain,
-            image: AssetImage('assets/images/$screenImageName'),
-          ),
+    return Container(
+      width: double.infinity,
+      height: 511,
+      decoration: BoxDecoration(
+        // color: Colors.amberAccent,
+        image: DecorationImage(
+          image: AssetImage('assets/images/$screenImageName'),
         ),
       ),
     );

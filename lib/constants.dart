@@ -24,6 +24,7 @@ const Color goldenColor = Color.fromRGBO(179, 137, 45, 1);
 const Color goldenSoftColor = Color.fromRGBO(252, 193, 63, 0.1);
 const Color greenColor = Color.fromRGBO(3, 166, 29, 1);
 const Color greySmoothColor = Color.fromRGBO(33, 33, 35, 1);
+const Color greyLightColor = Color.fromRGBO(222, 222, 222, 1);
 const String baseUrl = 'https://api.sekuyafamily.xellar.co/api/v1';
 const String baseUrlXellarLabs = 'https://api.sekuyalabs.xellar.co/api/v1';
 const String baseUrlMapGoogleApi = 'https://maps.googleapis.com/maps/api';

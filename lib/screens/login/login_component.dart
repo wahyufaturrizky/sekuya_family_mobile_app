@@ -407,36 +407,37 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const TopScreenImage(screenImageName: 'login_intro.png'),
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(right: 15.0, left: 15, bottom: 15),
-                  child: Column(
+          right: false,
+          left: false,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TopScreenImage(screenImageName: 'login_intro.png'),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Column(
                         children: [
                           ScreenTitle(title: 'Sign In Your Account'),
                           SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
                           Text(
                             'Please select your Gmail or Apple ID account to explore and collect your dream NFT.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.white,
+                              height: 2.0,
+                              color: greyLightColor,
                               fontSize: 12,
                             ),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 16),
                       Column(
                         children: [
                           Hero(
@@ -453,41 +454,41 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 buttonIcon: "ic_google.png",
                                 isOutlined: true,
-                                sizeButtonIcon: 20,
+                                labelSize: 12,
+                                sizeButtonIcon: 15,
                                 width: 500,
                                 paddingButton: 0),
                           ),
-                          // const SizedBox(
-                          //   height: 24,
-                          // ),
-                          // Hero(
-                          //   tag: 'signup_btn',
-                          //   child: CustomButton(
-                          //       isOutlinedBackgroundColor: blackPrimaryColor,
-                          //       isLoading: isLoadingSignInWithApple,
-                          //       buttonText: 'Continue with Apple ID',
-                          //       isOutlined: true,
-                          //       onPressed: () {
-                          //         if (!(isLoadingSignInWithApple ||
-                          //             isLoadingSignInWithGoogle)) {
-                          //           // signInWithApple();
-                          //         }
-                          //       },
-                          //       buttonIcon: "ic_apple.png",
-                          //       sizeButtonIcon: 20,
-                          //       width: 500,
-                          //       paddingButton: 0),
-                          // ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Hero(
+                            tag: 'signup_btn',
+                            child: CustomButton(
+                              isOutlinedBackgroundColor: blackPrimaryColor,
+                              isLoading: isLoadingSignInWithApple,
+                              buttonText: 'Continue with Apple ID',
+                              isOutlined: true,
+                              onPressed: () {
+                                if (!(isLoadingSignInWithApple ||
+                                    isLoadingSignInWithGoogle)) {
+                                  // signInWithApple();
+                                }
+                              },
+                              buttonIcon: "ic_apple.png",
+                              sizeButtonIcon: 15,
+                              labelSize: 12,
+                              width: double.infinity,
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+                ],
+              ),
+            ),
+          )),
     );
   }
 }
