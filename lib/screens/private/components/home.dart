@@ -310,7 +310,7 @@ class _HomeComponentState extends State<HomeComponent> {
                                                                       "maxQty"]
                                                                   .toString()
                                                                   .substring(
-                                                                      0, 3),
+                                                                      0, 1),
                                                           "image": rewards
                                                                   .isEmpty
                                                               ? null

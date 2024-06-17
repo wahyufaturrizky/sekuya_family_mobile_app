@@ -408,7 +408,7 @@ class _CommunityComponentState extends State<CommunityComponent> {
                           SliverPadding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             sliver: SliverFixedExtentList(
-                              itemExtent: 150.0,
+                              itemExtent: 160.0,
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
                                   return MyWidgetShimmerApp(

@@ -93,8 +93,10 @@ class _TabContentCommunityMissionsComponentState
                             ),
                             color: MaterialStateProperty.all<Color>(
                                 blueSecondaryColor),
-                            labelStyle:
-                                const TextStyle(color: blueSolidSecondaryColor),
+                            labelStyle: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                color: blueSolidSecondaryColor),
                             shape: const StadiumBorder(
                                 side: BorderSide(color: Colors.transparent)))
                     ],
