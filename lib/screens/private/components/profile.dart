@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sekuya_family_mobile_app/components/empty_list.dart';
@@ -476,27 +475,23 @@ class _ProfileComponentState extends State<ProfileComponent> {
   }
 
   handleLogout() async {
-    googleSignIn.disconnect().then((valDisconnect) {
-      FirebaseAuth.instance.signOut().then((value) {
-        SharedPreferences.getInstance().then((prefs) {
-          prefs
-              .remove('access_token')
-              .then((value) => {
-                    Application.router.navigateTo(context, "/",
-                        transition: TransitionType.native)
-                  })
-              .catchError((onError) => {
-                    print(
-                        'Error SharedPreferences remove access_token = $onError')
-                  });
-        }).catchError((onError) {
-          print('Error SharedPreferences signOut = $onError');
-        });
-      }).catchError((err) {
-        print('Error FirebaseAuth signOut = $err');
+    FirebaseAuth.instance.signOut().then((value) {
+      SharedPreferences.getInstance().then((prefs) {
+        prefs
+            .remove('access_token')
+            .then((value) => {
+                  Application.router.navigateTo(context, "/",
+                      transition: TransitionType.native)
+                })
+            .catchError((onError) => {
+                  print(
+                      'Error SharedPreferences remove access_token = $onError')
+                });
+      }).catchError((onError) {
+        print('Error SharedPreferences signOut = $onError');
       });
-    }).catchError((onError) {
-      print("Errpr googleSignIn disconnect = $onError");
+    }).catchError((err) {
+      print('Error FirebaseAuth signOut = $err');
     });
   }
 
