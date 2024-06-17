@@ -79,6 +79,8 @@ class _PrivateScreenState extends State<PrivateScreen> {
     ];
 
     return SafeArea(
+        right: false,
+        left: false,
         bottom: false,
         child: Scaffold(
             backgroundColor: mainBlackColor,
