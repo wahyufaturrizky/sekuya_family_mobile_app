@@ -192,7 +192,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
       isLoadingRecoveryEmailWithGoogle = true;
     });
 
-    googleSignIn.disconnect().then((value) {
+    googleSignIn.disconnect().then((valueDisconnect) {
       googleSignIn.signIn().then((result) {
         FirebaseAuth.instance
             .fetchSignInMethodsForEmail(result!.email)
@@ -348,7 +348,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
         });
       });
     }).catchError((onError) {
-      print("Error googleSignIn disconnect = $onError");
+      print("OnError disconnect = $onError");
     });
   }
 

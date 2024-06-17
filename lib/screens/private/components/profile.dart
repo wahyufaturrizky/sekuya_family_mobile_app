@@ -20,14 +20,9 @@ const List<String> scopes = <String>[
   'https://www.googleapis.com/auth/contacts.readonly',
 ];
 
-GoogleSignIn googleSignIn = kIsWeb
-    ? GoogleSignIn(
-        scopes: scopes,
-        clientId:
-            "433294916757-ebvrl9qvhgvn3vqo3j2k9elirj7t1k7r.apps.googleusercontent.com")
-    : GoogleSignIn(
-        scopes: scopes,
-      );
+GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: scopes,
+);
 
 class ProfileComponentApp extends StatelessWidget {
   const ProfileComponentApp({super.key});
@@ -480,8 +475,8 @@ class _ProfileComponentState extends State<ProfileComponent> {
     }
   }
 
-  Future handleLogout() async {
-    googleSignIn.disconnect().then((value) {
+  handleLogout() async {
+    googleSignIn.disconnect().then((valDisconnect) {
       FirebaseAuth.instance.signOut().then((value) {
         SharedPreferences.getInstance().then((prefs) {
           prefs
@@ -501,7 +496,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
         print('Error FirebaseAuth signOut = $err');
       });
     }).catchError((onError) {
-      print('Error GoogleSignIn disconnect = $onError');
+      print("Errpr googleSignIn disconnect = $onError");
     });
   }
 
