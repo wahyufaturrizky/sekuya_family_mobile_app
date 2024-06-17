@@ -79,47 +79,60 @@ class _PrivateScreenState extends State<PrivateScreen> {
     ];
 
     return SafeArea(
+        bottom: false,
         child: Scaffold(
-      backgroundColor: Colors.black,
-      body: widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
-            backgroundColor: Colors.black,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.ballot_outlined),
-            label: 'Mission',
-            backgroundColor: Colors.black,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.diversity_2_outlined),
-            label: 'Community',
-            backgroundColor: Colors.black,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.confirmation_number),
-            label: 'Voucher',
-            backgroundColor: Colors.black,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined),
-            label: 'Profile',
-            backgroundColor: Colors.black,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: yellowPrimaryColor,
-        unselectedItemColor: greySecondaryColor,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.black,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
-        onTap: _onItemTapped,
-      ),
-    ));
+            backgroundColor: mainBlackColor,
+            body: widgetOptions.elementAt(_selectedIndex),
+            bottomNavigationBar: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: blackPrimaryColor,
+                    width: 1, // Define your border width here
+                  ),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: BottomNavigationBar(
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home_filled),
+                      label: 'Home',
+                      backgroundColor: Colors.black,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.ballot_outlined),
+                      label: 'Mission',
+                      backgroundColor: Colors.black,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.diversity_2_outlined),
+                      label: 'Community',
+                      backgroundColor: Colors.black,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.confirmation_number),
+                      label: 'Voucher',
+                      backgroundColor: Colors.black,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.account_circle_outlined),
+                      label: 'Profile',
+                      backgroundColor: Colors.black,
+                    ),
+                  ],
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: yellowPrimaryColor,
+                  unselectedItemColor: greySecondaryColor,
+                  showUnselectedLabels: true,
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: mainBlackColor,
+                  selectedFontSize: 10,
+                  unselectedFontSize: 10,
+                  onTap: _onItemTapped,
+                ),
+              ),
+            )));
   }
 }

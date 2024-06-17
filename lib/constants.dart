@@ -4,6 +4,7 @@ const Color kBackgroundColor = Color(0xFFD4DEF7);
 const Color kTextColor = Color(0xFF4879C5);
 const Color greyColor = Color.fromRGBO(80, 80, 82, 1);
 const Color greyDarkColor = Color.fromRGBO(80, 80, 82, 0.3);
+const Color mainBlackColor = Color.fromRGBO(15, 15, 16, 1);
 const Color blackPrimaryColor = Color.fromRGBO(36, 36, 39, 1);
 const Color greySecondaryColor = Color.fromRGBO(135, 135, 135, 1);
 const Color greyThirdColor = Color.fromRGBO(158, 158, 158, 1);

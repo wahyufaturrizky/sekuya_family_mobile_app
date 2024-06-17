@@ -55,7 +55,7 @@ class _TabContentMissionComponentState
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 16.0),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
@@ -90,8 +90,10 @@ class _TabContentMissionComponentState
                           ),
                           color: MaterialStateProperty.all<Color>(
                               blueSecondaryColor),
-                          labelStyle:
-                              const TextStyle(color: blueSolidSecondaryColor),
+                          labelStyle: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                              color: blueSolidSecondaryColor),
                           shape: const StadiumBorder(
                               side: BorderSide(color: Colors.transparent)))
                     ],
@@ -114,7 +116,7 @@ class _TabContentMissionComponentState
                               : community?["name"] ?? "",
                           style: const TextStyle(
                               color: greySecondaryColor,
-                              fontSize: 14,
+                              fontSize: 10,
                               fontWeight: FontWeight.w600),
                         )
                     ],
