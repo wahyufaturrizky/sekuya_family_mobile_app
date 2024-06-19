@@ -835,6 +835,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                       physics: isLoadingTab
                           ? const NeverScrollableScrollPhysics()
                           : null,
+                      tabAlignment: TabAlignment.start,
                     ),
                   ),
                 ),
