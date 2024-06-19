@@ -498,8 +498,8 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                 ],
                                               ),
                                             Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 12),
+                                              padding: const EdgeInsets.only(
+                                                  right: 12),
                                               child: MyWidgetShimmerApp(
                                                 isLoading: isLoading,
                                                 child: CustomButton(
@@ -583,7 +583,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                                           FontWeight.w500,
                                                       fontSize: 12),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 8,
                                                 ),
                                                 Text(
@@ -679,12 +679,12 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                     );
                                   }).toList()),
                                 Container(
-                                  margin: EdgeInsets.only(top: 10),
+                                  margin: const EdgeInsets.only(top: 10),
                                   height: 5,
                                   width: double.infinity,
                                   color: blackSolidPrimaryColor,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 25,
                                 )
                               ],
@@ -695,7 +695,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                             backgroundColor: Colors.black,
                             forceElevated: innerBoxIsScrolled,
                             bottom: TabBar(
-                              labelStyle: TextStyle(
+                              labelStyle: const TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.w500),
                               labelColor: yellowPrimaryColor,
                               unselectedLabelColor: greySecondaryColor,
@@ -709,7 +709,13 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                       top: Radius.circular(4),
                                       bottom: Radius.circular(0))),
                               tabs: tabs
-                                  .map((String name) => Tab(text: name))
+                                  .map((String name) => Tab(
+                                          child: Text(
+                                        name,
+                                        style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      )))
                                   .toList(),
                             ),
                           ),

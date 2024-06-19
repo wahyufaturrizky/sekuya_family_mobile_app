@@ -97,14 +97,15 @@ class _TabContentProfileMyRewardComponentState
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(children: [
-                  Expanded(
-                      child: Text(
-                    "${description.length > 18 ? description.substring(0, 18) : description}",
-                    style: const TextStyle(
-                        color: greySecondaryColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600),
-                  ))
+                  if (description != null)
+                    Expanded(
+                        child: Text(
+                      "${description?.length > 18 ? description?.substring(0, 18) : description}",
+                      style: const TextStyle(
+                          color: greySecondaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ))
                 ]),
               ),
             ),

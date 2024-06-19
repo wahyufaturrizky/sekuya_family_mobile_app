@@ -41,6 +41,7 @@ class _TabContentCommunityMembersComponentState
     var exp = dataCommunitiesMembers?["exp"];
 
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
       decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(4),
@@ -59,44 +60,40 @@ class _TabContentCommunityMembersComponentState
                     detailProfile: dataCommunitiesMembers);
               });
         },
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      if (profilePic != null)
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundImage: NetworkImage(profilePic ?? ""),
-                        ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        username == '' ? email.substring(0, 18) : username,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                if (profilePic != null)
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundImage: NetworkImage(profilePic),
                   ),
-                  Text(
-                    '${exp ?? ""} xp',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              )
-            ],
-          ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  username == ''
+                      ? (email.length > 18 ? email.substring(0, 18) : email)
+                      : (username.length > 18
+                          ? username.substring(0, 18)
+                          : username),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+            Text(
+              '${exp ?? ""} xp',
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
+            ),
+          ],
         ),
       ),
     );

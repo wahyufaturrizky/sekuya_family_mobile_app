@@ -831,6 +831,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                       controller: isLoadingTab ? null : tabController,
                       // These are the widgets to put in each tab in the tab bar.
                       tabs: tabs.map((String name) => Tab(text: name)).toList(),
+                      isScrollable: true,
                       physics: isLoadingTab
                           ? const NeverScrollableScrollPhysics()
                           : null,
@@ -845,135 +846,143 @@ class _ProfileComponentState extends State<ProfileComponent> {
               children: tabs.map((String name) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return Column(
-                      children: [
-                        if (name == "My Mission" &&
-                            resMyMission == null &&
-                            !isLoadingResMyMission)
-                          const MyWidgetEmptyListApp(),
-                        if (name == "My Communities" &&
-                            resMyCommunities == null &&
-                            !isLoadingCommunities)
-                          const MyWidgetEmptyListApp(),
-                        if (name == "My Voucher" &&
-                            resMyVoucher == null &&
-                            !isLoadingResMyVoucher)
-                          const MyWidgetEmptyListApp(),
-                        if (name == "My Reward" &&
-                            resMyReward == null &&
-                            !isLoadingReward)
-                          const MyWidgetEmptyListApp(),
-                        Expanded(
-                          child: Container(
-                            color: Colors.black,
-                            child: CustomScrollView(
-                              key: PageStorageKey<String>(name),
-                              slivers: <Widget>[
-                                SliverOverlapInjector(
-                                  handle: NestedScrollView
-                                      .sliverOverlapAbsorberHandleFor(context),
-                                ),
-                                SliverPadding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  sliver: SliverFixedExtentList(
-                                    itemExtent: name == "My Mission"
-                                        ? 170.0
-                                        : name == "My Communities"
-                                            ? 150.0
-                                            : name == "My Reward"
-                                                ? 130.0
-                                                : 140,
-                                    delegate: SliverChildBuilderDelegate(
-                                      (BuildContext context, int index) {
-                                        var bodyTab;
-
-                                        switch (name) {
-                                          case "My Mission":
-                                            bodyTab = MyWidgetShimmerApp(
-                                              isLoading: isLoadingResMyMission,
-                                              child:
-                                                  TabContentProfileMyMissionComponentApp(
-                                                      resMyMission:
-                                                          resMyMission,
-                                                      index: index),
-                                            );
-
-                                            break;
-                                          case "My Communities":
-                                            bodyTab = MyWidgetShimmerApp(
-                                                isLoading: isLoadingCommunities,
-                                                child:
-                                                    TabContentProfileMyCommunityComponentApp(
-                                                        resMyCommunities:
-                                                            resMyCommunities,
-                                                        index: index));
-
-                                            break;
-                                          case "My Voucher":
-                                            bodyTab = MyWidgetShimmerApp(
-                                                isLoading:
-                                                    isLoadingResMyVoucher,
-                                                child:
-                                                    TabContentProfileMyVoucherComponentApp(
-                                                        resVoucher:
-                                                            resMyVoucher,
-                                                        index: index));
-
-                                            break;
-                                          default:
-                                            bodyTab = MyWidgetShimmerApp(
-                                                isLoading: isLoadingReward,
-                                                child:
-                                                    TabContentProfileMyRewardComponentApp(
-                                                        resMyReward:
-                                                            resMyReward,
-                                                        index: index));
-
-                                            break;
-                                        }
-
-                                        return bodyTab;
-                                      },
-                                      childCount: name == "My Mission"
-                                          ? itemPerPageMyMission == 0 &&
-                                                  isLoadingResMyMission
-                                              ? 5
-                                              : itemPerPageMyMission
-                                          : name == "My Communities"
-                                              ? itemPerPageMyCommunities == 0 &&
-                                                      isLoadingCommunities
-                                                  ? 5
-                                                  : itemPerPageMyCommunities
-                                              : name == "My Voucher"
-                                                  ? itemPerPageMyVoucher == 0 &&
-                                                          isLoadingResMyVoucher
-                                                      ? 5
-                                                      : itemPerPageMyVoucher
-                                                  : itemPerPageMyReward == 0 &&
-                                                          isLoadingReward
-                                                      ? 5
-                                                      : itemPerPageMyReward,
+                    return Container(
+                        color: Colors.black,
+                        child: Column(
+                          children: [
+                            if (name == "My Mission" &&
+                                resMyMission == null &&
+                                !isLoadingResMyMission)
+                              const MyWidgetEmptyListApp(),
+                            if (name == "My Communities" &&
+                                resMyCommunities == null &&
+                                !isLoadingCommunities)
+                              const MyWidgetEmptyListApp(),
+                            if (name == "My Voucher" &&
+                                resMyVoucher == null &&
+                                !isLoadingResMyVoucher)
+                              const MyWidgetEmptyListApp(),
+                            if (name == "My Reward" &&
+                                resMyReward == null &&
+                                !isLoadingReward)
+                              const MyWidgetEmptyListApp(),
+                            Expanded(
+                              child: Container(
+                                color: Colors.black,
+                                child: CustomScrollView(
+                                  key: PageStorageKey<String>(name),
+                                  slivers: <Widget>[
+                                    SliverOverlapInjector(
+                                      handle: NestedScrollView
+                                          .sliverOverlapAbsorberHandleFor(
+                                              context),
                                     ),
-                                  ),
+                                    SliverPadding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      sliver: SliverFixedExtentList(
+                                        itemExtent: name == "My Mission"
+                                            ? 170.0
+                                            : name == "My Communities"
+                                                ? 150.0
+                                                : name == "My Reward"
+                                                    ? 130.0
+                                                    : 140,
+                                        delegate: SliverChildBuilderDelegate(
+                                          (BuildContext context, int index) {
+                                            var bodyTab;
+
+                                            switch (name) {
+                                              case "My Mission":
+                                                bodyTab = MyWidgetShimmerApp(
+                                                  isLoading:
+                                                      isLoadingResMyMission,
+                                                  child:
+                                                      TabContentProfileMyMissionComponentApp(
+                                                          resMyMission:
+                                                              resMyMission,
+                                                          index: index),
+                                                );
+
+                                                break;
+                                              case "My Communities":
+                                                bodyTab = MyWidgetShimmerApp(
+                                                    isLoading:
+                                                        isLoadingCommunities,
+                                                    child:
+                                                        TabContentProfileMyCommunityComponentApp(
+                                                            resMyCommunities:
+                                                                resMyCommunities,
+                                                            index: index));
+
+                                                break;
+                                              case "My Voucher":
+                                                bodyTab = MyWidgetShimmerApp(
+                                                    isLoading:
+                                                        isLoadingResMyVoucher,
+                                                    child:
+                                                        TabContentProfileMyVoucherComponentApp(
+                                                            resVoucher:
+                                                                resMyVoucher,
+                                                            index: index));
+
+                                                break;
+                                              default:
+                                                bodyTab = MyWidgetShimmerApp(
+                                                    isLoading: isLoadingReward,
+                                                    child:
+                                                        TabContentProfileMyRewardComponentApp(
+                                                            resMyReward:
+                                                                resMyReward,
+                                                            index: index));
+
+                                                break;
+                                            }
+
+                                            return bodyTab;
+                                          },
+                                          childCount: name == "My Mission"
+                                              ? itemPerPageMyMission == 0 &&
+                                                      isLoadingResMyMission
+                                                  ? 5
+                                                  : itemPerPageMyMission
+                                              : name == "My Communities"
+                                                  ? itemPerPageMyCommunities ==
+                                                              0 &&
+                                                          isLoadingCommunities
+                                                      ? 5
+                                                      : itemPerPageMyCommunities
+                                                  : name == "My Voucher"
+                                                      ? itemPerPageMyVoucher ==
+                                                                  0 &&
+                                                              isLoadingResMyVoucher
+                                                          ? 5
+                                                          : itemPerPageMyVoucher
+                                                      : itemPerPageMyReward ==
+                                                                  0 &&
+                                                              isLoadingReward
+                                                          ? 5
+                                                          : itemPerPageMyReward,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        // if ((name == "My Mission" && noDataAnymoreMyMission) ||
-                        //     (name == "My Communities" &&
-                        //         noDataAnymoreMyCommunities) ||
-                        //     (name == "My Voucher" && noDataAnymoreMyVoucher) ||
-                        //     (name == "My Reward" && noDataAnymoreMyReward))
-                        //   const Center(
-                        //     child: Text(
-                        //         "👋🏻 Hi your reach the end of the list",
-                        //         style: TextStyle(
-                        //             color: Colors.white, fontSize: 14)),
-                        //   ),
-                      ],
-                    );
+                            // if ((name == "My Mission" && noDataAnymoreMyMission) ||
+                            //     (name == "My Communities" &&
+                            //         noDataAnymoreMyCommunities) ||
+                            //     (name == "My Voucher" && noDataAnymoreMyVoucher) ||
+                            //     (name == "My Reward" && noDataAnymoreMyReward))
+                            //   const Center(
+                            //     child: Text(
+                            //         "👋🏻 Hi your reach the end of the list",
+                            //         style: TextStyle(
+                            //             color: Colors.white, fontSize: 14)),
+                            //   ),
+                          ],
+                        ));
                   },
                 );
               }).toList(),
