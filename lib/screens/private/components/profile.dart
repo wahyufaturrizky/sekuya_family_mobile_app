@@ -622,7 +622,8 @@ class _ProfileComponentState extends State<ProfileComponent>
                     const SizedBox(
                       height: 12,
                     ),
-                    if (resProfile?["data"]?["username"].isNotEmpty)
+                    if (resProfile?["data"]?["username"] != null &&
+                        resProfile?["data"]?["username"].isNotEmpty)
                       Text(
                         resProfile?["data"]?["username"],
                         style: const TextStyle(
@@ -630,7 +631,8 @@ class _ProfileComponentState extends State<ProfileComponent>
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
-                    if (resProfile?["data"]?["email"].isNotEmpty)
+                    if (resProfile?["data"]?["email"] != null &&
+                        resProfile?["data"]?["email"].isNotEmpty)
                       Text(
                         resProfile?["data"]?["email"] ?? "-",
                         style: const TextStyle(
