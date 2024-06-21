@@ -141,258 +141,215 @@ class _VoucherComponentState extends State<VoucherComponent> {
 
     return Shimmer(
       linearGradient: shimmerGradient,
-      child: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          // These are the slivers that show up in the "outer" scroll view.
-          return <Widget>[
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                automaticallyImplyLeading: false,
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 320,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                child: Image.asset(
-                                  'assets/images/bg_voucher_redeem.png',
-                                  fit: BoxFit.cover,
-                                  // alignment: Alignment.topCenter,
-                                ),
-                              )),
-                          Positioned(
-                              top: 80,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 24.0, horizontal: 16.0),
-                                  decoration: const BoxDecoration(
-                                      color: blackPrimaryColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(12))),
-                                  child: Column(
-                                    children: [
-                                      const Center(
-                                        child: Text(
-                                          'Reedem Voucher',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      const Center(
-                                        child: Text(
-                                          'Lorem ipsum dolor sit amet, consectetur adipis\nadipiscing elit, sed do eiusmod tempor',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: greySecondaryColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: CustomTextField(
-                                              textField: TextField(
-                                                  controller: codeController,
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white,
-                                                  ),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                  decoration:
-                                                      kTextInputDecoration
-                                                          .copyWith(
-                                                    hintText: 'Input code',
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        const EdgeInsets.all(4),
-                                                    hintStyle: const TextStyle(
-                                                        color:
-                                                            greySecondaryColor,
-                                                        fontSize: 14),
-                                                  )),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          CustomButton(
-                                              buttonText: 'Find',
-                                              onPressed: () {
-                                                handleSearchByCode();
-                                              },
-                                              width: 60,
-                                              labelSize: 12,
-                                              height: 40,
-                                              paddingButton: 0)
-                                        ],
-                                      ),
-                                    ],
-                                  )))
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                floating: true,
-                expandedHeight: 250.0,
-                toolbarHeight: 220,
-                backgroundColor: Colors.transparent,
-                forceElevated: innerBoxIsScrolled,
-              ),
-            ),
-          ];
-        },
-        body: Builder(
-          builder: (BuildContext context) {
-            return Column(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.width * 0.75,
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                if (isLoadingResVoucher)
-                  MyWidgetShimmerApp(
-                      isLoading: isLoadingResVoucher,
-                      child: const Card(
-                        child: SizedBox(
-                          width: 300,
-                          height: 60,
-                        ),
-                      )),
-                if (resVoucher?["data"].length == 0)
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        {
-                          "title": "Complete the mission",
-                          "desc":
-                              "Unlock a variety of rewards by completing community missions.",
-                          "img": "voucher_img_01"
-                        },
-                        {
-                          "title": "Get Voucher Code",
-                          "desc":
-                              "Receive the voucher code as a reward upon completing the mission.",
-                          "img": "voucher_img_02"
-                        },
-                        {
-                          "title": "Claim Voucher",
-                          "desc":
-                              "Search and claim your voucher by using the voucher code you've received.",
-                          "img": "voucher_img_03"
-                        },
-                      ]
-                          .map((item) => Container(
-                              margin: const EdgeInsets.only(bottom: 16),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                      'assets/images/${item["img"]}.png'),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
-                                  Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.65,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            item["title"].toString(),
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14),
-                                          ),
-                                          Text(
-                                            item["desc"].toString(),
-                                            style: const TextStyle(
+                Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      child: Image.asset(
+                        'assets/images/bg_voucher_redeem.png',
+                        fit: BoxFit.cover,
+                        // alignment: Alignment.topCenter,
+                      ),
+                    )),
+                Positioned(
+                    top: 80,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 24.0, horizontal: 16.0),
+                        decoration: const BoxDecoration(
+                            color: blackPrimaryColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12))),
+                        child: Column(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'Reedem Voucher',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            const Center(
+                              child: Text(
+                                'Lorem ipsum dolor sit amet, consectetur adipis\nadipiscing elit, sed do eiusmod tempor',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: greySecondaryColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CustomTextField(
+                                    textField: TextField(
+                                        controller: codeController,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
+                                        decoration:
+                                            kTextInputDecoration.copyWith(
+                                          hintText: 'Input code',
+                                          isDense: true,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10),
+                                          hintStyle: const TextStyle(
                                               color: greySecondaryColor,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                            ),
-                                          )
-                                        ],
-                                      ))
-                                ],
-                              )))
-                          .toList(),
-                    ),
-                  ),
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      SliverOverlapInjector(
-                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                            context),
-                      ),
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverFixedExtentList(
-                          itemExtent: 120.0,
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return TabContentVoucherComponentApp(
-                                  index: index, resVoucher: resVoucher);
-                            },
-                            childCount: resVoucher?["data"]?.length ?? 0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (resVoucher != null && resVoucher?["data"].length > 0)
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: CustomButton(
-                      buttonText: 'Claim',
-                      isLoading: isLoadingClaimVoucher,
-                      onPressed: () {
-                        if (isClaimed) {
-                          const snackBar = SnackBar(
-                              backgroundColor: blackSolidPrimaryColor,
-                              behavior: SnackBarBehavior.floating,
-                              duration: Duration(milliseconds: 2000),
-                              content: Text(
-                                "👋🏻 Voucher already claimed",
-                                style: TextStyle(color: Colors.white),
-                              ));
-
-                          ScaffoldMessenger.of(mainContext)
-                              .showSnackBar(snackBar);
-                        } else {
-                          if (!isLoadingClaimVoucher) {
-                            onSubmitClaimVoucher(mainContext);
-                          }
-                        }
-                      },
-                      width: 500,
-                    ),
-                  )
+                                              fontSize: 12),
+                                        )),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                CustomButton(
+                                    buttonText: 'Find',
+                                    onPressed: () {
+                                      handleSearchByCode();
+                                    },
+                                    width: 60,
+                                    labelSize: 12,
+                                    height: 40,
+                                    paddingButton: 0)
+                              ],
+                            ),
+                          ],
+                        )))
               ],
-            );
-          },
-        ),
+            ),
+          ),
+          if (isLoadingResVoucher)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: MyWidgetShimmerApp(
+                  isLoading: isLoadingResVoucher,
+                  child: const Card(
+                    child: SizedBox(
+                      width: 300,
+                      height: 60,
+                    ),
+                  )),
+            ),
+          if (resVoucher?["data"].length == 0)
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  {
+                    "title": "Complete the mission",
+                    "desc":
+                        "Unlock a variety of rewards by completing community missions.",
+                    "img": "voucher_img_01"
+                  },
+                  {
+                    "title": "Get Voucher Code",
+                    "desc":
+                        "Receive the voucher code as a reward upon completing the mission.",
+                    "img": "voucher_img_02"
+                  },
+                  {
+                    "title": "Claim Voucher",
+                    "desc":
+                        "Search and claim your voucher by using the voucher code you've received.",
+                    "img": "voucher_img_03"
+                  },
+                ]
+                    .map((item) => Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: Row(
+                          children: [
+                            Image.asset('assets/images/${item["img"]}.png'),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.65,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item["title"].toString(),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14),
+                                    ),
+                                    Text(
+                                      item["desc"].toString(),
+                                      style: const TextStyle(
+                                        color: greySecondaryColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  ],
+                                ))
+                          ],
+                        )))
+                    .toList(),
+              ),
+            ),
+          Flexible(
+            child: ListView.builder(
+              itemCount: resVoucher?["data"]?.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                return TabContentVoucherComponentApp(
+                    index: index, resVoucher: resVoucher);
+              },
+            ),
+          ),
+          if (resVoucher != null && resVoucher?["data"].length > 0)
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: CustomButton(
+                buttonText: 'Claim',
+                isLoading: isLoadingClaimVoucher,
+                onPressed: () {
+                  if (isClaimed) {
+                    const snackBar = SnackBar(
+                        backgroundColor: blackSolidPrimaryColor,
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(milliseconds: 2000),
+                        content: Text(
+                          "👋🏻 Voucher already claimed",
+                          style: TextStyle(color: Colors.white),
+                        ));
+
+                    ScaffoldMessenger.of(mainContext).showSnackBar(snackBar);
+                  } else {
+                    if (!isLoadingClaimVoucher) {
+                      onSubmitClaimVoucher(mainContext);
+                    }
+                  }
+                },
+                width: 500,
+              ),
+            ),
+        ],
       ),
     );
   }

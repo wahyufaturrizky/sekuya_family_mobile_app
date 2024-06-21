@@ -47,7 +47,7 @@ class _TabContentVoucherComponentState
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
