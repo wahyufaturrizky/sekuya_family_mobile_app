@@ -17,7 +17,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const List<String> scopes = <String>[
   'email',
-  'https://www.googleapis.com/auth/contacts.readonly',
 ];
 
 GoogleSignIn googleSignIn = GoogleSignIn(
@@ -529,222 +528,233 @@ class _ProfileComponentState extends State<ProfileComponent>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/bg_profile.png',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.width * 0.6,
-                  alignment: Alignment.topCenter,
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Application.router.navigateTo(
-                                context,
-                                "/notificationScreen",
-                                transition: TransitionType.native,
-                              );
+            Container(
+              height: MediaQuery.of(context).size.width * 0.6,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                      image: AssetImage(
+                        'assets/images/bg_profile.png',
+                      ))),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Application.router.navigateTo(
+                              context,
+                              "/notificationScreen",
+                              transition: TransitionType.native,
+                            );
+                          },
+                          child: const Icon(
+                            Icons.notifications,
+                            color: yellowPrimaryColor,
+                          ),
+                        ),
+                        MyWidgetShimmerApp(
+                          isLoading: isLoadingResProfile,
+                          child: CircleAvatar(
+                            backgroundImage:
+                                resProfile?["data"]?["profilePic"] != null
+                                    ? NetworkImage(
+                                        resProfile?["data"]?["profilePic"])
+                                    : null,
+                            radius: 40,
+                          ),
+                        ),
+                        PopupMenuButton<String>(
+                            color: Colors.black,
+                            onSelected: (String item) {
+                              if (item == 'Logout') {
+                                handleLogout();
+                              } else {
+                                Application.router.navigateTo(
+                                  context,
+                                  "/profileDetailScreens",
+                                  transition: TransitionType.native,
+                                );
+                              }
+                            },
+                            itemBuilder: (BuildContext context) {
+                              return menu
+                                  .map((item) => PopupMenuItem<String>(
+                                        value: item,
+                                        child: ListTile(
+                                          leading: Icon(
+                                            item == "Logout"
+                                                ? Icons.logout_outlined
+                                                : Icons.edit_outlined,
+                                            color: item == "Logout"
+                                                ? redSolidPrimaryColor
+                                                : Colors.white,
+                                          ),
+                                          title: Text(
+                                            item == "Logout"
+                                                ? 'Logout'
+                                                : 'Edit Profile',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: item == "Logout"
+                                                    ? redSolidPrimaryColor
+                                                    : Colors.white),
+                                          ),
+                                        ),
+                                      ))
+                                  .toList();
                             },
                             child: const Icon(
-                              Icons.notifications,
-                              color: yellowPrimaryColor,
-                            ),
-                          ),
-                          MyWidgetShimmerApp(
-                            isLoading: isLoadingResProfile,
-                            child: CircleAvatar(
-                              backgroundImage:
-                                  resProfile?["data"]?["profilePic"] != null
-                                      ? NetworkImage(
-                                          resProfile?["data"]?["profilePic"])
-                                      : null,
-                              radius: 40,
-                            ),
-                          ),
-                          PopupMenuButton<String>(
-                              color: Colors.black,
-                              onSelected: (String item) {
-                                if (item == 'Logout') {
-                                  handleLogout();
-                                } else {
-                                  Application.router.navigateTo(
-                                    context,
-                                    "/profileDetailScreens",
-                                    transition: TransitionType.native,
-                                  );
-                                }
-                              },
-                              itemBuilder: (BuildContext context) {
-                                return menu
-                                    .map((item) => PopupMenuItem<String>(
-                                          value: item,
-                                          child: ListTile(
-                                            leading: Icon(
-                                              item == "Logout"
-                                                  ? Icons.logout_outlined
-                                                  : Icons.edit_outlined,
-                                              color: item == "Logout"
-                                                  ? redSolidPrimaryColor
-                                                  : Colors.white,
-                                            ),
-                                            title: Text(
-                                              item == "Logout"
-                                                  ? 'Logout'
-                                                  : 'Edit Profile',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: item == "Logout"
-                                                      ? redSolidPrimaryColor
-                                                      : Colors.white),
-                                            ),
-                                          ),
-                                        ))
-                                    .toList();
-                              },
-                              child: const Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
+                              Icons.more_vert,
+                              color: Colors.white,
+                            ))
+                      ],
                     ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    if (resProfile?["data"]?["username"] != null &&
-                        resProfile?["data"]?["username"].isNotEmpty)
-                      Text(
-                        resProfile?["data"]?["username"],
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    if (resProfile?["data"]?["email"] != null &&
-                        resProfile?["data"]?["email"].isNotEmpty)
-                      Text(
-                        resProfile?["data"]?["email"] ?? "-",
-                        style: const TextStyle(
-                            color: greySecondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 16.0,
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          color: Colors.black,
+                          spreadRadius: 42,
+                          blurRadius: 42,
+                          offset: Offset(0, 40))
+                    ]),
+                    child: Column(
                       children: [
-                        1,
-                        2,
-                        3,
-                      ]
-                          .map((item) => GestureDetector(
-                              onTap: () {
-                                // showModalBottomSheet(
-                                // backgroundColor: Colors.black,
-                                //     context: mainContext,
-                                //     builder: (BuildContext context) {
-                                //       return BadgeListBottomSheetApp(
-                                //           detailProfile: resProfile);
-                                //     });
+                        if (resProfile?["data"]?["username"] != null &&
+                            resProfile?["data"]?["username"].isNotEmpty)
+                          Text(
+                            resProfile?["data"]?["username"],
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        if (resProfile?["data"]?["email"] != null &&
+                            resProfile?["data"]?["email"].isNotEmpty)
+                          Text(
+                            resProfile?["data"]?["email"] ?? "-",
+                            style: const TextStyle(
+                                color: greySecondaryColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 16.0,
+                          children: [
+                            1,
+                            2,
+                            3,
+                          ]
+                              .map((item) => GestureDetector(
+                                  onTap: () {
+                                    // showModalBottomSheet(
+                                    // backgroundColor: Colors.black,
+                                    //     context: mainContext,
+                                    //     builder: (BuildContext context) {
+                                    //       return BadgeListBottomSheetApp(
+                                    //           detailProfile: resProfile);
+                                    //     });
 
-                                showDialog<String>(
-                                  context: mainContext,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    backgroundColor: blackSolidPrimaryColor,
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          child: Image.asset(
-                                              "assets/images/test_badge.png"),
+                                    showDialog<String>(
+                                      context: mainContext,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        backgroundColor: blackSolidPrimaryColor,
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              child: Image.asset(
+                                                  "assets/images/test_badge.png"),
+                                            ),
+                                            const SizedBox(
+                                              height: 16,
+                                            ),
+                                            const Text('You Get New Badge',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white)),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            const Text(
+                                                'dictum cursus mauris varius tristique aliquet. dictum cur mauris varius tristique aliquet. ',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: greySecondaryColor)),
+                                          ],
                                         ),
-                                        const SizedBox(
-                                          height: 16,
-                                        ),
-                                        const Text('You Get New Badge',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white)),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        const Text(
-                                            'dictum cursus mauris varius tristique aliquet. dictum cur mauris varius tristique aliquet. ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
-                                                color: greySecondaryColor)),
-                                      ],
-                                    ),
-                                    actions: <Widget>[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          CustomButton(
-                                            buttonText: 'See Later',
-                                            isOutlined: true,
-                                            border: 1,
-                                            isOutlinedBackgroundColor:
-                                                blackSolidPrimaryColor,
-                                            isOutlinedBorderColor:
-                                                yellowPrimaryColor,
-                                            labelSize: 12,
-                                            width: 100,
-                                            height: 36,
-                                            onPressed: () {
-                                              Navigator.pop(context, 'Cancel');
-                                            },
-                                          ),
-                                          CustomButton(
-                                            buttonText: 'See My Badge',
-                                            onPressed: () {
-                                              Navigator.pop(context, 'OK');
-                                            },
-                                            labelSize: 12,
-                                            height: 36,
-                                            width: 100,
+                                        actions: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              CustomButton(
+                                                buttonText: 'See Later',
+                                                isOutlined: true,
+                                                border: 1,
+                                                isOutlinedBackgroundColor:
+                                                    blackSolidPrimaryColor,
+                                                isOutlinedBorderColor:
+                                                    yellowPrimaryColor,
+                                                labelSize: 12,
+                                                width: 100,
+                                                height: 36,
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      context, 'Cancel');
+                                                },
+                                              ),
+                                              CustomButton(
+                                                buttonText: 'See My Badge',
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'OK');
+                                                },
+                                                labelSize: 12,
+                                                height: 36,
+                                                width: 100,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              child: MyWidgetShimmerApp(
-                                  isLoading: isLoadingResProfile,
-                                  child: const CircleAvatar(
-                                    radius: 20,
-                                  ))))
-                          .toList(),
+                                    );
+                                  },
+                                  child: MyWidgetShimmerApp(
+                                      isLoading: isLoadingResProfile,
+                                      child: const CircleAvatar(
+                                        radius: 20,
+                                      ))))
+                              .toList(),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
+                  ),
+                ],
+              ),
             ),
             MyWidgetShimmerApp(
               isLoading: isLoadingResProfile,

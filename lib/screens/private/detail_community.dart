@@ -386,147 +386,140 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  Container(
-                      height: MediaQuery.of(context).size.width * 0.5,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          image: coverImage != null
-                              ? DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                    coverImage,
-                                  ))
-                              : null),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(top: 32, left: 16),
-                            color: backNavigationColor,
-                            child: IconButton(
-                              color: Colors.white,
-                              icon: const Icon(Icons.arrow_back),
-                              onPressed: () {
-                                // handleBack();
-                                Navigator.pop(context, 'Cancel');
-                              },
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black,
-                                  spreadRadius: 15,
-                                  blurRadius: 15,
-                                  offset: Offset(0, 42))
-                            ]),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  if (isLoading)
-                                    MyWidgetShimmerApp(
-                                        isLoading: isLoading,
-                                        child: const Card(
-                                          child: SizedBox(
-                                            height: 40,
-                                            width: 150,
-                                          ),
-                                        )),
-                                  if (!isLoading)
-                                    Row(
+              Container(
+                  height: MediaQuery.of(context).size.width * 0.5,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      image: coverImage != null
+                          ? DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                coverImage,
+                              ))
+                          : null),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(top: 32, left: 16),
+                        color: backNavigationColor,
+                        child: IconButton(
+                          color: Colors.white,
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            // handleBack();
+                            Navigator.pop(context, 'Cancel');
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              spreadRadius: 15,
+                              blurRadius: 15,
+                              offset: Offset(0, 42))
+                        ]),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (isLoading)
+                                MyWidgetShimmerApp(
+                                    isLoading: isLoading,
+                                    child: const Card(
+                                      child: SizedBox(
+                                        height: 40,
+                                        width: 150,
+                                      ),
+                                    )),
+                              if (!isLoading)
+                                Row(
+                                  children: [
+                                    if (image != null)
+                                      Image.network(
+                                        image,
+                                        width: 48,
+                                        height: 48,
+                                      ),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        if (image != null)
-                                          Image.network(
-                                            image,
-                                            width: 48,
-                                            height: 48,
-                                          ),
-                                        const SizedBox(width: 12),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        Text(
+                                          name.toString(),
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Row(
                                           children: [
-                                            Text(
-                                              name.toString(),
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
+                                            Image.asset(
+                                              'assets/images/ic_level_detail_community.png',
                                             ),
-                                            const SizedBox(
-                                              height: 4,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/ic_level_detail_community.png',
-                                                ),
-                                                const SizedBox(width: 12),
-                                                if (level != null)
-                                                  Text(
-                                                    'LEVEL $level',
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 12),
-                                                  ),
-                                              ],
-                                            ),
+                                            const SizedBox(width: 12),
+                                            if (level != null)
+                                              Text(
+                                                'LEVEL $level',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12),
+                                              ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  MyWidgetShimmerApp(
-                                    isLoading: isLoading,
-                                    child: CustomButton(
-                                      isOutlined: isJoined,
-                                      isOutlinedBackgroundColor: isJoined
-                                          ? Colors.transparent
-                                          : blackSolidPrimaryColor,
-                                      isOutlinedBorderColor: yellowPrimaryColor,
-                                      buttonText: (isLoadingJoinCommunity ||
-                                              isLoadingCommunitiesDetail ||
-                                              isLoadingLeaveCommunity)
-                                          ? ''
-                                          : isJoined
-                                              ? 'Leave'
-                                              : 'Join',
-                                      onPressed: () {
-                                        if (!isLoadingJoinCommunity ||
-                                            !isLoadingCommunitiesDetail ||
-                                            !isLoadingLeaveCommunity) {
-                                          if (isJoined) {
-                                            handleLeaveCommunity(mainContext);
-                                          } else {
-                                            handleJoinCommunity(mainContext);
-                                          }
-                                        }
-                                      },
-                                      isLoading: isLoadingJoinCommunity ||
+                                  ],
+                                ),
+                              MyWidgetShimmerApp(
+                                isLoading: isLoading,
+                                child: CustomButton(
+                                  isOutlined: isJoined,
+                                  isOutlinedBackgroundColor: isJoined
+                                      ? Colors.transparent
+                                      : blackSolidPrimaryColor,
+                                  isOutlinedBorderColor: yellowPrimaryColor,
+                                  buttonText: (isLoadingJoinCommunity ||
                                           isLoadingCommunitiesDetail ||
-                                          isLoadingLeaveCommunity,
-                                      width: 60,
-                                      labelSize: 12,
-                                      height: 32,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
-                ],
-              ),
+                                          isLoadingLeaveCommunity)
+                                      ? ''
+                                      : isJoined
+                                          ? 'Leave'
+                                          : 'Join',
+                                  onPressed: () {
+                                    if (!isLoadingJoinCommunity ||
+                                        !isLoadingCommunitiesDetail ||
+                                        !isLoadingLeaveCommunity) {
+                                      if (isJoined) {
+                                        handleLeaveCommunity(mainContext);
+                                      } else {
+                                        handleJoinCommunity(mainContext);
+                                      }
+                                    }
+                                  },
+                                  isLoading: isLoadingJoinCommunity ||
+                                      isLoadingCommunitiesDetail ||
+                                      isLoadingLeaveCommunity,
+                                  width: 60,
+                                  labelSize: 12,
+                                  height: 32,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  )),
               const SizedBox(
                 height: 16,
               ),
@@ -560,8 +553,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
                                           item["value"]!.isNotEmpty)
                                         Text(
                                           item["value"]!.length > 8
-                                              ? item["value"]!.substring(0, 8) +
-                                                  "..."
+                                              ? "${item["value"]!.substring(0, 8)}..."
                                               : item["value"]!,
                                           style: const TextStyle(
                                               color: Colors.white,

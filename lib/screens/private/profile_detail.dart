@@ -20,7 +20,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 const List<String> scopes = <String>[
   'email',
-  'https://www.googleapis.com/auth/contacts.readonly',
 ];
 
 GoogleSignIn googleSignIn = kIsWeb

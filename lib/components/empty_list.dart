@@ -23,12 +23,14 @@ class _MyWidgetEmptyListState extends State<MyWidgetEmptyList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Image.asset('assets/images/empty_state.png'),
+        Image.asset(
+          'assets/images/empty_state.png',
+        ),
         const SizedBox(
           width: 250,
           child: Text(
             "Looks like there's nothing here yet. Start exploring to fill this space",
-            style: TextStyle(color: greySecondaryColor),
+            style: TextStyle(color: greySecondaryColor, fontSize: 12),
             textAlign: TextAlign.center,
           ),
         )
