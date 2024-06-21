@@ -516,7 +516,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
           color: Colors.white,
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            handleBack();
+            Navigator.pop(context, 'Cancel');
           },
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(),

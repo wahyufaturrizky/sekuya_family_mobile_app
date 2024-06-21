@@ -80,6 +80,7 @@ class _PrivateScreenState extends State<PrivateScreen> {
 
     return SafeArea(
         right: false,
+        top: false,
         left: false,
         bottom: false,
         child: Scaffold(

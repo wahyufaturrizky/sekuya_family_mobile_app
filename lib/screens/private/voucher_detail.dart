@@ -48,19 +48,19 @@ class _VoucherDetailState extends State<VoucherDetail> {
     },
   ];
 
-  void handleBack() {
-    final arguments = widget.args!.isFromPageVoucher == true
-        ? MyArgumentsDataClass(false, false, true, false)
-        : MyArgumentsDataClass(true, false, false, false);
+  // void handleBack() {
+  //   final arguments = widget.args!.isFromPageVoucher == true
+  //       ? MyArgumentsDataClass(false, false, true, false)
+  //       : MyArgumentsDataClass(true, false, false, false);
 
-    Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromRight,
-        routeSettings: RouteSettings(arguments: arguments));
+  //   Application.router.navigateTo(context, "/privateScreens",
+  //       transition: TransitionType.inFromRight,
+  //       routeSettings: RouteSettings(arguments: arguments));
 
-    setState(() {
-      isLoading = false;
-    });
-  }
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
           color: Colors.white,
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            handleBack();
+            Navigator.pop(context);
           },
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(),

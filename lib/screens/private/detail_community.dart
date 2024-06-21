@@ -427,7 +427,8 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail> {
                                             color: Colors.white,
                                             icon: const Icon(Icons.arrow_back),
                                             onPressed: () {
-                                              handleBack();
+                                              // handleBack();
+                                              Navigator.pop(context, 'Cancel');
                                             },
                                             padding: EdgeInsets.zero,
                                             constraints: const BoxConstraints(),

@@ -984,7 +984,8 @@ class _MissionDetailState extends State<MissionDetail> {
                 color: Colors.white,
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  handleBack();
+                  // handleBack();
+                  Navigator.pop(context, 'Cancel');
                 },
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),

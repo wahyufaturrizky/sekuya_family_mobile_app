@@ -227,9 +227,12 @@ class _VoucherComponentState extends State<VoucherComponent> {
                                   width: 8,
                                 ),
                                 CustomButton(
-                                    buttonText: 'Find',
+                                    isLoading: refetchResVoucher,
+                                    buttonText: refetchResVoucher ? '' : 'Find',
                                     onPressed: () {
-                                      handleSearchByCode();
+                                      if (!refetchResVoucher) {
+                                        handleSearchByCode();
+                                      }
                                     },
                                     width: 60,
                                     labelSize: 12,
