@@ -50,6 +50,7 @@ class ProfileDetail extends StatefulWidget {
 class _ProfileDetailState extends State<ProfileDetail> {
   bool isLoadingGetProfile = false;
   bool isLoadingUpdateProfile = false;
+  bool isLoadingUpdateDataProfile = false;
   bool isLoadingRecoveryEmailWithGoogle = false;
   bool isLoadingRecoveryEmailWithApple = false;
   var resProfile;
@@ -391,10 +392,14 @@ class _ProfileDetailState extends State<ProfileDetail> {
     }
   }
 
-  Future<dynamic> handleUpdateProfile(context) async {
+  Future<dynamic> handleUpdateProfile({context, refetch = false}) async {
     try {
       setState(() {
-        isLoadingUpdateProfile = true;
+        if (refetch) {
+          isLoadingUpdateDataProfile = true;
+        } else {
+          isLoadingUpdateProfile = true;
+        }
       });
 
       final formData = FormData.fromMap({
@@ -425,11 +430,13 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
         setState(() {
           isLoadingUpdateProfile = false;
+          isLoadingUpdateDataProfile = false;
         });
       }
     } catch (e) {
       setState(() {
         isLoadingUpdateProfile = false;
+        isLoadingUpdateDataProfile = false;
       });
       print(e);
     }
@@ -823,11 +830,13 @@ class _ProfileDetailState extends State<ProfileDetail> {
             child: MyWidgetShimmerApp(
                 isLoading: isLoadingGetProfile,
                 child: CustomButton(
-                    isLoading: isLoadingUpdateProfile,
+                    isLoading:
+                        isLoadingUpdateProfile || isLoadingUpdateDataProfile,
                     buttonText: 'Save',
                     onPressed: () {
-                      if (!isLoadingUpdateProfile) {
-                        handleUpdateProfile(context);
+                      if (!isLoadingUpdateProfile &&
+                          !isLoadingUpdateDataProfile) {
+                        handleUpdateProfile(context: context, refetch: true);
                       }
                     },
                     sizeButtonIcon: 20,

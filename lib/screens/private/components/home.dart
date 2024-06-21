@@ -144,7 +144,7 @@ class _HomeComponentState extends State<HomeComponent> {
                   }).toList(),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 16,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -175,9 +175,9 @@ class _HomeComponentState extends State<HomeComponent> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 16),
                   padding: const EdgeInsets.only(left: 16),
-                  height: 150,
+                  height: 135,
                   child: ListView(
                     physics:
                         isLoading ? const NeverScrollableScrollPhysics() : null,
@@ -194,197 +194,195 @@ class _HomeComponentState extends State<HomeComponent> {
                                 var community = item?["community"];
                                 var totalTasks = item?["totalTasks"];
                                 var totalExp = item?["totalExp"];
-                                return Card(
-                                  color: blackPrimaryColor,
-                                  clipBehavior: Clip.hardEdge,
-                                  margin: const EdgeInsets.only(right: 12),
-                                  child: InkWell(
-                                    splashColor:
-                                        yellowPrimaryColor.withAlpha(30),
-                                    onTap: () {
-                                      var tempItem = {
-                                        "data": {"data": []}
-                                      };
+                                return Container(
+                                    width: 160,
+                                    child: Card(
+                                      color: blackPrimaryColor,
+                                      clipBehavior: Clip.hardEdge,
+                                      margin: const EdgeInsets.only(right: 12),
+                                      child: InkWell(
+                                        splashColor:
+                                            yellowPrimaryColor.withAlpha(30),
+                                        onTap: () {
+                                          var tempItem = {
+                                            "data": {"data": []}
+                                          };
 
-                                      tempItem["data"]!["data"]?.add(item);
+                                          tempItem["data"]!["data"]?.add(item);
 
-                                      goToDetailMission(tempItem, 0);
-                                    },
-                                    child: SizedBox(
-                                      width: 200,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                if (name != null)
-                                                  Text(
-                                                    name?.length > 42
-                                                        ? '${name.substring(0, 42)}...'
-                                                        : name,
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                                Row(
+                                          goToDetailMission(tempItem, 0);
+                                        },
+                                        child: SizedBox(
+                                          width: 200,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    if (community?["image"] !=
-                                                        null)
-                                                      CircleAvatar(
-                                                        radius: 12,
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        child: Image.network(
-                                                            community?[
-                                                                "image"]),
-                                                      ),
-                                                    const SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    if (description != null)
+                                                    if (name != null)
                                                       Text(
-                                                        description?.length > 12
-                                                            ? '${description.substring(0, 12)}...'
-                                                            : description,
+                                                        name?.length > 19
+                                                            ? '${name.substring(0, 19)}...'
+                                                            : name,
                                                         style: const TextStyle(
-                                                            color:
-                                                                greySecondaryColor,
+                                                            color: Colors.white,
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w600),
-                                                      )
+                                                      ),
+                                                    const SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        if (community?[
+                                                                "image"] !=
+                                                            null)
+                                                          Image.network(
+                                                            community?["image"],
+                                                            height: 12,
+                                                            width: 12,
+                                                          ),
+                                                        const SizedBox(
+                                                          width: 6,
+                                                        ),
+                                                        if (description != null)
+                                                          Text(
+                                                            description?.length >
+                                                                    12
+                                                                ? '${description.substring(0, 12)}...'
+                                                                : description,
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    greySecondaryColor,
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          )
+                                                      ],
+                                                    ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            color: blackSolidPrimaryColor,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        {
-                                                          "title": "Task",
-                                                          "value": totalTasks
-                                                              .toString(),
-                                                        },
-                                                        {
-                                                          "title": "Xp",
-                                                          "value": totalExp
-                                                              .toString(),
-                                                        },
-                                                        {
-                                                          "title": rewards
-                                                                  .isEmpty
-                                                              ? ""
-                                                              : rewards?[0]?[
-                                                                          "name"]
+                                              ),
+                                              Container(
+                                                color: blackSolidPrimaryColor,
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 8),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            {
+                                                              "title": "Task",
+                                                              "value": totalTasks
+                                                                  .toString(),
+                                                            },
+                                                            {
+                                                              "title": "Xp",
+                                                              "value": totalExp
+                                                                  .toStringAsFixed(
+                                                                      1),
+                                                            },
+                                                            {
+                                                              "title": rewards
+                                                                      .isEmpty
+                                                                  ? ""
+                                                                  : rewards?[0]
+                                                                              ?[
+                                                                              "name"]
+                                                                          .substring(
+                                                                              0,
+                                                                              4) +
+                                                                      "...",
+                                                              "value": rewards
+                                                                      .isEmpty
+                                                                  ? ""
+                                                                  : rewards?[0]
+                                                                          ?[
+                                                                          "maxQty"]
+                                                                      .toString()
                                                                       .substring(
-                                                                          0,
-                                                                          4) +
-                                                                  "...",
-                                                          "value": rewards
-                                                                  .isEmpty
-                                                              ? ""
-                                                              : rewards?[0]?[
-                                                                      "maxQty"]
-                                                                  .toString()
-                                                                  .substring(
-                                                                      0, 1),
-                                                          "image": rewards
-                                                                  .isEmpty
-                                                              ? null
-                                                              : rewards?[0]
-                                                                  ?["image"],
-                                                        },
-                                                      ]
-                                                          .map(
-                                                            (itemMission) =>
-                                                                Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Row(
+                                                                          0, 1),
+                                                              "image": rewards
+                                                                      .isEmpty
+                                                                  ? null
+                                                                  : rewards?[0]
+                                                                      ?[
+                                                                      "image"],
+                                                            },
+                                                          ]
+                                                              .map(
+                                                                (itemMission) =>
+                                                                    Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
-                                                                    if (itemMission[
-                                                                            "image"] !=
-                                                                        null)
-                                                                      CircleAvatar(
-                                                                        radius:
-                                                                            10,
-                                                                        backgroundColor:
-                                                                            Colors.transparent,
-                                                                        child: Image
-                                                                            .network(
-                                                                          itemMission[
-                                                                              "image"]!,
-                                                                          width:
-                                                                              14,
-                                                                          height:
-                                                                              14,
+                                                                    Row(
+                                                                      children: [
+                                                                        if (itemMission["image"] !=
+                                                                            null)
+                                                                          Image
+                                                                              .network(
+                                                                            itemMission["image"]!,
+                                                                            width:
+                                                                                10,
+                                                                            height:
+                                                                                10,
+                                                                          ),
+                                                                        Text(
+                                                                          itemMission["value"]
+                                                                              .toString(),
+                                                                          style: const TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 10,
+                                                                              fontWeight: FontWeight.w600),
                                                                         ),
-                                                                      ),
+                                                                      ],
+                                                                    ),
                                                                     Text(
                                                                       itemMission[
-                                                                              "value"]
+                                                                              "title"]
                                                                           .toString(),
                                                                       style: const TextStyle(
-                                                                          color: Colors
-                                                                              .white,
+                                                                          color:
+                                                                              greySecondaryColor,
                                                                           fontSize:
                                                                               10,
                                                                           fontWeight:
-                                                                              FontWeight.w600),
-                                                                    ),
+                                                                              FontWeight.w500),
+                                                                    )
                                                                   ],
                                                                 ),
-                                                                Text(
-                                                                  itemMission[
-                                                                          "title"]
-                                                                      .toString(),
-                                                                  style: const TextStyle(
-                                                                      color:
-                                                                          greySecondaryColor,
-                                                                      fontSize:
-                                                                          10,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                )
-                                                              ],
-                                                            ),
-                                                          )
-                                                          .toList()),
-                                                ],
+                                                              )
+                                                              .toList()),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                );
+                                    ));
+                                ;
                               },
                             );
                           }).toList()
@@ -400,7 +398,7 @@ class _HomeComponentState extends State<HomeComponent> {
                   ),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 16,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -434,7 +432,7 @@ class _HomeComponentState extends State<HomeComponent> {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   padding: const EdgeInsets.only(left: 16),
-                  height: 150,
+                  height: 132,
                   child: ListView(
                     // This next line does the trick.
                     scrollDirection: Axis.horizontal,
@@ -449,125 +447,137 @@ class _HomeComponentState extends State<HomeComponent> {
                             var level = item?["level"];
                             return Builder(
                               builder: (BuildContext context) {
-                                return Card(
-                                  color: blackPrimaryColor,
-                                  clipBehavior: Clip.hardEdge,
-                                  margin: const EdgeInsets.only(right: 12),
-                                  child: InkWell(
-                                    splashColor:
-                                        yellowPrimaryColor.withAlpha(30),
-                                    onTap: () {
-                                      var tempItem = {
-                                        "data": {"data": []}
-                                      };
+                                return Container(
+                                  width: 240,
+                                  child: Card(
+                                    color: blackPrimaryColor,
+                                    clipBehavior: Clip.hardEdge,
+                                    margin: const EdgeInsets.only(right: 12),
+                                    child: InkWell(
+                                      splashColor:
+                                          yellowPrimaryColor.withAlpha(30),
+                                      onTap: () {
+                                        var tempItem = {
+                                          "data": {"data": []}
+                                        };
 
-                                      tempItem["data"]!["data"]?.add(item);
+                                        tempItem["data"]!["data"]?.add(item);
 
-                                      goToDetailCommunity(tempItem, 0);
-                                    },
-                                    child: Container(
-                                      width: 200,
-                                      height: 150,
-                                      decoration: BoxDecoration(
-                                          image: (coverImage != null)
-                                              ? DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                    coverImage,
-                                                  ))
-                                              : null),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            decoration:
-                                                const BoxDecoration(boxShadow: [
-                                              BoxShadow(
-                                                  color: blackSolidPrimaryColor,
-                                                  spreadRadius: 15,
-                                                  blurRadius: 15)
-                                            ]),
-                                            child: Column(
-                                              children: [
-                                                if (name != null)
-                                                  Text(
-                                                    name?.length > 18
-                                                        ? '${name?.substring(0, 18)}...'
-                                                        : name,
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600),
+                                        goToDetailCommunity(tempItem, 0);
+                                      },
+                                      child: Container(
+                                        width: 200,
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                            image: (coverImage != null)
+                                                ? DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                      coverImage,
+                                                    ))
+                                                : null),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              decoration: const BoxDecoration(
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color:
+                                                            blackSolidPrimaryColor,
+                                                        spreadRadius: 15,
+                                                        blurRadius: 15)
+                                                  ]),
+                                              child: Column(
+                                                children: [
+                                                  if (name != null)
+                                                    Text(
+                                                      name?.length > 18
+                                                          ? '${name?.substring(0, 18)}...'
+                                                          : name,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  const SizedBox(
+                                                    height: 4,
                                                   ),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                                if (item != null)
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      {
-                                                        "value": totalMission
-                                                            .toString(),
-                                                        "title": "total task"
-                                                      },
-                                                      {
-                                                        "value": totalPlayers
-                                                            .toString(),
-                                                        "title": "total players"
-                                                      },
-                                                      {
-                                                        "value":
-                                                            'Lv${level.toString()}',
-                                                        "title": "reward exp"
-                                                      }
-                                                    ].map((itemTask) {
-                                                      var title =
-                                                          itemTask["title"];
-                                                      var value =
-                                                          itemTask["value"];
+                                                  if (item != null)
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        {
+                                                          "value": totalMission
+                                                              .toString(),
+                                                          "title": "total task"
+                                                        },
+                                                        {
+                                                          "value": totalPlayers
+                                                              .toString(),
+                                                          "title":
+                                                              "total players"
+                                                        },
+                                                        {
+                                                          "value":
+                                                              'Lv${level.toString()}',
+                                                          "title": "reward exp"
+                                                        }
+                                                      ].map((itemTask) {
+                                                        var title =
+                                                            itemTask["title"];
+                                                        var value =
+                                                            itemTask["value"];
 
-                                                      return Row(
-                                                        children: [
-                                                          Image.asset(title ==
-                                                                  "total task"
-                                                              ? 'assets/images/ic_doc.png'
-                                                              : title ==
-                                                                      "total players"
-                                                                  ? 'assets/images/ic_players.png'
-                                                                  : 'assets/images/ic_level.png'),
-                                                          const SizedBox(
-                                                            width: 8,
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      6),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset(title ==
+                                                                      "total task"
+                                                                  ? 'assets/images/ic_doc.png'
+                                                                  : title ==
+                                                                          "total players"
+                                                                      ? 'assets/images/ic_players.png'
+                                                                      : 'assets/images/ic_level.png'),
+                                                              const SizedBox(
+                                                                width: 4,
+                                                              ),
+                                                              Text(
+                                                                value
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              ),
+                                                            ],
                                                           ),
-                                                          Text(
-                                                            value.toString(),
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 12,
-                                                          ),
-                                                        ],
-                                                      );
-                                                    }).toList(),
+                                                        );
+                                                      }).toList(),
+                                                    ),
+                                                  const SizedBox(
+                                                    height: 8,
                                                   ),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

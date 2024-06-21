@@ -533,7 +533,8 @@ class _ProfileComponentState extends State<ProfileComponent>
               width: double.infinity,
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      fit: BoxFit.cover,
+                      fit: BoxFit.none,
+                      scale: 1.1,
                       alignment: Alignment.topCenter,
                       image: AssetImage(
                         'assets/images/bg_profile.png',
@@ -541,7 +542,7 @@ class _ProfileComponentState extends State<ProfileComponent>
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 32,
+                    height: 42,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -631,7 +632,7 @@ class _ProfileComponentState extends State<ProfileComponent>
                           color: Colors.black,
                           spreadRadius: 42,
                           blurRadius: 42,
-                          offset: Offset(0, 40))
+                          offset: Offset(0, 20))
                     ]),
                     child: Column(
                       children: [
@@ -755,6 +756,9 @@ class _ProfileComponentState extends State<ProfileComponent>
                   ),
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 16,
             ),
             MyWidgetShimmerApp(
               isLoading: isLoadingResProfile,
