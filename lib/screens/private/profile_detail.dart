@@ -515,336 +515,352 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) {
+            return;
+          }
+          handleBack();
+        },
         child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          color: Colors.white,
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context, 'Cancel');
-          },
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      ),
-      backgroundColor: Colors.black,
-      body: Shimmer(
-        linearGradient: shimmerGradient,
-        child: SingleChildScrollView(
-          physics:
-              isLoadingGetProfile ? const NeverScrollableScrollPhysics() : null,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Stack(
-                alignment: Alignment.center,
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            leading: IconButton(
+              color: Colors.white,
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                handleBack();
+              },
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+            title: const Text(
+              'Edit Profile',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          backgroundColor: Colors.black,
+          body: Shimmer(
+            linearGradient: shimmerGradient,
+            child: SingleChildScrollView(
+              physics: isLoadingGetProfile
+                  ? const NeverScrollableScrollPhysics()
+                  : null,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Opacity(
-                      opacity: 0.7,
-                      child: Image.asset(
-                        'assets/images/bg_profile.png',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 170,
-                        alignment: Alignment.topCenter,
-                      )),
-                  Column(
+                  Stack(
+                    alignment: Alignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          if ((_picker
-                              .supportsImageSource(ImageSource.camera))) {
-                            _onImageButtonPressed(ImageSource.camera,
-                                context: context);
-                          }
-                        },
-                        child: CircleAvatar(
-                            radius: 40,
-                            child: !kIsWeb &&
-                                    defaultTargetPlatform ==
-                                        TargetPlatform.android
-                                ? FutureBuilder<void>(
-                                    future: retrieveLostData(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<void> snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.none:
-                                        case ConnectionState.waiting:
-                                          return const Text(
-                                            'You have not yet picked an image.',
-                                            textAlign: TextAlign.center,
-                                          );
-                                        case ConnectionState.done:
-                                          return _previewImages();
-                                        case ConnectionState.active:
-                                          if (snapshot.hasError) {
-                                            return Text(
-                                              'Pick image/video error: ${snapshot.error}}',
-                                              textAlign: TextAlign.center,
-                                            );
-                                          } else {
-                                            return const Text(
-                                              'You have not yet picked an image.',
-                                              textAlign: TextAlign.center,
-                                            );
+                      Opacity(
+                          opacity: 0.7,
+                          child: Image.asset(
+                            'assets/images/bg_profile.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 170,
+                            alignment: Alignment.topCenter,
+                          )),
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if ((_picker
+                                  .supportsImageSource(ImageSource.camera))) {
+                                _onImageButtonPressed(ImageSource.camera,
+                                    context: context);
+                              }
+                            },
+                            child: CircleAvatar(
+                                radius: 40,
+                                child: !kIsWeb &&
+                                        defaultTargetPlatform ==
+                                            TargetPlatform.android
+                                    ? FutureBuilder<void>(
+                                        future: retrieveLostData(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<void> snapshot) {
+                                          switch (snapshot.connectionState) {
+                                            case ConnectionState.none:
+                                            case ConnectionState.waiting:
+                                              return _previewImages();
+                                            // return const Text(
+                                            //   'You have not yet picked an image.',
+                                            //   textAlign: TextAlign.center,
+                                            // );
+                                            case ConnectionState.done:
+                                              return _previewImages();
+                                            case ConnectionState.active:
+                                              return _previewImages();
+                                            // if (snapshot.hasError) {
+                                            //   return Text(
+                                            //     'Pick image/video error: ${snapshot.error}}',
+                                            //     textAlign: TextAlign.center,
+                                            //   );
+                                            // } else {
+                                            //   return const Text(
+                                            //     'You have not yet picked an image.',
+                                            //     textAlign: TextAlign.center,
+                                            //   );
+                                            // }
                                           }
-                                      }
-                                    },
-                                  )
-                                : _previewImages()),
-                      )
+                                        },
+                                      )
+                                    : _previewImages()),
+                          )
+                        ],
+                      ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          const Row(
+                            children: [
+                              Text(
+                                'Username',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          if (isLoadingGetProfile)
+                            MyWidgetShimmerApp(
+                                isLoading: isLoadingGetProfile,
+                                child: const Card(
+                                  child: SizedBox(
+                                    width: 320,
+                                    height: 40,
+                                  ),
+                                )),
+                          if (!isLoadingGetProfile)
+                            CustomTextField(
+                              borderRadius: 4,
+                              textField: TextField(
+                                  controller: username,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                  decoration: kTextInputDecoration.copyWith(
+                                    hintText: 'Username',
+                                    hintStyle: const TextStyle(
+                                        color: greySecondaryColor),
+                                  )),
+                            ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          const Row(
+                            children: [
+                              Text(
+                                'Email Address',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          if (isLoadingGetProfile)
+                            MyWidgetShimmerApp(
+                                isLoading: isLoadingGetProfile,
+                                child: const Card(
+                                  child: SizedBox(
+                                    width: 320,
+                                    height: 40,
+                                  ),
+                                )),
+                          if (!isLoadingGetProfile)
+                            CustomTextField(
+                              isDisabled: true,
+                              borderRadius: 4,
+                              textField: TextField(
+                                  enabled: false,
+                                  controller: email,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                  decoration: kTextInputDecoration.copyWith(
+                                    hintText: 'Email address',
+                                    hintStyle: const TextStyle(
+                                        color: greySecondaryColor),
+                                  )),
+                            ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          const Row(
+                            children: [
+                              Text(
+                                'Email Recovery',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          if (recoveryEmail.text.isNotEmpty)
+                            CustomTextField(
+                              borderRadius: 4,
+                              textField: TextField(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        backgroundColor: Colors.black,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return RecoveryEmailBottomSheetApp();
+                                        });
+                                  },
+                                  readOnly: true,
+                                  controller: recoveryEmail,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                  decoration: kTextInputDecoration.copyWith(
+                                    hintText: 'Recovery email',
+                                    hintStyle: const TextStyle(
+                                        color: greySecondaryColor),
+                                  )),
+                            ),
+                          if (recoveryEmail.text.isEmpty)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomButton(
+                                  isOutlinedBackgroundColor: blackPrimaryColor,
+                                  buttonText: 'with Gmail',
+                                  isOutlined: true,
+                                  onPressed: () {
+                                    if (!(isLoadingRecoveryEmailWithGoogle ||
+                                        isLoadingRecoveryEmailWithApple)) {
+                                      signInWithGoogle();
+                                    }
+                                  },
+                                  sizeButtonIcon: 20,
+                                  buttonIcon: 'ic_google.png',
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.43,
+                                  paddingButton: 0,
+                                  labelSize: 12,
+                                  isLoading: isLoadingRecoveryEmailWithGoogle,
+                                ),
+                                // CustomButton(
+                                //     isOutlinedBackgroundColor: blackPrimaryColor,
+                                //     buttonText: 'with Apple ID',
+                                //     isOutlined: true,
+                                //     onPressed: () {
+                                //       if (!(isLoadingRecoveryEmailWithApple ||
+                                //           isLoadingRecoveryEmailWithGoogle)) {}
+                                //     },
+                                //     sizeButtonIcon: 20,
+                                //     buttonIcon: 'ic_apple.png',
+                                //     width: MediaQuery.of(context).size.width * 0.43,
+                                //     paddingButton: 0,
+                                //     labelSize: 14,
+                                //     isLoading: isLoadingRecoveryEmailWithApple)
+                              ],
+                            ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          const Row(
+                            children: [
+                              Text(
+                                'Linked Account',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children:
+                                resProfile?["data"]?["linkedAccount"] != null
+                                    ? (resProfile?["data"]?["linkedAccount"]
+                                            as Map<String, dynamic>)
+                                        .entries
+                                        .map((item) => Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 16,
+                                                ),
+                                                CustomButton(
+                                                    isOutlinedBackgroundColor:
+                                                        blackPrimaryColor,
+                                                    buttonText:
+                                                        'Connect to ${item.key}',
+                                                    isOutlined: true,
+                                                    onPressed: () {
+                                                      _launchUrl(item.value);
+                                                    },
+                                                    labelSize: 12,
+                                                    sizeButtonIcon: 20,
+                                                    buttonIcon:
+                                                        'ic_${item.key}.png',
+                                                    width: 500,
+                                                    paddingButton: 0)
+                                              ],
+                                            ))
+                                        .toList()
+                                    : [],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.15,
+                          )
+                        ],
+                      )),
                 ],
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      const Row(
-                        children: [
-                          Text(
-                            'Username',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      if (isLoadingGetProfile)
-                        MyWidgetShimmerApp(
-                            isLoading: isLoadingGetProfile,
-                            child: const Card(
-                              child: SizedBox(
-                                width: 320,
-                                height: 40,
-                              ),
-                            )),
-                      if (!isLoadingGetProfile)
-                        CustomTextField(
-                          borderRadius: 4,
-                          textField: TextField(
-                              controller: username,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                              ),
-                              decoration: kTextInputDecoration.copyWith(
-                                hintText: 'Username',
-                                hintStyle:
-                                    const TextStyle(color: greySecondaryColor),
-                              )),
-                        ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'Email Address',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      if (isLoadingGetProfile)
-                        MyWidgetShimmerApp(
-                            isLoading: isLoadingGetProfile,
-                            child: const Card(
-                              child: SizedBox(
-                                width: 320,
-                                height: 40,
-                              ),
-                            )),
-                      if (!isLoadingGetProfile)
-                        CustomTextField(
-                          isDisabled: true,
-                          borderRadius: 4,
-                          textField: TextField(
-                              enabled: false,
-                              controller: email,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                              ),
-                              decoration: kTextInputDecoration.copyWith(
-                                hintText: 'Email address',
-                                hintStyle:
-                                    const TextStyle(color: greySecondaryColor),
-                              )),
-                        ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'Email Recovery',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      if (recoveryEmail.text.isNotEmpty)
-                        CustomTextField(
-                          borderRadius: 4,
-                          textField: TextField(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    backgroundColor: Colors.black,
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return RecoveryEmailBottomSheetApp();
-                                    });
-                              },
-                              readOnly: true,
-                              controller: recoveryEmail,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                              decoration: kTextInputDecoration.copyWith(
-                                hintText: 'Recovery email',
-                                hintStyle:
-                                    const TextStyle(color: greySecondaryColor),
-                              )),
-                        ),
-                      if (recoveryEmail.text.isEmpty)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomButton(
-                              isOutlinedBackgroundColor: blackPrimaryColor,
-                              buttonText: 'with Gmail',
-                              isOutlined: true,
-                              onPressed: () {
-                                if (!(isLoadingRecoveryEmailWithGoogle ||
-                                    isLoadingRecoveryEmailWithApple)) {
-                                  signInWithGoogle();
-                                }
-                              },
-                              sizeButtonIcon: 20,
-                              buttonIcon: 'ic_google.png',
-                              width: MediaQuery.of(context).size.width * 0.43,
-                              paddingButton: 0,
-                              labelSize: 12,
-                              isLoading: isLoadingRecoveryEmailWithGoogle,
-                            ),
-                            // CustomButton(
-                            //     isOutlinedBackgroundColor: blackPrimaryColor,
-                            //     buttonText: 'with Apple ID',
-                            //     isOutlined: true,
-                            //     onPressed: () {
-                            //       if (!(isLoadingRecoveryEmailWithApple ||
-                            //           isLoadingRecoveryEmailWithGoogle)) {}
-                            //     },
-                            //     sizeButtonIcon: 20,
-                            //     buttonIcon: 'ic_apple.png',
-                            //     width: MediaQuery.of(context).size.width * 0.43,
-                            //     paddingButton: 0,
-                            //     labelSize: 14,
-                            //     isLoading: isLoadingRecoveryEmailWithApple)
-                          ],
-                        ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'Linked Account',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: resProfile?["data"]?["linkedAccount"] != null
-                            ? (resProfile?["data"]?["linkedAccount"]
-                                    as Map<String, dynamic>)
-                                .entries
-                                .map((item) => Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 16,
-                                        ),
-                                        CustomButton(
-                                            isOutlinedBackgroundColor:
-                                                blackPrimaryColor,
-                                            buttonText:
-                                                'Connect to ${item.key}',
-                                            isOutlined: true,
-                                            onPressed: () {
-                                              _launchUrl(item.value);
-                                            },
-                                            labelSize: 12,
-                                            sizeButtonIcon: 20,
-                                            buttonIcon: 'ic_${item.key}.png',
-                                            width: 500,
-                                            paddingButton: 0)
-                                      ],
-                                    ))
-                                .toList()
-                            : [],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.15,
-                      )
-                    ],
-                  )),
-            ],
+              // This is the title in the app bar.
+            ),
           ),
-          // This is the title in the app bar.
-        ),
-      ),
-      bottomSheet: Container(
-          padding: const EdgeInsets.all(16),
-          color: Colors.black,
-          child: Shimmer(
-            linearGradient: shimmerGradient,
-            child: MyWidgetShimmerApp(
-                isLoading: isLoadingGetProfile,
-                child: CustomButton(
-                    isLoading: isLoadingUpdateProfile,
-                    buttonText: 'Save',
-                    onPressed: () {
-                      if (!isLoadingUpdateProfile) {
-                        handleUpdateProfile(context: context, refetch: true);
-                      }
-                    },
-                    sizeButtonIcon: 20,
-                    labelSize: 14,
-                    width: 500,
-                    height: 44,
-                    paddingButton: 0)),
-          )),
-    ));
+          bottomSheet: Container(
+              padding: const EdgeInsets.all(16),
+              color: Colors.black,
+              child: Shimmer(
+                linearGradient: shimmerGradient,
+                child: MyWidgetShimmerApp(
+                    isLoading: isLoadingGetProfile,
+                    child: CustomButton(
+                        isLoading: isLoadingUpdateProfile,
+                        buttonText: 'Save',
+                        onPressed: () {
+                          if (!isLoadingUpdateProfile) {
+                            handleUpdateProfile(
+                                context: context, refetch: true);
+                          }
+                        },
+                        sizeButtonIcon: 20,
+                        labelSize: 14,
+                        width: 500,
+                        height: 44,
+                        paddingButton: 0)),
+              )),
+        ));
   }
 }
 
