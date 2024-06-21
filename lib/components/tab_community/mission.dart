@@ -80,7 +80,9 @@ class _TabContentCommunityMissionsComponentState
                     children: [
                       if (name != null)
                         Text(
-                          name ?? "",
+                          name.length > 20
+                              ? name.substring(0, 20) + "..."
+                              : name,
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,

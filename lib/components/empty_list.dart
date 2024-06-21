@@ -21,7 +21,8 @@ class MyWidgetEmptyList extends StatefulWidget {
 class _MyWidgetEmptyListState extends State<MyWidgetEmptyList> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Center(
+        child: Column(
       children: [
         Image.asset(
           'assets/images/empty_state.png',
@@ -35,6 +36,6 @@ class _MyWidgetEmptyListState extends State<MyWidgetEmptyList> {
           ),
         )
       ],
-    );
+    ));
   }
 }

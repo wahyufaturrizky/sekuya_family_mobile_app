@@ -55,7 +55,7 @@ class _TabContentMissionComponentState
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.symmetric(vertical: 16.0),
+      margin: const EdgeInsets.only(bottom: 16.0),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {

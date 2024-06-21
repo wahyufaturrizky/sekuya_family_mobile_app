@@ -157,233 +157,176 @@ class _MissionComponentState extends State<MissionComponent> {
   @override
   Widget build(BuildContext context) {
     return Shimmer(
-        linearGradient: shimmerGradient,
-        child: NestedScrollView(
-          physics:
-              isLoadingResMission ? const NeverScrollableScrollPhysics() : null,
-          controller: nestedScrollViewContoller,
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            // These are the slivers that show up in the "outer" scroll view.
-            return <Widget>[
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      const Center(
-                        child: Text(
-                          'Missions',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      const Center(
-                        child: Text(
-                          'Explore the innovative digital world \nand seize the opportunity to win exciting prizes! ',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            height: 20 / 12,
-                            color: greySecondaryColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      CustomTextField(
-                        textField: TextField(
-                            controller: searchController,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                            textAlignVertical: TextAlignVertical.center,
-                            decoration: kTextInputDecoration.copyWith(
-                              hintText: 'Search',
-                              prefixIcon: const Icon(Icons.search),
-                              prefixIconColor: greySecondaryColor,
-                              hintStyle:
-                                  const TextStyle(color: greySecondaryColor),
-                            )),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                                padding:
-                                    const EdgeInsets.only(left: 16, right: 16),
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40.0),
-                                  border: Border.all(
-                                      color:
-                                          const Color.fromRGBO(80, 80, 82, 1),
-                                      style: BorderStyle.solid,
-                                      width: 0.80),
-                                ),
-                                child: DropdownButton<String>(
-                                  value: filterStatus,
-                                  dropdownColor: Colors.black,
-                                  hint: const Text(
-                                    'All Status',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  icon: const Icon(Icons.expand_more),
-                                  iconEnabledColor: Colors.white,
-                                  elevation: 16,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  underline: Container(height: 0),
-                                  isExpanded: true,
-                                  onChanged: (String? value) {
-                                    // This is called when the user selects an item.
-                                    setState(() {
-                                      filterStatus = value!;
-                                    });
-
-                                    getDataMission(
-                                        filter_by_value: value, refetch: true);
-                                  },
-                                  items: list.map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                      ),
-                                    );
-                                  }).toList(),
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                                padding:
-                                    const EdgeInsets.only(left: 16, right: 16),
-                                height: 36,
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40.0),
-                                  border: Border.all(
-                                      color:
-                                          const Color.fromRGBO(80, 80, 82, 1),
-                                      style: BorderStyle.solid,
-                                      width: 0.80),
-                                ),
-                                child: DropdownButton<String>(
-                                  dropdownColor: Colors.black,
-                                  value: filterReward,
-                                  hint: const Text(
-                                    'All Reward',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  icon: const Icon(Icons.expand_more),
-                                  iconEnabledColor: Colors.white,
-                                  elevation: 16,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  underline: Container(height: 0),
-                                  isExpanded: true,
-                                  onChanged: (String? value) {
-                                    // This is called when the user selects an item.
-                                    setState(() {
-                                      filterReward = value!;
-                                    });
-                                    getDataMission(
-                                        filter_by_value: value, refetch: true);
-                                  },
-                                  items: list.map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                      ),
-                                    );
-                                  }).toList(),
-                                )),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  floating: true,
-                  expandedHeight: 240.0,
-                  toolbarHeight: 250,
-                  backgroundColor: Colors.black,
-                  forceElevated: innerBoxIsScrolled,
+      linearGradient: shimmerGradient,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(
+              height: 24,
+            ),
+            const Center(
+              child: Text(
+                'Missions',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            const Center(
+              child: Text(
+                'Explore the innovative digital world \nand seize the opportunity to win exciting prizes! ',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  height: 20 / 12,
+                  color: greySecondaryColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ];
-          },
-          body: Builder(
-            builder: (BuildContext context) {
-              return Column(
-                children: [
-                  Expanded(
-                      child: Container(
-                    color: Colors.black,
-                    child: CustomScrollView(
-                      slivers: <Widget>[
-                        SliverOverlapInjector(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                  context),
-                        ),
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverFixedExtentList(
-                            itemExtent: 180.0,
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return MyWidgetShimmerApp(
-                                    isLoading: isLoadingResMission,
-                                    child: TabContentMissionComponentApp(
-                                      resMission: resMission,
-                                      index: index,
-                                    ));
-                              },
-                              childCount:
-                                  itemPerPageState == 0 ? 5 : itemPerPageState,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            CustomTextField(
+              textField: TextField(
+                  controller: searchController,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: kTextInputDecoration.copyWith(
+                    hintText: 'Search',
+                    prefixIcon: const Icon(Icons.search),
+                    prefixIconColor: greySecondaryColor,
+                    hintStyle: const TextStyle(color: greySecondaryColor),
                   )),
-                  // if (noDataAnymore)
-                  //   const Center(
-                  //     child: Text("👋🏻 Hi your reach the end of the list",
-                  //         style: TextStyle(color: Colors.white, fontSize: 14)),
-                  //   ),
-                ],
-              );
-            },
-          ),
-        ));
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      height: 36,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40.0),
+                        border: Border.all(
+                            color: const Color.fromRGBO(80, 80, 82, 1),
+                            style: BorderStyle.solid,
+                            width: 0.80),
+                      ),
+                      child: DropdownButton<String>(
+                        value: filterStatus,
+                        dropdownColor: Colors.black,
+                        hint: const Text(
+                          'All Status',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        icon: const Icon(Icons.expand_more),
+                        iconEnabledColor: Colors.white,
+                        elevation: 16,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        underline: Container(height: 0),
+                        isExpanded: true,
+                        onChanged: (String? value) {
+                          // This is called when the user selects an item.
+                          setState(() {
+                            filterStatus = value!;
+                          });
+
+                          getDataMission(filter_by_value: value, refetch: true);
+                        },
+                        items:
+                            list.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                            ),
+                          );
+                        }).toList(),
+                      )),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      height: 36,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40.0),
+                        border: Border.all(
+                            color: const Color.fromRGBO(80, 80, 82, 1),
+                            style: BorderStyle.solid,
+                            width: 0.80),
+                      ),
+                      child: DropdownButton<String>(
+                        dropdownColor: Colors.black,
+                        value: filterReward,
+                        hint: const Text(
+                          'All Reward',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        icon: const Icon(Icons.expand_more),
+                        iconEnabledColor: Colors.white,
+                        elevation: 16,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        underline: Container(height: 0),
+                        isExpanded: true,
+                        onChanged: (String? value) {
+                          // This is called when the user selects an item.
+                          setState(() {
+                            filterReward = value!;
+                          });
+                          getDataMission(filter_by_value: value, refetch: true);
+                        },
+                        items:
+                            list.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                            ),
+                          );
+                        }).toList(),
+                      )),
+                )
+              ],
+            ),
+            Flexible(
+              child: ListView.builder(
+                itemCount: itemPerPageState == 0 ? 5 : itemPerPageState,
+                itemBuilder: (BuildContext context, int index) {
+                  return MyWidgetShimmerApp(
+                      isLoading: isLoadingResMission,
+                      child: TabContentMissionComponentApp(
+                        resMission: resMission,
+                        index: index,
+                      ));
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

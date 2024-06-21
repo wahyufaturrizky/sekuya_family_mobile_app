@@ -744,9 +744,8 @@ class _ProfileComponentState extends State<ProfileComponent>
                                   },
                                   child: MyWidgetShimmerApp(
                                       isLoading: isLoadingResProfile,
-                                      child: const CircleAvatar(
-                                        radius: 20,
-                                      ))))
+                                      child: Image.asset(
+                                          'assets/images/award_0$item.png'))))
                               .toList(),
                         ),
                       ],
@@ -838,7 +837,8 @@ class _ProfileComponentState extends State<ProfileComponent>
                           color: mainBlackColor,
                           margin: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               if (name == "My Mission" &&
                                   resMyMission == null &&

@@ -13,7 +13,8 @@ import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black, systemNavigationBarColor: Colors.black));
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.black));
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
