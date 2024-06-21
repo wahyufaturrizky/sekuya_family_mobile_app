@@ -50,7 +50,6 @@ class ProfileDetail extends StatefulWidget {
 class _ProfileDetailState extends State<ProfileDetail> {
   bool isLoadingGetProfile = false;
   bool isLoadingUpdateProfile = false;
-  bool isLoadingUpdateDataProfile = false;
   bool isLoadingRecoveryEmailWithGoogle = false;
   bool isLoadingRecoveryEmailWithApple = false;
   var resProfile;
@@ -81,12 +80,16 @@ class _ProfileDetailState extends State<ProfileDetail> {
     _mediaFileList = value == null ? null : <XFile>[value];
   }
 
-  Future<dynamic> getDataProfile() async {
+  Future<dynamic> getDataProfile({refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
         setState(() {
-          isLoadingGetProfile = true;
+          if (refetch) {
+            isLoadingUpdateProfile = true;
+          } else {
+            isLoadingGetProfile = true;
+          }
         });
       }
 
@@ -101,6 +104,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
             recoveryEmail.text = resProfile["data"]?["recoveryEmail"];
             username.text = resProfile["data"]?["username"];
             isLoadingGetProfile = false;
+            isLoadingUpdateProfile = false;
           });
         }
       }
@@ -108,6 +112,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
       if (mounted) {
         setState(() {
           isLoadingGetProfile = false;
+          isLoadingUpdateProfile = false;
         });
       }
 
@@ -395,11 +400,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
   Future<dynamic> handleUpdateProfile({context, refetch = false}) async {
     try {
       setState(() {
-        if (refetch) {
-          isLoadingUpdateDataProfile = true;
-        } else {
-          isLoadingUpdateProfile = true;
-        }
+        isLoadingUpdateProfile = true;
       });
 
       final formData = FormData.fromMap({
@@ -428,15 +429,15 @@ class _ProfileDetailState extends State<ProfileDetail> {
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
+        getDataProfile(refetch: true);
+
         setState(() {
           isLoadingUpdateProfile = false;
-          isLoadingUpdateDataProfile = false;
         });
       }
     } catch (e) {
       setState(() {
         isLoadingUpdateProfile = false;
-        isLoadingUpdateDataProfile = false;
       });
       print(e);
     }
@@ -830,12 +831,10 @@ class _ProfileDetailState extends State<ProfileDetail> {
             child: MyWidgetShimmerApp(
                 isLoading: isLoadingGetProfile,
                 child: CustomButton(
-                    isLoading:
-                        isLoadingUpdateProfile || isLoadingUpdateDataProfile,
+                    isLoading: isLoadingUpdateProfile,
                     buttonText: 'Save',
                     onPressed: () {
-                      if (!isLoadingUpdateProfile &&
-                          !isLoadingUpdateDataProfile) {
+                      if (!isLoadingUpdateProfile) {
                         handleUpdateProfile(context: context, refetch: true);
                       }
                     },

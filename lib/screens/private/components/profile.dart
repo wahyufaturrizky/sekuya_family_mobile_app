@@ -529,7 +529,7 @@ class _ProfileComponentState extends State<ProfileComponent>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              height: MediaQuery.of(context).size.width * 0.6,
+              height: MediaQuery.of(context).size.width * 0.65,
               width: double.infinity,
               decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -636,8 +636,7 @@ class _ProfileComponentState extends State<ProfileComponent>
                     ]),
                     child: Column(
                       children: [
-                        if (resProfile?["data"]?["username"] != null &&
-                            resProfile?["data"]?["username"].isNotEmpty)
+                        if (resProfile?["data"]?["username"] != null)
                           Text(
                             resProfile?["data"]?["username"],
                             style: const TextStyle(
@@ -645,10 +644,9 @@ class _ProfileComponentState extends State<ProfileComponent>
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
-                        if (resProfile?["data"]?["email"] != null &&
-                            resProfile?["data"]?["email"].isNotEmpty)
+                        if (resProfile?["data"]?["email"] != null)
                           Text(
-                            resProfile?["data"]?["email"] ?? "-",
+                            resProfile?["data"]?["email"],
                             style: const TextStyle(
                                 color: greySecondaryColor,
                                 fontSize: 14,
