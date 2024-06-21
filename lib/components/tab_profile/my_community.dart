@@ -56,7 +56,7 @@ class _TabContentProfileMyCommunityComponentState
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {

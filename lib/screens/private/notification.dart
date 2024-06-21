@@ -197,7 +197,8 @@ class _NotificationState extends State<Notification> {
           color: Colors.white,
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            handleBack();
+            // handleBack();
+            Navigator.pop(context, 'Cancel');
           },
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(),
@@ -229,80 +230,91 @@ class _NotificationState extends State<Notification> {
                 // ),
                 if (resNotification != null)
                   Column(
-                    children: (resNotification?["data"]?["data"]
-                            as List<dynamic>)
-                        .map((item) => GestureDetector(
-                            onTap: () {
-                              if (!isLoadingJoinCommunity) {
-                                handleGetDetailNotification(item);
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: const BoxDecoration(
-                                  color: goldenSoftColor,
-                                  border: Border.symmetric(
-                                      horizontal: BorderSide(
-                                          color: greySoftFourthColor,
-                                          width: 1))),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
+                    children:
+                        (resNotification?["data"]?["data"] as List<dynamic>)
+                            .map((item) {
+                      var dataNotifItem = item?["data"];
+                      var title = item?["title"];
+                      var body = item?["body"];
+                      var createdAt = item?["createdAt"];
+
+                      var taskCategoryKey = dataNotifItem?["taskCategoryKey"];
+
+                      return GestureDetector(
+                          onTap: () {
+                            if (!isLoadingJoinCommunity) {
+                              handleGetDetailNotification(item);
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: const BoxDecoration(
+                                color: goldenSoftColor,
+                                border: Border.symmetric(
+                                    horizontal: BorderSide(
+                                        color: greySoftFourthColor, width: 1))),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    if (taskCategoryKey != null)
                                       Text(
-                                        item["data"]?["taskCategoryKey"],
+                                        taskCategoryKey,
                                         style: const TextStyle(
                                           color: goldenColor,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
+                                    if (createdAt != null)
                                       Text(
-                                        handleFormatDate(item?["createdAt"]),
+                                        handleFormatDate(createdAt),
                                         style: const TextStyle(
                                           color: greySoftThirdColor,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    children: [
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  children: [
+                                    if (title != null)
                                       Flexible(
                                         child: Text(
-                                          item?["title"],
+                                          title,
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Row(
-                                    children: [
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Row(
+                                  children: [
+                                    if (body != null)
                                       Flexible(
                                         child: Text(
-                                          item?["body"],
+                                          body,
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
                                         ),
                                       )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            )))
-                        .toList(),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ));
+                    }).toList(),
                   ),
               ],
             ),

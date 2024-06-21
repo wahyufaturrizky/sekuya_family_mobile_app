@@ -42,6 +42,7 @@ class _TabContentCommunityMembersComponentState
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(4),

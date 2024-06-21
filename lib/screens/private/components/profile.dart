@@ -544,80 +544,83 @@ class _ProfileComponentState extends State<ProfileComponent>
                     const SizedBox(
                       height: 32,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Application.router.navigateTo(
-                              context,
-                              "/notificationScreen",
-                              transition: TransitionType.native,
-                            );
-                          },
-                          child: const Icon(
-                            Icons.notifications,
-                            color: yellowPrimaryColor,
-                          ),
-                        ),
-                        MyWidgetShimmerApp(
-                          isLoading: isLoadingResProfile,
-                          child: CircleAvatar(
-                            backgroundImage:
-                                resProfile?["data"]?["profilePic"] != null
-                                    ? NetworkImage(
-                                        resProfile?["data"]?["profilePic"])
-                                    : null,
-                            radius: 40,
-                          ),
-                        ),
-                        PopupMenuButton<String>(
-                            color: Colors.black,
-                            onSelected: (String item) {
-                              if (item == 'Logout') {
-                                handleLogout();
-                              } else {
-                                Application.router.navigateTo(
-                                  context,
-                                  "/profileDetailScreens",
-                                  transition: TransitionType.native,
-                                );
-                              }
-                            },
-                            itemBuilder: (BuildContext context) {
-                              return menu
-                                  .map((item) => PopupMenuItem<String>(
-                                        value: item,
-                                        child: ListTile(
-                                          leading: Icon(
-                                            item == "Logout"
-                                                ? Icons.logout_outlined
-                                                : Icons.edit_outlined,
-                                            color: item == "Logout"
-                                                ? redSolidPrimaryColor
-                                                : Colors.white,
-                                          ),
-                                          title: Text(
-                                            item == "Logout"
-                                                ? 'Logout'
-                                                : 'Edit Profile',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: item == "Logout"
-                                                    ? redSolidPrimaryColor
-                                                    : Colors.white),
-                                          ),
-                                        ),
-                                      ))
-                                  .toList();
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Application.router.navigateTo(
+                                context,
+                                "/notificationScreen",
+                                transition: TransitionType.native,
+                              );
                             },
                             child: const Icon(
-                              Icons.more_vert,
-                              color: Colors.white,
-                            ))
-                      ],
+                              Icons.notifications,
+                              color: yellowPrimaryColor,
+                            ),
+                          ),
+                          MyWidgetShimmerApp(
+                            isLoading: isLoadingResProfile,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  resProfile?["data"]?["profilePic"] != null
+                                      ? NetworkImage(
+                                          resProfile?["data"]?["profilePic"])
+                                      : null,
+                              radius: 40,
+                            ),
+                          ),
+                          PopupMenuButton<String>(
+                              color: Colors.black,
+                              onSelected: (String item) {
+                                if (item == 'Logout') {
+                                  handleLogout();
+                                } else {
+                                  Application.router.navigateTo(
+                                    context,
+                                    "/profileDetailScreens",
+                                    transition: TransitionType.native,
+                                  );
+                                }
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return menu
+                                    .map((item) => PopupMenuItem<String>(
+                                          value: item,
+                                          child: ListTile(
+                                            leading: Icon(
+                                              item == "Logout"
+                                                  ? Icons.logout_outlined
+                                                  : Icons.edit_outlined,
+                                              color: item == "Logout"
+                                                  ? redSolidPrimaryColor
+                                                  : Colors.white,
+                                            ),
+                                            title: Text(
+                                              item == "Logout"
+                                                  ? 'Logout'
+                                                  : 'Edit Profile',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: item == "Logout"
+                                                      ? redSolidPrimaryColor
+                                                      : Colors.white),
+                                            ),
+                                          ),
+                                        ))
+                                    .toList();
+                              },
+                              child: const Icon(
+                                Icons.more_vert,
+                                color: Colors.white,
+                              ))
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 12,
@@ -748,6 +751,7 @@ class _ProfileComponentState extends State<ProfileComponent>
               child: Container(
                   height: 56,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/images/bg_progress_xp.png'),
@@ -820,6 +824,7 @@ class _ProfileComponentState extends State<ProfileComponent>
                     builder: (BuildContext context) {
                       return Container(
                           color: mainBlackColor,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [

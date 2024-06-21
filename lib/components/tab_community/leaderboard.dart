@@ -93,7 +93,7 @@ class _TabContentCommunityLeaderBoardComponentState
                   color: blackPrimaryColor,
                   width: 1,
                 )),
-      margin: const EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
