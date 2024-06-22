@@ -144,19 +144,23 @@ class _MyWidgetShimmerState extends State<MyWidgetShimmer> {
       // itself out yet. Return an empty box.
       return const SizedBox();
     }
+    Offset? offsetWithinShimmer;
     final shimmerSize = shimmer.size;
     final gradient = shimmer.gradient;
-    final offsetWithinShimmer = shimmer.getDescendantOffset(
-      descendant: context.findRenderObject()! as RenderBox,
-    );
+
+    if (context.findRenderObject() != null) {
+      offsetWithinShimmer = shimmer.getDescendantOffset(
+        descendant: context.findRenderObject() as RenderBox,
+      );
+    }
 
     return ShaderMask(
       blendMode: BlendMode.srcATop,
       shaderCallback: (bounds) {
         return gradient.createShader(
           Rect.fromLTWH(
-            -offsetWithinShimmer.dx,
-            -offsetWithinShimmer.dy,
+            -(offsetWithinShimmer?.dx ?? 0.0),
+            -(offsetWithinShimmer?.dy ?? 0.0),
             shimmerSize.width,
             shimmerSize.height,
           ),
