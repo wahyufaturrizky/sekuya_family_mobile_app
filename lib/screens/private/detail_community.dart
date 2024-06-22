@@ -579,14 +579,15 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
                       const SizedBox(
                         height: 16,
                       ),
-                      Text(
-                        maxLines: 3,
-                        description.toString(),
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400),
-                      ),
+                      if (description != null)
+                        Text(
+                          maxLines: 3,
+                          description.toString(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400),
+                        ),
                       const SizedBox(
                         height: 15,
                       ),

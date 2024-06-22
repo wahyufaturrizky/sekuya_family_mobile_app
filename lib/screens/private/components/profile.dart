@@ -809,7 +809,7 @@ class _ProfileComponentState extends State<ProfileComponent>
             TabBar(
               labelColor: yellowPrimaryColor,
               unselectedLabelColor: greySecondaryColor,
-              dividerColor: greySecondaryColor,
+              dividerColor: blackPrimaryColor,
               overlayColor:
                   MaterialStateProperty.all<Color>(yellowPrimaryColor),
               indicatorSize: TabBarIndicatorSize.tab,
