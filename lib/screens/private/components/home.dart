@@ -37,17 +37,13 @@ class _HomeComponentState extends State<HomeComponent> {
   void goToDetailMission(data, index) {
     final arguments = MyArgumentsDataDetailMissionClass(data, index);
 
-    Application.router.navigateTo(context, "/detailMissionScreen",
-        transition: TransitionType.native,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/detailMissionScreen", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
   }
 
   void goToDetailCommunity(data, index) {
     final arguments = MyArgumentsDataDetailCommunityClass(data, index);
 
-    Application.router.navigateTo(context, "/communityDetailScreens",
-        transition: TransitionType.native,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/communityDetailScreens", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
   }
 
   @override
@@ -89,17 +85,13 @@ class _HomeComponentState extends State<HomeComponent> {
   void goToListMission() {
     final arguments = MyArgumentsDataClass(false, false, false, true);
 
-    Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromRight,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/privateScreens", transition: TransitionType.inFromRight, routeSettings: RouteSettings(arguments: arguments));
   }
 
   void goToListCommunity() {
     final arguments = MyArgumentsDataClass(false, true, false, false);
 
-    Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromRight,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/privateScreens", transition: TransitionType.inFromRight, routeSettings: RouteSettings(arguments: arguments));
   }
 
   @override
@@ -111,6 +103,7 @@ class _HomeComponentState extends State<HomeComponent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                SizedBox(height: 10),
                 CarouselSlider(
                   options: CarouselOptions(
                     height: 180.0,
@@ -154,10 +147,7 @@ class _HomeComponentState extends State<HomeComponent> {
                     children: [
                       Text(
                         'Featured Mission',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700),
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -165,10 +155,7 @@ class _HomeComponentState extends State<HomeComponent> {
                         },
                         child: Text(
                           'See All',
-                          style: TextStyle(
-                              color: yellowPrimaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500),
+                          style: TextStyle(color: yellowPrimaryColor, fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                       )
                     ],
@@ -179,13 +166,10 @@ class _HomeComponentState extends State<HomeComponent> {
                   padding: const EdgeInsets.only(left: 16),
                   height: 135,
                   child: ListView(
-                    physics:
-                        isLoading ? const NeverScrollableScrollPhysics() : null,
+                    physics: isLoading ? const NeverScrollableScrollPhysics() : null,
                     scrollDirection: Axis.horizontal,
                     children: resDashboard != null
-                        ? (resDashboard?["data"]?["featuredMissions"]
-                                as List<dynamic>)
-                            .map((item) {
+                        ? (resDashboard?["data"]?["featuredMissions"] as List<dynamic>).map((item) {
                             return Builder(
                               builder: (BuildContext context) {
                                 var rewards = item?["rewards"];
@@ -194,15 +178,14 @@ class _HomeComponentState extends State<HomeComponent> {
                                 var community = item?["community"];
                                 var totalTasks = item?["totalTasks"];
                                 var totalExp = item?["totalExp"];
-                                return Container(
-                                    width: 160,
+                                return SizedBox(
+                                    width: 180,
                                     child: Card(
                                       color: blackPrimaryColor,
                                       clipBehavior: Clip.hardEdge,
                                       margin: const EdgeInsets.only(right: 12),
                                       child: InkWell(
-                                        splashColor:
-                                            yellowPrimaryColor.withAlpha(30),
+                                        splashColor: yellowPrimaryColor.withAlpha(30),
                                         onTap: () {
                                           var tempItem = {
                                             "data": {"data": []}
@@ -213,38 +196,31 @@ class _HomeComponentState extends State<HomeComponent> {
                                           goToDetailMission(tempItem, 0);
                                         },
                                         child: SizedBox(
-                                          width: 200,
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.all(12.0),
+                                                padding: const EdgeInsets.all(12.0),
                                                 child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     if (name != null)
                                                       Text(
-                                                        name?.length > 19
-                                                            ? '${name.substring(0, 19)}...'
-                                                            : name,
+                                                        name,
                                                         style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                          color: Colors.white,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
                                                       ),
                                                     const SizedBox(
                                                       height: 8,
                                                     ),
                                                     Row(
                                                       children: [
-                                                        if (community?[
-                                                                "image"] !=
-                                                            null)
+                                                        if (community?["image"] != null)
                                                           Image.network(
                                                             community?["image"],
                                                             height: 12,
@@ -254,19 +230,18 @@ class _HomeComponentState extends State<HomeComponent> {
                                                           width: 6,
                                                         ),
                                                         if (description != null)
-                                                          Text(
-                                                            description?.length >
-                                                                    12
-                                                                ? '${description.substring(0, 12)}...'
-                                                                : description,
-                                                            style: const TextStyle(
-                                                                color:
-                                                                    greySecondaryColor,
+                                                          Expanded(
+                                                            child: Text(
+                                                              description,
+                                                              style: const TextStyle(
+                                                                color: greySecondaryColor,
                                                                 fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
-                                                          )
+                                                                fontWeight: FontWeight.w600,
+                                                              ),
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+                                                          ),
                                                       ],
                                                     ),
                                                   ],
@@ -275,99 +250,48 @@ class _HomeComponentState extends State<HomeComponent> {
                                               Container(
                                                 color: blackSolidPrimaryColor,
                                                 child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 8),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                                   child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
                                                             {
                                                               "title": "Task",
-                                                              "value": totalTasks
-                                                                  .toString(),
+                                                              "value": totalTasks.toString(),
                                                             },
                                                             {
                                                               "title": "Xp",
-                                                              "value": totalExp
-                                                                  .toStringAsFixed(
-                                                                      1),
+                                                              "value": totalExp.toStringAsFixed(1),
                                                             },
                                                             {
-                                                              "title": rewards
-                                                                      .isEmpty
-                                                                  ? ""
-                                                                  : rewards?[0]
-                                                                              ?[
-                                                                              "name"]
-                                                                          .substring(
-                                                                              0,
-                                                                              4) +
-                                                                      "...",
-                                                              "value": rewards
-                                                                      .isEmpty
-                                                                  ? ""
-                                                                  : rewards?[0]
-                                                                          ?[
-                                                                          "maxQty"]
-                                                                      .toString()
-                                                                      .substring(
-                                                                          0, 1),
-                                                              "image": rewards
-                                                                      .isEmpty
-                                                                  ? null
-                                                                  : rewards?[0]
-                                                                      ?[
-                                                                      "image"],
+                                                              "title": rewards.isEmpty ? "" : rewards?[0]?["name"].substring(0, 4) + "...",
+                                                              "value": rewards.isEmpty ? "" : rewards?[0]?["maxQty"].toString().substring(0, 1),
+                                                              "image": rewards.isEmpty ? null : rewards?[0]?["image"],
                                                             },
                                                           ]
                                                               .map(
-                                                                (itemMission) =>
-                                                                    Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
+                                                                (itemMission) => Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                                   children: [
                                                                     Row(
                                                                       children: [
-                                                                        if (itemMission["image"] !=
-                                                                            null)
-                                                                          Image
-                                                                              .network(
+                                                                        if (itemMission["image"] != null)
+                                                                          Image.network(
                                                                             itemMission["image"]!,
-                                                                            width:
-                                                                                10,
-                                                                            height:
-                                                                                10,
+                                                                            width: 10,
+                                                                            height: 10,
                                                                           ),
                                                                         Text(
-                                                                          itemMission["value"]
-                                                                              .toString(),
-                                                                          style: const TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontSize: 10,
-                                                                              fontWeight: FontWeight.w600),
+                                                                          itemMission["value"].toString(),
+                                                                          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600),
                                                                         ),
                                                                       ],
                                                                     ),
                                                                     Text(
-                                                                      itemMission[
-                                                                              "title"]
-                                                                          .toString(),
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              greySecondaryColor,
-                                                                          fontSize:
-                                                                              10,
-                                                                          fontWeight:
-                                                                              FontWeight.w500),
+                                                                      itemMission["title"].toString(),
+                                                                      style: const TextStyle(color: greySecondaryColor, fontSize: 10, fontWeight: FontWeight.w500),
                                                                     )
                                                                   ],
                                                                 ),
@@ -398,7 +322,7 @@ class _HomeComponentState extends State<HomeComponent> {
                   ),
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 32,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -410,10 +334,7 @@ class _HomeComponentState extends State<HomeComponent> {
                     children: [
                       Text(
                         'Featured Communities',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
                           onTap: () {
@@ -421,10 +342,7 @@ class _HomeComponentState extends State<HomeComponent> {
                           },
                           child: Text(
                             'See All',
-                            style: TextStyle(
-                                color: yellowPrimaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
+                            style: TextStyle(color: yellowPrimaryColor, fontSize: 14, fontWeight: FontWeight.w500),
                           ))
                     ],
                   ),
@@ -437,9 +355,7 @@ class _HomeComponentState extends State<HomeComponent> {
                     // This next line does the trick.
                     scrollDirection: Axis.horizontal,
                     children: resDashboard != null
-                        ? (resDashboard?["data"]?["featuredCommunities"]
-                                as List<dynamic>)
-                            .map((item) {
+                        ? (resDashboard?["data"]?["featuredCommunities"] as List<dynamic>).map((item) {
                             var coverImage = item?["coverImage"];
                             var name = item?["name"];
                             var totalMission = item?["totalMission"];
@@ -447,15 +363,14 @@ class _HomeComponentState extends State<HomeComponent> {
                             var level = item?["level"];
                             return Builder(
                               builder: (BuildContext context) {
-                                return Container(
+                                return SizedBox(
                                   width: 240,
                                   child: Card(
                                     color: blackPrimaryColor,
                                     clipBehavior: Clip.hardEdge,
                                     margin: const EdgeInsets.only(right: 12),
                                     child: InkWell(
-                                      splashColor:
-                                          yellowPrimaryColor.withAlpha(30),
+                                      splashColor: yellowPrimaryColor.withAlpha(30),
                                       onTap: () {
                                         var tempItem = {
                                           "data": {"data": []}
@@ -477,93 +392,47 @@ class _HomeComponentState extends State<HomeComponent> {
                                                     ))
                                                 : null),
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
                                             Container(
-                                              decoration: const BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        color:
-                                                            blackSolidPrimaryColor,
-                                                        spreadRadius: 15,
-                                                        blurRadius: 15)
-                                                  ]),
+                                              decoration: const BoxDecoration(boxShadow: [BoxShadow(color: blackSolidPrimaryColor, spreadRadius: 15, blurRadius: 15)]),
                                               child: Column(
                                                 children: [
                                                   if (name != null)
                                                     Text(
-                                                      name?.length > 18
-                                                          ? '${name?.substring(0, 18)}...'
-                                                          : name,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w700),
+                                                      name?.length > 18 ? '${name?.substring(0, 18)}...' : name,
+                                                      textAlign: TextAlign.center,
+                                                      style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700),
                                                     ),
                                                   const SizedBox(
                                                     height: 4,
                                                   ),
                                                   if (item != null)
                                                     Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
-                                                        {
-                                                          "value": totalMission
-                                                              .toString(),
-                                                          "title": "total task"
-                                                        },
-                                                        {
-                                                          "value": totalPlayers
-                                                              .toString(),
-                                                          "title":
-                                                              "total players"
-                                                        },
-                                                        {
-                                                          "value":
-                                                              'Lv${level.toString()}',
-                                                          "title": "reward exp"
-                                                        }
+                                                        {"value": totalMission.toString(), "title": "total task"},
+                                                        {"value": totalPlayers.toString(), "title": "total players"},
+                                                        {"value": 'Lv${level.toString()}', "title": "reward exp"}
                                                       ].map((itemTask) {
-                                                        var title =
-                                                            itemTask["title"];
-                                                        var value =
-                                                            itemTask["value"];
+                                                        var title = itemTask["title"];
+                                                        var value = itemTask["value"];
 
                                                         return Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      6),
+                                                          padding: const EdgeInsets.symmetric(horizontal: 6),
                                                           child: Row(
                                                             children: [
-                                                              Image.asset(title ==
-                                                                      "total task"
+                                                              Image.asset(title == "total task"
                                                                   ? 'assets/images/ic_doc.png'
-                                                                  : title ==
-                                                                          "total players"
+                                                                  : title == "total players"
                                                                       ? 'assets/images/ic_players.png'
                                                                       : 'assets/images/ic_level.png'),
                                                               const SizedBox(
                                                                 width: 4,
                                                               ),
                                                               Text(
-                                                                value
-                                                                    .toString(),
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        10,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
+                                                                value.toString(),
+                                                                style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),
                                                               ),
                                                             ],
                                                           ),

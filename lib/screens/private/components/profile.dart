@@ -39,8 +39,7 @@ class ProfileComponent extends StatefulWidget {
   State<ProfileComponent> createState() => _ProfileComponentState();
 }
 
-class _ProfileComponentState extends State<ProfileComponent>
-    with SingleTickerProviderStateMixin {
+class _ProfileComponentState extends State<ProfileComponent> with SingleTickerProviderStateMixin {
   bool isLoadingResProfile = false;
   bool isLoadingResMyVoucher = false;
   bool isLoadingResMyMission = false;
@@ -84,12 +83,9 @@ class _ProfileComponentState extends State<ProfileComponent>
   var noDataAnymoreMyVoucher = false;
   var noDataAnymoreMyReward = false;
 
-  late ScrollController? nestedScrollViewContollerMyMission =
-      ScrollController();
-  late ScrollController? nestedScrollViewContollerMyCommunities =
-      ScrollController();
-  late ScrollController? nestedScrollViewContollerMyVoucher =
-      ScrollController();
+  late ScrollController? nestedScrollViewContollerMyMission = ScrollController();
+  late ScrollController? nestedScrollViewContollerMyCommunities = ScrollController();
+  late ScrollController? nestedScrollViewContollerMyVoucher = ScrollController();
   late ScrollController? nestedScrollViewContollerMyReward = ScrollController();
 
   var resProfile;
@@ -129,14 +125,12 @@ class _ProfileComponentState extends State<ProfileComponent>
 
     nestedScrollViewContollerMyCommunities?.addListener(() {
       if (nestedScrollViewContollerMyCommunities!.position.atEdge) {
-        bool isTop =
-            nestedScrollViewContollerMyCommunities!.position.pixels == 0;
+        bool isTop = nestedScrollViewContollerMyCommunities!.position.pixels == 0;
         if (isTop) {
           print('At the top');
         } else {
           print('At the bottom');
-          getDataMyCommunities(
-              pageKey: currentPageMyCommunities + 1, refetch: true);
+          getDataMyCommunities(pageKey: currentPageMyCommunities + 1, refetch: true);
         }
       }
     });
@@ -236,8 +230,7 @@ class _ProfileComponentState extends State<ProfileComponent>
               refetchResMyVoucher = false;
               totalPagesMyVoucher = res?["data"]?["meta"]?["totalPages"];
               currentPageMyVoucher = res?["data"]?["meta"]?["page"];
-              itemPerPageMyVoucher =
-                  itemPerPageMyVoucher + tempItemPerPageState;
+              itemPerPageMyVoucher = itemPerPageMyVoucher + tempItemPerPageState;
             });
           } else {
             setState(() {
@@ -402,8 +395,7 @@ class _ProfileComponentState extends State<ProfileComponent>
               refetchResMyMission = false;
               totalPagesMyMission = res?["data"]?["meta"]?["totalPages"];
               currentPageMyMission = res?["data"]?["meta"]?["page"];
-              itemPerPageMyMission =
-                  itemPerPageMyMission + tempItemPerPageState;
+              itemPerPageMyMission = itemPerPageMyMission + tempItemPerPageState;
             });
           } else {
             setState(() {
@@ -473,8 +465,7 @@ class _ProfileComponentState extends State<ProfileComponent>
               refetchCommunities = false;
               totalPagesMyCommunities = res?["data"]?["meta"]?["totalPages"];
               currentPageMyCommunities = res?["data"]?["meta"]?["page"];
-              itemPerPageMyCommunities =
-                  itemPerPageMyCommunities + tempItemPerPageState;
+              itemPerPageMyCommunities = itemPerPageMyCommunities + tempItemPerPageState;
             });
           } else {
             setState(() {
@@ -502,14 +493,8 @@ class _ProfileComponentState extends State<ProfileComponent>
       SharedPreferences.getInstance().then((prefs) {
         prefs
             .remove('access_token')
-            .then((value) => {
-                  Application.router.navigateTo(context, "/",
-                      transition: TransitionType.native)
-                })
-            .catchError((onError) => {
-                  print(
-                      'Error SharedPreferences remove access_token = $onError')
-                });
+            .then((value) => {Application.router.navigateTo(context, "/", transition: TransitionType.native)})
+            .catchError((onError) => {print('Error SharedPreferences remove access_token = $onError')});
       }).catchError((onError) {
         print('Error SharedPreferences signOut = $onError');
       });
@@ -520,239 +505,255 @@ class _ProfileComponentState extends State<ProfileComponent>
 
   @override
   Widget build(BuildContext mainContext) {
-    var isLoadingTab =
-        isLoadingCommunities || isLoadingResMyMission || isLoadingResMyVoucher;
+    var isLoadingTab = isLoadingCommunities || isLoadingResMyMission || isLoadingResMyVoucher;
 
     return Shimmer(
         linearGradient: shimmerGradient,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: MediaQuery.of(context).size.width * 0.65,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.none,
-                      scale: 1.1,
-                      alignment: Alignment.topCenter,
-                      image: AssetImage(
+            // const SizedBox(height: 16),
+            Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width * 0.65,
+                  color: const Color(0xFF0F0F10),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width * 0.65,
+                    child: Center(
+                      child: Image.asset(
                         'assets/images/bg_profile.png',
-                      ))),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 42,
+                        fit: BoxFit.none,
+                        height: MediaQuery.of(context).size.width * 0.65,
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        alignment: Alignment.topCenter,
+                        opacity: const AlwaysStoppedAnimation(.8),
+                        scale: 0.9,
+                      ),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Application.router.navigateTo(
-                              context,
-                              "/notificationScreen",
-                              transition: TransitionType.native,
-                            );
-                          },
-                          child: const Icon(
-                            Icons.notifications,
-                            color: yellowPrimaryColor,
-                          ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: MediaQuery.of(context).size.width * 0.45,
+                      width: MediaQuery.of(context).size.width / 1.2,
+                      alignment: Alignment.bottomCenter,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.center,
+                          colors: [
+                            Colors.transparent, // Warna dari atas (transparent)
+                            Color(0xFF0F0F10), // Warna ke bawah (black)
+                          ],
                         ),
-                        MyWidgetShimmerApp(
-                          isLoading: isLoadingResProfile,
-                          child: CircleAvatar(
-                            backgroundImage:
-                                resProfile?["data"]?["profilePic"] != null
-                                    ? NetworkImage(
-                                        resProfile?["data"]?["profilePic"])
-                                    : null,
-                            radius: 40,
-                          ),
-                        ),
-                        PopupMenuButton<String>(
-                            color: Colors.black,
-                            onSelected: (String item) {
-                              if (item == 'Logout') {
-                                handleLogout();
-                              } else {
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: const Color(0xFF0F0F10).withOpacity(0.9), // Warna bayangan
+                        //     offset: const Offset(2, 30), // Offset bayangan (posisi)
+                        //     blurRadius: 5, // Jarak blur
+                        //     spreadRadius: 15, // Jarak sebar
+                        //   ),
+                        // ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.65,
+                  width: double.infinity,
+                  // decoration: const BoxDecoration(
+                  //   image: DecorationImage(
+                  //     fit: BoxFit.none,
+                  //     scale: 1.1,
+                  //     alignment: Alignment.topCenter,
+                  //     opacity: 0.5,
+                  //     image: AssetImage(
+                  //       'assets/images/bg_profile.png',
+                  //     ),
+                  //   ),
+                  // ),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 60,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
                                 Application.router.navigateTo(
                                   context,
-                                  "/profileDetailScreens",
+                                  "/notificationScreen",
                                   transition: TransitionType.native,
                                 );
-                              }
-                            },
-                            itemBuilder: (BuildContext context) {
-                              return menu
-                                  .map((item) => PopupMenuItem<String>(
-                                        value: item,
-                                        child: ListTile(
-                                          leading: Icon(
-                                            item == "Logout"
-                                                ? Icons.logout_outlined
-                                                : Icons.edit_outlined,
-                                            color: item == "Logout"
-                                                ? redSolidPrimaryColor
-                                                : Colors.white,
+                              },
+                              child: const Icon(
+                                Icons.notifications,
+                                color: yellowPrimaryColor,
+                              ),
+                            ),
+                            MyWidgetShimmerApp(
+                              isLoading: isLoadingResProfile,
+                              child: CircleAvatar(
+                                backgroundImage: resProfile?["data"]?["profilePic"] != null ? NetworkImage(resProfile?["data"]?["profilePic"]) : null,
+                                radius: 40,
+                              ),
+                            ),
+                            PopupMenuButton<String>(
+                              color: Colors.black,
+                              onSelected: (String item) {
+                                if (item == 'Logout') {
+                                  handleLogout();
+                                } else {
+                                  Application.router.navigateTo(
+                                    context,
+                                    "/profileDetailScreens",
+                                    transition: TransitionType.native,
+                                  );
+                                }
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return menu
+                                    .map((item) => PopupMenuItem<String>(
+                                          value: item,
+                                          child: ListTile(
+                                            leading: Icon(
+                                              item == "Logout" ? Icons.logout_outlined : Icons.edit_outlined,
+                                              color: item == "Logout" ? redSolidPrimaryColor : Colors.white,
+                                            ),
+                                            title: Text(
+                                              item == "Logout" ? 'Logout' : 'Edit Profile',
+                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: item == "Logout" ? redSolidPrimaryColor : Colors.white),
+                                            ),
                                           ),
-                                          title: Text(
-                                            item == "Logout"
-                                                ? 'Logout'
-                                                : 'Edit Profile',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: item == "Logout"
-                                                    ? redSolidPrimaryColor
-                                                    : Colors.white),
-                                          ),
-                                        ),
-                                      ))
-                                  .toList();
-                            },
-                            child: const Icon(
-                              Icons.more_vert,
-                              color: Colors.white,
-                            ))
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(boxShadow: [
-                      BoxShadow(
-                          color: Colors.black,
-                          spreadRadius: 42,
-                          blurRadius: 42,
-                          offset: Offset(0, 20))
-                    ]),
-                    child: Column(
-                      children: [
-                        if (resProfile?["data"]?["username"] != null)
-                          Text(
-                            resProfile?["data"]?["username"],
-                            style: const TextStyle(
+                                        ))
+                                    .toList();
+                              },
+                              child: const Icon(
+                                Icons.more_vert,
                                 color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        if (resProfile?["data"]?["email"] != null)
-                          Text(
-                            resProfile?["data"]?["email"],
-                            style: const TextStyle(
-                                color: greySecondaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        const SizedBox(
-                          height: 16,
+                              ),
+                            ),
+                          ],
                         ),
-                        Wrap(
-                          alignment: WrapAlignment.center,
-                          spacing: 16.0,
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
                           children: [
-                            1,
-                            2,
-                            3,
-                          ]
-                              .map((item) => GestureDetector(
-                                  onTap: () {
-                                    // showModalBottomSheet(
-                                    // backgroundColor: Colors.black,
-                                    //     context: mainContext,
-                                    //     builder: (BuildContext context) {
-                                    //       return BadgeListBottomSheetApp(
-                                    //           detailProfile: resProfile);
-                                    //     });
+                            if (resProfile?["data"]?["username"] != null)
+                              Text(
+                                resProfile?["data"]?["username"],
+                                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            if (resProfile?["data"]?["email"] != null)
+                              Text(
+                                resProfile?["data"]?["email"],
+                                style: const TextStyle(color: greySecondaryColor, fontSize: 14, fontWeight: FontWeight.w500),
+                              ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            // Wrap(
+                            //   alignment: WrapAlignment.center,
+                            //   spacing: 16.0,
+                            //   children: [
+                            //     1,
+                            //     2,
+                            //     3,
+                            //   ]
+                            //       .map((item) => GestureDetector(
+                            //           onTap: () {
+                            //             // showModalBottomSheet(
+                            //             // backgroundColor: Colors.black,
+                            //             //     context: mainContext,
+                            //             //     builder: (BuildContext context) {
+                            //             //       return BadgeListBottomSheetApp(
+                            //             //           detailProfile: resProfile);
+                            //             //     });
 
-                                    showDialog<String>(
-                                      context: mainContext,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        backgroundColor: blackSolidPrimaryColor,
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              child: Image.asset(
-                                                  "assets/images/test_badge.png"),
-                                            ),
-                                            const SizedBox(
-                                              height: 16,
-                                            ),
-                                            const Text('You Get New Badge',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.white)),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            const Text(
-                                                'dictum cursus mauris varius tristique aliquet. dictum cur mauris varius tristique aliquet. ',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: greySecondaryColor)),
-                                          ],
-                                        ),
-                                        actions: <Widget>[
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              CustomButton(
-                                                buttonText: 'See Later',
-                                                isOutlined: true,
-                                                border: 1,
-                                                isOutlinedBackgroundColor:
-                                                    blackSolidPrimaryColor,
-                                                isOutlinedBorderColor:
-                                                    yellowPrimaryColor,
-                                                labelSize: 12,
-                                                width: 100,
-                                                height: 36,
-                                                onPressed: () {
-                                                  Navigator.pop(
-                                                      context, 'Cancel');
-                                                },
-                                              ),
-                                              CustomButton(
-                                                buttonText: 'See My Badge',
-                                                onPressed: () {
-                                                  Navigator.pop(context, 'OK');
-                                                },
-                                                labelSize: 12,
-                                                height: 36,
-                                                width: 100,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  child: MyWidgetShimmerApp(
-                                      isLoading: isLoadingResProfile,
-                                      child: Image.asset(
-                                          'assets/images/award_0$item.png'))))
-                              .toList(),
+                            //             showDialog<String>(
+                            //               context: mainContext,
+                            //               builder: (BuildContext context) => AlertDialog(
+                            //                 backgroundColor: blackSolidPrimaryColor,
+                            //                 content: Column(
+                            //                   mainAxisSize: MainAxisSize.min,
+                            //                   children: [
+                            //                     Container(
+                            //                       child: Image.asset("assets/images/test_badge.png"),
+                            //                     ),
+                            //                     const SizedBox(
+                            //                       height: 16,
+                            //                     ),
+                            //                     const Text('You Get New Badge',
+                            //                         textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
+                            //                     const SizedBox(
+                            //                       height: 8,
+                            //                     ),
+                            //                     const Text('dictum cursus mauris varius tristique aliquet. dictum cur mauris varius tristique aliquet. ',
+                            //                         textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
+                            //                   ],
+                            //                 ),
+                            //                 actions: <Widget>[
+                            //                   Row(
+                            //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //                     children: [
+                            //                       CustomButton(
+                            //                         buttonText: 'See Later',
+                            //                         isOutlined: true,
+                            //                         border: 1,
+                            //                         isOutlinedBackgroundColor: blackSolidPrimaryColor,
+                            //                         isOutlinedBorderColor: yellowPrimaryColor,
+                            //                         labelSize: 12,
+                            //                         width: 100,
+                            //                         height: 36,
+                            //                         onPressed: () {
+                            //                           Navigator.pop(context, 'Cancel');
+                            //                         },
+                            //                       ),
+                            //                       CustomButton(
+                            //                         buttonText: 'See My Badge',
+                            //                         onPressed: () {
+                            //                           Navigator.pop(context, 'OK');
+                            //                         },
+                            //                         labelSize: 12,
+                            //                         height: 36,
+                            //                         width: 100,
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             );
+                            //           },
+                            //           child: MyWidgetShimmerApp(isLoading: isLoadingResProfile, child: Image.asset('assets/images/award_0$item.png'))))
+                            //       .toList(),
+                            // ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 16,
@@ -763,10 +764,7 @@ class _ProfileComponentState extends State<ProfileComponent>
                   height: 56,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/bg_progress_xp.png'),
-                          fit: BoxFit.fill)),
+                  decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/bg_progress_xp.png'), fit: BoxFit.fill)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -775,17 +773,11 @@ class _ProfileComponentState extends State<ProfileComponent>
                         children: [
                           Text(
                             'Level ${resProfile?["data"]?["level"]}',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
+                            style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           Text(
                             '${resProfile?["data"]?["exp"] ?? ""} xp',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
+                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
@@ -810,39 +802,25 @@ class _ProfileComponentState extends State<ProfileComponent>
               labelColor: yellowPrimaryColor,
               unselectedLabelColor: greySecondaryColor,
               dividerColor: blackPrimaryColor,
-              overlayColor:
-                  MaterialStateProperty.all<Color>(yellowPrimaryColor),
+              overlayColor: MaterialStateProperty.all<Color>(yellowPrimaryColor),
               indicatorSize: TabBarIndicatorSize.tab,
-              indicator: const BoxDecoration(
-                  color: yellowPrimaryTransparentColor,
-                  borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(4), right: Radius.circular(4))),
+              indicator: const BoxDecoration(color: yellowPrimaryTransparentColor, borderRadius: BorderRadius.horizontal(left: Radius.circular(4), right: Radius.circular(4))),
               controller: tabController,
               // These are the widgets to put in each tab in the tab bar.
               tabs: tabs.map((String name) => Tab(text: name)).toList(),
               isScrollable: true,
-              physics:
-                  isLoadingTab ? const NeverScrollableScrollPhysics() : null,
+              physics: isLoadingTab ? const NeverScrollableScrollPhysics() : null,
               tabAlignment: TabAlignment.start,
             ),
             Expanded(
               child: TabBarView(
                 controller: tabController,
-                physics:
-                    isLoadingTab ? const NeverScrollableScrollPhysics() : null,
+                physics: isLoadingTab ? const NeverScrollableScrollPhysics() : null,
                 children: tabs.map((String name) {
-                  var isNotEmptyList = (name == "My Voucher" &&
-                          resMyVoucher != null &&
-                          !isLoadingResMyVoucher) ||
-                      (name == "My Mission" &&
-                          resMyMission != null &&
-                          !isLoadingResMyMission) ||
-                      (name == "My Communities" &&
-                          resMyCommunities != null &&
-                          !isLoadingCommunities) ||
-                      (name == "My Reward" &&
-                          resMyReward != null &&
-                          !isLoadingReward);
+                  var isNotEmptyList = (name == "My Voucher" && resMyVoucher != null && !isLoadingResMyVoucher) ||
+                      (name == "My Mission" && resMyMission != null && !isLoadingResMyMission) ||
+                      (name == "My Communities" && resMyCommunities != null && !isLoadingCommunities) ||
+                      (name == "My Reward" && resMyReward != null && !isLoadingReward);
 
                   print("@resMyReward $resMyReward");
                   print("@itemPerPageMyReward $itemPerPageMyReward");
@@ -857,23 +835,11 @@ class _ProfileComponentState extends State<ProfileComponent>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              if (name == "My Mission" &&
-                                  resMyMission == null &&
-                                  !isLoadingResMyMission)
-                                const MyWidgetEmptyListApp(),
+                              if (name == "My Mission" && resMyMission == null && !isLoadingResMyMission) const MyWidgetEmptyListApp(),
 
-                              if (name == "My Communities" &&
-                                  resMyCommunities == null &&
-                                  !isLoadingCommunities)
-                                const MyWidgetEmptyListApp(),
-                              if (name == "My Voucher" &&
-                                  resMyVoucher == null &&
-                                  !isLoadingResMyVoucher)
-                                const MyWidgetEmptyListApp(),
-                              if (name == "My Reward" &&
-                                  resMyReward == null &&
-                                  !isLoadingReward)
-                                const MyWidgetEmptyListApp(),
+                              if (name == "My Communities" && resMyCommunities == null && !isLoadingCommunities) const MyWidgetEmptyListApp(),
+                              if (name == "My Voucher" && resMyVoucher == null && !isLoadingResMyVoucher) const MyWidgetEmptyListApp(),
+                              if (name == "My Reward" && resMyReward == null && !isLoadingReward) const MyWidgetEmptyListApp(),
                               if (isNotEmptyList)
                                 Expanded(
                                   child: ListView.builder(
@@ -885,69 +851,46 @@ class _ProfileComponentState extends State<ProfileComponent>
                                             : tabIndex == 2
                                                 ? nestedScrollViewContollerMyVoucher
                                                 : nestedScrollViewContollerMyReward,
-                                    physics: isLoadingTab
-                                        ? const NeverScrollableScrollPhysics()
-                                        : null,
+                                    physics: isLoadingTab ? const NeverScrollableScrollPhysics() : null,
                                     itemCount: name == "My Mission"
-                                        ? itemPerPageMyMission == 0 &&
-                                                isLoadingResMyMission
+                                        ? itemPerPageMyMission == 0 && isLoadingResMyMission
                                             ? 5
                                             : itemPerPageMyMission
                                         : name == "My Communities"
-                                            ? itemPerPageMyCommunities == 0 &&
-                                                    isLoadingCommunities
+                                            ? itemPerPageMyCommunities == 0 && isLoadingCommunities
                                                 ? 5
                                                 : itemPerPageMyCommunities
                                             : name == "My Voucher"
-                                                ? itemPerPageMyVoucher == 0 &&
-                                                        isLoadingResMyVoucher
+                                                ? itemPerPageMyVoucher == 0 && isLoadingResMyVoucher
                                                     ? 5
                                                     : itemPerPageMyVoucher
-                                                : itemPerPageMyReward == 0 &&
-                                                        isLoadingReward
+                                                : itemPerPageMyReward == 0 && isLoadingReward
                                                     ? 5
                                                     : itemPerPageMyReward,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
+                                    itemBuilder: (BuildContext context, int index) {
                                       var bodyTab;
 
                                       switch (name) {
                                         case "My Mission":
                                           bodyTab = MyWidgetShimmerApp(
                                             isLoading: isLoadingResMyMission,
-                                            child:
-                                                TabContentProfileMyMissionComponentApp(
-                                                    resMyMission: resMyMission,
-                                                    index: index),
+                                            child: TabContentProfileMyMissionComponentApp(resMyMission: resMyMission, index: index),
                                           );
 
                                           break;
                                         case "My Communities":
                                           bodyTab = MyWidgetShimmerApp(
-                                              isLoading: isLoadingCommunities,
-                                              child:
-                                                  TabContentProfileMyCommunityComponentApp(
-                                                      resMyCommunities:
-                                                          resMyCommunities,
-                                                      index: index));
+                                              isLoading: isLoadingCommunities, child: TabContentProfileMyCommunityComponentApp(resMyCommunities: resMyCommunities, index: index));
 
                                           break;
                                         case "My Voucher":
                                           bodyTab = MyWidgetShimmerApp(
-                                              isLoading: isLoadingResMyVoucher,
-                                              child:
-                                                  TabContentProfileMyVoucherComponentApp(
-                                                      resVoucher: resMyVoucher,
-                                                      index: index));
+                                              isLoading: isLoadingResMyVoucher, child: TabContentProfileMyVoucherComponentApp(resVoucher: resMyVoucher, index: index));
 
                                           break;
                                         default:
-                                          bodyTab = MyWidgetShimmerApp(
-                                              isLoading: isLoadingReward,
-                                              child:
-                                                  TabContentProfileMyRewardComponentApp(
-                                                      resMyReward: resMyReward,
-                                                      index: index));
+                                          bodyTab =
+                                              MyWidgetShimmerApp(isLoading: isLoadingReward, child: TabContentProfileMyRewardComponentApp(resMyReward: resMyReward, index: index));
 
                                           break;
                                       }
