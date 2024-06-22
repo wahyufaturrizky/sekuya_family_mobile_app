@@ -77,13 +77,16 @@ class _TabContentProfileMyMissionComponentState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        name ?? "",
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
-                      ),
+                      if (name != null)
+                        Text(
+                          name.length > 18
+                              ? "${name.substring(0, 18)}..."
+                              : name,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
                       Chip(
                           label: Text(
                             status ?? "",

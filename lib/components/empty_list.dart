@@ -23,8 +23,6 @@ class _MyWidgetEmptyListState extends State<MyWidgetEmptyList> {
   Widget build(BuildContext context) {
     return Center(
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
           'assets/images/empty_state.png',
