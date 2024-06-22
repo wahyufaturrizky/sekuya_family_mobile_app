@@ -90,6 +90,14 @@
           }
         },
         {
+          "client_id": "433294916757-f7vq9s4hqj0bndd2s6c3l0c1q7l68098.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sekuya.familyapp",
+            "certificate_hash": "72f61da440fb5f4b05b35e717af11450fc22e04b"
+          }
+        },
+        {
           "client_id": "433294916757-fu8qmk5bb6148d1n6uvgnq8nto5vkjq9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
