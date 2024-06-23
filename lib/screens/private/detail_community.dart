@@ -31,12 +31,10 @@ class CommunityComponentDetail extends StatefulWidget {
   final MyArgumentsDataDetailCommunityClass? args;
 
   @override
-  State<CommunityComponentDetail> createState() =>
-      _CommunityComponentDetailState();
+  State<CommunityComponentDetail> createState() => _CommunityComponentDetailState();
 }
 
-class _CommunityComponentDetailState extends State<CommunityComponentDetail>
-    with SingleTickerProviderStateMixin {
+class _CommunityComponentDetailState extends State<CommunityComponentDetail> with SingleTickerProviderStateMixin {
   bool isLoadingJoinCommunity = false;
   bool isLoadingLeaveCommunity = false;
   bool isJoinCommunity = false;
@@ -85,8 +83,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
         });
       }
 
-      String id = widget.args?.resCommunities?["data"]?["data"]
-          ?[widget.args?.indexResCommunities]["_id"];
+      String id = widget.args?.resCommunities?["data"]?["data"]?[widget.args?.indexResCommunities]["_id"];
 
       var res = await handleGetDataCommunitiesDetail(id);
 
@@ -121,8 +118,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
         });
       }
 
-      String id = widget.args?.resCommunities?["data"]?["data"]
-          ?[widget.args?.indexResCommunities]["_id"];
+      String id = widget.args?.resCommunities?["data"]?["data"]?[widget.args?.indexResCommunities]["_id"];
 
       var res = await handleGetDataCommunitiesMissions(id);
 
@@ -154,8 +150,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
         });
       }
 
-      String id = widget.args?.resCommunities?["data"]?["data"]
-          ?[widget.args?.indexResCommunities]["_id"];
+      String id = widget.args?.resCommunities?["data"]?["data"]?[widget.args?.indexResCommunities]["_id"];
 
       var res = await handleGetDataCommunitiesLeaderboards(id);
 
@@ -187,8 +182,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
         });
       }
 
-      String id = widget.args?.resCommunities?["data"]?["data"]
-          ?[widget.args?.indexResCommunities]["_id"];
+      String id = widget.args?.resCommunities?["data"]?["data"]?[widget.args?.indexResCommunities]["_id"];
 
       var res = await handleGetDataCommunitiesMembers(id);
 
@@ -211,12 +205,18 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
     }
   }
 
+  bool isExpanded = false;
+
+  void _toggleReadMore() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+  }
+
   void handleBack() {
     final arguments = MyArgumentsDataClass(false, true, false, false);
 
-    Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromRight,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/privateScreens", transition: TransitionType.inFromRight, routeSettings: RouteSettings(arguments: arguments));
   }
 
   Future<void> _launchUrl(val) async {
@@ -231,21 +231,11 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
               SizedBox(
                 height: 16,
               ),
-              Text('Warning!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white)),
+              Text('Warning!', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
               SizedBox(
                 height: 8,
               ),
-              Text('Social account link is not valid',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: greySecondaryColor)),
+              Text('Social account link is not valid', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
             ],
           ),
           actionsAlignment: MainAxisAlignment.center,
@@ -277,8 +267,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
         isLoadingJoinCommunity = true;
       });
 
-      String id = widget.args?.resCommunities?["data"]?["data"]
-          ?[widget.args?.indexResCommunities]["_id"];
+      String id = widget.args?.resCommunities?["data"]?["data"]?[widget.args?.indexResCommunities]["_id"];
 
       var res = await handleJoinCommunities(id: id);
 
@@ -314,8 +303,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
         isLoadingLeaveCommunity = true;
       });
 
-      String id = widget.args?.resCommunities?["data"]?["data"]
-          ?[widget.args?.indexResCommunities]["_id"];
+      String id = widget.args?.resCommunities?["data"]?["data"]?[widget.args?.indexResCommunities]["_id"];
 
       var res = await handleLeaveCommunities(id);
 
@@ -347,10 +335,7 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
 
   @override
   Widget build(BuildContext mainContext) {
-    var isLoading = isLoadingCommunitiesDetail ||
-        isLoadingCommunitiesLeaderboards ||
-        isLoadingCommunitiesMissions ||
-        isLoadingCommunitiesMembers;
+    var isLoading = isLoadingCommunitiesDetail || isLoadingCommunitiesLeaderboards || isLoadingCommunitiesMissions || isLoadingCommunitiesMembers;
 
     var dataCommunitiesDetail = resCommunitiesDetail?["data"];
 
@@ -380,367 +365,371 @@ class _CommunityComponentDetailState extends State<CommunityComponentDetail>
     ];
 
     return Scaffold(
-        backgroundColor: Colors.black,
-        body: Shimmer(
-          linearGradient: shimmerGradient,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                  height: MediaQuery.of(context).size.width * 0.5,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      image: coverImage != null
-                          ? DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                coverImage,
-                              ))
-                          : null),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 32, left: 16),
+      backgroundColor: Colors.black,
+      body: Shimmer(
+        linearGradient: shimmerGradient,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+                height: MediaQuery.of(context).size.width * 0.55,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: coverImage != null
+                      ? DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            coverImage,
+                          ),
+                        )
+                      : null,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.pop(context, 'Cancel'),
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 42, left: 16),
                         color: backNavigationColor,
-                        child: IconButton(
+                        padding: const EdgeInsets.all(6),
+                        child: const Icon(
+                          Icons.arrow_back,
                           color: Colors.white,
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: () {
-                            // handleBack();
-                            Navigator.pop(context, 'Cancel');
-                          },
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
+                          size: 25,
                         ),
                       ),
-                      Container(
-                        decoration: const BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              color: Colors.black,
-                              spreadRadius: 15,
-                              blurRadius: 15,
-                              offset: Offset(0, 42))
-                        ]),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (isLoading)
-                                MyWidgetShimmerApp(
-                                    isLoading: isLoading,
-                                    child: const Card(
-                                      child: SizedBox(
-                                        height: 40,
-                                        width: 150,
-                                      ),
-                                    )),
-                              if (!isLoading)
-                                Row(
-                                  children: [
-                                    if (image != null)
-                                      Image.network(
-                                        image,
-                                        width: 48,
-                                        height: 48,
-                                      ),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          name.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Image.asset(
-                                              'assets/images/ic_level_detail_community.png',
-                                            ),
-                                            const SizedBox(width: 12),
-                                            if (level != null)
-                                              Text(
-                                                'LEVEL $level',
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 12),
-                                              ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(boxShadow: [BoxShadow(color: Colors.black, spreadRadius: 15, blurRadius: 15, offset: Offset(0, 42))]),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (isLoading)
                               MyWidgetShimmerApp(
-                                isLoading: isLoading,
-                                child: CustomButton(
-                                  isOutlined: isJoined,
-                                  isOutlinedBackgroundColor: isJoined
-                                      ? Colors.transparent
-                                      : blackSolidPrimaryColor,
-                                  isOutlinedBorderColor: yellowPrimaryColor,
-                                  buttonText: (isLoadingJoinCommunity ||
-                                          isLoadingCommunitiesDetail ||
-                                          isLoadingLeaveCommunity)
-                                      ? ''
-                                      : isJoined
-                                          ? 'Leave'
-                                          : 'Join',
-                                  onPressed: () {
-                                    if (!isLoadingJoinCommunity ||
-                                        !isLoadingCommunitiesDetail ||
-                                        !isLoadingLeaveCommunity) {
-                                      if (isJoined) {
-                                        handleLeaveCommunity(mainContext);
-                                      } else {
-                                        handleJoinCommunity(mainContext);
-                                      }
-                                    }
-                                  },
-                                  isLoading: isLoadingJoinCommunity ||
-                                      isLoadingCommunitiesDetail ||
-                                      isLoadingLeaveCommunity,
-                                  width: 60,
-                                  labelSize: 12,
-                                  height: 32,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  )),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: headerCards.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          Map<String, String> item = entry.value;
-                          return Expanded(
-                              flex: 1,
-                              child: MyWidgetShimmerApp(
-                                isLoading: isLoading,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: index == 0 ? 0 : 8,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: blackSolidPrimaryColor,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  isLoading: isLoading,
+                                  child: const Card(
+                                    child: SizedBox(
+                                      height: 40,
+                                      width: 150,
+                                    ),
+                                  )),
+                            if (!isLoading)
+                              Row(
+                                children: [
+                                  if (image != null)
+                                    Image.network(
+                                      image,
+                                      width: 48,
+                                      height: 48,
+                                    ),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      if (item["value"] != null &&
-                                          item["value"]!.isNotEmpty)
-                                        Text(
-                                          item["value"]!.length > 8
-                                              ? "${item["value"]!.substring(0, 8)}..."
-                                              : item["value"]!,
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12),
-                                        ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
                                       Text(
-                                        item["title"]!,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: greySecondaryColor,
-                                        ),
+                                        name.toString(),
+                                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/ic_level_detail_community.png',
+                                          ),
+                                          const SizedBox(width: 12),
+                                          if (level != null)
+                                            Text(
+                                              'LEVEL $level',
+                                              style: const TextStyle(color: Colors.white, fontSize: 12),
+                                            ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ),
-                              ));
-                        }).toList(),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      if (description != null)
-                        Text(
-                          maxLines: 3,
-                          description.toString(),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400),
+                                ],
+                              ),
+                            MyWidgetShimmerApp(
+                              isLoading: isLoading,
+                              child: CustomButton(
+                                isOutlined: isJoined,
+                                isOutlinedBackgroundColor: isJoined ? Colors.transparent : blackSolidPrimaryColor,
+                                isOutlinedBorderColor: yellowPrimaryColor,
+                                buttonText: (isLoadingJoinCommunity || isLoadingCommunitiesDetail || isLoadingLeaveCommunity)
+                                    ? ''
+                                    : isJoined
+                                        ? 'Leave'
+                                        : 'Join',
+                                onPressed: () {
+                                  if (!isLoadingJoinCommunity || !isLoadingCommunitiesDetail || !isLoadingLeaveCommunity) {
+                                    if (isJoined) {
+                                      handleLeaveCommunity(mainContext);
+                                    } else {
+                                      handleJoinCommunity(mainContext);
+                                    }
+                                  }
+                                },
+                                isLoading: isLoadingJoinCommunity || isLoadingCommunitiesDetail || isLoadingLeaveCommunity,
+                                width: 60,
+                                labelSize: 12,
+                                height: 32,
+                              ),
+                            )
+                          ],
                         ),
-                      const SizedBox(
-                        height: 15,
                       ),
-                      const Row(
-                        children: [
-                          Text(
-                            'Social Media',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
+                    )
+                  ],
+                )),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: headerCards.asMap().entries.map(
+                        (entry) {
+                          int index = entry.key;
+                          Map<String, String> item = entry.value;
+                          return Expanded(
+                            flex: 1,
+                            child: MyWidgetShimmerApp(
+                              isLoading: isLoading,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                  left: index == 0 ? 0 : 8,
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: blackSolidPrimaryColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (item["value"] != null && item["value"]!.isNotEmpty)
+                                      Text(
+                                        item["value"]!,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(
+                                      item["title"]!,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: greySecondaryColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    if (description != null)
+                      Text(
+                        description.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: isExpanded ? 100 : 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    if (!isExpanded) ...[
+                      GestureDetector(
+                        onTap: _toggleReadMore,
+                        child: const Text(
+                          'Read More',
+                          style: TextStyle(
+                            color: yellowPrimaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
                           ),
-                        ],
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                      if (social != null && social.isNotEmpty && !isLoading)
-                        Row(
-                            children: (social as Map<String, dynamic>)
-                                .entries
-                                .map((item) {
+                    ],
+                    if (isExpanded) ...[
+                      GestureDetector(
+                        onTap: _toggleReadMore,
+                        child: const Text(
+                          'Read Less',
+                          style: TextStyle(
+                            color: yellowPrimaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Row(
+                      children: [
+                        Text(
+                          'Social Media',
+                          style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    if (social != null && social.isNotEmpty && !isLoading)
+                      Row(
+                        children: (social as Map<String, dynamic>).entries.map((item) {
                           return Builder(
                             builder: (BuildContext context) {
                               return MyWidgetShimmerApp(
-                                  isLoading: isLoading,
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        _launchUrl(item.value);
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.only(right: 8),
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          color: blackSolidPrimaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
+                                isLoading: isLoading,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _launchUrl(item.value);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: blackSolidPrimaryColor,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                          item.key == "discord"
+                                              ? 'assets/images/ic_discord_community.png'
+                                              : item.key == "instagram"
+                                                  ? 'assets/images/ic_instagram.png'
+                                                  : item.key == "facebook"
+                                                      ? 'assets/images/ic_facebook.png'
+                                                      : 'assets/images/ic_twitter_social.png',
                                         ),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              item.key == "discord"
-                                                  ? 'assets/images/ic_discord_community.png'
-                                                  : item.key == "instagram"
-                                                      ? 'assets/images/ic_instagram.png'
-                                                      : item.key == "facebook"
-                                                          ? 'assets/images/ic_facebook.png'
-                                                          : 'assets/images/ic_twitter_social.png',
-                                            ),
-                                            const SizedBox(width: 8),
-                                            const Text(
-                                              '0',
-                                              style: TextStyle(
-                                                  color: yellowPrimaryColor,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          '0',
+                                          style: TextStyle(color: yellowPrimaryColor, fontSize: 10, fontWeight: FontWeight.w500),
                                         ),
-                                      )));
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
                             },
                           );
-                        }).toList()),
-                    ],
-                  )),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                height: 5,
-                width: double.infinity,
-                color: blackSolidPrimaryColor,
-              ),
-              TabBar(
+                        }).toList(),
+                      ),
+                  ],
+                )),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 16),
+              height: 5,
+              width: double.infinity,
+              color: blackSolidPrimaryColor,
+            ),
+            TabBar(
+              controller: tabController,
+              labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+              labelColor: yellowPrimaryColor,
+              unselectedLabelColor: greySecondaryColor,
+              dividerColor: blackPrimaryColor,
+              overlayColor: WidgetStateProperty.all<Color>(yellowPrimaryColor),
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicator: const BoxDecoration(color: yellowPrimaryTransparentColor, borderRadius: BorderRadius.vertical(top: Radius.circular(4), bottom: Radius.circular(0))),
+              tabs: tabs
+                  .map(
+                    (String name) => Tab(
+                      child: Text(
+                        name,
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+            Expanded(
+              child: TabBarView(
                 controller: tabController,
-                labelStyle:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                labelColor: yellowPrimaryColor,
-                unselectedLabelColor: greySecondaryColor,
-                dividerColor: blackPrimaryColor,
-                overlayColor:
-                    MaterialStateProperty.all<Color>(yellowPrimaryColor),
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicator: const BoxDecoration(
-                    color: yellowPrimaryTransparentColor,
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(4), bottom: Radius.circular(0))),
-                tabs: tabs
-                    .map((String name) => Tab(
-                            child: Text(
-                          name,
-                          style: const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w500),
-                        )))
-                    .toList(),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: tabController,
-                  children: tabs.map((String name) {
-                    var childCountCommunitiesMissions =
-                        resCommunitiesMissions?["data"]?["data"] != null
-                            ? resCommunitiesMissions?["data"]?["data"]?.length
-                            : 0;
+                children: tabs.map(
+                  (String name) {
+                    var childCountCommunitiesMissions = resCommunitiesMissions?["data"]?["data"] != null ? resCommunitiesMissions?["data"]?["data"]?.length : 0;
 
-                    var childCountCommunitiesLeaderboards =
-                        resCommunitiesLeaderboards?["data"]?["data"] != null
-                            ? resCommunitiesLeaderboards?["data"]?["data"]
-                                ?.length
-                            : 0;
+                    var childCountCommunitiesLeaderboards = resCommunitiesLeaderboards?["data"]?["data"] != null ? resCommunitiesLeaderboards?["data"]?["data"]?.length : 0;
 
-                    var childCountCommunitiesMembers =
-                        resCommunitiesMembers?["data"]?["data"] != null
-                            ? resCommunitiesMembers?["data"]?["data"]?.length
-                            : 0;
+                    var childCountCommunitiesMembers = resCommunitiesMembers?["data"]?["data"] != null ? resCommunitiesMembers?["data"]?["data"]?.length : 0;
 
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            color: Colors.black,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Expanded(
-                                    child: ListView.builder(
-                                        itemCount: name == "Mission"
-                                            ? childCountCommunitiesMissions
-                                            : name == "Leaderboard"
-                                                ? childCountCommunitiesLeaderboards
-                                                : childCountCommunitiesMembers,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return name == "Mission"
-                                              ? TabContentCommunityMissionsComponentApp(
-                                                  resCommunitiesMissions:
-                                                      resCommunitiesMissions,
-                                                  index: index)
-                                              : name == "Leaderboard"
-                                                  ? TabContentCommunityLeaderBoardComponentApp(
-                                                      resCommunitiesLeaderboards:
-                                                          resCommunitiesLeaderboards,
-                                                      index: index)
-                                                  : TabContentCommunityMembersComponentApp(
-                                                      resCommunitiesMembers:
-                                                          resCommunitiesMembers,
-                                                      index: index);
-                                        }))
-                              ],
-                            ));
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          color: Colors.black,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.symmetric(vertical: 6),
+                                  itemCount: name == "Mission"
+                                      ? childCountCommunitiesMissions
+                                      : name == "Leaderboard"
+                                          ? childCountCommunitiesLeaderboards
+                                          : childCountCommunitiesMembers,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return name == "Mission"
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(top: 10),
+                                            child: TabContentCommunityMissionsComponentApp(
+                                              resCommunitiesMissions: resCommunitiesMissions,
+                                              index: index,
+                                            ),
+                                          )
+                                        : name == "Leaderboard"
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(top: 10),
+                                                child: TabContentCommunityLeaderBoardComponentApp(
+                                                  resCommunitiesLeaderboards: resCommunitiesLeaderboards,
+                                                  index: index,
+                                                ),
+                                              )
+                                            : TabContentCommunityMembersComponentApp(
+                                                resCommunitiesMembers: resCommunitiesMembers,
+                                                index: index,
+                                              );
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        );
                       },
                     );
-                  }).toList(),
-                ),
-              )
-            ],
-          ),
-        ));
+                  },
+                ).toList(),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

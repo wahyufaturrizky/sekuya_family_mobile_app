@@ -106,7 +106,7 @@ class _HomeComponentState extends State<HomeComponent> {
                 SizedBox(height: 10),
                 CarouselSlider(
                   options: CarouselOptions(
-                    height: 180.0,
+                    height: 185.0,
                     // autoPlay: true,
                     autoPlayInterval: const Duration(seconds: 2),
                     viewportFraction: 1.0,
@@ -130,7 +130,8 @@ class _HomeComponentState extends State<HomeComponent> {
                                     child: SizedBox(
                                       width: 350,
                                     ),
-                                  )),
+                                  ),
+                                ),
                         );
                       },
                     );

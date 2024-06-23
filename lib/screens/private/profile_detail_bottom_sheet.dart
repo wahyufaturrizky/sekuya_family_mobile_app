@@ -24,8 +24,7 @@ class ProfileDetailBottomSheet extends StatefulWidget {
   final dynamic detailProfile;
 
   @override
-  State<ProfileDetailBottomSheet> createState() =>
-      _ProfileDetailBottomSheetState();
+  State<ProfileDetailBottomSheet> createState() => _ProfileDetailBottomSheetState();
 }
 
 class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
@@ -41,9 +40,7 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
   void goToDetailCommunity(data, index) {
     final arguments = MyArgumentsDataDetailCommunityClass(data, index);
 
-    Application.router.navigateTo(context, "/communityDetailScreens",
-        transition: TransitionType.native,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/communityDetailScreens", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
   }
 
   Future<dynamic> getDataDetailProfile() async {
@@ -98,63 +95,55 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
           child: Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Stack(
-                alignment: Alignment.center,
+              const SizedBox(height: 20),
+              Container(
+                width: 135,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF5D5D5D),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              const SizedBox(height: 25),
+              Column(
                 children: [
-                  Image.asset(
-                    'assets/images/bg_profile.png',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 170,
-                    alignment: Alignment.topCenter,
+                  if (profilePic != null)
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(profilePic),
+                      radius: 40,
+                    ),
+                  const SizedBox(
+                    height: 12,
                   ),
-                  Column(
-                    children: [
-                      if (profilePic != null)
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(profilePic),
-                          radius: 40,
-                        ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      if (username != null)
-                        Text(
-                          username ?? "",
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      if (email != null)
-                        Text(
-                          email.substring(0, 14),
-                          style: const TextStyle(
-                              color: greySecondaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500),
-                        ),
-                    ],
-                  ),
+                  if (username != null)
+                    Text(
+                      username ?? "",
+                      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  if (email != null)
+                    Text(
+                      email.substring(0, 14),
+                      style: const TextStyle(color: greySecondaryColor, fontSize: 14, fontWeight: FontWeight.w500),
+                    ),
                 ],
               ),
               const SizedBox(
                 height: 8,
               ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 16.0,
-                children: [1, 2, 3]
-                    .map((item) => const CircleAvatar(
-                          backgroundImage:
-                              NetworkImage('https://i.pravatar.cc/150?img=1'),
-                          radius: 20,
-                        ))
-                    .toList(),
-              ),
+              // Wrap(
+              //   alignment: WrapAlignment.center,
+              //   spacing: 16.0,
+              //   children: [1, 2, 3]
+              //       .map((item) => const CircleAvatar(
+              //             backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=1'),
+              //             radius: 20,
+              //           ))
+              //       .toList(),
+              // ),
               const SizedBox(
                 height: 16,
               ),
@@ -162,10 +151,7 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                   height: 56,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/bg_progress_xp.png'),
-                          fit: BoxFit.fill)),
+                  decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/bg_progress_xp.png'), fit: BoxFit.fill)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -174,17 +160,11 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
                         children: [
                           Text(
                             'Level ${level}',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
+                            style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           Text(
                             '${exp} xp',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
+                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
@@ -201,150 +181,125 @@ class _ProfileDetailBottomSheetState extends State<ProfileDetailBottomSheet> {
               const SizedBox(
                 height: 15,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Communities',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                padding: const EdgeInsets.only(left: 16),
-                height: 150,
-                child: ListView(
-                  // This next line does the trick.
-                  scrollDirection: Axis.horizontal,
-                  children: communities != null
-                      ? (communities as List<dynamic>).map((item) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Card(
-                                color: blackPrimaryColor,
-                                clipBehavior: Clip.hardEdge,
-                                margin: const EdgeInsets.only(right: 12),
-                                child: InkWell(
-                                  splashColor: yellowPrimaryColor.withAlpha(30),
-                                  onTap: () {
-                                    var tempItem = {
-                                      "data": {"data": []}
-                                    };
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Communities',
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.only(left: 16),
+                    height: 150,
+                    child: ListView(
+                      // This next line does the trick.
+                      scrollDirection: Axis.horizontal,
+                      children: communities != null
+                          ? (communities as List<dynamic>).map((item) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Card(
+                                    color: blackPrimaryColor,
+                                    clipBehavior: Clip.hardEdge,
+                                    margin: const EdgeInsets.only(right: 12),
+                                    child: InkWell(
+                                      splashColor: yellowPrimaryColor.withAlpha(30),
+                                      onTap: () {
+                                        var tempItem = {
+                                          "data": {"data": []}
+                                        };
 
-                                    tempItem["data"]!["data"]?.add(item);
+                                        tempItem["data"]!["data"]?.add(item);
 
-                                    goToDetailCommunity(tempItem, 0);
-                                  },
-                                  child: Container(
-                                    width: 200,
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                        image: (item?["coverImage"] != null)
-                                            ? DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(
-                                                  item?["coverImage"],
-                                                ))
-                                            : null),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          decoration:
-                                              const BoxDecoration(boxShadow: [
-                                            BoxShadow(
-                                                color: blackSolidPrimaryColor,
-                                                spreadRadius: 15,
-                                                blurRadius: 15)
-                                          ]),
-                                          child: Column(
-                                            children: [
-                                              if (item?["name"] != null)
-                                                Text(
-                                                  item?["name"] ?? "",
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                              const SizedBox(
-                                                height: 8,
+                                        goToDetailCommunity(tempItem, 0);
+                                      },
+                                      child: Container(
+                                        width: 230,
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                            image: (item?["coverImage"] != null)
+                                                ? DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                      item?["coverImage"],
+                                                    ))
+                                                : null),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              decoration: const BoxDecoration(boxShadow: [BoxShadow(color: blackSolidPrimaryColor, spreadRadius: 15, blurRadius: 15)]),
+                                              child: Column(
+                                                children: [
+                                                  if (item?["name"] != null)
+                                                    Text(
+                                                      item?["name"] ?? "",
+                                                      textAlign: TextAlign.center,
+                                                      style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                                                    ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  if (item != null)
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        {
+                                                          "title": "total mission",
+                                                          "value": item?["totalMission"].toString(),
+                                                        },
+                                                        {
+                                                          "title": "total players",
+                                                          "value": item?["totalPlayers"].toString(),
+                                                        },
+                                                        {
+                                                          "title": "level",
+                                                          "value": item?["level"].toString(),
+                                                        },
+                                                      ]
+                                                          .map((item) => Row(
+                                                                children: [
+                                                                  Image.asset(item["title"] == "total mission"
+                                                                      ? 'assets/images/ic_total_mission.png'
+                                                                      : item["title"] == "total players"
+                                                                          ? 'assets/images/ic_total_player.png'
+                                                                          : 'assets/images/ic_level_community.png'),
+                                                                  const SizedBox(
+                                                                    width: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    item["value"].toString(),
+                                                                    style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 12,
+                                                                  ),
+                                                                ],
+                                                              ))
+                                                          .toList(),
+                                                    ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                ],
                                               ),
-                                              if (item != null)
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    {
-                                                      "title": "total mission",
-                                                      "value":
-                                                          item?["totalMission"]
-                                                              .toString(),
-                                                    },
-                                                    {
-                                                      "title": "total players",
-                                                      "value":
-                                                          item?["totalPlayers"]
-                                                              .toString(),
-                                                    },
-                                                    {
-                                                      "title": "level",
-                                                      "value": item?["level"]
-                                                          .toString(),
-                                                    },
-                                                  ]
-                                                      .map((item) => Row(
-                                                            children: [
-                                                              Image.asset(item[
-                                                                          "title"] ==
-                                                                      "total mission"
-                                                                  ? 'assets/images/ic_total_mission.png'
-                                                                  : item["title"] ==
-                                                                          "total players"
-                                                                      ? 'assets/images/ic_total_player.png'
-                                                                      : 'assets/images/ic_level_community.png'),
-                                                              const SizedBox(
-                                                                width: 8,
-                                                              ),
-                                                              Text(
-                                                                item["value"]
-                                                                    .toString(),
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 12,
-                                                              ),
-                                                            ],
-                                                          ))
-                                                      .toList(),
-                                                ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               );
-                            },
-                          );
-                        }).toList()
-                      : [],
-                ),
+                            }).toList()
+                          : [],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

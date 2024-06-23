@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
@@ -16,8 +17,7 @@ final dio = Dio()
         onError: (error, handler) {
           print("@ Error InterceptorsWrapper $error");
           // Do stuff here
-          handler.reject(
-              error); // Added this line to let error propagate outside the interceptor
+          handler.reject(error); // Added this line to let error propagate outside the interceptor
         },
       ),
 
@@ -29,7 +29,7 @@ final dio = Dio()
             final prefs = await SharedPreferences.getInstance();
 
             final accessToken = prefs.getString('access_token') ?? '';
-
+            log('BERAR TOKEN ===> $accessToken');
             if (accessToken != '') {
               cachedCSRFToken = 'Bearer $accessToken';
               if (cachedCSRFToken != null) {
@@ -66,18 +66,19 @@ final dio = Dio()
     ],
   );
 
-Future<dynamic> clientDio(
-    {serviceUrlParam = "", methodParam = "GET", data, queryParameters}) async {
+Future<dynamic> clientDio({serviceUrlParam = "", methodParam = "GET", data, queryParameters}) async {
   try {
     String serviceUrl = serviceUrlParam;
     String method = methodParam;
 
-    final response = await dio.request(serviceUrl,
-        options: Options(
-          method: method,
-        ),
-        queryParameters: queryParameters,
-        data: data);
+    final response = await dio.request(
+      serviceUrl,
+      options: Options(
+        method: method,
+      ),
+      queryParameters: queryParameters,
+      data: data,
+    );
     print('@client response $response');
 
     var decodeJsonRes = jsonDecode(response.toString());

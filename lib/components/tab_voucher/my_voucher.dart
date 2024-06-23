@@ -22,19 +22,14 @@ class TabContentVoucherComponent extends StatefulWidget {
   final dynamic resVoucher;
 
   @override
-  State<TabContentVoucherComponent> createState() =>
-      _TabContentVoucherComponentState();
+  State<TabContentVoucherComponent> createState() => _TabContentVoucherComponentState();
 }
 
-class _TabContentVoucherComponentState
-    extends State<TabContentVoucherComponent> {
+class _TabContentVoucherComponentState extends State<TabContentVoucherComponent> {
   void goToDetailVoucher() {
-    final arguments = MyArgumentsDataDetailVoucherClass(
-        widget.resVoucher, widget.index, true);
+    final arguments = MyArgumentsDataDetailVoucherClass(widget.resVoucher, widget.index, true);
 
-    Application.router.navigateTo(context, "/detailVoucherScreen",
-        transition: TransitionType.native,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/detailVoucherScreen", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
   }
 
   @override
@@ -47,7 +42,7 @@ class _TabContentVoucherComponentState
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         splashColor: yellowPrimaryColor.withAlpha(30),
         onTap: () {
@@ -59,8 +54,7 @@ class _TabContentVoucherComponentState
             image: coverImage != null
                 ? DecorationImage(
                     fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
                     image: NetworkImage(coverImage),
                   )
                 : null,
@@ -82,10 +76,7 @@ class _TabContentVoucherComponentState
               ),
               Text(
                 description ?? "",
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
+                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400),
               ),
             ],
           ),

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:avatar_stack/avatar_stack.dart';
 import 'package:date_count_down/date_count_down.dart';
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
@@ -27,6 +26,8 @@ import 'package:sekuya_family_mobile_app/screens/private/profile_detail.dart';
 import 'package:sekuya_family_mobile_app/service/mission/mission.dart';
 import 'package:sekuya_family_mobile_app/util/format_date.dart';
 import 'package:sekuya_family_mobile_app/util/launch_url.dart';
+
+import '../../components/avatar_stack_widget.dart';
 
 final dio = Dio();
 
@@ -89,11 +90,9 @@ class _MissionDetailState extends State<MissionDetail> {
   final additionalAttributeAnswerNotes = TextEditingController();
   final additionalAttributeAnswerMultipleChoice = TextEditingController();
 
-  static const String _kLocationServicesDisabledMessage =
-      'Location services are disabled.';
+  static const String _kLocationServicesDisabledMessage = 'Location services are disabled.';
   static const String _kPermissionDeniedMessage = 'Permission denied.';
-  static const String _kPermissionDeniedForeverMessage =
-      'Permission denied forever.';
+  static const String _kPermissionDeniedForeverMessage = 'Permission denied forever.';
   static const String _kPermissionGrantedMessage = 'Permission granted.';
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
@@ -116,8 +115,7 @@ class _MissionDetailState extends State<MissionDetail> {
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
       final serviceStatusStream = _geolocatorPlatform.getServiceStatusStream();
-      _serviceStatusStreamSubscription =
-          serviceStatusStream.handleError((error) {
+      _serviceStatusStreamSubscription = serviceStatusStream.handleError((error) {
         _serviceStatusStreamSubscription?.cancel();
         _serviceStatusStreamSubscription = null;
       }).listen((serviceStatus) {
@@ -132,8 +130,7 @@ class _MissionDetailState extends State<MissionDetail> {
             setState(() {
               _positionStreamSubscription?.cancel();
               _positionStreamSubscription = null;
-              _updatePositionList(
-                  _PositionItemType.log, 'Position Stream has been canceled');
+              _updatePositionList(_PositionItemType.log, 'Position Stream has been canceled');
             });
           }
           serviceStatusValue = 'disabled';
@@ -146,8 +143,7 @@ class _MissionDetailState extends State<MissionDetail> {
     }
   }
 
-  Future<dynamic> getDataLuckyWinnersByMissionDetail(
-      {pageKey = 1, refetch = false}) async {
+  Future<dynamic> getDataLuckyWinnersByMissionDetail({pageKey = 1, refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
@@ -167,11 +163,9 @@ class _MissionDetailState extends State<MissionDetail> {
         'limit': pageSizeLuckyWinners.toString(),
       };
 
-      String id = widget.args?.resMission?["data"]?["data"]
-          ?[widget.args?.indexResMission]?["_id"];
+      String id = widget.args?.resMission[widget.args?.indexResMission]?["_id"];
 
-      var res =
-          await handleGetDataLuckyWinnersByMissionDetail(id, queryParameters);
+      var res = await handleGetDataLuckyWinnersByMissionDetail(id, queryParameters);
 
       if (res != null) {
         if (mounted) {
@@ -195,8 +189,7 @@ class _MissionDetailState extends State<MissionDetail> {
               refetchLuckyWinners = false;
               totalPagesLuckyWinners = res?["data"]?["meta"]?["totalPages"];
               currentPageLuckyWinners = res?["data"]?["meta"]?["page"];
-              itemPerPageLuckyWinners =
-                  itemPerPageLuckyWinners + tempItemPerPageState;
+              itemPerPageLuckyWinners = itemPerPageLuckyWinners + tempItemPerPageState;
             });
           } else {
             setState(() {
@@ -218,8 +211,7 @@ class _MissionDetailState extends State<MissionDetail> {
     }
   }
 
-  Future<dynamic> getDataPlayersByMissionDetail(
-      {pageKey = 1, refetch = false}) async {
+  Future<dynamic> getDataPlayersByMissionDetail({pageKey = 1, refetch = false}) async {
     if (!mounted) return;
     try {
       if (mounted) {
@@ -239,8 +231,7 @@ class _MissionDetailState extends State<MissionDetail> {
         'limit': pageSizePlayers.toString(),
       };
 
-      String id = widget.args?.resMission?["data"]?["data"]
-          ?[widget.args?.indexResMission]?["_id"];
+      String id = widget.args?.resMission[widget.args?.indexResMission]?["_id"];
 
       var res = await handleGetDataPlayersByMissionDetail(id, queryParameters);
 
@@ -301,8 +292,7 @@ class _MissionDetailState extends State<MissionDetail> {
         });
       }
 
-      String id = widget.args?.resMission?["data"]?["data"]
-          ?[widget.args?.indexResMission]?["_id"];
+      String id = widget.args?.resMission[widget.args?.indexResMission]?["_id"];
 
       var res = await handleGetDataMissionDetail(id);
 
@@ -378,8 +368,7 @@ class _MissionDetailState extends State<MissionDetail> {
     _positionItems.add(_PositionItem(type, displayValue));
 
     if (type != _PositionItemType.log) {
-      RegExp regExp = RegExp(
-          r'Latitude:\s*([-+]?[0-9]*\.?[0-9]+),\s*Longitude:\s*([-+]?[0-9]*\.?[0-9]+)');
+      RegExp regExp = RegExp(r'Latitude:\s*([-+]?[0-9]*\.?[0-9]+),\s*Longitude:\s*([-+]?[0-9]*\.?[0-9]+)');
 
       Match? match = regExp.firstMatch(displayValue);
 
@@ -389,8 +378,7 @@ class _MissionDetailState extends State<MissionDetail> {
 
         print('Latitude: $latitude, Longitude: $longitude');
 
-        final response = await dio.get(
-            '$baseUrlMapGoogleApi/geocode/json?latlng=$latitude,$longitude&key=$apiKeyGoogleApi');
+        final response = await dio.get('$baseUrlMapGoogleApi/geocode/json?latlng=$latitude,$longitude&key=$apiKeyGoogleApi');
 
         final res = jsonDecode(response.toString());
 
@@ -422,9 +410,7 @@ class _MissionDetailState extends State<MissionDetail> {
   void handleBack() {
     final arguments = MyArgumentsDataClass(false, false, false, true);
 
-    Application.router.navigateTo(context, "/privateScreens",
-        transition: TransitionType.inFromRight,
-        routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/privateScreens", transition: TransitionType.inFromRight, routeSettings: RouteSettings(arguments: arguments));
   }
 
   Future<dynamic> handlePostTaskSubmission({taskId, taskCategoryKey}) async {
@@ -433,17 +419,13 @@ class _MissionDetailState extends State<MissionDetail> {
         isLoadingSubmitTaskMission = true;
       });
 
-      String idMission = widget.args?.resMission?["data"]?["data"]
-          ?[widget.args?.indexResMission]?["_id"];
+      String idMission = widget.args?.resMission[widget.args?.indexResMission]?["_id"];
 
       var formData;
 
       switch (taskCategoryKey) {
         case "PROOF_WITH_PHOTO_AND_LOCATION":
-          if (_mediaFileList == null ||
-              _mediaFileList!.isEmpty ||
-              lat == null ||
-              long == null) {
+          if (_mediaFileList == null || _mediaFileList!.isEmpty || lat == null || long == null) {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
@@ -454,22 +436,12 @@ class _MissionDetailState extends State<MissionDetail> {
                     SizedBox(
                       height: 16,
                     ),
-                    Text('Warning!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white)),
+                    Text('Warning!', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
                     SizedBox(
                       height: 8,
                     ),
-                    Text(
-                        'Please provide the required photo, latitude, and longitude.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: greySecondaryColor)),
+                    Text('Please provide the required photo, latitude, and longitude.',
+                        textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
                   ],
                 ),
                 actionsAlignment: MainAxisAlignment.center,
@@ -516,21 +488,11 @@ class _MissionDetailState extends State<MissionDetail> {
                     SizedBox(
                       height: 16,
                     ),
-                    Text('Warning!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white)),
+                    Text('Warning!', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
                     SizedBox(
                       height: 8,
                     ),
-                    Text('Please provide the required photo.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: greySecondaryColor)),
+                    Text('Please provide the required photo.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
                   ],
                 ),
                 actionsAlignment: MainAxisAlignment.center,
@@ -577,21 +539,11 @@ class _MissionDetailState extends State<MissionDetail> {
                     SizedBox(
                       height: 16,
                     ),
-                    Text('Warning!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white)),
+                    Text('Warning!', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
                     SizedBox(
                       height: 8,
                     ),
-                    Text('Please provide the answer notes.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: greySecondaryColor)),
+                    Text('Please provide the answer notes.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
                   ],
                 ),
                 actionsAlignment: MainAxisAlignment.center,
@@ -634,21 +586,11 @@ class _MissionDetailState extends State<MissionDetail> {
                     SizedBox(
                       height: 16,
                     ),
-                    Text('Warning!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white)),
+                    Text('Warning!', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
                     SizedBox(
                       height: 8,
                     ),
-                    Text('Please provide the answer notes.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: greySecondaryColor)),
+                    Text('Please provide the answer notes.', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
                   ],
                 ),
                 actionsAlignment: MainAxisAlignment.center,
@@ -696,21 +638,12 @@ class _MissionDetailState extends State<MissionDetail> {
                     SizedBox(
                       height: 16,
                     ),
-                    Text('Warning!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white)),
+                    Text('Warning!', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
                     SizedBox(
                       height: 8,
                     ),
                     Text('Please provide the answer for the multiple choice.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: greySecondaryColor)),
+                        textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
                   ],
                 ),
                 actionsAlignment: MainAxisAlignment.center,
@@ -767,24 +700,12 @@ class _MissionDetailState extends State<MissionDetail> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Text('Message!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+                  const Text('Message!', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
                   const SizedBox(
                     height: 8,
                   ),
-                  Text(
-                      res["statusCode"] == 400
-                          ? res['message']
-                          : '👋🏻 Success submit Task',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: greySecondaryColor)),
+                  Text(res["statusCode"] == 400 ? res['message'] : '👋🏻 Success submit Task',
+                      textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: greySecondaryColor)),
                 ],
               ),
               actionsAlignment: MainAxisAlignment.center,
@@ -977,90 +898,94 @@ class _MissionDetailState extends State<MissionDetail> {
     var dataLuckyWinners = resLuckyWinners?["data"]?["data"];
 
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.black,
-              leading: IconButton(
-                color: Colors.white,
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  // handleBack();
-                  Navigator.pop(context, 'Cancel');
-                },
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              title: const Text(
-                'Detail Mission',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            backgroundColor: Colors.black,
-            body: Shimmer(
-              linearGradient: shimmerGradient,
-              child: SingleChildScrollView(
-                  physics: isLoadingMissionDetail
-                      ? const NeverScrollableScrollPhysics()
-                      : null,
-                  child: Padding(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          centerTitle: true,
+          leading: IconButton(
+            color: Colors.white,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              // handleBack();
+              Navigator.pop(context, 'Cancel');
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+          title: const Text(
+            'Detail Mission',
+            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+        backgroundColor: Colors.black,
+        body: Shimmer(
+          linearGradient: shimmerGradient,
+          child: SingleChildScrollView(
+            physics: isLoadingMissionDetail ? const NeverScrollableScrollPhysics() : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
+                      children: <Widget>[
                         if (isLoadingMissionDetail)
                           MyWidgetShimmerApp(
-                              isLoading: isLoadingMissionDetail,
-                              child: const Card(
-                                child: SizedBox(
-                                  height: 20,
-                                ),
-                              )),
+                            isLoading: isLoadingMissionDetail,
+                            child: const Card(
+                              child: SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                          ),
                         if (!isLoadingMissionDetail)
                           Text(
-                            name.length > 20
-                                ? name.substring(0, 20) + "..."
-                                : name ?? "",
+                            name ?? "",
                             style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: Colors.white),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         const SizedBox(
-                          height: 16,
+                          height: 14,
                         ),
                         if (isLoadingMissionDetail)
                           MyWidgetShimmerApp(
-                              isLoading: isLoadingMissionDetail,
-                              child: const Card(
-                                child: SizedBox(
-                                  height: 20,
-                                ),
-                              )),
+                            isLoading: isLoadingMissionDetail,
+                            child: const Card(
+                              child: SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                          ),
                         if (!isLoadingMissionDetail)
                           Row(
                             children: [
                               if (community?["image"] != null)
                                 Image.network(
                                   community?["image"],
-                                  width: 32,
-                                  height: 32,
+                                  width: 24,
+                                  height: 24,
                                 ),
                               const SizedBox(
                                 width: 8,
                               ),
                               if (community?["name"] != null)
                                 Text(
-                                  community?["name"].length > 10
-                                      ? community["name"].substring(0, 10) +
-                                          "..."
-                                      : community?["name"] ?? "",
+                                  community?["name"] ?? "",
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      color: Colors.white),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
                             ],
                           ),
@@ -1078,10 +1003,7 @@ class _MissionDetailState extends State<MissionDetail> {
                         if (!isLoadingMissionDetail)
                           Text(
                             description ?? "-",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12,
-                                color: greySecondaryColor),
+                            style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: greySecondaryColor),
                           ),
                         const SizedBox(
                           height: 16,
@@ -1091,53 +1013,64 @@ class _MissionDetailState extends State<MissionDetail> {
                             if (isLoadingMissionDetail)
                               if (isLoadingMissionDetail)
                                 MyWidgetShimmerApp(
-                                    isLoading: isLoadingMissionDetail,
-                                    child: const Card(
-                                      child: SizedBox(
-                                        width: 100,
-                                        height: 30,
-                                      ),
-                                    )),
-                            if (!isLoadingMissionDetail)
-                              Chip(
-                                  label: Text(
-                                    status ?? "",
-                                  ),
-                                  color: MaterialStateProperty.all<Color>(
-                                      blueSecondaryColor),
-                                  labelStyle: const TextStyle(
-                                      color: blueSolidSecondaryColor),
-                                  shape: const StadiumBorder(
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            if (isLoadingMissionDetail)
-                              MyWidgetShimmerApp(
                                   isLoading: isLoadingMissionDetail,
                                   child: const Card(
                                     child: SizedBox(
                                       width: 100,
                                       height: 30,
                                     ),
-                                  )),
+                                  ),
+                                ),
+                            if (!isLoadingMissionDetail)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      status.toString().toLowerCase().contains('completed') ? const Color(0xFF03A61D).withOpacity(0.2) : const Color(0xFF2AB6F2).withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    status ?? "",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: status.toString().toLowerCase().contains('completed') ? greenColor : blueSolidSecondaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            const SizedBox(
+                              width: 18,
+                            ),
+                            if (isLoadingMissionDetail)
+                              MyWidgetShimmerApp(
+                                isLoading: isLoadingMissionDetail,
+                                child: const Card(
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 30,
+                                  ),
+                                ),
+                              ),
                             if (!isLoadingMissionDetail)
                               Row(
                                 children: [
                                   Text(
                                     '${handleFormatDate(startDate)} - ',
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12,
-                                        color: Colors.white),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   Text(
                                     handleFormatDate(endDate),
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12,
-                                        color: Colors.white),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ],
                               )
@@ -1155,48 +1088,47 @@ class _MissionDetailState extends State<MissionDetail> {
                                   height: 60,
                                 ),
                               )),
-                        if (!isLoadingMissionDetail)
+                        if (!isLoadingMissionDetail && !status.toString().toLowerCase().contains('completed'))
                           Container(
-                              margin: const EdgeInsets.only(bottom: 16),
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: yellowPrimaryColor.withOpacity(0.2),
-                                  border: Border.all(
-                                    color: yellowPrimaryColor,
+                            margin: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: yellowPrimaryColor.withOpacity(0.2),
+                              border: Border.all(
+                                color: yellowPrimaryColor,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                const Text(
+                                  'Mission will end on',
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8))),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'Mission will end on',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                if (endDate != null)
+                                  CountDownText(
+                                    due: DateTime.parse(endDate),
+                                    finishedText: "Mission End",
+                                    showLabel: true,
+                                    longDateName: true,
+                                    style: const TextStyle(color: Colors.white),
                                   ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  if (endDate != null)
-                                    CountDownText(
-                                      due: DateTime.parse(endDate),
-                                      finishedText: "Mission End",
-                                      showLabel: true,
-                                      longDateName: true,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                ],
-                              )),
+                              ],
+                            ),
+                          ),
                         if (rewards != null && rewards.isNotEmpty)
                           const Padding(
                             padding: EdgeInsets.only(bottom: 16),
                             child: Text(
                               'Rewards',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  color: Colors.white),
+                              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
                             ),
                           ),
                         if (isLoadingMissionDetail)
@@ -1212,86 +1144,62 @@ class _MissionDetailState extends State<MissionDetail> {
                             padding: const EdgeInsets.only(bottom: 16),
                             child: Column(
                               children: (rewards as List<dynamic>)
-                                  .map((itemReward) => Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: const BoxDecoration(
-                                            color: blackPrimaryColor,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8))),
-                                        child: Row(
-                                          children: [
-                                            if (itemReward["image"] != null)
-                                              Image.network(
-                                                itemReward["image"],
-                                                width: 40,
-                                                height: 40,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            const SizedBox(
-                                              width: 16,
+                                  .map(
+                                    (itemReward) => Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(color: blackPrimaryColor, borderRadius: BorderRadius.all(Radius.circular(8))),
+                                      child: Row(
+                                        children: [
+                                          if (itemReward["image"] != null)
+                                            Image.network(
+                                              itemReward["image"],
+                                              width: 40,
+                                              height: 40,
+                                              fit: BoxFit.cover,
                                             ),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    '${itemReward["maxQty"].toString()} Xp',
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  LinearProgressIndicator(
-                                                    value:
-                                                        itemReward["maxQty"] *
-                                                            0.01,
-                                                    color: yellowPrimaryColor,
-                                                    backgroundColor:
-                                                        greyThirdColor,
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Text(
-                                                    itemReward["description"],
-                                                    style: const TextStyle(
-                                                        color:
-                                                            greySecondaryColor,
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 16,
-                                            ),
-                                            Chip(
-                                                label: Text(
-                                                  '${itemReward["maxQty"] / itemReward["maxQty"]}%',
+                                          const SizedBox(
+                                            width: 16,
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${itemReward["maxQty"].toString()} Xp',
+                                                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
                                                 ),
-                                                color: MaterialStateProperty
-                                                    .all<Color>(
-                                                        blackSolidPrimaryColor),
-                                                labelStyle: const TextStyle(
-                                                    color: yellowPrimaryColor,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    side: const BorderSide(
-                                                        color: Colors
-                                                            .transparent))),
-                                          ],
-                                        ),
-                                      ))
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                LinearProgressIndicator(
+                                                  value: itemReward["maxQty"] * 0.01,
+                                                  color: yellowPrimaryColor,
+                                                  backgroundColor: greyThirdColor,
+                                                ),
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Text(
+                                                  itemReward["description"],
+                                                  style: const TextStyle(color: greySecondaryColor, fontWeight: FontWeight.w400),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 16,
+                                          ),
+                                          Chip(
+                                              label: Text(
+                                                '${itemReward["maxQty"] / itemReward["maxQty"]}%',
+                                              ),
+                                              color: WidgetStateProperty.all<Color>(blackSolidPrimaryColor),
+                                              labelStyle: const TextStyle(color: yellowPrimaryColor, fontWeight: FontWeight.w600),
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: const BorderSide(color: Colors.transparent))),
+                                        ],
+                                      ),
+                                    ),
+                                  )
                                   .toList(),
                             ),
                           ),
@@ -1302,31 +1210,22 @@ class _MissionDetailState extends State<MissionDetail> {
                             children: [
                               const Text(
                                 'Lucky Winner',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               GestureDetector(
                                   onTap: () {
-                                    String idMission = widget
-                                            .args?.resMission?["data"]?["data"]
-                                        ?[widget.args?.indexResMission]?["_id"];
+                                    String idMission = widget.args?.resMission[widget.args?.indexResMission]?["_id"];
 
                                     showModalBottomSheet(
                                         backgroundColor: Colors.black,
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return LuckyWinnerBottomSheetApp(
-                                              idMission: idMission);
+                                          return LuckyWinnerBottomSheetApp(idMission: idMission);
                                         });
                                   },
                                   child: const Text(
                                     'See All',
-                                    style: TextStyle(
-                                        color: yellowPrimaryColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
+                                    style: TextStyle(color: yellowPrimaryColor, fontSize: 14, fontWeight: FontWeight.w500),
                                   ))
                             ],
                           ),
@@ -1334,53 +1233,57 @@ class _MissionDetailState extends State<MissionDetail> {
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 16),
                             padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: blackPrimaryColor),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.black),
-                            child: Row(children: [
-                              Flexible(
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 12,
-                                      backgroundColor: Colors.transparent,
-                                      backgroundImage: NetworkImage(
-                                          dataLuckyWinners[0]?["player"]
-                                              ?["profilePic"]),
-                                    ),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      "${dataLuckyWinners[0]?["player"]?["email"].substring(0, 6)}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
+                            decoration: BoxDecoration(border: Border.all(color: blackPrimaryColor), borderRadius: BorderRadius.circular(8), color: Colors.black),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Colors.transparent,
+                                        backgroundImage: NetworkImage(dataLuckyWinners[0]?["player"]?["profilePic"]),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        "${dataLuckyWinners[0]?["player"]?["email"].substring(0, 6)}",
+                                        style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Flexible(
+                                Flexible(
                                   child: AvatarStack(
-                                height: 24,
-                                avatars: [
-                                  for (var n = 0;
-                                      n < dataLuckyWinners.length;
-                                      n++)
-                                    NetworkImage(dataLuckyWinners[n]?["player"]
-                                        ?["profilePic"])
-                                ],
-                              ))
-                            ]),
+                                    height: 24,
+                                    avatars: [
+                                      for (var n = 0; n < dataLuckyWinners.length; n++)
+                                        NetworkImage(
+                                          dataLuckyWinners[n]?["player"]?["profilePic"],
+                                        ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    color: Color(0xFF1A1A1C),
+                    thickness: 8,
+                    height: 32,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
                         const Text(
                           'Tasks',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Colors.white),
+                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
                         ),
                         const SizedBox(
                           height: 16,
@@ -1390,15 +1293,12 @@ class _MissionDetailState extends State<MissionDetail> {
                             children: (tasks as List<dynamic>).map((itemTask) {
                               return Column(
                                 children: [
-                                  if (itemTask["taskCategoryKey"] ==
-                                      "PROOF_WITH_PHOTO_AND_LOCATION")
+                                  if (itemTask["taskCategoryKey"] == "PROOF_WITH_PHOTO_AND_LOCATION")
                                     ProofWithPhotoAndLocApp(
                                         image: itemTask["image"],
                                         reason: itemTask["reason"],
-                                        isLoadingMissionDetail:
-                                            isLoadingMissionDetail,
-                                        submittedAdditionalAttribute: itemTask[
-                                            "submittedAdditionalAttribute"],
+                                        isLoadingMissionDetail: isLoadingMissionDetail,
+                                        submittedAdditionalAttribute: itemTask["submittedAdditionalAttribute"],
                                         status: itemTask["status"],
                                         onExpansionChanged: () {
                                           setState(() {
@@ -1406,61 +1306,39 @@ class _MissionDetailState extends State<MissionDetail> {
                                             _mediaFileList = null;
                                             lat = null;
                                             long = null;
-                                            additionalAttributeAnswerNotes
-                                                .text = "";
-                                            additionalAttributeAnswerMultipleChoice
-                                                .text = "";
+                                            additionalAttributeAnswerNotes.text = "";
+                                            additionalAttributeAnswerMultipleChoice.text = "";
                                           });
                                         },
                                         name: itemTask["name"],
                                         description: itemTask["description"],
                                         exp: itemTask["exp"],
                                         onTapTakeCamera: () {
-                                          if (_picker.supportsImageSource(
-                                                  ImageSource.camera) &&
-                                              [
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"])) {
-                                            _onImageButtonPressed(
-                                                ImageSource.camera,
-                                                context: context);
+                                          if (_picker.supportsImageSource(ImageSource.camera) && ["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"])) {
+                                            _onImageButtonPressed(ImageSource.camera, context: context);
                                           }
                                         },
                                         retrieveLostData: () async {
                                           await retrieveLostData();
                                         },
                                         previewImages: _previewImages(
-                                          imageProof: [
-                                            "NOT_SUBMITTED",
-                                            "REJECTED"
-                                          ].contains(itemTask["status"])
-                                              ? ''
-                                              : itemTask["imageProof"],
+                                          imageProof: ["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]) ? '' : itemTask["imageProof"],
                                         ),
                                         onTapGetCurrentPosition: () {
                                           _getCurrentPosition();
                                         },
-                                        isLoadingNameLocation:
-                                            isLoadingNameLocation,
+                                        isLoadingNameLocation: isLoadingNameLocation,
                                         nameLocation: nameLocation,
-                                        isLoadingSubmitTaskMission:
-                                            isLoadingSubmitTaskMission,
+                                        isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
                                         onPressedSubmitTaskMission: () {
-                                          if (!isLoadingSubmitTaskMission &&
-                                              ([
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"]))) {
+                                          if (!isLoadingSubmitTaskMission && (["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]))) {
                                             handlePostTaskSubmission(
                                               taskId: itemTask["id"],
-                                              taskCategoryKey:
-                                                  itemTask["taskCategoryKey"],
+                                              taskCategoryKey: itemTask["taskCategoryKey"],
                                             );
                                           }
                                         }),
-                                  if (itemTask["taskCategoryKey"] ==
-                                      "PROOF_WITH_PHOTO")
+                                  if (itemTask["taskCategoryKey"] == "PROOF_WITH_PHOTO")
                                     ProofWithPhotoApp(
                                         image: itemTask["image"],
                                         status: itemTask["status"],
@@ -1471,58 +1349,35 @@ class _MissionDetailState extends State<MissionDetail> {
                                             _mediaFileList = null;
                                             lat = null;
                                             long = null;
-                                            additionalAttributeAnswerNotes
-                                                .text = "";
-                                            additionalAttributeAnswerMultipleChoice
-                                                .text = "";
+                                            additionalAttributeAnswerNotes.text = "";
+                                            additionalAttributeAnswerMultipleChoice.text = "";
                                           });
                                         },
                                         name: itemTask["name"],
                                         description: itemTask["description"],
                                         exp: itemTask["exp"],
                                         onTapTakeCamera: () {
-                                          if (_picker.supportsImageSource(
-                                                  ImageSource.camera) &&
-                                              [
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"])) {
-                                            _onImageButtonPressed(
-                                                ImageSource.camera,
-                                                context: context);
+                                          if (_picker.supportsImageSource(ImageSource.camera) && ["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"])) {
+                                            _onImageButtonPressed(ImageSource.camera, context: context);
                                           }
                                         },
                                         retrieveLostData: () async {
                                           await retrieveLostData();
                                         },
-                                        previewImages: _previewImages(
-                                            imageProof: [
-                                          "NOT_SUBMITTED",
-                                          "REJECTED"
-                                        ].contains(itemTask["status"])
-                                                ? ''
-                                                : itemTask["imageProof"]),
-                                        isLoadingSubmitTaskMission:
-                                            isLoadingSubmitTaskMission,
+                                        previewImages: _previewImages(imageProof: ["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]) ? '' : itemTask["imageProof"]),
+                                        isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
                                         onPressedSubmitTaskMission: () {
-                                          if (!isLoadingSubmitTaskMission &&
-                                              ([
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"]))) {
+                                          if (!isLoadingSubmitTaskMission && (["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]))) {
                                             handlePostTaskSubmission(
                                               taskId: itemTask["id"],
-                                              taskCategoryKey:
-                                                  itemTask["taskCategoryKey"],
+                                              taskCategoryKey: itemTask["taskCategoryKey"],
                                             );
                                           }
                                         }),
-                                  if (itemTask["taskCategoryKey"] ==
-                                      "ANSWER_NOTES")
+                                  if (itemTask["taskCategoryKey"] == "ANSWER_NOTES")
                                     AnswerNotesApp(
                                         image: itemTask["image"],
-                                        submittedAdditionalAttribute: itemTask[
-                                            "submittedAdditionalAttribute"],
+                                        submittedAdditionalAttribute: itemTask["submittedAdditionalAttribute"],
                                         name: itemTask["name"],
                                         reason: itemTask["reason"],
                                         status: itemTask["status"],
@@ -1532,28 +1387,19 @@ class _MissionDetailState extends State<MissionDetail> {
                                             _mediaFileList = null;
                                             lat = null;
                                             long = null;
-                                            additionalAttributeAnswerNotes
-                                                .text = "";
-                                            additionalAttributeAnswerMultipleChoice
-                                                .text = "";
+                                            additionalAttributeAnswerNotes.text = "";
+                                            additionalAttributeAnswerMultipleChoice.text = "";
                                           });
                                         },
-                                        additionalAttributeAnswerNotes:
-                                            additionalAttributeAnswerNotes,
+                                        additionalAttributeAnswerNotes: additionalAttributeAnswerNotes,
                                         description: itemTask["description"],
                                         exp: itemTask["exp"],
-                                        isLoadingSubmitTaskMission:
-                                            isLoadingSubmitTaskMission,
+                                        isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
                                         onPressedSubmitTaskMission: () {
-                                          if (!isLoadingSubmitTaskMission &&
-                                              ([
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"]))) {
+                                          if (!isLoadingSubmitTaskMission && (["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]))) {
                                             handlePostTaskSubmission(
                                               taskId: itemTask["id"],
-                                              taskCategoryKey:
-                                                  itemTask["taskCategoryKey"],
+                                              taskCategoryKey: itemTask["taskCategoryKey"],
                                             );
                                           }
                                         }),
@@ -1561,8 +1407,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                     ReferralApp(
                                         image: itemTask["image"],
                                         name: itemTask["name"],
-                                        submittedAdditionalAttribute: itemTask[
-                                            "submittedAdditionalAttribute"],
+                                        submittedAdditionalAttribute: itemTask["submittedAdditionalAttribute"],
                                         reason: itemTask["reason"],
                                         status: itemTask["status"],
                                         onExpansionChanged: () {
@@ -1571,28 +1416,19 @@ class _MissionDetailState extends State<MissionDetail> {
                                             _mediaFileList = null;
                                             lat = null;
                                             long = null;
-                                            additionalAttributeAnswerNotes
-                                                .text = "";
-                                            additionalAttributeAnswerMultipleChoice
-                                                .text = "";
+                                            additionalAttributeAnswerNotes.text = "";
+                                            additionalAttributeAnswerMultipleChoice.text = "";
                                           });
                                         },
-                                        additionalAttributeAnswerNotes:
-                                            additionalAttributeAnswerNotes,
+                                        additionalAttributeAnswerNotes: additionalAttributeAnswerNotes,
                                         description: itemTask["description"],
                                         exp: itemTask["exp"],
-                                        isLoadingSubmitTaskMission:
-                                            isLoadingSubmitTaskMission,
+                                        isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
                                         onPressedSubmitTaskMission: () {
-                                          if (!isLoadingSubmitTaskMission &&
-                                              ([
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"]))) {
+                                          if (!isLoadingSubmitTaskMission && (["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]))) {
                                             handlePostTaskSubmission(
                                               taskId: itemTask["id"],
-                                              taskCategoryKey:
-                                                  itemTask["taskCategoryKey"],
+                                              taskCategoryKey: itemTask["taskCategoryKey"],
                                             );
                                           }
                                         }),
@@ -1600,8 +1436,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                     QuizApp(
                                         image: itemTask["image"],
                                         name: itemTask["name"],
-                                        submittedAdditionalAttribute: itemTask[
-                                            "submittedAdditionalAttribute"],
+                                        submittedAdditionalAttribute: itemTask["submittedAdditionalAttribute"],
                                         reason: itemTask["reason"],
                                         status: itemTask["status"],
                                         selectedChoice: selectedChoice,
@@ -1611,8 +1446,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                           });
                                         },
                                         description: itemTask["description"],
-                                        additionalAttribute:
-                                            itemTask["additionalAttribute"],
+                                        additionalAttribute: itemTask["additionalAttribute"],
                                         exp: itemTask["exp"],
                                         onExpansionChanged: () {
                                           setState(() {
@@ -1620,33 +1454,24 @@ class _MissionDetailState extends State<MissionDetail> {
                                             _mediaFileList = null;
                                             lat = null;
                                             long = null;
-                                            additionalAttributeAnswerNotes
-                                                .text = "";
-                                            additionalAttributeAnswerMultipleChoice
-                                                .text = "";
+                                            additionalAttributeAnswerNotes.text = "";
+                                            additionalAttributeAnswerMultipleChoice.text = "";
                                           });
                                         },
                                         retrieveLostData: () async {
                                           await retrieveLostData();
                                         },
                                         previewImages: _previewImages(),
-                                        isLoadingSubmitTaskMission:
-                                            isLoadingSubmitTaskMission,
+                                        isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
                                         onPressedSubmitTaskMission: () {
-                                          if (!isLoadingSubmitTaskMission &&
-                                              ([
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"]))) {
+                                          if (!isLoadingSubmitTaskMission && (["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]))) {
                                             handlePostTaskSubmission(
                                               taskId: itemTask["id"],
-                                              taskCategoryKey:
-                                                  itemTask["taskCategoryKey"],
+                                              taskCategoryKey: itemTask["taskCategoryKey"],
                                             );
                                           }
                                         }),
-                                  if (itemTask["taskCategoryKey"] ==
-                                      "BUTTON_CLICK")
+                                  if (itemTask["taskCategoryKey"] == "BUTTON_CLICK")
                                     ButtonClickApp(
                                         image: itemTask["image"],
                                         name: itemTask["name"],
@@ -1659,8 +1484,7 @@ class _MissionDetailState extends State<MissionDetail> {
                                           });
                                         },
                                         description: itemTask["description"],
-                                        additionalAttribute:
-                                            itemTask["additionalAttribute"],
+                                        additionalAttribute: itemTask["additionalAttribute"],
                                         exp: itemTask["exp"],
                                         onExpansionChanged: () {
                                           setState(() {
@@ -1668,34 +1492,22 @@ class _MissionDetailState extends State<MissionDetail> {
                                             _mediaFileList = null;
                                             lat = null;
                                             long = null;
-                                            additionalAttributeAnswerNotes
-                                                .text = "";
-                                            additionalAttributeAnswerMultipleChoice
-                                                .text = "";
+                                            additionalAttributeAnswerNotes.text = "";
+                                            additionalAttributeAnswerMultipleChoice.text = "";
                                           });
                                         },
                                         retrieveLostData: () async {
                                           await retrieveLostData();
                                         },
                                         previewImages: _previewImages(),
-                                        isLoadingSubmitTaskMission:
-                                            isLoadingSubmitTaskMission,
+                                        isLoadingSubmitTaskMission: isLoadingSubmitTaskMission,
                                         onPressedSubmitTaskMission: () {
-                                          if (!isLoadingSubmitTaskMission &&
-                                              ([
-                                                "NOT_SUBMITTED",
-                                                "REJECTED"
-                                              ].contains(itemTask["status"]))) {
-                                            handleLaunchUrl(
-                                                context: context,
-                                                val: itemTask?[
-                                                        "additionalAttribute"]
-                                                    ?["link"]);
+                                          if (!isLoadingSubmitTaskMission && (["NOT_SUBMITTED", "REJECTED"].contains(itemTask["status"]))) {
+                                            handleLaunchUrl(context: context, val: itemTask?["additionalAttribute"]?["link"]);
 
                                             handlePostTaskSubmission(
                                               taskId: itemTask["id"],
-                                              taskCategoryKey:
-                                                  itemTask["taskCategoryKey"],
+                                              taskCategoryKey: itemTask["taskCategoryKey"],
                                             );
                                           }
                                         }),
@@ -1705,102 +1517,64 @@ class _MissionDetailState extends State<MissionDetail> {
                           ),
                         if (dataPlayers != null)
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 16),
+                            margin: const EdgeInsets.symmetric(vertical: 16),
                             child: const Text(
                               'Players',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  color: Colors.white),
+                              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
                             ),
                           ),
                         if (dataPlayers != null)
                           SizedBox(
-                              height: 260,
-                              child: GridView.builder(
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 16,
-                                          mainAxisExtent: 60,
-                                          crossAxisSpacing: 16),
-                                  itemCount: dataPlayers?.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Card(
-                                        color: blackPrimaryColor,
-                                        child: InkWell(
-                                            splashColor: yellowPrimaryColor
-                                                .withAlpha(30),
-                                            onTap: () {
-                                              debugPrint('Card tapped.');
-                                            },
-                                            child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color:
-                                                            greySecondaryColor,
-                                                        width: 1),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                8))),
-                                                child: Row(
-                                                  children: [
-                                                    Center(
-                                                        child: CircleAvatar(
-                                                      radius: 12,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      backgroundImage: dataPlayers?[
-                                                                      index]?[
-                                                                  "profilePic"] !=
-                                                              null
-                                                          ? NetworkImage(
-                                                              dataPlayers?[
-                                                                      index]?[
-                                                                  "profilePic"])
-                                                          : null,
-                                                    )),
-                                                    const SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    if (dataPlayers?[index]
-                                                                ?["username"] !=
-                                                            null ||
-                                                        dataPlayers?[index]
-                                                                ?["email"] !=
-                                                            null)
-                                                      Text(
-                                                        dataPlayers?[index]?[
-                                                                    "username"] ==
-                                                                ''
-                                                            ? dataPlayers?[
-                                                                        index]
-                                                                    ?["email"]
-                                                                .substring(
-                                                                    0, 10)
-                                                            : dataPlayers?[
-                                                                    index]
-                                                                ?["username"],
-                                                        style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                  ],
-                                                ))));
-                                  })),
+                            height: 260,
+                            child: GridView.builder(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 16, mainAxisExtent: 60, crossAxisSpacing: 16),
+                              itemCount: dataPlayers?.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  color: blackPrimaryColor,
+                                  child: InkWell(
+                                    splashColor: yellowPrimaryColor.withAlpha(30),
+                                    onTap: () {
+                                      debugPrint('Card tapped.');
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                                      decoration: BoxDecoration(border: Border.all(color: greySecondaryColor, width: 1), borderRadius: const BorderRadius.all(Radius.circular(8))),
+                                      child: Row(
+                                        children: [
+                                          Center(
+                                              child: CircleAvatar(
+                                            radius: 12,
+                                            backgroundColor: Colors.transparent,
+                                            backgroundImage: dataPlayers?[index]?["profilePic"] != null ? NetworkImage(dataPlayers?[index]?["profilePic"]) : null,
+                                          )),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          if (dataPlayers?[index]?["username"] != null || dataPlayers?[index]?["email"] != null)
+                                            Text(
+                                              dataPlayers?[index]?["username"] == '' ? dataPlayers?[index]?["email"].substring(0, 10) : dataPlayers?[index]?["username"],
+                                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                       ],
                     ),
-                    // This is the title in the app bar.
-                  )),
-            )));
+                  ),
+                ],
+              ),
+              // This is the title in the app bar.
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -1822,5 +1596,4 @@ class _PositionItem {
   final String displayValue;
 }
 
-typedef OnPickImageCallback = void Function(
-    double? maxWidth, double? maxHeight, int? quality, int? limit);
+typedef OnPickImageCallback = void Function(double? maxWidth, double? maxHeight, int? quality, int? limit);

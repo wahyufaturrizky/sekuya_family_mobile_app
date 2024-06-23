@@ -874,7 +874,10 @@ class _ProfileComponentState extends State<ProfileComponent> with SingleTickerPr
                                         case "My Mission":
                                           bodyTab = MyWidgetShimmerApp(
                                             isLoading: isLoadingResMyMission,
-                                            child: TabContentProfileMyMissionComponentApp(resMyMission: resMyMission, index: index),
+                                            child: TabContentProfileMyMissionComponentApp(
+                                              resMyMission: resMyMission,
+                                              index: index,
+                                            ),
                                           );
 
                                           break;

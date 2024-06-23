@@ -36,12 +36,16 @@ dependencies:
   cupertino_icons: ^1.0.6
   fluro: ^2.0.5
   carousel_slider: ^4.2.1
-  avatar_stack: ^1.2.0
   firebase_core: ^2.30.0
   firebase_auth: ^4.19.2
   google_sign_in: ^6.2.1
   dio: ^5.4.3+1
   shared_preferences: ^2.2.3
+  cached_network_image: ^3.2.3
+  djangoflow_auth_discord: ^0.1.0+6
+  shimmer: ^3.0.0
+  djangoflow_auth: ^0.5.0+1
+  oauth2_client: ^3.2.2
   firebase_analytics: ^10.10.3
   firebase_crashlytics: ^3.5.3
   image_picker: ^1.1.0
@@ -52,6 +56,14 @@ dependencies:
   geolocator: ^11.1.0
   firebase_messaging: ^14.9.2
   firebase_in_app_messaging: ^0.7.5+5
+
+# dependency_overrides:
+#   djangoflow_openapi:
+#     path: PATH_TO_YOUR_GENERATED_OPENAPI
+#   oauth2_client:
+#     git:
+#       url: https://github.com/jheld/oauth2_client.git
+#       ref: master
 
 dev_dependencies:
   flutter_test:
