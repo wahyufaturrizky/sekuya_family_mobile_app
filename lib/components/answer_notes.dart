@@ -188,14 +188,18 @@ class _AnswerNotesState extends State<AnswerNotes> {
         const SizedBox(
           height: 16,
         ),
-        CustomButton(
-          buttonText: 'Submit',
-          isLoading: widget.isLoadingSubmitTaskMission!,
-          onPressed: () {
-            widget.onPressedSubmitTaskMission!();
-          },
-          width: 500,
-          isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
+        SizedBox(
+          height: 38,
+          child: CustomButton(
+            buttonText: 'Submit',
+            isLoading: widget.isLoadingSubmitTaskMission!,
+            onPressed: () {
+              widget.onPressedSubmitTaskMission!();
+            },
+            width: MediaQuery.of(context).size.width,
+            paddingButton: 0,
+            isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
+          ),
         ),
         const SizedBox(
           height: 16,

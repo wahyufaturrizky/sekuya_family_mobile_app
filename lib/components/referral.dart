@@ -117,20 +117,18 @@ class _ReferralState extends State<Referral> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name.length > 12
-                        ? name.substring(0, 12) + "..."
-                        : name ?? "",
+                    name ?? "",
                     style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: Colors.white),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '${exp ?? ""}xp',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontSize: 12),
+                    style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 12),
                   ),
                 ],
               ),
@@ -168,21 +166,9 @@ class _ReferralState extends State<Referral> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     if (reason != '' && ["REJECTED"].contains(widget.status))
-                      Text("Reason rejected: ${reason}",
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                              color: redSolidPrimaryColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500)),
-                    Text(
-                        widget.description.length > 12
-                            ? widget.description.substring(0, 12) + "..."
-                            : widget.description ?? "",
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500)),
+                      Text("Reason rejected: ${reason}", textAlign: TextAlign.left, style: const TextStyle(color: redSolidPrimaryColor, fontSize: 14, fontWeight: FontWeight.w500)),
+                    Text(widget.description.length > 12 ? widget.description.substring(0, 12) + "..." : widget.description ?? "",
+                        textAlign: TextAlign.left, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
                   ],
                 ),
               ),
@@ -195,19 +181,17 @@ class _ReferralState extends State<Referral> {
             borderRadius: 4,
             borderWidth: 1,
             textField: TextField(
-                readOnly:
-                    !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
-                controller: widget.additionalAttributeAnswerNotes,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                ),
-                decoration: kTextInputDecoration.copyWith(
-                  hintText: ["NOT_SUBMITTED", "REJECTED"].contains(status)
-                      ? 'Your answer'
-                      : widget.submittedAdditionalAttribute,
-                  hintStyle: const TextStyle(color: greySecondaryColor),
-                )),
+              readOnly: !["NOT_SUBMITTED", "REJECTED"].contains(widget.status),
+              controller: widget.additionalAttributeAnswerNotes,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.white,
+              ),
+              decoration: kTextInputDecoration.copyWith(
+                hintText: ["NOT_SUBMITTED", "REJECTED"].contains(status) ? 'Your answer' : widget.submittedAdditionalAttribute,
+                hintStyle: const TextStyle(color: greySecondaryColor),
+              ),
+            ),
           ),
           const SizedBox(
             height: 16,
@@ -219,7 +203,8 @@ class _ReferralState extends State<Referral> {
             onPressed: () {
               widget.onPressedSubmitTaskMission!();
             },
-            width: 500,
+            width: MediaQuery.of(context).size.width,
+            paddingButton: 0,
           ),
           const SizedBox(
             height: 16,
