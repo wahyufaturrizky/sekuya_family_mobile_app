@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
 
@@ -52,7 +61,9 @@ class CustomButton extends StatelessWidget {
           padding: EdgeInsets.all(paddingButton),
           decoration: BoxDecoration(
             color: isOutlined ? isOutlinedBackgroundColor : yellowPrimaryColor,
-            border: isOutlined ? Border.all(color: isOutlinedBorderColor, width: border) : Border.all(color: yellowPrimaryColor, width: border),
+            border: isOutlined
+                ? Border.all(color: isOutlinedBorderColor, width: border)
+                : Border.all(color: yellowPrimaryColor, width: border),
             borderRadius: BorderRadius.circular(30),
           ),
           child: Center(
@@ -68,7 +79,9 @@ class CustomButton extends StatelessWidget {
                               height: 24,
                               child: CircularProgressIndicator(
                                 strokeWidth: 3,
-                                color: isOutlined ? yellowPrimaryColor : Colors.white,
+                                color: isOutlined
+                                    ? yellowPrimaryColor
+                                    : Colors.white,
                               ))),
                       const SizedBox(
                         width: 8,
@@ -80,7 +93,8 @@ class CustomButton extends StatelessWidget {
                     radius: sizeButtonIcon,
                     backgroundColor: Colors.transparent,
                     child: SizedBox(
-                      width: sizeButtonIcon, // Set the desired width for the logo
+                      width:
+                          sizeButtonIcon, // Set the desired width for the logo
                       child: Image.asset('assets/images/$buttonIcon'),
                     ),
                   ),
@@ -89,7 +103,9 @@ class CustomButton extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: labelSize,
-                    color: isOutlined ? yellowPrimaryColor : blackSolidPrimaryColor,
+                    color: isOutlined
+                        ? yellowPrimaryColor
+                        : blackSolidPrimaryColor,
                   ),
                 )
               ],
@@ -128,7 +144,8 @@ class ScreenTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+      style: const TextStyle(
+          fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
       textAlign: TextAlign.center,
     );
   }
@@ -157,7 +174,9 @@ class CustomTextField extends StatelessWidget {
         horizontal: padding ?? 16,
       ),
       decoration: BoxDecoration(
-        color: isDisabled ? const Color.fromRGBO(36, 36, 39, 1) : Colors.transparent,
+        color: isDisabled
+            ? const Color.fromRGBO(36, 36, 39, 1)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
           width: borderWidth,

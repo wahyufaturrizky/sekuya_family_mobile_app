@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'dart:math';
 
 import 'position_widget.dart';
@@ -84,7 +93,8 @@ class RestrictedPositions implements Positions {
   }
 
   int _calculateMaxCapacityItems() {
-    final capacity = _width / (_itemSize + _getSpaceBetweenItemsBy(coverage: maxCoverage));
+    final capacity =
+        _width / (_itemSize + _getSpaceBetweenItemsBy(coverage: maxCoverage));
     return capacity.toInt();
   }
 
@@ -97,9 +107,13 @@ class RestrictedPositions implements Positions {
       return 0;
     }
 
-    final spaceBetweenItemsForFullWidth = (_width - _infoIndent - _itemSize * _allowedAmountItems) / (_allowedAmountItems - 1);
-    final spaceBetweenItemsWithMinCoverageRestriction = _getSpaceBetweenItemsBy(coverage: minCoverage);
-    return min(spaceBetweenItemsForFullWidth, spaceBetweenItemsWithMinCoverageRestriction);
+    final spaceBetweenItemsForFullWidth =
+        (_width - _infoIndent - _itemSize * _allowedAmountItems) /
+            (_allowedAmountItems - 1);
+    final spaceBetweenItemsWithMinCoverageRestriction =
+        _getSpaceBetweenItemsBy(coverage: minCoverage);
+    return min(spaceBetweenItemsForFullWidth,
+        spaceBetweenItemsWithMinCoverageRestriction);
   }
 
   double _calculateOffsetStep() {
@@ -107,7 +121,10 @@ class RestrictedPositions implements Positions {
   }
 
   double _getAlignmentOffset() {
-    final freeSpace = _width - _allowedAmountItems * _offsetStep + _spaceBetweenItems - _infoIndent;
+    final freeSpace = _width -
+        _allowedAmountItems * _offsetStep +
+        _spaceBetweenItems -
+        _infoIndent;
     switch (align) {
       case StackAlign.left:
         return 0;
@@ -131,14 +148,16 @@ class RestrictedPositions implements Positions {
   }
 
   void _fillPositionsBackward(List<ItemPosition> positions) {
-    final normalizedTopPosition = min(_itemToFill, laying.itemPositionNumberAtTop);
+    final normalizedTopPosition =
+        min(_itemToFill, laying.itemPositionNumberAtTop);
     for (var n = _itemToFill - 1; n >= normalizedTopPosition; n--) {
       positions.add(_generateItemPosition(n));
     }
   }
 
   void _fillPositionsForward(List<ItemPosition> positions) {
-    final normalizedTopPosition = min(_itemToFill, laying.itemPositionNumberAtTop);
+    final normalizedTopPosition =
+        min(_itemToFill, laying.itemPositionNumberAtTop);
     for (var n = 0; n < normalizedTopPosition; n++) {
       positions.add(_generateItemPosition(n));
     }
@@ -154,16 +173,20 @@ class RestrictedPositions implements Positions {
     }
   }
 
-  ItemPosition _generateItemPosition(int number) => _getItemPositionByLayoutDirection(
+  ItemPosition _generateItemPosition(int number) =>
+      _getItemPositionByLayoutDirection(
         number: number,
         position: number * _offsetStep + _alignmentOffset,
       );
 
   ItemPosition _generateInfoItemPosition() => InfoItemPosition.fromItemPosition(
-        amountAdditionalItems: _amountHiddenItems + 1, // we also replace one item with infoItem
+        amountAdditionalItems:
+            _amountHiddenItems + 1, // we also replace one item with infoItem
         itemPosition: _getItemPositionByLayoutDirection(
           number: _allowedAmountItems - 1,
-          position: (_allowedAmountItems - 1) * _offsetStep + _alignmentOffset + _infoIndent,
+          position: (_allowedAmountItems - 1) * _offsetStep +
+              _alignmentOffset +
+              _infoIndent,
         ),
       );
 
@@ -235,7 +258,8 @@ class RestrictedAmountPositions extends RestrictedPositions {
 
   @override
   int _getAmountItems() {
-    final minBetweenFullAndCalculatedAmount = min(_fullAmountItems, _allowedBySpaceAndMaxCoverageAmountItems);
+    final minBetweenFullAndCalculatedAmount =
+        min(_fullAmountItems, _allowedBySpaceAndMaxCoverageAmountItems);
     return min(maxAmountItems, minBetweenFullAndCalculatedAmount);
   }
 }

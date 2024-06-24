@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
@@ -128,7 +137,10 @@ class _ReferralState extends State<Referral> {
                   ),
                   Text(
                     '${exp ?? ""}xp',
-                    style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 12),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        fontSize: 12),
                   ),
                 ],
               ),
@@ -166,9 +178,21 @@ class _ReferralState extends State<Referral> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     if (reason != '' && ["REJECTED"].contains(widget.status))
-                      Text("Reason rejected: ${reason}", textAlign: TextAlign.left, style: const TextStyle(color: redSolidPrimaryColor, fontSize: 14, fontWeight: FontWeight.w500)),
-                    Text(widget.description.length > 12 ? widget.description.substring(0, 12) + "..." : widget.description ?? "",
-                        textAlign: TextAlign.left, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                      Text("Reason rejected: ${reason}",
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                              color: redSolidPrimaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                    Text(
+                        widget.description.length > 12
+                            ? widget.description.substring(0, 12) + "..."
+                            : widget.description ?? "",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500)),
                   ],
                 ),
               ),
@@ -188,7 +212,9 @@ class _ReferralState extends State<Referral> {
                 color: Colors.white,
               ),
               decoration: kTextInputDecoration.copyWith(
-                hintText: ["NOT_SUBMITTED", "REJECTED"].contains(status) ? 'Your answer' : widget.submittedAdditionalAttribute,
+                hintText: ["NOT_SUBMITTED", "REJECTED"].contains(status)
+                    ? 'Your answer'
+                    : widget.submittedAdditionalAttribute,
                 hintStyle: const TextStyle(color: greySecondaryColor),
               ),
             ),

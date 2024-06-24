@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
@@ -133,11 +142,17 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
                 children: [
                   Text(
                     name ?? "",
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Colors.white),
                   ),
                   Text(
                     '${exp ?? ""}xp',
-                    style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 12),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        fontSize: 12),
                   ),
                 ],
               ),
@@ -193,7 +208,8 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          if (reason != '' && ["REJECTED"].contains(widget.status))
+                          if (reason != '' &&
+                              ["REJECTED"].contains(widget.status))
                             Text(
                               "Reason rejected: ${reason}",
                               textAlign: TextAlign.left,
@@ -236,15 +252,18 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
                       child: SizedBox(
                         height: 200,
                         width: 150,
-                        child: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+                        child: !kIsWeb &&
+                                defaultTargetPlatform == TargetPlatform.android
                             ? FutureBuilder<void>(
                                 future: widget.retrieveLostData!(),
-                                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<void> snapshot) {
                                   switch (snapshot.connectionState) {
                                     case ConnectionState.none:
                                     case ConnectionState.waiting:
                                       return const PlaceholderImageTaskApp(
-                                        label: 'You have not yet picked an image.',
+                                        label:
+                                            'You have not yet picked an image.',
                                       );
                                     case ConnectionState.done:
                                       return widget.previewImages;
@@ -282,7 +301,8 @@ class _ProofWithPhotoState extends State<ProofWithPhoto> {
                       onPressed: () {
                         widget.onPressedSubmitTaskMission!();
                       },
-                      isOutlined: !["NOT_SUBMITTED", "REJECTED"].contains(status),
+                      isOutlined:
+                          !["NOT_SUBMITTED", "REJECTED"].contains(status),
                       width: MediaQuery.of(context).size.width / 1.5,
                       height: 38,
                     ),

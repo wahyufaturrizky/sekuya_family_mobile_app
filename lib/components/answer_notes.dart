@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/components.dart';
 import 'package:sekuya_family_mobile_app/constants.dart';
@@ -116,11 +125,17 @@ class _AnswerNotesState extends State<AnswerNotes> {
               children: [
                 Text(
                   name ?? "",
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.white),
                 ),
                 Text(
                   '${exp ?? ""}xp',
-                  style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 12),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                      fontSize: 12),
                 ),
               ],
             ),
@@ -157,10 +172,20 @@ class _AnswerNotesState extends State<AnswerNotes> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  if (widget.reason != '' && ["REJECTED"].contains(widget.status))
+                  if (widget.reason != '' &&
+                      ["REJECTED"].contains(widget.status))
                     Text("Reason rejected: ${widget.reason}",
-                        textAlign: TextAlign.left, style: const TextStyle(color: redSolidPrimaryColor, fontSize: 14, fontWeight: FontWeight.w500)),
-                  Text(widget.description ?? "", textAlign: TextAlign.left, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                            color: redSolidPrimaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500)),
+                  Text(widget.description ?? "",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500)),
                 ],
               ),
             ),
@@ -181,7 +206,9 @@ class _AnswerNotesState extends State<AnswerNotes> {
                 color: Colors.white,
               ),
               decoration: kTextInputDecoration.copyWith(
-                hintText: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status) ? 'Your answer' : widget.submittedAdditionalAttribute,
+                hintText: ["NOT_SUBMITTED", "REJECTED"].contains(widget.status)
+                    ? 'Your answer'
+                    : widget.submittedAdditionalAttribute,
                 hintStyle: const TextStyle(color: greySecondaryColor),
               )),
         ),

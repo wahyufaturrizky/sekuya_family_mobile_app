@@ -1,3 +1,11 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
 /// Base interface for positions.
 const int maxInt = 0x7fffffff;
 const int maxInt64 = 0x7fffffffffffffff;
@@ -17,7 +25,9 @@ abstract class Positions {
 class ItemPosition {
   ItemPosition({
     required this.number,
-    @Deprecated('"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead') double? position,
+    @Deprecated(
+        '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
+    double? position,
     required this.x,
     required this.y,
     required this.size,
@@ -27,7 +37,8 @@ class ItemPosition {
   final int number;
 
   /// Coordinate
-  @Deprecated('"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
+  @Deprecated(
+      '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
   final double position;
 
   final double x;
@@ -43,11 +54,21 @@ class ItemPosition {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ItemPosition && other.number == number && other.position == position && other.x == x && other.y == y && other.size == size;
+    return other is ItemPosition &&
+        other.number == number &&
+        other.position == position &&
+        other.x == x &&
+        other.y == y &&
+        other.size == size;
   }
 
   @override
-  int get hashCode => number.hashCode ^ position.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
+  int get hashCode =>
+      number.hashCode ^
+      position.hashCode ^
+      x.hashCode ^
+      y.hashCode ^
+      size.hashCode;
 }
 
 /// InfoItemPosition consists coordinates, order and information about
@@ -55,7 +76,9 @@ class ItemPosition {
 class InfoItemPosition extends ItemPosition {
   InfoItemPosition({
     required super.number,
-    @Deprecated('"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead') double? position,
+    @Deprecated(
+        '"position" is deprecated and will be removed after v2.0.0, use "x" and "y" instead')
+    double? position,
     required this.amountAdditionalItems,
     required super.x,
     required super.y,
@@ -95,7 +118,13 @@ class InfoItemPosition extends ItemPosition {
   }
 
   @override
-  int get hashCode => number.hashCode ^ position.hashCode ^ amountAdditionalItems.hashCode ^ x.hashCode ^ y.hashCode ^ size.hashCode;
+  int get hashCode =>
+      number.hashCode ^
+      position.hashCode ^
+      amountAdditionalItems.hashCode ^
+      x.hashCode ^
+      y.hashCode ^
+      size.hashCode;
 }
 
 /// Whether and how to align avatars horizontally.
@@ -115,7 +144,8 @@ class StackLaying {
   const StackLaying({
     required this.itemPositionNumberAtTop,
     this.infoItemAtTop = false,
-  }) : assert(itemPositionNumberAtTop >= 0, 'itemPositionNumberAtTop must be positive');
+  }) : assert(itemPositionNumberAtTop >= 0,
+            'itemPositionNumberAtTop must be positive');
   static const StackLaying first = StackLaying(
     itemPositionNumberAtTop: 0,
     infoItemAtTop: false,

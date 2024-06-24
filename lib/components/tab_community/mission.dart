@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
@@ -7,37 +16,46 @@ import 'package:sekuya_family_mobile_app/constants.dart';
 import '../avatar_stack_widget.dart';
 
 class TabContentCommunityMissionsComponentApp extends StatelessWidget {
-  const TabContentCommunityMissionsComponentApp({super.key, this.resCommunitiesMissions, this.index});
+  const TabContentCommunityMissionsComponentApp(
+      {super.key, this.resCommunitiesMissions, this.index});
 
   final dynamic resCommunitiesMissions;
   final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return TabContentCommunityMissionsComponent(resCommunitiesMissions: resCommunitiesMissions, index: index);
+    return TabContentCommunityMissionsComponent(
+        resCommunitiesMissions: resCommunitiesMissions, index: index);
   }
 }
 
 class TabContentCommunityMissionsComponent extends StatefulWidget {
-  const TabContentCommunityMissionsComponent({super.key, this.resCommunitiesMissions, this.index});
+  const TabContentCommunityMissionsComponent(
+      {super.key, this.resCommunitiesMissions, this.index});
 
   final dynamic resCommunitiesMissions;
   final int? index;
 
   @override
-  State<TabContentCommunityMissionsComponent> createState() => _TabContentCommunityMissionsComponentState();
+  State<TabContentCommunityMissionsComponent> createState() =>
+      _TabContentCommunityMissionsComponentState();
 }
 
-class _TabContentCommunityMissionsComponentState extends State<TabContentCommunityMissionsComponent> {
+class _TabContentCommunityMissionsComponentState
+    extends State<TabContentCommunityMissionsComponent> {
   void goToDetailMission() {
-    final arguments = MyArgumentsDataDetailMissionClass(widget.resCommunitiesMissions, widget.index);
+    final arguments = MyArgumentsDataDetailMissionClass(
+        widget.resCommunitiesMissions, widget.index);
 
-    Application.router.navigateTo(context, "/detailMissionScreen", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/detailMissionScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
   }
 
   @override
   Widget build(BuildContext context) {
-    var dataCommunitiesMissions = widget.resCommunitiesMissions?["data"]?["data"]?[widget.index];
+    var dataCommunitiesMissions =
+        widget.resCommunitiesMissions?["data"]?["data"]?[widget.index];
     var name = dataCommunitiesMissions?["name"];
     var status = dataCommunitiesMissions?["status"];
     var community = dataCommunitiesMissions?["community"];
@@ -86,9 +104,15 @@ class _TabContentCommunityMissionsComponentState extends State<TabContentCommuni
                         ),
                       if (status != null)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
                           decoration: BoxDecoration(
-                            color: status.toString().toLowerCase().contains('completed') ? greenColor.withOpacity(0.2) : const Color(0xFF2AB6F2).withOpacity(0.2),
+                            color: status
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains('completed')
+                                ? greenColor.withOpacity(0.2)
+                                : const Color(0xFF2AB6F2).withOpacity(0.2),
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Center(
@@ -97,7 +121,12 @@ class _TabContentCommunityMissionsComponentState extends State<TabContentCommuni
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
-                                color: status.toString().toLowerCase().contains('completed') ? greenColor : blueSolidSecondaryColor,
+                                color: status
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains('completed')
+                                    ? greenColor
+                                    : blueSolidSecondaryColor,
                               ),
                             ),
                           ),
@@ -111,14 +140,19 @@ class _TabContentCommunityMissionsComponentState extends State<TabContentCommuni
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.transparent,
-                          child: community?["image"] != null ? Image.network(community?["image"]) : null,
+                          child: community?["image"] != null
+                              ? Image.network(community?["image"])
+                              : null,
                         ),
                         const SizedBox(
                           width: 8,
                         ),
                         Text(
                           community?["name"] ?? "",
-                          style: const TextStyle(color: greySecondaryColor, fontSize: 14, fontWeight: FontWeight.w600),
+                          style: const TextStyle(
+                              color: greySecondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
                         )
                       ],
                     ),
@@ -146,9 +180,15 @@ class _TabContentCommunityMissionsComponentState extends State<TabContentCommuni
                                 "icon": "",
                               },
                               {
-                                "title": rewards != null && rewards.isNotEmpty ? rewards?[0]?["name"] : '',
-                                "amount": rewards != null && rewards.isNotEmpty ? rewards?[0]?["maxQty"] : '',
-                                "icon": rewards != null && rewards.isNotEmpty ? rewards?[0]?["image"] : null,
+                                "title": rewards != null && rewards.isNotEmpty
+                                    ? rewards?[0]?["name"]
+                                    : '',
+                                "amount": rewards != null && rewards.isNotEmpty
+                                    ? rewards?[0]?["maxQty"]
+                                    : '',
+                                "icon": rewards != null && rewards.isNotEmpty
+                                    ? rewards?[0]?["image"]
+                                    : null,
                               }
                             ]
                                 .map(
@@ -158,23 +198,33 @@ class _TabContentCommunityMissionsComponentState extends State<TabContentCommuni
                                       children: [
                                         if (item["icon"] != "")
                                           Container(
-                                            margin: const EdgeInsets.only(right: 4),
+                                            margin:
+                                                const EdgeInsets.only(right: 4),
                                             child: CircleAvatar(
                                               radius: 12,
-                                              backgroundColor: Colors.transparent,
-                                              child: item["icon"] != null ? Image.network(item["icon"]) : null,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: item["icon"] != null
+                                                  ? Image.network(item["icon"])
+                                                  : null,
                                             ),
                                           ),
                                         Text(
                                           item["amount"].toString(),
-                                          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(
                                           width: 4,
                                         ),
                                         Text(
                                           item["title"] ?? "",
-                                          style: const TextStyle(color: greySecondaryColor, fontSize: 12, fontWeight: FontWeight.w500),
+                                          style: const TextStyle(
+                                              color: greySecondaryColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ],
                                     ),
@@ -182,7 +232,9 @@ class _TabContentCommunityMissionsComponentState extends State<TabContentCommuni
                                 )
                                 .toList(),
                           ),
-                          if (playerSamples != null && playerSamples.isNotEmpty && totalPlayers > 1)
+                          if (playerSamples != null &&
+                              playerSamples.isNotEmpty &&
+                              totalPlayers > 1)
                             AvatarStack(
                               height: 24,
                               width: totalPlayers > 2 ? 50 : 30,

@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/material.dart';
 
 import 'avatar_position_widget.dart';
@@ -59,9 +68,12 @@ class AvatarStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _settings = settings ?? RestrictedPositions(maxCoverage: 0.5, minCoverage: 0.5);
+    final _settings =
+        settings ?? RestrictedPositions(maxCoverage: 0.5, minCoverage: 0.5);
 
-    final border = BorderSide(color: borderColor ?? Theme.of(context).colorScheme.onPrimary, width: borderWidth ?? 2.0);
+    final border = BorderSide(
+        color: borderColor ?? Theme.of(context).colorScheme.onPrimary,
+        width: borderWidth ?? 2.0);
 
     Widget _textInfoWidgetBuilder(surplus) => BorderedCircleAvatar(
           border: border,

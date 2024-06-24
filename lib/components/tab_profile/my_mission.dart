@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/components/tab_mission/mission.dart';
@@ -7,32 +16,40 @@ import 'package:sekuya_family_mobile_app/constants.dart';
 import '../avatar_stack_widget.dart';
 
 class TabContentProfileMyMissionComponentApp extends StatelessWidget {
-  const TabContentProfileMyMissionComponentApp({super.key, this.resMyMission, this.index});
+  const TabContentProfileMyMissionComponentApp(
+      {super.key, this.resMyMission, this.index});
 
   final dynamic resMyMission;
   final int? index;
 
   @override
   Widget build(BuildContext context) {
-    return TabContentProfileMyMissionComponent(resMyMission: resMyMission, index: index);
+    return TabContentProfileMyMissionComponent(
+        resMyMission: resMyMission, index: index);
   }
 }
 
 class TabContentProfileMyMissionComponent extends StatefulWidget {
-  const TabContentProfileMyMissionComponent({super.key, this.resMyMission, this.index});
+  const TabContentProfileMyMissionComponent(
+      {super.key, this.resMyMission, this.index});
 
   final dynamic resMyMission;
   final int? index;
 
   @override
-  State<TabContentProfileMyMissionComponent> createState() => _TabContentProfileMyMissionComponentState();
+  State<TabContentProfileMyMissionComponent> createState() =>
+      _TabContentProfileMyMissionComponentState();
 }
 
-class _TabContentProfileMyMissionComponentState extends State<TabContentProfileMyMissionComponent> {
+class _TabContentProfileMyMissionComponentState
+    extends State<TabContentProfileMyMissionComponent> {
   void goToDetailMission() {
-    final arguments = MyArgumentsDataDetailMissionClass(widget.resMyMission, widget.index);
+    final arguments =
+        MyArgumentsDataDetailMissionClass(widget.resMyMission, widget.index);
 
-    Application.router.navigateTo(context, "/detailMissionScreen", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/detailMissionScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
   }
 
   @override
@@ -85,9 +102,15 @@ class _TabContentProfileMyMissionComponentState extends State<TabContentProfileM
                           ),
                         ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
-                          color: status.toString().toLowerCase().contains('completed') ? greenColor.withOpacity(0.2) : const Color(0xFF2AB6F2).withOpacity(0.2),
+                          color: status
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains('completed')
+                              ? greenColor.withOpacity(0.2)
+                              : const Color(0xFF2AB6F2).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Center(
@@ -96,7 +119,12 @@ class _TabContentProfileMyMissionComponentState extends State<TabContentProfileM
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w500,
-                              color: status.toString().toLowerCase().contains('completed') ? greenColor : blueSolidSecondaryColor,
+                              color: status
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains('completed')
+                                  ? greenColor
+                                  : blueSolidSecondaryColor,
                             ),
                           ),
                         ),
@@ -121,7 +149,10 @@ class _TabContentProfileMyMissionComponentState extends State<TabContentProfileM
                       ),
                       Text(
                         community?["name"] ?? "",
-                        style: const TextStyle(color: greySecondaryColor, fontSize: 14, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                            color: greySecondaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
                       )
                     ],
                   ),
@@ -148,9 +179,15 @@ class _TabContentProfileMyMissionComponentState extends State<TabContentProfileM
                           "icon": null,
                         },
                         {
-                          "title": rewards != null && rewards.isNotEmpty ? "${rewards?[0]?["name"].substring(0, 3)}" : '',
-                          "amount": rewards != null && rewards.isNotEmpty ? rewards?[0]?["maxQty"] : '',
-                          "icon": rewards != null && rewards.isNotEmpty ? rewards?[0]?["image"] : null,
+                          "title": rewards != null && rewards.isNotEmpty
+                              ? "${rewards?[0]?["name"].substring(0, 3)}"
+                              : '',
+                          "amount": rewards != null && rewards.isNotEmpty
+                              ? rewards?[0]?["maxQty"]
+                              : '',
+                          "icon": rewards != null && rewards.isNotEmpty
+                              ? rewards?[0]?["image"]
+                              : null,
                         }
                       ]
                           .map(
@@ -173,14 +210,20 @@ class _TabContentProfileMyMissionComponentState extends State<TabContentProfileM
                                     ),
                                   Text(
                                     item["amount"].toString(),
-                                    style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(
                                     width: 4,
                                   ),
                                   Text(
                                     item["title"] ?? "",
-                                    style: const TextStyle(color: greySecondaryColor, fontSize: 12, fontWeight: FontWeight.w500),
+                                    style: const TextStyle(
+                                        color: greySecondaryColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -213,7 +256,8 @@ class _TabContentProfileMyMissionComponentState extends State<TabContentProfileM
 }
 
 String getAvatarUrl({indexMyMissions, indexDisplayPlayers, resMyMission}) {
-  final url = resMyMission?["data"]?["data"]?[indexMyMissions]?["display_players"]?[indexDisplayPlayers]?["image"];
+  final url = resMyMission?["data"]?["data"]?[indexMyMissions]
+      ?["display_players"]?[indexDisplayPlayers]?["image"];
 
   if (url != null) {
     return url;

@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/material.dart';
 
 import 'position_widget.dart';
@@ -26,7 +35,8 @@ class WidgetStack extends StatelessWidget {
   Widget build(BuildContext context) {
     positions.setAmountItems(stackedWidgets.length);
     return LayoutBuilder(builder: (context, BoxConstraints constraints) {
-      final isNotEnoughSpace = constraints.maxWidth <= 0 || constraints.maxHeight <= 0;
+      final isNotEnoughSpace =
+          constraints.maxWidth <= 0 || constraints.maxHeight <= 0;
       if (isNotEnoughSpace) {
         return const SizedBox.shrink();
       }

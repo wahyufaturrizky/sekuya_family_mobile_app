@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -22,14 +31,19 @@ class TabContentVoucherComponent extends StatefulWidget {
   final dynamic resVoucher;
 
   @override
-  State<TabContentVoucherComponent> createState() => _TabContentVoucherComponentState();
+  State<TabContentVoucherComponent> createState() =>
+      _TabContentVoucherComponentState();
 }
 
-class _TabContentVoucherComponentState extends State<TabContentVoucherComponent> {
+class _TabContentVoucherComponentState
+    extends State<TabContentVoucherComponent> {
   void goToDetailVoucher() {
-    final arguments = MyArgumentsDataDetailVoucherClass(widget.resVoucher, widget.index, true);
+    final arguments = MyArgumentsDataDetailVoucherClass(
+        widget.resVoucher, widget.index, true);
 
-    Application.router.navigateTo(context, "/detailVoucherScreen", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/detailVoucherScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
   }
 
   @override
@@ -54,7 +68,8 @@ class _TabContentVoucherComponentState extends State<TabContentVoucherComponent>
             image: coverImage != null
                 ? DecorationImage(
                     fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.5), BlendMode.dstATop),
                     image: NetworkImage(coverImage),
                   )
                 : null,
@@ -76,7 +91,10 @@ class _TabContentVoucherComponentState extends State<TabContentVoucherComponent>
               ),
               Text(
                 description ?? "",
-                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400),
               ),
             ],
           ),

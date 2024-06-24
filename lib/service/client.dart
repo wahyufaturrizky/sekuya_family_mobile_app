@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -17,7 +26,8 @@ final dio = Dio()
         onError: (error, handler) {
           print("@ Error InterceptorsWrapper $error");
           // Do stuff here
-          handler.reject(error); // Added this line to let error propagate outside the interceptor
+          handler.reject(
+              error); // Added this line to let error propagate outside the interceptor
         },
       ),
 
@@ -66,7 +76,8 @@ final dio = Dio()
     ],
   );
 
-Future<dynamic> clientDio({serviceUrlParam = "", methodParam = "GET", data, queryParameters}) async {
+Future<dynamic> clientDio(
+    {serviceUrlParam = "", methodParam = "GET", data, queryParameters}) async {
   try {
     String serviceUrl = serviceUrlParam;
     String method = methodParam;

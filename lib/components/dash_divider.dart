@@ -1,7 +1,17 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:flutter/material.dart';
 
 class DashDivider extends StatelessWidget {
-  const DashDivider({Key? key, this.height = 1, this.color = Colors.black}) : super(key: key);
+  const DashDivider({Key? key, this.height = 1, this.color = Colors.black})
+      : super(key: key);
   final double height;
   final Color color;
 

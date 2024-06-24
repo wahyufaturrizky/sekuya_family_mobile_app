@@ -1,3 +1,12 @@
+/*
+ * Sekuya Family Mobile App
+ * Created by Wahyu Fatur Rizki
+ * https://www.linkedin.com/in/wahyu-fatur-rizky/
+ * 
+ * Copyright (c) 2024 Wahyu Fatur Rizki, LLC. All rights reserved.
+ * See LICENSE for distribution and usage details.
+ */
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sekuya_family_mobile_app/config/application.dart';
@@ -24,14 +33,19 @@ class TabContentMissionComponent extends StatefulWidget {
   final int? index;
 
   @override
-  State<TabContentMissionComponent> createState() => _TabContentMissionComponentState();
+  State<TabContentMissionComponent> createState() =>
+      _TabContentMissionComponentState();
 }
 
-class _TabContentMissionComponentState extends State<TabContentMissionComponent> {
+class _TabContentMissionComponentState
+    extends State<TabContentMissionComponent> {
   void goToDetailMission() {
-    final arguments = MyArgumentsDataDetailMissionClass(widget.resMission, widget.index);
+    final arguments =
+        MyArgumentsDataDetailMissionClass(widget.resMission, widget.index);
 
-    Application.router.navigateTo(context, "/detailMissionScreen", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
+    Application.router.navigateTo(context, "/detailMissionScreen",
+        transition: TransitionType.native,
+        routeSettings: RouteSettings(arguments: arguments));
   }
 
   var dataMission;
@@ -100,9 +114,15 @@ class _TabContentMissionComponentState extends State<TabContentMissionComponent>
                           ),
                         ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
-                          color: status.toString().toLowerCase().contains('completed') ? greenColor.withOpacity(0.2) : const Color(0xFF2AB6F2).withOpacity(0.2),
+                          color: status
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains('completed')
+                              ? greenColor.withOpacity(0.2)
+                              : const Color(0xFF2AB6F2).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Center(
@@ -111,7 +131,12 @@ class _TabContentMissionComponentState extends State<TabContentMissionComponent>
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w500,
-                              color: status.toString().toLowerCase().contains('completed') ? greenColor : blueSolidSecondaryColor,
+                              color: status
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains('completed')
+                                  ? greenColor
+                                  : blueSolidSecondaryColor,
                             ),
                           ),
                         ),
@@ -174,9 +199,15 @@ class _TabContentMissionComponentState extends State<TabContentMissionComponent>
                           "icon": "",
                         },
                         {
-                          "title": rewards != null && rewards.isNotEmpty ? rewards?[0]?["name"] : "",
-                          "amount": rewards != null && rewards.isNotEmpty ? rewards?[0]?["maxQty"] : "",
-                          "icon": rewards != null && rewards.isNotEmpty ? rewards?[0]?["image"] : "",
+                          "title": rewards != null && rewards.isNotEmpty
+                              ? rewards?[0]?["name"]
+                              : "",
+                          "amount": rewards != null && rewards.isNotEmpty
+                              ? rewards?[0]?["maxQty"]
+                              : "",
+                          "icon": rewards != null && rewards.isNotEmpty
+                              ? rewards?[0]?["image"]
+                              : "",
                         }
                       ]
                           .map(
@@ -184,7 +215,8 @@ class _TabContentMissionComponentState extends State<TabContentMissionComponent>
                               margin: const EdgeInsets.only(right: 20),
                               child: Row(
                                 children: [
-                                  if (item["icon"] != "" && item["icon"] != null)
+                                  if (item["icon"] != "" &&
+                                      item["icon"] != null)
                                     Container(
                                       margin: const EdgeInsets.only(right: 4),
                                       child: CircleAvatar(
