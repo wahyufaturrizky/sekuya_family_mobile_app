@@ -34,20 +34,35 @@ class _TabContentMissionComponentState extends State<TabContentMissionComponent>
     Application.router.navigateTo(context, "/detailMissionScreen", transition: TransitionType.native, routeSettings: RouteSettings(arguments: arguments));
   }
 
+  var dataMission;
+
+  var rewards;
+  var id;
+  var name;
+  var status;
+  var community;
+  var totalTasks;
+  var totalExp;
+  var totalPlayers;
+  var playerSamples;
+
+  @override
+  void initState() {
+    dataMission = widget.resMission[widget.index];
+    rewards = dataMission?["rewards"];
+    id = dataMission?["_id"];
+    name = dataMission?["name"];
+    status = dataMission?["status"];
+    community = dataMission?["community"];
+    totalTasks = dataMission?["totalTasks"];
+    totalExp = dataMission?["totalExp"];
+    totalPlayers = dataMission?["totalPlayers"];
+    playerSamples = dataMission?["playerSamples"];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var dataMission = widget.resMission[widget.index];
-
-    var rewards = dataMission?["rewards"];
-    var id = dataMission?["_id"];
-    var name = dataMission?["name"];
-    var status = dataMission?["status"];
-    var community = dataMission?["community"];
-    var totalTasks = dataMission?["totalTasks"];
-    var totalExp = dataMission?["totalExp"];
-    var totalPlayers = dataMission?["totalPlayers"];
-    var playerSamples = dataMission?["playerSamples"];
-
     return Card(
       color: blackPrimaryColor,
       clipBehavior: Clip.hardEdge,

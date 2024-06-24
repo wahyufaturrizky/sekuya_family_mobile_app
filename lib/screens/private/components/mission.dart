@@ -50,6 +50,7 @@ class _MissionComponentState extends State<MissionComponent> {
   var resMission;
 
   List listMission = [];
+  List searchListMission = [];
 
   @override
   void initState() {
@@ -76,13 +77,15 @@ class _MissionComponentState extends State<MissionComponent> {
 
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(_debouceDuration, () async {
-      log('RESPONSE MISSION LOG $resMission');
-      setState(() {
-        // listMission.where(
-        //   (element) => element['name'].toString().toLowerCase().contains(search),
-        // );
-        log('RESPONSE MISSION LIST $listMission');
-      });
+      setState(
+        () {
+          searchListMission = listMission
+              .where(
+                (element) => element['name'].toString().toLowerCase().contains(search),
+              )
+              .toList();
+        },
+      );
     });
   }
 
@@ -345,11 +348,11 @@ class _MissionComponentState extends State<MissionComponent> {
                     )
                   : ListView.builder(
                       padding: EdgeInsets.zero,
-                      itemCount: itemPerPageState == 0 ? 5 : itemPerPageState,
+                      itemCount: searchController.text.isNotEmpty ? searchListMission.length : listMission.length,
                       itemBuilder: (BuildContext context, int index) {
                         return listMission.isNotEmpty
                             ? TabContentMissionComponentApp(
-                                resMission: listMission,
+                                resMission: searchController.text.isNotEmpty ? searchListMission : listMission,
                                 index: index,
                               )
                             : SizedBox(
